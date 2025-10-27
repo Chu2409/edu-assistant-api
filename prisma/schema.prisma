@@ -1,0 +1,50 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DB_URL")
+}
+
+enum UserType {
+  ADMINISTRATOR
+  MANAGER
+
+  @@map("USER_TYPE")
+}
+
+enum UserStatus {
+  ACTIVE
+  INACTIVE
+  SUSPENDED
+
+  @@map("USER_STATUS")
+}
+
+model Person {
+  id        Int       @id @default(autoincrement()) @map("id")
+  dni       String    @unique @map("dni")
+  name      String    @map("name")
+  surname   String    @map("surname")
+  email     String    @unique @map("email")
+  birthDate DateTime? @map("birth_date") @db.Date
+  phone     String?   @map("phone")
+
+  user User?
+
+  @@map("people")
+}
+
+model User {
+  id       Int        @id @default(autoincrement()) @map("id")
+  username String     @unique @map("username")
+  password String     @map("password")
+  type     UserType   @map("type")
+  status   UserStatus @default(ACTIVE) @map("status")
+
+  personId Int    @unique @map("person_id")
+  person   Person @relation(fields: [personId], references: [id], onDelete: Cascade)
+
+  @@map("users")
+}

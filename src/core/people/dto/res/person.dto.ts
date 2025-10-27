@@ -1,0 +1,45 @@
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger'
+
+export class PersonResDto {
+  @ApiProperty({
+    description: 'ID de la persona',
+    example: 1,
+  })
+  id: number
+
+  @ApiProperty({
+    description: 'DNI de la persona',
+    example: '0707047643',
+  })
+  dni: string
+
+  @ApiProperty({
+    description: 'Nombre de la persona',
+    example: 'Juan',
+  })
+  name: string
+
+  @ApiProperty({
+    description: 'Apellido de la persona',
+    example: 'Pérez',
+  })
+  surname: string
+
+  @ApiProperty({
+    description: 'Email de la persona',
+    example: 'jperez1231@uta.edu.ec',
+  })
+  email: string
+
+  @ApiPropertyOptional({
+    description: 'Fecha de nacimiento de la persona',
+    example: '1990-01-01',
+  })
+  birthDate: Date | null
+
+  @ApiPropertyOptional({
+    description: 'Teléfono de la persona',
+    example: '0987654321',
+  })
+  phone: string | null
+}
