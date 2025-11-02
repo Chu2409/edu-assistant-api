@@ -39,6 +39,7 @@ export default tseslint.config(
       'quotes': ['error', 'single'],
       "@typescript-eslint/await-thenable": "error",
       "@typescript-eslint/no-unnecessary-condition": "error",
+      "@typescript-eslint/require-await": "warn",
     },
   },
 );

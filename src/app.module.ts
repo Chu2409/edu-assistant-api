@@ -1,12 +1,12 @@
 import { Module } from '@nestjs/common'
-import { GlobalModule } from './global/global.module'
+import { CoreModule } from './core/core.module'
 import { HealthController } from './health.controller'
-import { ResponseInterceptor } from './common/interceptors/response.interceptor'
+import { ResponseInterceptor } from './shared/interceptors/response.interceptor'
 import { APP_GUARD } from '@nestjs/core'
-import { JwtAuthGuard } from './core/auth/guards/jwt-auth.guard'
+import { JwtAuthGuard } from './modules/auth/guards/jwt-auth.guard'
 
 @Module({
-  imports: [GlobalModule],
+  imports: [CoreModule],
   controllers: [HealthController],
   providers: [
     ResponseInterceptor,
