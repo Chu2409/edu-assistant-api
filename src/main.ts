@@ -2,13 +2,13 @@ import { NestFactory } from '@nestjs/core'
 import { AppModule } from './app.module'
 import { Logger, ValidationPipe, VersioningType } from '@nestjs/common'
 import { useContainer } from 'class-validator'
-import { ResponseInterceptor } from './common/interceptors/response.interceptor'
-import { GlobalExceptionFilter } from './common/filters/all-exception.filter'
-import { CustomConfigService } from './global/config/config.service'
+import { ResponseInterceptor } from './shared/interceptors/response.interceptor'
+import { GlobalExceptionFilter } from './shared/filters/all-exception.filter'
+import { CustomConfigService } from './core/config/config.service'
 import * as express from 'express'
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger'
-import { ApiPaginatedRes, ApiRes } from './common/dtos/res/api-response.dto'
-import { BaseParamsReqDto } from './common/dtos/req/base-params.dto'
+import { ApiPaginatedRes, ApiRes } from './shared/dtos/res/api-response.dto'
+import { BaseParamsReqDto } from './shared/dtos/req/base-params.dto'
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, { cors: true })

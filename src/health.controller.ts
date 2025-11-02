@@ -1,6 +1,6 @@
 import { Controller, Get } from '@nestjs/common'
-import { DBService } from './global/database/database.service'
-import { Public } from './core/auth/decorators/public-route.decorator'
+import { DBService } from './core/database/database.service'
+import { Public } from './modules/auth/decorators/public-route.decorator'
 
 @Controller('health')
 export class HealthController {
