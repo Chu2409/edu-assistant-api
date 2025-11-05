@@ -4,7 +4,7 @@ import { Reflector } from '@nestjs/core'
 import { IS_PUBLIC_KEY } from '../decorators/public-route.decorator'
 import { Observable } from 'rxjs'
 import { BusinessException } from 'src/shared/exceptions/business.exception'
-import { UserPersonResDto } from 'src/modules/users/dto/res/user.dto'
+import { UserResDto } from 'src/modules/users/dto/res/user.dto'
 
 @Injectable()
 export class JwtAuthGuard extends AuthGuard('jwt') {
@@ -27,7 +27,7 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
   }
 
   // 4. Verifica si el usuario tiene los permisos necesarios (-> strategy)
-  handleRequest<TUser = UserPersonResDto>(
+  handleRequest<TUser = UserResDto>(
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     err: any,
     user: TUser | null,

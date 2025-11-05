@@ -4,7 +4,6 @@ import {
   Get,
   HttpStatus,
   Param,
-  ParseIntPipe,
   Patch,
   Post,
   Query,
@@ -14,12 +13,11 @@ import { CreateUserReqDto } from './dto/req/create-user.dto'
 import { UpdateUserReqDto } from './dto/req/update-user.dto'
 import { BaseParamsReqDto } from 'src/shared/dtos/req/base-params.dto'
 import { ApiTags, ApiOperation } from '@nestjs/swagger'
-import { ChangeUserStatusDto } from './dto/req/change-user-status.dto'
 import {
   ApiPaginatedResponse,
   ApiStandardResponse,
 } from 'src/shared/decorators/api-standard-response.decorator'
-import { UserPersonResDto } from './dto/res/user.dto'
+import { UserResDto } from './dto/res/user.dto'
 
 @ApiTags('Users')
 @Controller('users')
@@ -39,7 +37,7 @@ export class UsersController {
   @ApiOperation({
     summary: 'Get all users',
   })
-  @ApiPaginatedResponse(UserPersonResDto, HttpStatus.OK)
+  @ApiPaginatedResponse(UserResDto, HttpStatus.OK)
   findAll(@Query() paginationDto: BaseParamsReqDto) {
     return this.service.findAll(paginationDto)
   }
@@ -48,8 +46,8 @@ export class UsersController {
   @ApiOperation({
     summary: 'Get a user by id',
   })
-  @ApiStandardResponse(UserPersonResDto, HttpStatus.OK)
-  findById(@Param('id', ParseIntPipe) id: number) {
+  @ApiStandardResponse(UserResDto, HttpStatus.OK)
+  findById(@Param('id') id: string) {
     return this.service.findOne(id)
   }
 
@@ -57,8 +55,8 @@ export class UsersController {
   @ApiOperation({
     summary: 'Update a user by id',
   })
-  @ApiStandardResponse(UserPersonResDto, HttpStatus.OK)
-  update(@Param('id', ParseIntPipe) id: number, @Body() dto: UpdateUserReqDto) {
+  @ApiStandardResponse(UserResDto, HttpStatus.OK)
+  update(@Param('id') id: string, @Body() dto: UpdateUserReqDto) {
     return this.service.update(id, dto)
   }
 
@@ -66,10 +64,7 @@ export class UsersController {
   @ApiOperation({
     summary: 'Change the status of a user by id',
   })
-  changeStatus(
-    @Param('id', ParseIntPipe) id: number,
-    @Body() dto: ChangeUserStatusDto,
-  ) {
-    return this.service.changeStatus(id, dto)
+  changeStatus(@Param('id') id: string) {
+    return this.service.changeStatus(id)
   }
 }

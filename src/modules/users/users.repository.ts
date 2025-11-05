@@ -1,19 +1,16 @@
 import { Injectable } from '@nestjs/common'
 import { DBService } from 'src/core/database/database.service'
 import { UserFiltersReqDto } from './dto/req/user-filters.dto'
-import { UserPersonResDto } from './dto/res/user.dto'
 import { CreateUserReqDto } from './dto/req/create-user.dto'
 import { UpdateUserReqDto } from './dto/req/update-user.dto'
-import { USER_STATUS } from './types/user-status.enum'
 import { Prisma } from '@prisma/client'
+import { UserResDto } from './dto/res/user.dto'
 
 @Injectable()
 export class UsersRepository {
   constructor(private readonly dbService: DBService) {}
 
-  async findMany(
-    filters: UserFiltersReqDto,
-  ): Promise<[UserPersonResDto[], number]> {
+  async findMany(filters: UserFiltersReqDto): Promise<[UserResDto[], number]> {
     const { limit, page, search } = filters
 
     const whereClause: Prisma.UserWhereInput = {}
@@ -21,27 +18,21 @@ export class UsersRepository {
     if (search) {
       whereClause.OR = [
         {
-          username: {
+          firstName: {
             contains: search,
             mode: 'insensitive',
           },
         },
         {
-          person: {
-            OR: [
-              {
-                name: {
-                  contains: search,
-                  mode: 'insensitive',
-                },
-              },
-              {
-                email: {
-                  contains: search,
-                  mode: 'insensitive',
-                },
-              },
-            ],
+          lastName: {
+            contains: search,
+            mode: 'insensitive',
+          },
+        },
+        {
+          email: {
+            contains: search,
+            mode: 'insensitive',
           },
         },
       ]
@@ -55,8 +46,8 @@ export class UsersRepository {
         orderBy: {
           id: 'desc',
         },
-        include: {
-          person: true,
+        omit: {
+          password: true,
         },
       }),
       this.dbService.user.count({
@@ -67,45 +58,31 @@ export class UsersRepository {
     return [entities, total]
   }
 
-  // eslint-disable-next-line @typescript-eslint/require-await
-  async findById(id: number) {
+  async findById(id: string) {
     return this.dbService.user.findUnique({
       where: { id },
-      include: {
-        person: true,
+      omit: {
+        password: true,
       },
     })
   }
 
-  // eslint-disable-next-line @typescript-eslint/require-await
   async verifyIfExists({
     email,
     excludeUserId,
-    username,
-    dni,
   }: {
-    username?: string
     email?: string
-    dni?: string
-    excludeUserId?: number
+    excludeUserId?: string
   }) {
-    if (!username && !email && !dni) return null
+    if (!email) return null
 
     const conditions: Prisma.UserWhereInput = {
       OR: [],
       NOT: {},
     }
 
-    if (username) {
-      conditions.OR?.push({ username })
-    }
-
     if (email) {
-      conditions.OR?.push({ person: { email } })
-    }
-
-    if (dni) {
-      conditions.OR?.push({ person: { dni } })
+      conditions.OR?.push({ email })
     }
 
     if (excludeUserId) {
@@ -114,61 +91,50 @@ export class UsersRepository {
 
     return this.dbService.user.findFirst({
       where: conditions,
-      include: {
-        person: true,
-      },
     })
   }
 
-  async createWithPerson(userData: CreateUserReqDto) {
+  async create(userData: CreateUserReqDto) {
     return this.dbService.$transaction(async (prisma) => {
       return prisma.user.create({
         data: {
           ...userData,
-          person: {
-            create: userData.person,
-          },
         },
-        include: {
-          person: true,
+        omit: {
+          password: true,
         },
       })
     })
   }
 
-  async updateWithPerson(id: number, data: UpdateUserReqDto) {
+  async update(id: string, data: UpdateUserReqDto) {
     return this.dbService.user.update({
       where: { id },
       data: {
         ...data,
         password: data.password ? data.password : undefined,
-        person: {
-          update: {
-            ...data.person,
-          },
-        },
       },
-      include: {
-        person: true,
+      omit: {
+        password: true,
       },
     })
   }
 
-  async remove(id: number) {
+  async remove(id: string) {
     return this.dbService.user.delete({
       where: { id },
-      include: {
-        person: true,
+      omit: {
+        password: true,
       },
     })
   }
 
-  async changeStatus(id: number, status: USER_STATUS) {
+  async changeStatus(id: string, status: boolean) {
     return this.dbService.user.update({
       where: { id },
-      data: { status },
-      include: {
-        person: true,
+      data: { isActive: status },
+      omit: {
+        password: true,
       },
     })
   }

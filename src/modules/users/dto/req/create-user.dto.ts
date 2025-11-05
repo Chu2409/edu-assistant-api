@@ -1,24 +1,13 @@
-import {
-  IsEnum,
-  IsNotEmpty,
-  IsObject,
-  IsOptional,
-  IsString,
-  ValidateNested,
-} from 'class-validator'
-import { CreatePersonReqDto } from 'src/modules/people/dto/req/create-person.dto'
-import { Type } from 'class-transformer'
+import { IsEmail, IsEnum, IsNotEmpty, IsString } from 'class-validator'
 import { ApiProperty } from '@nestjs/swagger'
-import { USER_TYPE } from '../../types/user-type.enum'
-import { USER_STATUS } from '../../types/user-status.enum'
+import { USER_ROLE } from '../../types/user-role.enum'
 export class CreateUserReqDto {
-  @IsString({ message: 'username must be a string' })
-  @IsNotEmpty({ message: 'username is required' })
   @ApiProperty({
-    description: 'The username of the user',
-    example: 'johndoe',
+    description: 'Email of the user (must be unique)',
+    example: 'jperez1231@uta.edu.ec',
   })
-  username: string
+  @IsEmail()
+  email: string
 
   @IsString({ message: 'password must be a string' })
   @IsNotEmpty({ message: 'password is required' })
@@ -28,30 +17,26 @@ export class CreateUserReqDto {
   })
   password: string
 
-  @IsEnum(USER_TYPE)
-  @IsNotEmpty({ message: 'type is required' })
   @ApiProperty({
-    description: 'The type of the user',
-    enum: USER_TYPE,
-    example: USER_TYPE.ADMINISTRATOR,
+    description: 'First name of the user',
+    example: 'Juan',
   })
-  type: USER_TYPE
+  @IsString()
+  firstName: string
 
-  @IsEnum(USER_STATUS)
-  @IsOptional()
   @ApiProperty({
-    description: 'The status of the user',
-    enum: USER_STATUS,
-    example: USER_STATUS.ACTIVE,
+    description: 'Last name of the user',
+    example: 'Pérez',
   })
-  status?: USER_STATUS
+  @IsString()
+  lastName: string
 
-  @IsObject()
-  @ValidateNested()
-  @Type(() => CreatePersonReqDto)
+  @IsEnum(USER_ROLE)
+  @IsNotEmpty({ message: 'role is required' })
   @ApiProperty({
-    description: 'The person of the user',
-    type: CreatePersonReqDto,
+    description: 'The role of the user',
+    enum: USER_ROLE,
+    example: USER_ROLE.ADMIN,
   })
-  person: CreatePersonReqDto
+  role: USER_ROLE
 }

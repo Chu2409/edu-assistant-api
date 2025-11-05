@@ -7,44 +7,704 @@ datasource db {
   url      = env("DB_URL")
 }
 
-enum UserType {
-  ADMINISTRATOR
-  MANAGER
+// ============================================
+// USERS & AUTHENTICATION
+// ============================================
 
-  @@map("USER_TYPE")
-}
-
-enum UserStatus {
-  ACTIVE
-  INACTIVE
-  SUSPENDED
-
-  @@map("USER_STATUS")
-}
-
-model Person {
-  id        Int       @id @default(autoincrement()) @map("id")
-  dni       String    @unique @map("dni")
-  name      String    @map("name")
-  surname   String    @map("surname")
-  email     String    @unique @map("email")
-  birthDate DateTime? @map("birth_date") @db.Date
-  phone     String?   @map("phone")
-
-  user User?
-
-  @@map("people")
+enum Role {
+  ADMIN
+  TEACHER
+  STUDENT
 }
 
 model User {
-  id       Int        @id @default(autoincrement()) @map("id")
-  username String     @unique @map("username")
-  password String     @map("password")
-  type     UserType   @map("type")
-  status   UserStatus @default(ACTIVE) @map("status")
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  firstName String   @map("first_name")
+  lastName  String   @map("last_name")
+  role      Role     @default(STUDENT)
+  isActive  Boolean  @default(true) @map("is_active")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
 
-  personId Int    @unique @map("person_id")
-  person   Person @relation(fields: [personId], references: [id], onDelete: Cascade)
+  // Relations
+  modulesAsTeacher Module[]             @relation("TeacherModules")
+  enrollments      Enrollment[]
+  generatedContent GeneratedContent[]
+  lessonProgress   LessonProgress[]
+  activityAttempts ActivityAttempt[]
+  interactions     StudentInteraction[]
+  questions        StudentQuestion[]
+  notifications    Notification[]
+  notesAnnotations NoteAnnotation[]
+  questionReplies  QuestionReply[]
 
   @@map("users")
+}
+
+// ============================================
+// MODULES (COURSES)
+// ============================================
+
+model Module {
+  id              String   @id @default(cuid())
+  title           String
+  description     String?  @db.Text
+  teacherId       String   @map("teacher_id")
+  isPublic        Boolean  @default(false) @map("is_public") // RF-1b: restricción de enrolamiento
+  allowSelfEnroll Boolean  @default(true) @map("allow_self_enroll") // RF-1: enrolarse libremente
+  publicUrl       String?  @unique @map("public_url") // RF-2a: URL pública para Moodle
+  isActive        Boolean  @default(true) @map("is_active")
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+
+  // Relations
+  teacher         User             @relation("TeacherModules", fields: [teacherId], references: [id], onDelete: Cascade)
+  lessons         Lesson[]
+  enrollments     Enrollment[]
+  concepts        ModuleConcept[]
+  aiConfiguration AiConfiguration?
+  podcasts        Podcast[]
+  moduleMetrics   ModuleMetrics?
+
+  @@index([teacherId])
+  @@map("modules")
+}
+
+// ============================================
+// AI CONFIGURATION (RF-9, RF-10)
+// ============================================
+
+model AiConfiguration {
+  id            String   @id @default(cuid())
+  moduleId      String   @unique @map("module_id")
+  language      String   @default("es") // RF-9: idioma específico
+  contextPrompt String?  @db.Text // RF-10: contexto personalizado del módulo
+  temperature   Float    @default(0.7)
+  maxTokens     Int      @default(2000) @map("max_tokens")
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+
+  // Relations
+  module Module @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+
+  @@map("ai_configurations")
+}
+
+// ============================================
+// ENROLLMENTS (RF-1)
+// ============================================
+
+model Enrollment {
+  id          String    @id @default(cuid())
+  userId      String    @map("user_id")
+  moduleId    String    @map("module_id")
+  enrolledAt  DateTime  @default(now()) @map("enrolled_at")
+  completedAt DateTime? @map("completed_at")
+  isActive    Boolean   @default(true) @map("is_active")
+
+  // Relations
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  module Module @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, moduleId])
+  @@index([userId])
+  @@index([moduleId])
+  @@map("enrollments")
+}
+
+// ============================================
+// LESSONS
+// ============================================
+
+model Lesson {
+  id          String                       @id @default(cuid())
+  moduleId    String                       @map("module_id")
+  title       String
+  content     String                       @db.Text
+  orderIndex  Int                          @map("order_index") // orden en el módulo
+  embedding   Unsupported("vector(1536)")? // RF-6: embeddings para contenidos relacionados
+  isPublished Boolean                      @default(false) @map("is_published")
+  createdAt   DateTime                     @default(now()) @map("created_at")
+  updatedAt   DateTime                     @updatedAt @map("updated_at")
+
+  // Relations
+  module             Module               @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+  activities         Activity[]
+  relatedLessonsFrom LessonRelation[]     @relation("OriginLesson")
+  relatedLessonsTo   LessonRelation[]     @relation("RelatedLesson")
+  conceptMentions    ConceptLesson[]
+  generatedContent   GeneratedContent[]
+  progress           LessonProgress[]
+  interactions       StudentInteraction[]
+  questions          StudentQuestion[]
+  podcasts           Podcast[]
+  mediaResources     MediaResource[]
+  noteAnnotations    NoteAnnotation[]
+
+  @@unique([moduleId, orderIndex])
+  @@index([moduleId])
+  @@map("lessons")
+}
+
+// ============================================
+// LESSON RELATIONS (RF-6: contenidos relacionados)
+// ============================================
+
+enum RelationType {
+  SEMANTIC // similitud semántica
+  PREREQUISITE // prerequisito recomendado
+  COMPLEMENTARY // contenido complementario
+  DEEPENING // profundización del tema
+  APPLIED_EXAMPLE // ejemplo aplicado
+}
+
+model LessonRelation {
+  id              String       @id @default(cuid())
+  originLessonId  String       @map("origin_lesson_id")
+  relatedLessonId String       @map("related_lesson_id")
+  similarityScore Float        @map("similarity_score") // 0-1
+  relationType    RelationType @map("relation_type")
+  commonThemes    String[]     @map("common_themes")
+  explanation     String?      @db.Text // por qué están relacionadas
+  createdAt       DateTime     @default(now()) @map("created_at")
+
+  // Relations
+  originLesson  Lesson @relation("OriginLesson", fields: [originLessonId], references: [id], onDelete: Cascade)
+  relatedLesson Lesson @relation("RelatedLesson", fields: [relatedLessonId], references: [id], onDelete: Cascade)
+
+  @@unique([originLessonId, relatedLessonId])
+  @@index([originLessonId])
+  @@index([similarityScore])
+  @@map("lesson_relations")
+}
+
+// ============================================
+// MODULE CONCEPTS (RF-7)
+// ============================================
+
+enum ConceptType {
+  FUNDAMENTAL
+  ADVANCED
+  APPLIED
+}
+
+model ModuleConcept {
+  id          String                       @id @default(cuid())
+  moduleId    String                       @map("module_id")
+  name        String
+  definition  String?                      @db.Text
+  embedding   Unsupported("vector(1536)")? // embedding para similitud entre conceptos
+  importance  Float                        @default(0) // 0-100 calculado
+  frequency   Int                          @default(1) // número de apariciones
+  conceptType ConceptType                  @default(FUNDAMENTAL) @map("concept_type")
+  createdAt   DateTime                     @default(now()) @map("created_at")
+  updatedAt   DateTime                     @updatedAt @map("updated_at")
+
+  // Relations
+  module            Module              @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+  lessonMentions    ConceptLesson[]
+  relationsAsParent ConceptRelation[]   @relation("ParentConcept")
+  relationsAsChild  ConceptRelation[]   @relation("ChildConcept")
+  similarConcepts   ConceptSimilarity[] @relation("OriginConcept")
+  relatedConcepts   ConceptSimilarity[] @relation("SimilarConcept")
+
+  @@unique([moduleId, name])
+  @@index([moduleId])
+  @@index([importance])
+  @@map("module_concepts")
+}
+
+// ============================================
+// CONCEPT-LESSON RELATION (RF-7)
+// ============================================
+
+model ConceptLesson {
+  id             String   @id @default(cuid())
+  conceptId      String   @map("concept_id")
+  lessonId       String   @map("lesson_id")
+  relevance      Float    @default(0.5) // 0-1: relevancia en esta lección
+  isFirstMention Boolean  @default(false) @map("is_first_mention")
+  contextSnippet String?  @map("context_snippet") @db.Text // fragmento donde aparece
+  createdAt      DateTime @default(now()) @map("created_at")
+
+  // Relations
+  concept ModuleConcept @relation(fields: [conceptId], references: [id], onDelete: Cascade)
+  lesson  Lesson        @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+
+  @@unique([conceptId, lessonId])
+  @@index([conceptId])
+  @@index([lessonId])
+  @@map("concept_lessons")
+}
+
+// ============================================
+// CONCEPT RELATIONS (RF-7)
+// ============================================
+
+enum ConceptRelationType {
+  REQUIRES // prerequisito
+  COMPLEMENTS // complementa
+  EXTENDS // extiende/profundiza
+  CONTRASTS // contrasta con
+}
+
+model ConceptRelation {
+  id              String              @id @default(cuid())
+  parentConceptId String              @map("parent_concept_id")
+  childConceptId  String              @map("child_concept_id")
+  relationType    ConceptRelationType @map("relation_type")
+  explanation     String?             @db.Text
+  createdAt       DateTime            @default(now()) @map("created_at")
+
+  // Relations
+  parentConcept ModuleConcept @relation("ParentConcept", fields: [parentConceptId], references: [id], onDelete: Cascade)
+  childConcept  ModuleConcept @relation("ChildConcept", fields: [childConceptId], references: [id], onDelete: Cascade)
+
+  @@unique([parentConceptId, childConceptId, relationType])
+  @@index([parentConceptId])
+  @@index([childConceptId])
+  @@map("concept_relations")
+}
+
+// ============================================
+// CONCEPT SIMILARITY (basado en embeddings)
+// ============================================
+
+model ConceptSimilarity {
+  id                String   @id @default(cuid())
+  originConceptId   String   @map("origin_concept_id")
+  similarConceptId  String   @map("similar_concept_id")
+  similarityScore   Float    @map("similarity_score") // 0-1
+  sharedLessonCount Int      @default(0) @map("shared_lesson_count") // cuántas lecciones comparten
+  createdAt         DateTime @default(now()) @map("created_at")
+
+  // Relations
+  originConcept  ModuleConcept @relation("OriginConcept", fields: [originConceptId], references: [id], onDelete: Cascade)
+  similarConcept ModuleConcept @relation("SimilarConcept", fields: [similarConceptId], references: [id], onDelete: Cascade)
+
+  @@unique([originConceptId, similarConceptId])
+  @@index([originConceptId])
+  @@index([similarityScore])
+  @@map("concept_similarities")
+}
+
+// ============================================
+// ACTIVITIES/REACTIVOS (RF-8)
+// ============================================
+
+enum ActivityType {
+  MULTIPLE_CHOICE
+  TRUE_FALSE
+  SHORT_ANSWER
+  ESSAY
+  FILL_BLANK
+  MATCHING
+  ORDERING
+}
+
+model Activity {
+  id                  String       @id @default(cuid())
+  lessonId            String       @map("lesson_id")
+  type                ActivityType
+  question            String       @db.Text
+  options             Json? // para multiple choice, matching, etc.
+  correctAnswer       Json         @map("correct_answer")
+  explanation         String?      @db.Text
+  difficulty          Int          @default(1) // 1-5
+  points              Int          @default(1)
+  orderIndex          Int          @map("order_index")
+  isApprovedByTeacher Boolean      @default(false) @map("is_approved_by_teacher") // RF-8: aprobado por docente
+  usedAsExample       Boolean      @default(false) @map("used_as_example") // RF-8a: usado para generar más
+  generatedFromId     String?      @map("generated_from_id") // RF-8a: generado a partir de otro
+  createdAt           DateTime     @default(now()) @map("created_at")
+  updatedAt           DateTime     @updatedAt @map("updated_at")
+
+  // Relations
+  lesson              Lesson            @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+  generatedFrom       Activity?         @relation("GeneratedActivities", fields: [generatedFromId], references: [id], onDelete: SetNull)
+  generatedActivities Activity[]        @relation("GeneratedActivities")
+  attempts            ActivityAttempt[]
+
+  @@index([lessonId])
+  @@index([isApprovedByTeacher])
+  @@index([usedAsExample])
+  @@map("activities")
+}
+
+// ============================================
+// ACTIVITY ATTEMPTS
+// ============================================
+
+model ActivityAttempt {
+  id               String   @id @default(cuid())
+  activityId       String   @map("activity_id")
+  userId           String   @map("user_id")
+  studentAnswer    Json     @map("student_answer")
+  isCorrect        Boolean  @map("is_correct")
+  pointsEarned     Int      @map("points_earned")
+  timeSpentSeconds Int?     @map("time_spent_seconds")
+  attemptNumber    Int      @map("attempt_number") // número de intento
+  createdAt        DateTime @default(now()) @map("created_at")
+
+  // Relations
+  activity Activity @relation(fields: [activityId], references: [id], onDelete: Cascade)
+  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([activityId])
+  @@index([userId])
+  @@index([isCorrect])
+  @@map("activity_attempts")
+}
+
+// ============================================
+// GENERATED CONTENT (RF-4, RF-5)
+// ============================================
+
+enum ContentType {
+  LESSON_CONTENT // contenido de lección generado
+  EXPLANATION // explicación a estudiante
+  SUMMARY // resumen
+  QUIZ // reactivo generado
+  PODCAST_SCRIPT // script para podcast
+  REFINEMENT // refinamiento de contenido
+  RELATED_CONTENT // contenido relacionado sugerido
+}
+
+model GeneratedContent {
+  id              String      @id @default(cuid())
+  lessonId        String?     @map("lesson_id")
+  userId          String      @map("user_id") // quien solicitó la generación
+  contentType     ContentType @map("content_type")
+  content         String      @db.Text
+  originalPrompt  String      @map("original_prompt") @db.Text
+  modelUsed       String      @map("model_used") // "gpt-4o-mini", "claude-sonnet", etc.
+  version         Int         @default(1) // RF-5: versiones para refinamiento
+  parentContentId String?     @map("parent_content_id") // RF-5: versión anterior
+  feedbackNotes   String?     @map("feedback_notes") @db.Text // RF-5: comentarios del docente
+  tokensUsed      Int?        @map("tokens_used")
+  createdAt       DateTime    @default(now()) @map("created_at")
+
+  // Relations
+  lesson        Lesson?            @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+  user          User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  parentContent GeneratedContent?  @relation("ContentRefinement", fields: [parentContentId], references: [id], onDelete: SetNull)
+  refinements   GeneratedContent[] @relation("ContentRefinement")
+
+  @@index([lessonId])
+  @@index([userId])
+  @@index([contentType])
+  @@index([version])
+  @@map("generated_content")
+}
+
+// ============================================
+// LESSON PROGRESS (RF-9: progreso estudiante)
+// ============================================
+
+model LessonProgress {
+  id               String    @id @default(cuid())
+  userId           String    @map("user_id")
+  lessonId         String    @map("lesson_id")
+  isCompleted      Boolean   @default(false) @map("is_completed")
+  completedAt      DateTime? @map("completed_at")
+  lastAccessedAt   DateTime  @default(now()) @map("last_accessed_at")
+  timeSpentSeconds Int       @default(0) @map("time_spent_seconds")
+  scrollPercentage Int       @default(0) @map("scroll_percentage") // 0-100
+
+  // Relations
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  lesson Lesson @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, lessonId])
+  @@index([userId])
+  @@index([lessonId])
+  @@map("lesson_progress")
+}
+
+// ============================================
+// STUDENT INTERACTIONS (RF-11: tracking para analytics)
+// ============================================
+
+enum InteractionType {
+  VIEW
+  SCROLL
+  CLICK
+  SEARCH
+  DOWNLOAD
+  VOICE_INPUT // RF-3: uso de micrófono
+  TEXT_TO_SPEECH // RF-4: lectura con voz GPT
+  AI_QUERY
+  CONCEPT_EXPLORE
+}
+
+model StudentInteraction {
+  id              String          @id @default(cuid())
+  userId          String          @map("user_id")
+  lessonId        String?         @map("lesson_id")
+  interactionType InteractionType @map("interaction_type")
+  metadata        Json? // datos adicionales (profundidad scroll, query text, etc.)
+  durationSeconds Int?            @map("duration_seconds")
+  createdAt       DateTime        @default(now()) @map("created_at")
+
+  // Relations
+  user   User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  lesson Lesson? @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([lessonId])
+  @@index([interactionType])
+  @@index([createdAt])
+  @@map("student_interactions")
+}
+
+// ============================================
+// STUDENT QUESTIONS (RF-12, RF-14)
+// ============================================
+
+enum QuestionStatus {
+  PENDING
+  ANSWERED_BY_AI
+  ANSWERED_BY_TEACHER
+  RESOLVED
+}
+
+model StudentQuestion {
+  id              String         @id @default(cuid())
+  userId          String         @map("user_id")
+  lessonId        String         @map("lesson_id")
+  questionText    String         @map("question_text") @db.Text
+  aiResponse      String?        @map("ai_response") @db.Text
+  teacherResponse String?        @map("teacher_response") @db.Text
+  status          QuestionStatus @default(PENDING)
+  inferredTopic   String?        @map("inferred_topic") // RF-11: tema inferido por IA
+  isPublic        Boolean        @default(true) @map("is_public") // visible en foro
+  upvotes         Int            @default(0) // para priorizar en foro
+  createdAt       DateTime       @default(now()) @map("created_at")
+  updatedAt       DateTime       @updatedAt @map("updated_at")
+
+  // Relations
+  user    User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  lesson  Lesson          @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+  replies QuestionReply[]
+
+  @@index([userId])
+  @@index([lessonId])
+  @@index([status])
+  @@index([isPublic])
+  @@index([inferredTopic])
+  @@map("student_questions")
+}
+
+model QuestionReply {
+  id            String   @id @default(cuid())
+  questionId    String   @map("question_id")
+  userId        String   @map("user_id")
+  replyText     String   @map("reply_text") @db.Text
+  isFromTeacher Boolean  @default(false) @map("is_from_teacher")
+  createdAt     DateTime @default(now()) @map("created_at")
+
+  // Relations
+  question StudentQuestion @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  user     User            @relation(fields: [userId], references: [id])
+
+  @@index([questionId])
+  @@map("question_replies")
+}
+
+// ============================================
+// NOTE ANNOTATIONS (RF-12: anotar contenido)
+// ============================================
+
+model NoteAnnotation {
+  id              String   @id @default(cuid())
+  userId          String   @map("user_id")
+  lessonId        String   @map("lesson_id")
+  noteText        String   @map("note_text") @db.Text
+  highlightedText String?  @map("highlighted_text") @db.Text
+  position        Json? // posición en el documento (offset, selector CSS, etc.)
+  suggestUpdate   Boolean  @default(false) @map("suggest_update") // RF-12: sugerir actualización
+  isPrivate       Boolean  @default(true) @map("is_private")
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+
+  // Relations
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  lesson Lesson @relation(fields: [lessonId], references: [id])
+
+  @@index([userId])
+  @@index([lessonId])
+  @@index([suggestUpdate])
+  @@map("note_annotations")
+}
+
+// ============================================
+// NOTIFICATIONS (RF-13)
+// ============================================
+
+enum NotificationType {
+  NEW_LESSON
+  LESSON_UPDATE
+  CONCEPT_ADDED
+  SUGGESTED_CONTENT
+  QUESTION_ANSWERED
+  TEACHER_REPLY
+  EXCESSIVE_USE_WARNING // RF-13: abuso de herramienta
+  MODULE_UPDATE
+}
+
+model Notification {
+  id                String           @id @default(cuid())
+  userId            String           @map("user_id")
+  type              NotificationType
+  title             String
+  message           String           @db.Text
+  relatedEntityId   String?          @map("related_entity_id") // ID de lección, pregunta, etc.
+  relatedEntityType String?          @map("related_entity_type")
+  isRead            Boolean          @default(false) @map("is_read")
+  emailSent         Boolean          @default(false) @map("email_sent")
+  createdAt         DateTime         @default(now()) @map("created_at")
+
+  // Relations
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([isRead])
+  @@index([createdAt])
+  @@map("notifications")
+}
+
+// ============================================
+// PODCASTS (RF-15)
+// ============================================
+
+model Podcast {
+  id            String   @id @default(cuid())
+  moduleId      String?  @map("module_id")
+  lessonId      String?  @map("lesson_id")
+  title         String
+  description   String?  @db.Text
+  audioUrl      String   @map("audio_url") // URL externa (S3, Cloudinary, etc.)
+  duration      Int? // duración en segundos
+  scriptContent String?  @map("script_content") @db.Text // guión generado
+  isPublished   Boolean  @default(false) @map("is_published")
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+
+  // Relations
+  module Module? @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+  lesson Lesson? @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+
+  @@index([moduleId])
+  @@index([lessonId])
+  @@map("podcasts")
+}
+
+// ============================================
+// MEDIA RESOURCES (videos, imágenes, archivos)
+// ============================================
+
+enum MediaType {
+  IMAGE
+  VIDEO
+  AUDIO
+  DOCUMENT
+  OTHER
+}
+
+model MediaResource {
+  id           String    @id @default(cuid())
+  lessonId     String?   @map("lesson_id")
+  type         MediaType
+  title        String?
+  url          String // URL externa
+  thumbnailUrl String?   @map("thumbnail_url")
+  fileSize     Int?      @map("file_size") // bytes
+  mimeType     String?   @map("mime_type")
+  createdAt    DateTime  @default(now()) @map("created_at")
+
+  // Relations
+  lesson Lesson? @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+
+  @@index([lessonId])
+  @@index([type])
+  @@map("media_resources")
+}
+
+// ============================================
+// MODULE METRICS (RF-11: analytics para docente)
+// ============================================
+
+model ModuleMetrics {
+  id                    String   @id @default(cuid())
+  moduleId              String   @unique @map("module_id")
+  totalViews            Int      @default(0) @map("total_views")
+  totalStudents         Int      @default(0) @map("total_students")
+  averageCompletionRate Float    @default(0) @map("average_completion_rate")
+  mostViewedLessonId    String?  @map("most_viewed_lesson_id")
+  lastCalculatedAt      DateTime @default(now()) @map("last_calculated_at")
+
+  // Relations
+  module Module @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+
+  @@map("module_metrics")
+}
+
+// ============================================
+// AI CACHE (optimización de costos)
+// ============================================
+
+model AiResponseCache {
+  id         String   @id @default(cuid())
+  promptHash String   @unique @map("prompt_hash") // hash del prompt
+  response   String   @db.Text
+  modelUsed  String   @map("model_used")
+  tokensUsed Int      @map("tokens_used")
+  hits       Int      @default(1) // contador de reutilización
+  createdAt  DateTime @default(now()) @map("created_at")
+  lastUsedAt DateTime @default(now()) @map("last_used_at")
+
+  @@index([promptHash])
+  @@index([lastUsedAt])
+  @@map("ai_response_cache")
+}
+
+// ============================================
+// JOBS QUEUE STATUS (tracking de procesamiento)
+// ============================================
+
+enum JobStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  FAILED
+}
+
+enum JobType {
+  GENERATE_EMBEDDING
+  EXTRACT_CONCEPTS
+  CALCULATE_RELATIONS
+  GENERATE_PODCAST
+  SEND_NOTIFICATIONS
+  UPDATE_METRICS
+}
+
+model JobQueue {
+  id           String    @id @default(cuid())
+  jobType      JobType   @map("job_type")
+  status       JobStatus @default(PENDING)
+  entityId     String    @map("entity_id") // ID de la entidad a procesar
+  entityType   String    @map("entity_type") // "lesson", "module", etc.
+  payload      Json? // datos adicionales
+  errorMessage String?   @map("error_message") @db.Text
+  retryCount   Int       @default(0) @map("retry_count")
+  createdAt    DateTime  @default(now()) @map("created_at")
+  startedAt    DateTime? @map("started_at")
+  completedAt  DateTime? @map("completed_at")
+
+  @@index([status])
+  @@index([jobType])
+  @@index([createdAt])
+  @@map("job_queue")
 }

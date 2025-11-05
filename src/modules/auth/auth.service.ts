@@ -13,9 +13,8 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
 
-  async login({ username, password }: SignInReqDto) {
-    const userFound =
-      await this.usersService.findOneWithPasswordByUsername(username)
+  async login({ email, password }: SignInReqDto) {
+    const userFound = await this.usersService.findOneWithPasswordByEmail(email)
 
     if (!userFound)
       throw new BusinessException(
@@ -26,12 +25,12 @@ export class AuthService {
     this.verifyPassword(password, userFound.password)
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { password: _, personId: __, ...userWithoutPassword } = userFound
+    const { password: _, ...userWithoutPassword } = userFound
 
     return {
       token: this.createToken({
         id: userFound.id,
-        role: userFound.type,
+        role: userFound.role,
       }),
       user: userWithoutPassword,
     }

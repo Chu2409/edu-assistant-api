@@ -1,6 +1,6 @@
-import { USER_TYPE } from 'src/modules/users/types/user-type.enum'
+import { USER_ROLE } from 'src/modules/users/types/user-role.enum'
 
 export class JwtPayload {
-  id: number
-  role: USER_TYPE
+  id: string
+  role: USER_ROLE
 }
