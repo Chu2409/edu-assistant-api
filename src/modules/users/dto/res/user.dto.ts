@@ -1,46 +1,52 @@
 import { ApiProperty } from '@nestjs/swagger'
-import { USER_TYPE } from '../../types/user-type.enum'
-import { USER_STATUS } from '../../types/user-status.enum'
-import { PersonResDto } from 'src/modules/people/dto/res/person.dto'
+import { USER_ROLE } from '../../types/user-role.enum'
 
-export class BaseUserResDto {
+export class UserResDto {
   @ApiProperty({
-    description: 'id del usuario',
-    example: 1,
+    description: 'ID of the user',
+    example: 'cixf02ym000001b66m45ae4k8',
   })
-  id: number
+  id: string
 
   @ApiProperty({
-    description: 'username del usuario',
-    example: 'ezhu7643',
+    description: 'Email of the user',
+    example: 'jperez1231@uta.edu.ec',
   })
-  username: string
+  email: string
 
   @ApiProperty({
-    description: 'tipo de usuario',
-    example: USER_TYPE.ADMINISTRATOR,
+    description: 'First name of the user',
+    example: 'Juan',
   })
-  type: USER_TYPE
+  firstName: string
 
   @ApiProperty({
-    description: 'estado del usuario',
-    example: USER_STATUS.ACTIVE,
+    description: 'Last name of the user',
+    example: 'Pérez',
   })
-  status: USER_STATUS
-}
+  lastName: string
 
-export class UserResDto extends BaseUserResDto {
   @ApiProperty({
-    description: 'id de la persona',
-    example: 1,
+    description: 'Role of the user',
+    example: USER_ROLE.ADMIN,
   })
-  personId: number
-}
+  role: USER_ROLE
 
-export class UserPersonResDto extends BaseUserResDto {
   @ApiProperty({
-    description: 'persona asociada al usuario',
-    type: PersonResDto,
+    description: 'Is active of the user',
+    example: true,
   })
-  person: PersonResDto
+  isActive: boolean
+
+  @ApiProperty({
+    description: 'Created at of the user',
+    example: '2021-01-01T00:00:00.000Z',
+  })
+  createdAt: Date
+
+  @ApiProperty({
+    description: 'Updated at of the user',
+    example: '2021-01-01T00:00:00.000Z',
+  })
+  updatedAt: Date
 }
