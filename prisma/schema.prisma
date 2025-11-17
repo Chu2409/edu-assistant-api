@@ -29,13 +29,15 @@ model User {
   updatedAt DateTime @updatedAt @map("updated_at")
 
   // Relations
-  modulesAsTeacher Module[]           @relation("TeacherModules")
+  modulesAsTeacher Module[]          @relation("TeacherModules")
   enrollments      Enrollment[]
-  generatedContent GeneratedContent[]
+  generatedContent Note[]
   activityAttempts ActivityAttempt[]
   notifications    Notification[]
   pageFeedbacks    PageFeedback[]
   promptFeedbacks  PromptFeedback[]
+  studentQuestions StudentQuestion[]
+  questionReplies  QuestionReply[]
 
   @@map("users")
 }
@@ -75,9 +77,8 @@ model AiConfiguration {
   id            String   @id @default(cuid())
   moduleId      String   @unique @map("module_id")
   language      String   @default("es") // RF-9: idioma específico
-  contextPrompt String?  @db.Text // RF-10: contexto personalizado del módulo
+  contextPrompt String?  @map("context_prompt") @db.Text // RF-10: contexto personalizado del módulo
   temperature   Float    @default(0.7)
-  maxTokens     Int      @default(2000) @map("max_tokens")
   createdAt     DateTime @default(now()) @map("created_at")
   updatedAt     DateTime @updatedAt @map("updated_at")
 
@@ -125,16 +126,17 @@ model Page {
   updatedAt   DateTime                     @updatedAt @map("updated_at")
 
   // Relations
-  module           Module             @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+  module           Module            @relation(fields: [moduleId], references: [id], onDelete: Cascade)
   activities       Activity[]
-  relatedPagesFrom PageRelation[]     @relation("OriginPage")
-  relatedPagesTo   PageRelation[]     @relation("RelatedPage")
+  relatedPagesFrom PageRelation[]    @relation("OriginPage")
+  relatedPagesTo   PageRelation[]    @relation("RelatedPage")
   conceptMentions  PageConcept[]
-  generatedContent GeneratedContent[]
+  notes            Note[]
   podcasts         Podcast[]
   mediaResources   MediaResource[]
   pageFeedbacks    PageFeedback[]
   promptFeedbacks  PromptFeedback[]
+  studentQuestions StudentQuestion[]
 
   @@unique([moduleId, orderIndex])
   @@index([moduleId])
@@ -215,7 +217,6 @@ model Activity {
   correctAnswer       Json         @map("correct_answer")
   explanation         String?      @db.Text
   difficulty          Int          @default(1) // 1-5
-  points              Int          @default(1)
   orderIndex          Int          @map("order_index")
   isApprovedByTeacher Boolean      @default(false) @map("is_approved_by_teacher") // RF-8: aprobado por docente
   usedAsExample       Boolean      @default(false) @map("used_as_example") // RF-8a: usado para generar más
@@ -240,15 +241,13 @@ model Activity {
 // ============================================
 
 model ActivityAttempt {
-  id               String   @id @default(cuid())
-  activityId       String   @map("activity_id")
-  userId           String   @map("user_id")
-  studentAnswer    Json     @map("student_answer")
-  isCorrect        Boolean  @map("is_correct")
-  pointsEarned     Int      @map("points_earned")
-  timeSpentSeconds Int?     @map("time_spent_seconds")
-  attemptNumber    Int      @map("attempt_number") // número de intento
-  createdAt        DateTime @default(now()) @map("created_at")
+  id            String   @id @default(cuid())
+  activityId    String   @map("activity_id")
+  userId        String   @map("user_id")
+  studentAnswer Json     @map("student_answer")
+  isCorrect     Boolean  @map("is_correct")
+  attemptNumber Int      @map("attempt_number") // número de intento
+  createdAt     DateTime @default(now()) @map("created_at")
 
   // Relations
   activity Activity @relation(fields: [activityId], references: [id], onDelete: Cascade)
@@ -308,7 +307,7 @@ enum ContentType {
   RELATED_CONTENT // contenido relacionado sugerido
 }
 
-model GeneratedContent {
+model Note {
   id        String   @id @default(cuid())
   pageId    String?  @map("page_id")
   userId    String   @map("user_id") // quien solicitó la generación
@@ -321,7 +320,48 @@ model GeneratedContent {
 
   @@index([pageId])
   @@index([userId])
-  @@map("generated_content")
+  @@map("notes")
+}
+
+// ============================================
+// STUDENT QUESTIONS (RF-12, RF-14)
+// ============================================
+
+model StudentQuestion {
+  id        String   @id @default(cuid())
+  userId    String   @map("user_id")
+  pageId    String   @map("page_id")
+  question  String   @map("question") @db.Text
+  isPublic  Boolean  @default(true) @map("is_public") // visible en foro
+  upvotes   Int      @default(0) // para priorizar en foro
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  // Relations
+  user    User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  page    Page            @relation(fields: [pageId], references: [id], onDelete: Cascade)
+  replies QuestionReply[]
+
+  @@index([userId])
+  @@index([pageId])
+  @@index([isPublic])
+  @@map("student_questions")
+}
+
+model QuestionReply {
+  id            String   @id @default(cuid())
+  questionId    String   @map("question_id")
+  userId        String   @map("user_id")
+  replyText     String   @map("reply_text") @db.Text
+  isFromTeacher Boolean  @default(false) @map("is_from_teacher")
+  createdAt     DateTime @default(now()) @map("created_at")
+
+  // Relations
+  question StudentQuestion @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  user     User            @relation(fields: [userId], references: [id])
+
+  @@index([questionId])
+  @@map("question_replies")
 }
 
 // ============================================
