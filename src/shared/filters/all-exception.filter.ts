@@ -11,7 +11,7 @@ import {
 import { Request, Response } from 'express'
 import { BusinessException } from '../exceptions/business.exception'
 import { ApiRes } from '../dtos/res/api-response.dto'
-import { Prisma } from '@prisma/client'
+import { Prisma } from 'src/core/database/generated/client'
 
 @Catch()
 export class GlobalExceptionFilter implements ExceptionFilter {
