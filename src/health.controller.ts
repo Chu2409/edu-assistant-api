@@ -1,22 +1,21 @@
 import { Controller, Get } from '@nestjs/common'
 import { DBService } from './core/database/database.service'
-import { Public } from './modules/auth/decorators/public-route.decorator'
 
 @Controller('health')
 export class HealthController {
-  constructor(private readonly prisma: DBService) {}
+  constructor(private readonly dbService: DBService) {}
 
   @Get()
-  @Public()
+  // @Public()
   check() {
     return { status: 'OK', timestamp: new Date().toISOString() }
   }
 
   @Get('db')
-  @Public()
+  // @Public()
   async checkDatabase() {
     // Verificar la conexión a la base de datos
-    await this.prisma.$queryRaw`SELECT 1`
+    await this.dbService.$queryRaw`SELECT 1`
 
     return {
       status: 'OK',

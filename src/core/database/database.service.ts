@@ -1,28 +1,19 @@
-import { Injectable, OnModuleDestroy, OnModuleInit } from '@nestjs/common'
-import { PrismaClient } from '@prisma/client'
+// db.service.ts
+import { Injectable, OnModuleInit } from '@nestjs/common'
+import { PrismaPg } from '@prisma/adapter-pg'
+import { CustomConfigService } from '../config/config.service'
+import { PrismaClient } from './generated/client'
 
 @Injectable()
-export class DBService
-  extends PrismaClient
-  implements OnModuleInit, OnModuleDestroy
-{
+export class DBService extends PrismaClient implements OnModuleInit {
+  constructor(private readonly configService: CustomConfigService) {
+    const adapter = new PrismaPg({
+      connectionString: configService.env.DB_URL,
+    })
+    super({ adapter })
+  }
+
   async onModuleInit() {
     await this.$connect()
-  }
-
-  async onModuleDestroy() {
-    await this.$disconnect()
-  }
-
-  // eslint-disable-next-line @typescript-eslint/require-await
-  async executeTransaction<T>(
-    fn: (
-      tx: Omit<
-        PrismaClient,
-        '$connect' | '$disconnect' | '$on' | '$transaction' | '$use'
-      >,
-    ) => Promise<T>,
-  ): Promise<T> {
-    return this.$transaction(fn)
   }
 }
