@@ -36,9 +36,10 @@ model User {
   activityAttempts ActivityAttempt[]
   notifications    Notification[]
   pageFeedbacks    PageFeedback[]
-  promptFeedbacks  PromptFeedback[]
+  promptFeedbacks  Prompt[]
   studentQuestions StudentQuestion[]
   questionReplies  QuestionReply[]
+  pageViews        PageView[]
 
   @@map("users")
 }
@@ -136,12 +137,39 @@ model Page {
   podcasts         Podcast[]
   mediaResources   MediaResource[]
   pageFeedbacks    PageFeedback[]
-  promptFeedbacks  PromptFeedback[]
+  promptFeedbacks  Prompt[]
   studentQuestions StudentQuestion[]
+  pageViews        PageView[]
 
   @@unique([moduleId, orderIndex])
   @@index([moduleId])
   @@map("pages")
+}
+
+// ============================================
+// PAGE VIEWS (Control de visualización de estudiantes)
+// ============================================
+
+model PageView {
+  id            String   @id @default(cuid())
+  userId        String   @map("user_id")
+  pageId        String   @map("page_id")
+  firstViewedAt DateTime @default(now()) @map("first_viewed_at")
+  lastViewedAt  DateTime @updatedAt @map("last_viewed_at")
+  viewCount     Int      @default(1) @map("view_count") // número de veces que ha visto la página
+  timeSpent     Int      @default(0) @map("time_spent") // tiempo total en segundos
+  isCompleted   Boolean  @default(false) @map("is_completed") // si completó la visualización
+  progress      Float    @default(0) // porcentaje de progreso (0-100)
+
+  // Relations
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  page Page @relation(fields: [pageId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, pageId])
+  @@index([userId])
+  @@index([pageId])
+  @@index([isCompleted])
+  @@map("page_views")
 }
 
 // ============================================
@@ -263,7 +291,7 @@ model ActivityAttempt {
 // ============================================
 // GENERATED CONTENT (RF-4, RF-5)
 // ============================================
-model PromptFeedback {
+model Prompt {
   id        String   @id @default(cuid())
   pageId    String?  @map("page_id")
   userId    String   @map("user_id") // quien solicitó la generación
@@ -277,7 +305,7 @@ model PromptFeedback {
 
   @@index([pageId])
   @@index([userId])
-  @@map("prompt_feedback")
+  @@map("prompts")
 }
 
 model PageFeedback {
