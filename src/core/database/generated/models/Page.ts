@@ -249,8 +249,9 @@ export type PageWhereInput = {
   podcasts?: Prisma.PodcastListRelationFilter
   mediaResources?: Prisma.MediaResourceListRelationFilter
   pageFeedbacks?: Prisma.PageFeedbackListRelationFilter
-  promptFeedbacks?: Prisma.PromptFeedbackListRelationFilter
+  promptFeedbacks?: Prisma.PromptListRelationFilter
   studentQuestions?: Prisma.StudentQuestionListRelationFilter
+  pageViews?: Prisma.PageViewListRelationFilter
 }
 
 export type PageOrderByWithRelationInput = {
@@ -271,8 +272,9 @@ export type PageOrderByWithRelationInput = {
   podcasts?: Prisma.PodcastOrderByRelationAggregateInput
   mediaResources?: Prisma.MediaResourceOrderByRelationAggregateInput
   pageFeedbacks?: Prisma.PageFeedbackOrderByRelationAggregateInput
-  promptFeedbacks?: Prisma.PromptFeedbackOrderByRelationAggregateInput
+  promptFeedbacks?: Prisma.PromptOrderByRelationAggregateInput
   studentQuestions?: Prisma.StudentQuestionOrderByRelationAggregateInput
+  pageViews?: Prisma.PageViewOrderByRelationAggregateInput
 }
 
 export type PageWhereUniqueInput = Prisma.AtLeast<{
@@ -297,8 +299,9 @@ export type PageWhereUniqueInput = Prisma.AtLeast<{
   podcasts?: Prisma.PodcastListRelationFilter
   mediaResources?: Prisma.MediaResourceListRelationFilter
   pageFeedbacks?: Prisma.PageFeedbackListRelationFilter
-  promptFeedbacks?: Prisma.PromptFeedbackListRelationFilter
+  promptFeedbacks?: Prisma.PromptListRelationFilter
   studentQuestions?: Prisma.StudentQuestionListRelationFilter
+  pageViews?: Prisma.PageViewListRelationFilter
 }, "id" | "moduleId_orderIndex">
 
 export type PageOrderByWithAggregationInput = {
@@ -348,8 +351,9 @@ export type PageCreateInput = {
   podcasts?: Prisma.PodcastCreateNestedManyWithoutPageInput
   mediaResources?: Prisma.MediaResourceCreateNestedManyWithoutPageInput
   pageFeedbacks?: Prisma.PageFeedbackCreateNestedManyWithoutPageInput
-  promptFeedbacks?: Prisma.PromptFeedbackCreateNestedManyWithoutPageInput
+  promptFeedbacks?: Prisma.PromptCreateNestedManyWithoutPageInput
   studentQuestions?: Prisma.StudentQuestionCreateNestedManyWithoutPageInput
+  pageViews?: Prisma.PageViewCreateNestedManyWithoutPageInput
 }
 
 export type PageUncheckedCreateInput = {
@@ -369,8 +373,9 @@ export type PageUncheckedCreateInput = {
   podcasts?: Prisma.PodcastUncheckedCreateNestedManyWithoutPageInput
   mediaResources?: Prisma.MediaResourceUncheckedCreateNestedManyWithoutPageInput
   pageFeedbacks?: Prisma.PageFeedbackUncheckedCreateNestedManyWithoutPageInput
-  promptFeedbacks?: Prisma.PromptFeedbackUncheckedCreateNestedManyWithoutPageInput
+  promptFeedbacks?: Prisma.PromptUncheckedCreateNestedManyWithoutPageInput
   studentQuestions?: Prisma.StudentQuestionUncheckedCreateNestedManyWithoutPageInput
+  pageViews?: Prisma.PageViewUncheckedCreateNestedManyWithoutPageInput
 }
 
 export type PageUpdateInput = {
@@ -390,8 +395,9 @@ export type PageUpdateInput = {
   podcasts?: Prisma.PodcastUpdateManyWithoutPageNestedInput
   mediaResources?: Prisma.MediaResourceUpdateManyWithoutPageNestedInput
   pageFeedbacks?: Prisma.PageFeedbackUpdateManyWithoutPageNestedInput
-  promptFeedbacks?: Prisma.PromptFeedbackUpdateManyWithoutPageNestedInput
+  promptFeedbacks?: Prisma.PromptUpdateManyWithoutPageNestedInput
   studentQuestions?: Prisma.StudentQuestionUpdateManyWithoutPageNestedInput
+  pageViews?: Prisma.PageViewUpdateManyWithoutPageNestedInput
 }
 
 export type PageUncheckedUpdateInput = {
@@ -411,8 +417,9 @@ export type PageUncheckedUpdateInput = {
   podcasts?: Prisma.PodcastUncheckedUpdateManyWithoutPageNestedInput
   mediaResources?: Prisma.MediaResourceUncheckedUpdateManyWithoutPageNestedInput
   pageFeedbacks?: Prisma.PageFeedbackUncheckedUpdateManyWithoutPageNestedInput
-  promptFeedbacks?: Prisma.PromptFeedbackUncheckedUpdateManyWithoutPageNestedInput
+  promptFeedbacks?: Prisma.PromptUncheckedUpdateManyWithoutPageNestedInput
   studentQuestions?: Prisma.StudentQuestionUncheckedUpdateManyWithoutPageNestedInput
+  pageViews?: Prisma.PageViewUncheckedUpdateManyWithoutPageNestedInput
 }
 
 export type PageCreateManyInput = {
@@ -561,6 +568,20 @@ export type IntFieldUpdateOperationsInput = {
   decrement?: number
   multiply?: number
   divide?: number
+}
+
+export type PageCreateNestedOneWithoutPageViewsInput = {
+  create?: Prisma.XOR<Prisma.PageCreateWithoutPageViewsInput, Prisma.PageUncheckedCreateWithoutPageViewsInput>
+  connectOrCreate?: Prisma.PageCreateOrConnectWithoutPageViewsInput
+  connect?: Prisma.PageWhereUniqueInput
+}
+
+export type PageUpdateOneRequiredWithoutPageViewsNestedInput = {
+  create?: Prisma.XOR<Prisma.PageCreateWithoutPageViewsInput, Prisma.PageUncheckedCreateWithoutPageViewsInput>
+  connectOrCreate?: Prisma.PageCreateOrConnectWithoutPageViewsInput
+  upsert?: Prisma.PageUpsertWithoutPageViewsInput
+  connect?: Prisma.PageWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.PageUpdateToOneWithWhereWithoutPageViewsInput, Prisma.PageUpdateWithoutPageViewsInput>, Prisma.PageUncheckedUpdateWithoutPageViewsInput>
 }
 
 export type PageCreateNestedOneWithoutRelatedPagesFromInput = {
@@ -729,8 +750,9 @@ export type PageCreateWithoutModuleInput = {
   podcasts?: Prisma.PodcastCreateNestedManyWithoutPageInput
   mediaResources?: Prisma.MediaResourceCreateNestedManyWithoutPageInput
   pageFeedbacks?: Prisma.PageFeedbackCreateNestedManyWithoutPageInput
-  promptFeedbacks?: Prisma.PromptFeedbackCreateNestedManyWithoutPageInput
+  promptFeedbacks?: Prisma.PromptCreateNestedManyWithoutPageInput
   studentQuestions?: Prisma.StudentQuestionCreateNestedManyWithoutPageInput
+  pageViews?: Prisma.PageViewCreateNestedManyWithoutPageInput
 }
 
 export type PageUncheckedCreateWithoutModuleInput = {
@@ -749,8 +771,9 @@ export type PageUncheckedCreateWithoutModuleInput = {
   podcasts?: Prisma.PodcastUncheckedCreateNestedManyWithoutPageInput
   mediaResources?: Prisma.MediaResourceUncheckedCreateNestedManyWithoutPageInput
   pageFeedbacks?: Prisma.PageFeedbackUncheckedCreateNestedManyWithoutPageInput
-  promptFeedbacks?: Prisma.PromptFeedbackUncheckedCreateNestedManyWithoutPageInput
+  promptFeedbacks?: Prisma.PromptUncheckedCreateNestedManyWithoutPageInput
   studentQuestions?: Prisma.StudentQuestionUncheckedCreateNestedManyWithoutPageInput
+  pageViews?: Prisma.PageViewUncheckedCreateNestedManyWithoutPageInput
 }
 
 export type PageCreateOrConnectWithoutModuleInput = {
@@ -793,6 +816,106 @@ export type PageScalarWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"Page"> | Date | string
 }
 
+export type PageCreateWithoutPageViewsInput = {
+  id?: string
+  title: string
+  content: string
+  orderIndex: number
+  isPublished?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  module: Prisma.ModuleCreateNestedOneWithoutPagesInput
+  activities?: Prisma.ActivityCreateNestedManyWithoutPageInput
+  relatedPagesFrom?: Prisma.PageRelationCreateNestedManyWithoutOriginPageInput
+  relatedPagesTo?: Prisma.PageRelationCreateNestedManyWithoutRelatedPageInput
+  conceptMentions?: Prisma.PageConceptCreateNestedManyWithoutPageInput
+  notes?: Prisma.NoteCreateNestedManyWithoutPageInput
+  podcasts?: Prisma.PodcastCreateNestedManyWithoutPageInput
+  mediaResources?: Prisma.MediaResourceCreateNestedManyWithoutPageInput
+  pageFeedbacks?: Prisma.PageFeedbackCreateNestedManyWithoutPageInput
+  promptFeedbacks?: Prisma.PromptCreateNestedManyWithoutPageInput
+  studentQuestions?: Prisma.StudentQuestionCreateNestedManyWithoutPageInput
+}
+
+export type PageUncheckedCreateWithoutPageViewsInput = {
+  id?: string
+  moduleId: string
+  title: string
+  content: string
+  orderIndex: number
+  isPublished?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  activities?: Prisma.ActivityUncheckedCreateNestedManyWithoutPageInput
+  relatedPagesFrom?: Prisma.PageRelationUncheckedCreateNestedManyWithoutOriginPageInput
+  relatedPagesTo?: Prisma.PageRelationUncheckedCreateNestedManyWithoutRelatedPageInput
+  conceptMentions?: Prisma.PageConceptUncheckedCreateNestedManyWithoutPageInput
+  notes?: Prisma.NoteUncheckedCreateNestedManyWithoutPageInput
+  podcasts?: Prisma.PodcastUncheckedCreateNestedManyWithoutPageInput
+  mediaResources?: Prisma.MediaResourceUncheckedCreateNestedManyWithoutPageInput
+  pageFeedbacks?: Prisma.PageFeedbackUncheckedCreateNestedManyWithoutPageInput
+  promptFeedbacks?: Prisma.PromptUncheckedCreateNestedManyWithoutPageInput
+  studentQuestions?: Prisma.StudentQuestionUncheckedCreateNestedManyWithoutPageInput
+}
+
+export type PageCreateOrConnectWithoutPageViewsInput = {
+  where: Prisma.PageWhereUniqueInput
+  create: Prisma.XOR<Prisma.PageCreateWithoutPageViewsInput, Prisma.PageUncheckedCreateWithoutPageViewsInput>
+}
+
+export type PageUpsertWithoutPageViewsInput = {
+  update: Prisma.XOR<Prisma.PageUpdateWithoutPageViewsInput, Prisma.PageUncheckedUpdateWithoutPageViewsInput>
+  create: Prisma.XOR<Prisma.PageCreateWithoutPageViewsInput, Prisma.PageUncheckedCreateWithoutPageViewsInput>
+  where?: Prisma.PageWhereInput
+}
+
+export type PageUpdateToOneWithWhereWithoutPageViewsInput = {
+  where?: Prisma.PageWhereInput
+  data: Prisma.XOR<Prisma.PageUpdateWithoutPageViewsInput, Prisma.PageUncheckedUpdateWithoutPageViewsInput>
+}
+
+export type PageUpdateWithoutPageViewsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  content?: Prisma.StringFieldUpdateOperationsInput | string
+  orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
+  isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  module?: Prisma.ModuleUpdateOneRequiredWithoutPagesNestedInput
+  activities?: Prisma.ActivityUpdateManyWithoutPageNestedInput
+  relatedPagesFrom?: Prisma.PageRelationUpdateManyWithoutOriginPageNestedInput
+  relatedPagesTo?: Prisma.PageRelationUpdateManyWithoutRelatedPageNestedInput
+  conceptMentions?: Prisma.PageConceptUpdateManyWithoutPageNestedInput
+  notes?: Prisma.NoteUpdateManyWithoutPageNestedInput
+  podcasts?: Prisma.PodcastUpdateManyWithoutPageNestedInput
+  mediaResources?: Prisma.MediaResourceUpdateManyWithoutPageNestedInput
+  pageFeedbacks?: Prisma.PageFeedbackUpdateManyWithoutPageNestedInput
+  promptFeedbacks?: Prisma.PromptUpdateManyWithoutPageNestedInput
+  studentQuestions?: Prisma.StudentQuestionUpdateManyWithoutPageNestedInput
+}
+
+export type PageUncheckedUpdateWithoutPageViewsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  moduleId?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  content?: Prisma.StringFieldUpdateOperationsInput | string
+  orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
+  isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  activities?: Prisma.ActivityUncheckedUpdateManyWithoutPageNestedInput
+  relatedPagesFrom?: Prisma.PageRelationUncheckedUpdateManyWithoutOriginPageNestedInput
+  relatedPagesTo?: Prisma.PageRelationUncheckedUpdateManyWithoutRelatedPageNestedInput
+  conceptMentions?: Prisma.PageConceptUncheckedUpdateManyWithoutPageNestedInput
+  notes?: Prisma.NoteUncheckedUpdateManyWithoutPageNestedInput
+  podcasts?: Prisma.PodcastUncheckedUpdateManyWithoutPageNestedInput
+  mediaResources?: Prisma.MediaResourceUncheckedUpdateManyWithoutPageNestedInput
+  pageFeedbacks?: Prisma.PageFeedbackUncheckedUpdateManyWithoutPageNestedInput
+  promptFeedbacks?: Prisma.PromptUncheckedUpdateManyWithoutPageNestedInput
+  studentQuestions?: Prisma.StudentQuestionUncheckedUpdateManyWithoutPageNestedInput
+}
+
 export type PageCreateWithoutRelatedPagesFromInput = {
   id?: string
   title: string
@@ -809,8 +932,9 @@ export type PageCreateWithoutRelatedPagesFromInput = {
   podcasts?: Prisma.PodcastCreateNestedManyWithoutPageInput
   mediaResources?: Prisma.MediaResourceCreateNestedManyWithoutPageInput
   pageFeedbacks?: Prisma.PageFeedbackCreateNestedManyWithoutPageInput
-  promptFeedbacks?: Prisma.PromptFeedbackCreateNestedManyWithoutPageInput
+  promptFeedbacks?: Prisma.PromptCreateNestedManyWithoutPageInput
   studentQuestions?: Prisma.StudentQuestionCreateNestedManyWithoutPageInput
+  pageViews?: Prisma.PageViewCreateNestedManyWithoutPageInput
 }
 
 export type PageUncheckedCreateWithoutRelatedPagesFromInput = {
@@ -829,8 +953,9 @@ export type PageUncheckedCreateWithoutRelatedPagesFromInput = {
   podcasts?: Prisma.PodcastUncheckedCreateNestedManyWithoutPageInput
   mediaResources?: Prisma.MediaResourceUncheckedCreateNestedManyWithoutPageInput
   pageFeedbacks?: Prisma.PageFeedbackUncheckedCreateNestedManyWithoutPageInput
-  promptFeedbacks?: Prisma.PromptFeedbackUncheckedCreateNestedManyWithoutPageInput
+  promptFeedbacks?: Prisma.PromptUncheckedCreateNestedManyWithoutPageInput
   studentQuestions?: Prisma.StudentQuestionUncheckedCreateNestedManyWithoutPageInput
+  pageViews?: Prisma.PageViewUncheckedCreateNestedManyWithoutPageInput
 }
 
 export type PageCreateOrConnectWithoutRelatedPagesFromInput = {
@@ -854,8 +979,9 @@ export type PageCreateWithoutRelatedPagesToInput = {
   podcasts?: Prisma.PodcastCreateNestedManyWithoutPageInput
   mediaResources?: Prisma.MediaResourceCreateNestedManyWithoutPageInput
   pageFeedbacks?: Prisma.PageFeedbackCreateNestedManyWithoutPageInput
-  promptFeedbacks?: Prisma.PromptFeedbackCreateNestedManyWithoutPageInput
+  promptFeedbacks?: Prisma.PromptCreateNestedManyWithoutPageInput
   studentQuestions?: Prisma.StudentQuestionCreateNestedManyWithoutPageInput
+  pageViews?: Prisma.PageViewCreateNestedManyWithoutPageInput
 }
 
 export type PageUncheckedCreateWithoutRelatedPagesToInput = {
@@ -874,8 +1000,9 @@ export type PageUncheckedCreateWithoutRelatedPagesToInput = {
   podcasts?: Prisma.PodcastUncheckedCreateNestedManyWithoutPageInput
   mediaResources?: Prisma.MediaResourceUncheckedCreateNestedManyWithoutPageInput
   pageFeedbacks?: Prisma.PageFeedbackUncheckedCreateNestedManyWithoutPageInput
-  promptFeedbacks?: Prisma.PromptFeedbackUncheckedCreateNestedManyWithoutPageInput
+  promptFeedbacks?: Prisma.PromptUncheckedCreateNestedManyWithoutPageInput
   studentQuestions?: Prisma.StudentQuestionUncheckedCreateNestedManyWithoutPageInput
+  pageViews?: Prisma.PageViewUncheckedCreateNestedManyWithoutPageInput
 }
 
 export type PageCreateOrConnectWithoutRelatedPagesToInput = {
@@ -910,8 +1037,9 @@ export type PageUpdateWithoutRelatedPagesFromInput = {
   podcasts?: Prisma.PodcastUpdateManyWithoutPageNestedInput
   mediaResources?: Prisma.MediaResourceUpdateManyWithoutPageNestedInput
   pageFeedbacks?: Prisma.PageFeedbackUpdateManyWithoutPageNestedInput
-  promptFeedbacks?: Prisma.PromptFeedbackUpdateManyWithoutPageNestedInput
+  promptFeedbacks?: Prisma.PromptUpdateManyWithoutPageNestedInput
   studentQuestions?: Prisma.StudentQuestionUpdateManyWithoutPageNestedInput
+  pageViews?: Prisma.PageViewUpdateManyWithoutPageNestedInput
 }
 
 export type PageUncheckedUpdateWithoutRelatedPagesFromInput = {
@@ -930,8 +1058,9 @@ export type PageUncheckedUpdateWithoutRelatedPagesFromInput = {
   podcasts?: Prisma.PodcastUncheckedUpdateManyWithoutPageNestedInput
   mediaResources?: Prisma.MediaResourceUncheckedUpdateManyWithoutPageNestedInput
   pageFeedbacks?: Prisma.PageFeedbackUncheckedUpdateManyWithoutPageNestedInput
-  promptFeedbacks?: Prisma.PromptFeedbackUncheckedUpdateManyWithoutPageNestedInput
+  promptFeedbacks?: Prisma.PromptUncheckedUpdateManyWithoutPageNestedInput
   studentQuestions?: Prisma.StudentQuestionUncheckedUpdateManyWithoutPageNestedInput
+  pageViews?: Prisma.PageViewUncheckedUpdateManyWithoutPageNestedInput
 }
 
 export type PageUpsertWithoutRelatedPagesToInput = {
@@ -961,8 +1090,9 @@ export type PageUpdateWithoutRelatedPagesToInput = {
   podcasts?: Prisma.PodcastUpdateManyWithoutPageNestedInput
   mediaResources?: Prisma.MediaResourceUpdateManyWithoutPageNestedInput
   pageFeedbacks?: Prisma.PageFeedbackUpdateManyWithoutPageNestedInput
-  promptFeedbacks?: Prisma.PromptFeedbackUpdateManyWithoutPageNestedInput
+  promptFeedbacks?: Prisma.PromptUpdateManyWithoutPageNestedInput
   studentQuestions?: Prisma.StudentQuestionUpdateManyWithoutPageNestedInput
+  pageViews?: Prisma.PageViewUpdateManyWithoutPageNestedInput
 }
 
 export type PageUncheckedUpdateWithoutRelatedPagesToInput = {
@@ -981,8 +1111,9 @@ export type PageUncheckedUpdateWithoutRelatedPagesToInput = {
   podcasts?: Prisma.PodcastUncheckedUpdateManyWithoutPageNestedInput
   mediaResources?: Prisma.MediaResourceUncheckedUpdateManyWithoutPageNestedInput
   pageFeedbacks?: Prisma.PageFeedbackUncheckedUpdateManyWithoutPageNestedInput
-  promptFeedbacks?: Prisma.PromptFeedbackUncheckedUpdateManyWithoutPageNestedInput
+  promptFeedbacks?: Prisma.PromptUncheckedUpdateManyWithoutPageNestedInput
   studentQuestions?: Prisma.StudentQuestionUncheckedUpdateManyWithoutPageNestedInput
+  pageViews?: Prisma.PageViewUncheckedUpdateManyWithoutPageNestedInput
 }
 
 export type PageCreateWithoutConceptMentionsInput = {
@@ -1001,8 +1132,9 @@ export type PageCreateWithoutConceptMentionsInput = {
   podcasts?: Prisma.PodcastCreateNestedManyWithoutPageInput
   mediaResources?: Prisma.MediaResourceCreateNestedManyWithoutPageInput
   pageFeedbacks?: Prisma.PageFeedbackCreateNestedManyWithoutPageInput
-  promptFeedbacks?: Prisma.PromptFeedbackCreateNestedManyWithoutPageInput
+  promptFeedbacks?: Prisma.PromptCreateNestedManyWithoutPageInput
   studentQuestions?: Prisma.StudentQuestionCreateNestedManyWithoutPageInput
+  pageViews?: Prisma.PageViewCreateNestedManyWithoutPageInput
 }
 
 export type PageUncheckedCreateWithoutConceptMentionsInput = {
@@ -1021,8 +1153,9 @@ export type PageUncheckedCreateWithoutConceptMentionsInput = {
   podcasts?: Prisma.PodcastUncheckedCreateNestedManyWithoutPageInput
   mediaResources?: Prisma.MediaResourceUncheckedCreateNestedManyWithoutPageInput
   pageFeedbacks?: Prisma.PageFeedbackUncheckedCreateNestedManyWithoutPageInput
-  promptFeedbacks?: Prisma.PromptFeedbackUncheckedCreateNestedManyWithoutPageInput
+  promptFeedbacks?: Prisma.PromptUncheckedCreateNestedManyWithoutPageInput
   studentQuestions?: Prisma.StudentQuestionUncheckedCreateNestedManyWithoutPageInput
+  pageViews?: Prisma.PageViewUncheckedCreateNestedManyWithoutPageInput
 }
 
 export type PageCreateOrConnectWithoutConceptMentionsInput = {
@@ -1057,8 +1190,9 @@ export type PageUpdateWithoutConceptMentionsInput = {
   podcasts?: Prisma.PodcastUpdateManyWithoutPageNestedInput
   mediaResources?: Prisma.MediaResourceUpdateManyWithoutPageNestedInput
   pageFeedbacks?: Prisma.PageFeedbackUpdateManyWithoutPageNestedInput
-  promptFeedbacks?: Prisma.PromptFeedbackUpdateManyWithoutPageNestedInput
+  promptFeedbacks?: Prisma.PromptUpdateManyWithoutPageNestedInput
   studentQuestions?: Prisma.StudentQuestionUpdateManyWithoutPageNestedInput
+  pageViews?: Prisma.PageViewUpdateManyWithoutPageNestedInput
 }
 
 export type PageUncheckedUpdateWithoutConceptMentionsInput = {
@@ -1077,8 +1211,9 @@ export type PageUncheckedUpdateWithoutConceptMentionsInput = {
   podcasts?: Prisma.PodcastUncheckedUpdateManyWithoutPageNestedInput
   mediaResources?: Prisma.MediaResourceUncheckedUpdateManyWithoutPageNestedInput
   pageFeedbacks?: Prisma.PageFeedbackUncheckedUpdateManyWithoutPageNestedInput
-  promptFeedbacks?: Prisma.PromptFeedbackUncheckedUpdateManyWithoutPageNestedInput
+  promptFeedbacks?: Prisma.PromptUncheckedUpdateManyWithoutPageNestedInput
   studentQuestions?: Prisma.StudentQuestionUncheckedUpdateManyWithoutPageNestedInput
+  pageViews?: Prisma.PageViewUncheckedUpdateManyWithoutPageNestedInput
 }
 
 export type PageCreateWithoutActivitiesInput = {
@@ -1097,8 +1232,9 @@ export type PageCreateWithoutActivitiesInput = {
   podcasts?: Prisma.PodcastCreateNestedManyWithoutPageInput
   mediaResources?: Prisma.MediaResourceCreateNestedManyWithoutPageInput
   pageFeedbacks?: Prisma.PageFeedbackCreateNestedManyWithoutPageInput
-  promptFeedbacks?: Prisma.PromptFeedbackCreateNestedManyWithoutPageInput
+  promptFeedbacks?: Prisma.PromptCreateNestedManyWithoutPageInput
   studentQuestions?: Prisma.StudentQuestionCreateNestedManyWithoutPageInput
+  pageViews?: Prisma.PageViewCreateNestedManyWithoutPageInput
 }
 
 export type PageUncheckedCreateWithoutActivitiesInput = {
@@ -1117,8 +1253,9 @@ export type PageUncheckedCreateWithoutActivitiesInput = {
   podcasts?: Prisma.PodcastUncheckedCreateNestedManyWithoutPageInput
   mediaResources?: Prisma.MediaResourceUncheckedCreateNestedManyWithoutPageInput
   pageFeedbacks?: Prisma.PageFeedbackUncheckedCreateNestedManyWithoutPageInput
-  promptFeedbacks?: Prisma.PromptFeedbackUncheckedCreateNestedManyWithoutPageInput
+  promptFeedbacks?: Prisma.PromptUncheckedCreateNestedManyWithoutPageInput
   studentQuestions?: Prisma.StudentQuestionUncheckedCreateNestedManyWithoutPageInput
+  pageViews?: Prisma.PageViewUncheckedCreateNestedManyWithoutPageInput
 }
 
 export type PageCreateOrConnectWithoutActivitiesInput = {
@@ -1153,8 +1290,9 @@ export type PageUpdateWithoutActivitiesInput = {
   podcasts?: Prisma.PodcastUpdateManyWithoutPageNestedInput
   mediaResources?: Prisma.MediaResourceUpdateManyWithoutPageNestedInput
   pageFeedbacks?: Prisma.PageFeedbackUpdateManyWithoutPageNestedInput
-  promptFeedbacks?: Prisma.PromptFeedbackUpdateManyWithoutPageNestedInput
+  promptFeedbacks?: Prisma.PromptUpdateManyWithoutPageNestedInput
   studentQuestions?: Prisma.StudentQuestionUpdateManyWithoutPageNestedInput
+  pageViews?: Prisma.PageViewUpdateManyWithoutPageNestedInput
 }
 
 export type PageUncheckedUpdateWithoutActivitiesInput = {
@@ -1173,8 +1311,9 @@ export type PageUncheckedUpdateWithoutActivitiesInput = {
   podcasts?: Prisma.PodcastUncheckedUpdateManyWithoutPageNestedInput
   mediaResources?: Prisma.MediaResourceUncheckedUpdateManyWithoutPageNestedInput
   pageFeedbacks?: Prisma.PageFeedbackUncheckedUpdateManyWithoutPageNestedInput
-  promptFeedbacks?: Prisma.PromptFeedbackUncheckedUpdateManyWithoutPageNestedInput
+  promptFeedbacks?: Prisma.PromptUncheckedUpdateManyWithoutPageNestedInput
   studentQuestions?: Prisma.StudentQuestionUncheckedUpdateManyWithoutPageNestedInput
+  pageViews?: Prisma.PageViewUncheckedUpdateManyWithoutPageNestedInput
 }
 
 export type PageCreateWithoutPromptFeedbacksInput = {
@@ -1195,6 +1334,7 @@ export type PageCreateWithoutPromptFeedbacksInput = {
   mediaResources?: Prisma.MediaResourceCreateNestedManyWithoutPageInput
   pageFeedbacks?: Prisma.PageFeedbackCreateNestedManyWithoutPageInput
   studentQuestions?: Prisma.StudentQuestionCreateNestedManyWithoutPageInput
+  pageViews?: Prisma.PageViewCreateNestedManyWithoutPageInput
 }
 
 export type PageUncheckedCreateWithoutPromptFeedbacksInput = {
@@ -1215,6 +1355,7 @@ export type PageUncheckedCreateWithoutPromptFeedbacksInput = {
   mediaResources?: Prisma.MediaResourceUncheckedCreateNestedManyWithoutPageInput
   pageFeedbacks?: Prisma.PageFeedbackUncheckedCreateNestedManyWithoutPageInput
   studentQuestions?: Prisma.StudentQuestionUncheckedCreateNestedManyWithoutPageInput
+  pageViews?: Prisma.PageViewUncheckedCreateNestedManyWithoutPageInput
 }
 
 export type PageCreateOrConnectWithoutPromptFeedbacksInput = {
@@ -1251,6 +1392,7 @@ export type PageUpdateWithoutPromptFeedbacksInput = {
   mediaResources?: Prisma.MediaResourceUpdateManyWithoutPageNestedInput
   pageFeedbacks?: Prisma.PageFeedbackUpdateManyWithoutPageNestedInput
   studentQuestions?: Prisma.StudentQuestionUpdateManyWithoutPageNestedInput
+  pageViews?: Prisma.PageViewUpdateManyWithoutPageNestedInput
 }
 
 export type PageUncheckedUpdateWithoutPromptFeedbacksInput = {
@@ -1271,6 +1413,7 @@ export type PageUncheckedUpdateWithoutPromptFeedbacksInput = {
   mediaResources?: Prisma.MediaResourceUncheckedUpdateManyWithoutPageNestedInput
   pageFeedbacks?: Prisma.PageFeedbackUncheckedUpdateManyWithoutPageNestedInput
   studentQuestions?: Prisma.StudentQuestionUncheckedUpdateManyWithoutPageNestedInput
+  pageViews?: Prisma.PageViewUncheckedUpdateManyWithoutPageNestedInput
 }
 
 export type PageCreateWithoutPageFeedbacksInput = {
@@ -1289,8 +1432,9 @@ export type PageCreateWithoutPageFeedbacksInput = {
   notes?: Prisma.NoteCreateNestedManyWithoutPageInput
   podcasts?: Prisma.PodcastCreateNestedManyWithoutPageInput
   mediaResources?: Prisma.MediaResourceCreateNestedManyWithoutPageInput
-  promptFeedbacks?: Prisma.PromptFeedbackCreateNestedManyWithoutPageInput
+  promptFeedbacks?: Prisma.PromptCreateNestedManyWithoutPageInput
   studentQuestions?: Prisma.StudentQuestionCreateNestedManyWithoutPageInput
+  pageViews?: Prisma.PageViewCreateNestedManyWithoutPageInput
 }
 
 export type PageUncheckedCreateWithoutPageFeedbacksInput = {
@@ -1309,8 +1453,9 @@ export type PageUncheckedCreateWithoutPageFeedbacksInput = {
   notes?: Prisma.NoteUncheckedCreateNestedManyWithoutPageInput
   podcasts?: Prisma.PodcastUncheckedCreateNestedManyWithoutPageInput
   mediaResources?: Prisma.MediaResourceUncheckedCreateNestedManyWithoutPageInput
-  promptFeedbacks?: Prisma.PromptFeedbackUncheckedCreateNestedManyWithoutPageInput
+  promptFeedbacks?: Prisma.PromptUncheckedCreateNestedManyWithoutPageInput
   studentQuestions?: Prisma.StudentQuestionUncheckedCreateNestedManyWithoutPageInput
+  pageViews?: Prisma.PageViewUncheckedCreateNestedManyWithoutPageInput
 }
 
 export type PageCreateOrConnectWithoutPageFeedbacksInput = {
@@ -1345,8 +1490,9 @@ export type PageUpdateWithoutPageFeedbacksInput = {
   notes?: Prisma.NoteUpdateManyWithoutPageNestedInput
   podcasts?: Prisma.PodcastUpdateManyWithoutPageNestedInput
   mediaResources?: Prisma.MediaResourceUpdateManyWithoutPageNestedInput
-  promptFeedbacks?: Prisma.PromptFeedbackUpdateManyWithoutPageNestedInput
+  promptFeedbacks?: Prisma.PromptUpdateManyWithoutPageNestedInput
   studentQuestions?: Prisma.StudentQuestionUpdateManyWithoutPageNestedInput
+  pageViews?: Prisma.PageViewUpdateManyWithoutPageNestedInput
 }
 
 export type PageUncheckedUpdateWithoutPageFeedbacksInput = {
@@ -1365,8 +1511,9 @@ export type PageUncheckedUpdateWithoutPageFeedbacksInput = {
   notes?: Prisma.NoteUncheckedUpdateManyWithoutPageNestedInput
   podcasts?: Prisma.PodcastUncheckedUpdateManyWithoutPageNestedInput
   mediaResources?: Prisma.MediaResourceUncheckedUpdateManyWithoutPageNestedInput
-  promptFeedbacks?: Prisma.PromptFeedbackUncheckedUpdateManyWithoutPageNestedInput
+  promptFeedbacks?: Prisma.PromptUncheckedUpdateManyWithoutPageNestedInput
   studentQuestions?: Prisma.StudentQuestionUncheckedUpdateManyWithoutPageNestedInput
+  pageViews?: Prisma.PageViewUncheckedUpdateManyWithoutPageNestedInput
 }
 
 export type PageCreateWithoutNotesInput = {
@@ -1385,8 +1532,9 @@ export type PageCreateWithoutNotesInput = {
   podcasts?: Prisma.PodcastCreateNestedManyWithoutPageInput
   mediaResources?: Prisma.MediaResourceCreateNestedManyWithoutPageInput
   pageFeedbacks?: Prisma.PageFeedbackCreateNestedManyWithoutPageInput
-  promptFeedbacks?: Prisma.PromptFeedbackCreateNestedManyWithoutPageInput
+  promptFeedbacks?: Prisma.PromptCreateNestedManyWithoutPageInput
   studentQuestions?: Prisma.StudentQuestionCreateNestedManyWithoutPageInput
+  pageViews?: Prisma.PageViewCreateNestedManyWithoutPageInput
 }
 
 export type PageUncheckedCreateWithoutNotesInput = {
@@ -1405,8 +1553,9 @@ export type PageUncheckedCreateWithoutNotesInput = {
   podcasts?: Prisma.PodcastUncheckedCreateNestedManyWithoutPageInput
   mediaResources?: Prisma.MediaResourceUncheckedCreateNestedManyWithoutPageInput
   pageFeedbacks?: Prisma.PageFeedbackUncheckedCreateNestedManyWithoutPageInput
-  promptFeedbacks?: Prisma.PromptFeedbackUncheckedCreateNestedManyWithoutPageInput
+  promptFeedbacks?: Prisma.PromptUncheckedCreateNestedManyWithoutPageInput
   studentQuestions?: Prisma.StudentQuestionUncheckedCreateNestedManyWithoutPageInput
+  pageViews?: Prisma.PageViewUncheckedCreateNestedManyWithoutPageInput
 }
 
 export type PageCreateOrConnectWithoutNotesInput = {
@@ -1441,8 +1590,9 @@ export type PageUpdateWithoutNotesInput = {
   podcasts?: Prisma.PodcastUpdateManyWithoutPageNestedInput
   mediaResources?: Prisma.MediaResourceUpdateManyWithoutPageNestedInput
   pageFeedbacks?: Prisma.PageFeedbackUpdateManyWithoutPageNestedInput
-  promptFeedbacks?: Prisma.PromptFeedbackUpdateManyWithoutPageNestedInput
+  promptFeedbacks?: Prisma.PromptUpdateManyWithoutPageNestedInput
   studentQuestions?: Prisma.StudentQuestionUpdateManyWithoutPageNestedInput
+  pageViews?: Prisma.PageViewUpdateManyWithoutPageNestedInput
 }
 
 export type PageUncheckedUpdateWithoutNotesInput = {
@@ -1461,8 +1611,9 @@ export type PageUncheckedUpdateWithoutNotesInput = {
   podcasts?: Prisma.PodcastUncheckedUpdateManyWithoutPageNestedInput
   mediaResources?: Prisma.MediaResourceUncheckedUpdateManyWithoutPageNestedInput
   pageFeedbacks?: Prisma.PageFeedbackUncheckedUpdateManyWithoutPageNestedInput
-  promptFeedbacks?: Prisma.PromptFeedbackUncheckedUpdateManyWithoutPageNestedInput
+  promptFeedbacks?: Prisma.PromptUncheckedUpdateManyWithoutPageNestedInput
   studentQuestions?: Prisma.StudentQuestionUncheckedUpdateManyWithoutPageNestedInput
+  pageViews?: Prisma.PageViewUncheckedUpdateManyWithoutPageNestedInput
 }
 
 export type PageCreateWithoutStudentQuestionsInput = {
@@ -1482,7 +1633,8 @@ export type PageCreateWithoutStudentQuestionsInput = {
   podcasts?: Prisma.PodcastCreateNestedManyWithoutPageInput
   mediaResources?: Prisma.MediaResourceCreateNestedManyWithoutPageInput
   pageFeedbacks?: Prisma.PageFeedbackCreateNestedManyWithoutPageInput
-  promptFeedbacks?: Prisma.PromptFeedbackCreateNestedManyWithoutPageInput
+  promptFeedbacks?: Prisma.PromptCreateNestedManyWithoutPageInput
+  pageViews?: Prisma.PageViewCreateNestedManyWithoutPageInput
 }
 
 export type PageUncheckedCreateWithoutStudentQuestionsInput = {
@@ -1502,7 +1654,8 @@ export type PageUncheckedCreateWithoutStudentQuestionsInput = {
   podcasts?: Prisma.PodcastUncheckedCreateNestedManyWithoutPageInput
   mediaResources?: Prisma.MediaResourceUncheckedCreateNestedManyWithoutPageInput
   pageFeedbacks?: Prisma.PageFeedbackUncheckedCreateNestedManyWithoutPageInput
-  promptFeedbacks?: Prisma.PromptFeedbackUncheckedCreateNestedManyWithoutPageInput
+  promptFeedbacks?: Prisma.PromptUncheckedCreateNestedManyWithoutPageInput
+  pageViews?: Prisma.PageViewUncheckedCreateNestedManyWithoutPageInput
 }
 
 export type PageCreateOrConnectWithoutStudentQuestionsInput = {
@@ -1538,7 +1691,8 @@ export type PageUpdateWithoutStudentQuestionsInput = {
   podcasts?: Prisma.PodcastUpdateManyWithoutPageNestedInput
   mediaResources?: Prisma.MediaResourceUpdateManyWithoutPageNestedInput
   pageFeedbacks?: Prisma.PageFeedbackUpdateManyWithoutPageNestedInput
-  promptFeedbacks?: Prisma.PromptFeedbackUpdateManyWithoutPageNestedInput
+  promptFeedbacks?: Prisma.PromptUpdateManyWithoutPageNestedInput
+  pageViews?: Prisma.PageViewUpdateManyWithoutPageNestedInput
 }
 
 export type PageUncheckedUpdateWithoutStudentQuestionsInput = {
@@ -1558,7 +1712,8 @@ export type PageUncheckedUpdateWithoutStudentQuestionsInput = {
   podcasts?: Prisma.PodcastUncheckedUpdateManyWithoutPageNestedInput
   mediaResources?: Prisma.MediaResourceUncheckedUpdateManyWithoutPageNestedInput
   pageFeedbacks?: Prisma.PageFeedbackUncheckedUpdateManyWithoutPageNestedInput
-  promptFeedbacks?: Prisma.PromptFeedbackUncheckedUpdateManyWithoutPageNestedInput
+  promptFeedbacks?: Prisma.PromptUncheckedUpdateManyWithoutPageNestedInput
+  pageViews?: Prisma.PageViewUncheckedUpdateManyWithoutPageNestedInput
 }
 
 export type PageCreateWithoutPodcastsInput = {
@@ -1577,8 +1732,9 @@ export type PageCreateWithoutPodcastsInput = {
   notes?: Prisma.NoteCreateNestedManyWithoutPageInput
   mediaResources?: Prisma.MediaResourceCreateNestedManyWithoutPageInput
   pageFeedbacks?: Prisma.PageFeedbackCreateNestedManyWithoutPageInput
-  promptFeedbacks?: Prisma.PromptFeedbackCreateNestedManyWithoutPageInput
+  promptFeedbacks?: Prisma.PromptCreateNestedManyWithoutPageInput
   studentQuestions?: Prisma.StudentQuestionCreateNestedManyWithoutPageInput
+  pageViews?: Prisma.PageViewCreateNestedManyWithoutPageInput
 }
 
 export type PageUncheckedCreateWithoutPodcastsInput = {
@@ -1597,8 +1753,9 @@ export type PageUncheckedCreateWithoutPodcastsInput = {
   notes?: Prisma.NoteUncheckedCreateNestedManyWithoutPageInput
   mediaResources?: Prisma.MediaResourceUncheckedCreateNestedManyWithoutPageInput
   pageFeedbacks?: Prisma.PageFeedbackUncheckedCreateNestedManyWithoutPageInput
-  promptFeedbacks?: Prisma.PromptFeedbackUncheckedCreateNestedManyWithoutPageInput
+  promptFeedbacks?: Prisma.PromptUncheckedCreateNestedManyWithoutPageInput
   studentQuestions?: Prisma.StudentQuestionUncheckedCreateNestedManyWithoutPageInput
+  pageViews?: Prisma.PageViewUncheckedCreateNestedManyWithoutPageInput
 }
 
 export type PageCreateOrConnectWithoutPodcastsInput = {
@@ -1633,8 +1790,9 @@ export type PageUpdateWithoutPodcastsInput = {
   notes?: Prisma.NoteUpdateManyWithoutPageNestedInput
   mediaResources?: Prisma.MediaResourceUpdateManyWithoutPageNestedInput
   pageFeedbacks?: Prisma.PageFeedbackUpdateManyWithoutPageNestedInput
-  promptFeedbacks?: Prisma.PromptFeedbackUpdateManyWithoutPageNestedInput
+  promptFeedbacks?: Prisma.PromptUpdateManyWithoutPageNestedInput
   studentQuestions?: Prisma.StudentQuestionUpdateManyWithoutPageNestedInput
+  pageViews?: Prisma.PageViewUpdateManyWithoutPageNestedInput
 }
 
 export type PageUncheckedUpdateWithoutPodcastsInput = {
@@ -1653,8 +1811,9 @@ export type PageUncheckedUpdateWithoutPodcastsInput = {
   notes?: Prisma.NoteUncheckedUpdateManyWithoutPageNestedInput
   mediaResources?: Prisma.MediaResourceUncheckedUpdateManyWithoutPageNestedInput
   pageFeedbacks?: Prisma.PageFeedbackUncheckedUpdateManyWithoutPageNestedInput
-  promptFeedbacks?: Prisma.PromptFeedbackUncheckedUpdateManyWithoutPageNestedInput
+  promptFeedbacks?: Prisma.PromptUncheckedUpdateManyWithoutPageNestedInput
   studentQuestions?: Prisma.StudentQuestionUncheckedUpdateManyWithoutPageNestedInput
+  pageViews?: Prisma.PageViewUncheckedUpdateManyWithoutPageNestedInput
 }
 
 export type PageCreateWithoutMediaResourcesInput = {
@@ -1673,8 +1832,9 @@ export type PageCreateWithoutMediaResourcesInput = {
   notes?: Prisma.NoteCreateNestedManyWithoutPageInput
   podcasts?: Prisma.PodcastCreateNestedManyWithoutPageInput
   pageFeedbacks?: Prisma.PageFeedbackCreateNestedManyWithoutPageInput
-  promptFeedbacks?: Prisma.PromptFeedbackCreateNestedManyWithoutPageInput
+  promptFeedbacks?: Prisma.PromptCreateNestedManyWithoutPageInput
   studentQuestions?: Prisma.StudentQuestionCreateNestedManyWithoutPageInput
+  pageViews?: Prisma.PageViewCreateNestedManyWithoutPageInput
 }
 
 export type PageUncheckedCreateWithoutMediaResourcesInput = {
@@ -1693,8 +1853,9 @@ export type PageUncheckedCreateWithoutMediaResourcesInput = {
   notes?: Prisma.NoteUncheckedCreateNestedManyWithoutPageInput
   podcasts?: Prisma.PodcastUncheckedCreateNestedManyWithoutPageInput
   pageFeedbacks?: Prisma.PageFeedbackUncheckedCreateNestedManyWithoutPageInput
-  promptFeedbacks?: Prisma.PromptFeedbackUncheckedCreateNestedManyWithoutPageInput
+  promptFeedbacks?: Prisma.PromptUncheckedCreateNestedManyWithoutPageInput
   studentQuestions?: Prisma.StudentQuestionUncheckedCreateNestedManyWithoutPageInput
+  pageViews?: Prisma.PageViewUncheckedCreateNestedManyWithoutPageInput
 }
 
 export type PageCreateOrConnectWithoutMediaResourcesInput = {
@@ -1729,8 +1890,9 @@ export type PageUpdateWithoutMediaResourcesInput = {
   notes?: Prisma.NoteUpdateManyWithoutPageNestedInput
   podcasts?: Prisma.PodcastUpdateManyWithoutPageNestedInput
   pageFeedbacks?: Prisma.PageFeedbackUpdateManyWithoutPageNestedInput
-  promptFeedbacks?: Prisma.PromptFeedbackUpdateManyWithoutPageNestedInput
+  promptFeedbacks?: Prisma.PromptUpdateManyWithoutPageNestedInput
   studentQuestions?: Prisma.StudentQuestionUpdateManyWithoutPageNestedInput
+  pageViews?: Prisma.PageViewUpdateManyWithoutPageNestedInput
 }
 
 export type PageUncheckedUpdateWithoutMediaResourcesInput = {
@@ -1749,8 +1911,9 @@ export type PageUncheckedUpdateWithoutMediaResourcesInput = {
   notes?: Prisma.NoteUncheckedUpdateManyWithoutPageNestedInput
   podcasts?: Prisma.PodcastUncheckedUpdateManyWithoutPageNestedInput
   pageFeedbacks?: Prisma.PageFeedbackUncheckedUpdateManyWithoutPageNestedInput
-  promptFeedbacks?: Prisma.PromptFeedbackUncheckedUpdateManyWithoutPageNestedInput
+  promptFeedbacks?: Prisma.PromptUncheckedUpdateManyWithoutPageNestedInput
   studentQuestions?: Prisma.StudentQuestionUncheckedUpdateManyWithoutPageNestedInput
+  pageViews?: Prisma.PageViewUncheckedUpdateManyWithoutPageNestedInput
 }
 
 export type PageCreateManyModuleInput = {
@@ -1779,8 +1942,9 @@ export type PageUpdateWithoutModuleInput = {
   podcasts?: Prisma.PodcastUpdateManyWithoutPageNestedInput
   mediaResources?: Prisma.MediaResourceUpdateManyWithoutPageNestedInput
   pageFeedbacks?: Prisma.PageFeedbackUpdateManyWithoutPageNestedInput
-  promptFeedbacks?: Prisma.PromptFeedbackUpdateManyWithoutPageNestedInput
+  promptFeedbacks?: Prisma.PromptUpdateManyWithoutPageNestedInput
   studentQuestions?: Prisma.StudentQuestionUpdateManyWithoutPageNestedInput
+  pageViews?: Prisma.PageViewUpdateManyWithoutPageNestedInput
 }
 
 export type PageUncheckedUpdateWithoutModuleInput = {
@@ -1799,8 +1963,9 @@ export type PageUncheckedUpdateWithoutModuleInput = {
   podcasts?: Prisma.PodcastUncheckedUpdateManyWithoutPageNestedInput
   mediaResources?: Prisma.MediaResourceUncheckedUpdateManyWithoutPageNestedInput
   pageFeedbacks?: Prisma.PageFeedbackUncheckedUpdateManyWithoutPageNestedInput
-  promptFeedbacks?: Prisma.PromptFeedbackUncheckedUpdateManyWithoutPageNestedInput
+  promptFeedbacks?: Prisma.PromptUncheckedUpdateManyWithoutPageNestedInput
   studentQuestions?: Prisma.StudentQuestionUncheckedUpdateManyWithoutPageNestedInput
+  pageViews?: Prisma.PageViewUncheckedUpdateManyWithoutPageNestedInput
 }
 
 export type PageUncheckedUpdateManyWithoutModuleInput = {
@@ -1829,6 +1994,7 @@ export type PageCountOutputType = {
   pageFeedbacks: number
   promptFeedbacks: number
   studentQuestions: number
+  pageViews: number
 }
 
 export type PageCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1842,6 +2008,7 @@ export type PageCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   pageFeedbacks?: boolean | PageCountOutputTypeCountPageFeedbacksArgs
   promptFeedbacks?: boolean | PageCountOutputTypeCountPromptFeedbacksArgs
   studentQuestions?: boolean | PageCountOutputTypeCountStudentQuestionsArgs
+  pageViews?: boolean | PageCountOutputTypeCountPageViewsArgs
 }
 
 /**
@@ -1914,7 +2081,7 @@ export type PageCountOutputTypeCountPageFeedbacksArgs<ExtArgs extends runtime.Ty
  * PageCountOutputType without action
  */
 export type PageCountOutputTypeCountPromptFeedbacksArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.PromptFeedbackWhereInput
+  where?: Prisma.PromptWhereInput
 }
 
 /**
@@ -1922,6 +2089,13 @@ export type PageCountOutputTypeCountPromptFeedbacksArgs<ExtArgs extends runtime.
  */
 export type PageCountOutputTypeCountStudentQuestionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.StudentQuestionWhereInput
+}
+
+/**
+ * PageCountOutputType without action
+ */
+export type PageCountOutputTypeCountPageViewsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.PageViewWhereInput
 }
 
 
@@ -1945,6 +2119,7 @@ export type PageSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   pageFeedbacks?: boolean | Prisma.Page$pageFeedbacksArgs<ExtArgs>
   promptFeedbacks?: boolean | Prisma.Page$promptFeedbacksArgs<ExtArgs>
   studentQuestions?: boolean | Prisma.Page$studentQuestionsArgs<ExtArgs>
+  pageViews?: boolean | Prisma.Page$pageViewsArgs<ExtArgs>
   _count?: boolean | Prisma.PageCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["page"]>
 
@@ -1996,6 +2171,7 @@ export type PageInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   pageFeedbacks?: boolean | Prisma.Page$pageFeedbacksArgs<ExtArgs>
   promptFeedbacks?: boolean | Prisma.Page$promptFeedbacksArgs<ExtArgs>
   studentQuestions?: boolean | Prisma.Page$studentQuestionsArgs<ExtArgs>
+  pageViews?: boolean | Prisma.Page$pageViewsArgs<ExtArgs>
   _count?: boolean | Prisma.PageCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type PageIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -2017,8 +2193,9 @@ export type $PagePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     podcasts: Prisma.$PodcastPayload<ExtArgs>[]
     mediaResources: Prisma.$MediaResourcePayload<ExtArgs>[]
     pageFeedbacks: Prisma.$PageFeedbackPayload<ExtArgs>[]
-    promptFeedbacks: Prisma.$PromptFeedbackPayload<ExtArgs>[]
+    promptFeedbacks: Prisma.$PromptPayload<ExtArgs>[]
     studentQuestions: Prisma.$StudentQuestionPayload<ExtArgs>[]
+    pageViews: Prisma.$PageViewPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -2432,8 +2609,9 @@ export interface Prisma__PageClient<T, Null = never, ExtArgs extends runtime.Typ
   podcasts<T extends Prisma.Page$podcastsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Page$podcastsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PodcastPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   mediaResources<T extends Prisma.Page$mediaResourcesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Page$mediaResourcesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$MediaResourcePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   pageFeedbacks<T extends Prisma.Page$pageFeedbacksArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Page$pageFeedbacksArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PageFeedbackPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  promptFeedbacks<T extends Prisma.Page$promptFeedbacksArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Page$promptFeedbacksArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PromptFeedbackPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  promptFeedbacks<T extends Prisma.Page$promptFeedbacksArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Page$promptFeedbacksArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PromptPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   studentQuestions<T extends Prisma.Page$studentQuestionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Page$studentQuestionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$StudentQuestionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  pageViews<T extends Prisma.Page$pageViewsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Page$pageViewsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PageViewPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -3063,23 +3241,23 @@ export type Page$pageFeedbacksArgs<ExtArgs extends runtime.Types.Extensions.Inte
  */
 export type Page$promptFeedbacksArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the PromptFeedback
+   * Select specific fields to fetch from the Prompt
    */
-  select?: Prisma.PromptFeedbackSelect<ExtArgs> | null
+  select?: Prisma.PromptSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the PromptFeedback
+   * Omit specific fields from the Prompt
    */
-  omit?: Prisma.PromptFeedbackOmit<ExtArgs> | null
+  omit?: Prisma.PromptOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.PromptFeedbackInclude<ExtArgs> | null
-  where?: Prisma.PromptFeedbackWhereInput
-  orderBy?: Prisma.PromptFeedbackOrderByWithRelationInput | Prisma.PromptFeedbackOrderByWithRelationInput[]
-  cursor?: Prisma.PromptFeedbackWhereUniqueInput
+  include?: Prisma.PromptInclude<ExtArgs> | null
+  where?: Prisma.PromptWhereInput
+  orderBy?: Prisma.PromptOrderByWithRelationInput | Prisma.PromptOrderByWithRelationInput[]
+  cursor?: Prisma.PromptWhereUniqueInput
   take?: number
   skip?: number
-  distinct?: Prisma.PromptFeedbackScalarFieldEnum | Prisma.PromptFeedbackScalarFieldEnum[]
+  distinct?: Prisma.PromptScalarFieldEnum | Prisma.PromptScalarFieldEnum[]
 }
 
 /**
@@ -3104,6 +3282,30 @@ export type Page$studentQuestionsArgs<ExtArgs extends runtime.Types.Extensions.I
   take?: number
   skip?: number
   distinct?: Prisma.StudentQuestionScalarFieldEnum | Prisma.StudentQuestionScalarFieldEnum[]
+}
+
+/**
+ * Page.pageViews
+ */
+export type Page$pageViewsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the PageView
+   */
+  select?: Prisma.PageViewSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the PageView
+   */
+  omit?: Prisma.PageViewOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PageViewInclude<ExtArgs> | null
+  where?: Prisma.PageViewWhereInput
+  orderBy?: Prisma.PageViewOrderByWithRelationInput | Prisma.PageViewOrderByWithRelationInput[]
+  cursor?: Prisma.PageViewWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.PageViewScalarFieldEnum | Prisma.PageViewScalarFieldEnum[]
 }
 
 /**

@@ -56,11 +56,12 @@ export const ModelName = {
   AiConfiguration: 'AiConfiguration',
   Enrollment: 'Enrollment',
   Page: 'Page',
+  PageView: 'PageView',
   PageRelation: 'PageRelation',
   PageConcept: 'PageConcept',
   Activity: 'Activity',
   ActivityAttempt: 'ActivityAttempt',
-  PromptFeedback: 'PromptFeedback',
+  Prompt: 'Prompt',
   PageFeedback: 'PageFeedback',
   Note: 'Note',
   StudentQuestion: 'StudentQuestion',
@@ -157,6 +158,21 @@ export const PageScalarFieldEnum = {
 export type PageScalarFieldEnum = (typeof PageScalarFieldEnum)[keyof typeof PageScalarFieldEnum]
 
 
+export const PageViewScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  pageId: 'pageId',
+  firstViewedAt: 'firstViewedAt',
+  lastViewedAt: 'lastViewedAt',
+  viewCount: 'viewCount',
+  timeSpent: 'timeSpent',
+  isCompleted: 'isCompleted',
+  progress: 'progress'
+} as const
+
+export type PageViewScalarFieldEnum = (typeof PageViewScalarFieldEnum)[keyof typeof PageViewScalarFieldEnum]
+
+
 export const PageRelationScalarFieldEnum = {
   id: 'id',
   originPageId: 'originPageId',
@@ -216,7 +232,7 @@ export const ActivityAttemptScalarFieldEnum = {
 export type ActivityAttemptScalarFieldEnum = (typeof ActivityAttemptScalarFieldEnum)[keyof typeof ActivityAttemptScalarFieldEnum]
 
 
-export const PromptFeedbackScalarFieldEnum = {
+export const PromptScalarFieldEnum = {
   id: 'id',
   pageId: 'pageId',
   userId: 'userId',
@@ -225,7 +241,7 @@ export const PromptFeedbackScalarFieldEnum = {
   updatedAt: 'updatedAt'
 } as const
 
-export type PromptFeedbackScalarFieldEnum = (typeof PromptFeedbackScalarFieldEnum)[keyof typeof PromptFeedbackScalarFieldEnum]
+export type PromptScalarFieldEnum = (typeof PromptScalarFieldEnum)[keyof typeof PromptScalarFieldEnum]
 
 
 export const PageFeedbackScalarFieldEnum = {

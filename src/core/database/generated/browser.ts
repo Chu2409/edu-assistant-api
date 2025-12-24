@@ -43,6 +43,11 @@ export type Enrollment = Prisma.EnrollmentModel
  */
 export type Page = Prisma.PageModel
 /**
+ * Model PageView
+ * 
+ */
+export type PageView = Prisma.PageViewModel
+/**
  * Model PageRelation
  * 
  */
@@ -63,10 +68,10 @@ export type Activity = Prisma.ActivityModel
  */
 export type ActivityAttempt = Prisma.ActivityAttemptModel
 /**
- * Model PromptFeedback
+ * Model Prompt
  * 
  */
-export type PromptFeedback = Prisma.PromptFeedbackModel
+export type Prompt = Prisma.PromptModel
 /**
  * Model PageFeedback
  * 

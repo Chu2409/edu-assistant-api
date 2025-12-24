@@ -220,9 +220,10 @@ export type UserWhereInput = {
   activityAttempts?: Prisma.ActivityAttemptListRelationFilter
   notifications?: Prisma.NotificationListRelationFilter
   pageFeedbacks?: Prisma.PageFeedbackListRelationFilter
-  promptFeedbacks?: Prisma.PromptFeedbackListRelationFilter
+  promptFeedbacks?: Prisma.PromptListRelationFilter
   studentQuestions?: Prisma.StudentQuestionListRelationFilter
   questionReplies?: Prisma.QuestionReplyListRelationFilter
+  pageViews?: Prisma.PageViewListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -241,9 +242,10 @@ export type UserOrderByWithRelationInput = {
   activityAttempts?: Prisma.ActivityAttemptOrderByRelationAggregateInput
   notifications?: Prisma.NotificationOrderByRelationAggregateInput
   pageFeedbacks?: Prisma.PageFeedbackOrderByRelationAggregateInput
-  promptFeedbacks?: Prisma.PromptFeedbackOrderByRelationAggregateInput
+  promptFeedbacks?: Prisma.PromptOrderByRelationAggregateInput
   studentQuestions?: Prisma.StudentQuestionOrderByRelationAggregateInput
   questionReplies?: Prisma.QuestionReplyOrderByRelationAggregateInput
+  pageViews?: Prisma.PageViewOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -265,9 +267,10 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   activityAttempts?: Prisma.ActivityAttemptListRelationFilter
   notifications?: Prisma.NotificationListRelationFilter
   pageFeedbacks?: Prisma.PageFeedbackListRelationFilter
-  promptFeedbacks?: Prisma.PromptFeedbackListRelationFilter
+  promptFeedbacks?: Prisma.PromptListRelationFilter
   studentQuestions?: Prisma.StudentQuestionListRelationFilter
   questionReplies?: Prisma.QuestionReplyListRelationFilter
+  pageViews?: Prisma.PageViewListRelationFilter
 }, "id" | "email">
 
 export type UserOrderByWithAggregationInput = {
@@ -316,9 +319,10 @@ export type UserCreateInput = {
   activityAttempts?: Prisma.ActivityAttemptCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   pageFeedbacks?: Prisma.PageFeedbackCreateNestedManyWithoutUserInput
-  promptFeedbacks?: Prisma.PromptFeedbackCreateNestedManyWithoutUserInput
+  promptFeedbacks?: Prisma.PromptCreateNestedManyWithoutUserInput
   studentQuestions?: Prisma.StudentQuestionCreateNestedManyWithoutUserInput
   questionReplies?: Prisma.QuestionReplyCreateNestedManyWithoutUserInput
+  pageViews?: Prisma.PageViewCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -337,9 +341,10 @@ export type UserUncheckedCreateInput = {
   activityAttempts?: Prisma.ActivityAttemptUncheckedCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   pageFeedbacks?: Prisma.PageFeedbackUncheckedCreateNestedManyWithoutUserInput
-  promptFeedbacks?: Prisma.PromptFeedbackUncheckedCreateNestedManyWithoutUserInput
+  promptFeedbacks?: Prisma.PromptUncheckedCreateNestedManyWithoutUserInput
   studentQuestions?: Prisma.StudentQuestionUncheckedCreateNestedManyWithoutUserInput
   questionReplies?: Prisma.QuestionReplyUncheckedCreateNestedManyWithoutUserInput
+  pageViews?: Prisma.PageViewUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserUpdateInput = {
@@ -358,9 +363,10 @@ export type UserUpdateInput = {
   activityAttempts?: Prisma.ActivityAttemptUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   pageFeedbacks?: Prisma.PageFeedbackUpdateManyWithoutUserNestedInput
-  promptFeedbacks?: Prisma.PromptFeedbackUpdateManyWithoutUserNestedInput
+  promptFeedbacks?: Prisma.PromptUpdateManyWithoutUserNestedInput
   studentQuestions?: Prisma.StudentQuestionUpdateManyWithoutUserNestedInput
   questionReplies?: Prisma.QuestionReplyUpdateManyWithoutUserNestedInput
+  pageViews?: Prisma.PageViewUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -379,9 +385,10 @@ export type UserUncheckedUpdateInput = {
   activityAttempts?: Prisma.ActivityAttemptUncheckedUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   pageFeedbacks?: Prisma.PageFeedbackUncheckedUpdateManyWithoutUserNestedInput
-  promptFeedbacks?: Prisma.PromptFeedbackUncheckedUpdateManyWithoutUserNestedInput
+  promptFeedbacks?: Prisma.PromptUncheckedUpdateManyWithoutUserNestedInput
   studentQuestions?: Prisma.StudentQuestionUncheckedUpdateManyWithoutUserNestedInput
   questionReplies?: Prisma.QuestionReplyUncheckedUpdateManyWithoutUserNestedInput
+  pageViews?: Prisma.PageViewUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -505,6 +512,20 @@ export type UserUpdateOneRequiredWithoutEnrollmentsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutEnrollmentsInput, Prisma.UserUpdateWithoutEnrollmentsInput>, Prisma.UserUncheckedUpdateWithoutEnrollmentsInput>
 }
 
+export type UserCreateNestedOneWithoutPageViewsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutPageViewsInput, Prisma.UserUncheckedCreateWithoutPageViewsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutPageViewsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutPageViewsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutPageViewsInput, Prisma.UserUncheckedCreateWithoutPageViewsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutPageViewsInput
+  upsert?: Prisma.UserUpsertWithoutPageViewsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutPageViewsInput, Prisma.UserUpdateWithoutPageViewsInput>, Prisma.UserUncheckedUpdateWithoutPageViewsInput>
+}
+
 export type UserCreateNestedOneWithoutActivityAttemptsInput = {
   create?: Prisma.XOR<Prisma.UserCreateWithoutActivityAttemptsInput, Prisma.UserUncheckedCreateWithoutActivityAttemptsInput>
   connectOrCreate?: Prisma.UserCreateOrConnectWithoutActivityAttemptsInput
@@ -618,9 +639,10 @@ export type UserCreateWithoutModulesAsTeacherInput = {
   activityAttempts?: Prisma.ActivityAttemptCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   pageFeedbacks?: Prisma.PageFeedbackCreateNestedManyWithoutUserInput
-  promptFeedbacks?: Prisma.PromptFeedbackCreateNestedManyWithoutUserInput
+  promptFeedbacks?: Prisma.PromptCreateNestedManyWithoutUserInput
   studentQuestions?: Prisma.StudentQuestionCreateNestedManyWithoutUserInput
   questionReplies?: Prisma.QuestionReplyCreateNestedManyWithoutUserInput
+  pageViews?: Prisma.PageViewCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutModulesAsTeacherInput = {
@@ -638,9 +660,10 @@ export type UserUncheckedCreateWithoutModulesAsTeacherInput = {
   activityAttempts?: Prisma.ActivityAttemptUncheckedCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   pageFeedbacks?: Prisma.PageFeedbackUncheckedCreateNestedManyWithoutUserInput
-  promptFeedbacks?: Prisma.PromptFeedbackUncheckedCreateNestedManyWithoutUserInput
+  promptFeedbacks?: Prisma.PromptUncheckedCreateNestedManyWithoutUserInput
   studentQuestions?: Prisma.StudentQuestionUncheckedCreateNestedManyWithoutUserInput
   questionReplies?: Prisma.QuestionReplyUncheckedCreateNestedManyWithoutUserInput
+  pageViews?: Prisma.PageViewUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutModulesAsTeacherInput = {
@@ -674,9 +697,10 @@ export type UserUpdateWithoutModulesAsTeacherInput = {
   activityAttempts?: Prisma.ActivityAttemptUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   pageFeedbacks?: Prisma.PageFeedbackUpdateManyWithoutUserNestedInput
-  promptFeedbacks?: Prisma.PromptFeedbackUpdateManyWithoutUserNestedInput
+  promptFeedbacks?: Prisma.PromptUpdateManyWithoutUserNestedInput
   studentQuestions?: Prisma.StudentQuestionUpdateManyWithoutUserNestedInput
   questionReplies?: Prisma.QuestionReplyUpdateManyWithoutUserNestedInput
+  pageViews?: Prisma.PageViewUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutModulesAsTeacherInput = {
@@ -694,9 +718,10 @@ export type UserUncheckedUpdateWithoutModulesAsTeacherInput = {
   activityAttempts?: Prisma.ActivityAttemptUncheckedUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   pageFeedbacks?: Prisma.PageFeedbackUncheckedUpdateManyWithoutUserNestedInput
-  promptFeedbacks?: Prisma.PromptFeedbackUncheckedUpdateManyWithoutUserNestedInput
+  promptFeedbacks?: Prisma.PromptUncheckedUpdateManyWithoutUserNestedInput
   studentQuestions?: Prisma.StudentQuestionUncheckedUpdateManyWithoutUserNestedInput
   questionReplies?: Prisma.QuestionReplyUncheckedUpdateManyWithoutUserNestedInput
+  pageViews?: Prisma.PageViewUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutEnrollmentsInput = {
@@ -714,9 +739,10 @@ export type UserCreateWithoutEnrollmentsInput = {
   activityAttempts?: Prisma.ActivityAttemptCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   pageFeedbacks?: Prisma.PageFeedbackCreateNestedManyWithoutUserInput
-  promptFeedbacks?: Prisma.PromptFeedbackCreateNestedManyWithoutUserInput
+  promptFeedbacks?: Prisma.PromptCreateNestedManyWithoutUserInput
   studentQuestions?: Prisma.StudentQuestionCreateNestedManyWithoutUserInput
   questionReplies?: Prisma.QuestionReplyCreateNestedManyWithoutUserInput
+  pageViews?: Prisma.PageViewCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutEnrollmentsInput = {
@@ -734,9 +760,10 @@ export type UserUncheckedCreateWithoutEnrollmentsInput = {
   activityAttempts?: Prisma.ActivityAttemptUncheckedCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   pageFeedbacks?: Prisma.PageFeedbackUncheckedCreateNestedManyWithoutUserInput
-  promptFeedbacks?: Prisma.PromptFeedbackUncheckedCreateNestedManyWithoutUserInput
+  promptFeedbacks?: Prisma.PromptUncheckedCreateNestedManyWithoutUserInput
   studentQuestions?: Prisma.StudentQuestionUncheckedCreateNestedManyWithoutUserInput
   questionReplies?: Prisma.QuestionReplyUncheckedCreateNestedManyWithoutUserInput
+  pageViews?: Prisma.PageViewUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutEnrollmentsInput = {
@@ -770,9 +797,10 @@ export type UserUpdateWithoutEnrollmentsInput = {
   activityAttempts?: Prisma.ActivityAttemptUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   pageFeedbacks?: Prisma.PageFeedbackUpdateManyWithoutUserNestedInput
-  promptFeedbacks?: Prisma.PromptFeedbackUpdateManyWithoutUserNestedInput
+  promptFeedbacks?: Prisma.PromptUpdateManyWithoutUserNestedInput
   studentQuestions?: Prisma.StudentQuestionUpdateManyWithoutUserNestedInput
   questionReplies?: Prisma.QuestionReplyUpdateManyWithoutUserNestedInput
+  pageViews?: Prisma.PageViewUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutEnrollmentsInput = {
@@ -790,7 +818,108 @@ export type UserUncheckedUpdateWithoutEnrollmentsInput = {
   activityAttempts?: Prisma.ActivityAttemptUncheckedUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   pageFeedbacks?: Prisma.PageFeedbackUncheckedUpdateManyWithoutUserNestedInput
-  promptFeedbacks?: Prisma.PromptFeedbackUncheckedUpdateManyWithoutUserNestedInput
+  promptFeedbacks?: Prisma.PromptUncheckedUpdateManyWithoutUserNestedInput
+  studentQuestions?: Prisma.StudentQuestionUncheckedUpdateManyWithoutUserNestedInput
+  questionReplies?: Prisma.QuestionReplyUncheckedUpdateManyWithoutUserNestedInput
+  pageViews?: Prisma.PageViewUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutPageViewsInput = {
+  id?: string
+  email: string
+  password: string
+  firstName: string
+  lastName: string
+  role?: $Enums.Role
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  modulesAsTeacher?: Prisma.ModuleCreateNestedManyWithoutTeacherInput
+  enrollments?: Prisma.EnrollmentCreateNestedManyWithoutUserInput
+  generatedContent?: Prisma.NoteCreateNestedManyWithoutUserInput
+  activityAttempts?: Prisma.ActivityAttemptCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  pageFeedbacks?: Prisma.PageFeedbackCreateNestedManyWithoutUserInput
+  promptFeedbacks?: Prisma.PromptCreateNestedManyWithoutUserInput
+  studentQuestions?: Prisma.StudentQuestionCreateNestedManyWithoutUserInput
+  questionReplies?: Prisma.QuestionReplyCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutPageViewsInput = {
+  id?: string
+  email: string
+  password: string
+  firstName: string
+  lastName: string
+  role?: $Enums.Role
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  modulesAsTeacher?: Prisma.ModuleUncheckedCreateNestedManyWithoutTeacherInput
+  enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutUserInput
+  generatedContent?: Prisma.NoteUncheckedCreateNestedManyWithoutUserInput
+  activityAttempts?: Prisma.ActivityAttemptUncheckedCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  pageFeedbacks?: Prisma.PageFeedbackUncheckedCreateNestedManyWithoutUserInput
+  promptFeedbacks?: Prisma.PromptUncheckedCreateNestedManyWithoutUserInput
+  studentQuestions?: Prisma.StudentQuestionUncheckedCreateNestedManyWithoutUserInput
+  questionReplies?: Prisma.QuestionReplyUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutPageViewsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutPageViewsInput, Prisma.UserUncheckedCreateWithoutPageViewsInput>
+}
+
+export type UserUpsertWithoutPageViewsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutPageViewsInput, Prisma.UserUncheckedUpdateWithoutPageViewsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutPageViewsInput, Prisma.UserUncheckedCreateWithoutPageViewsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutPageViewsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutPageViewsInput, Prisma.UserUncheckedUpdateWithoutPageViewsInput>
+}
+
+export type UserUpdateWithoutPageViewsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string
+  lastName?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  modulesAsTeacher?: Prisma.ModuleUpdateManyWithoutTeacherNestedInput
+  enrollments?: Prisma.EnrollmentUpdateManyWithoutUserNestedInput
+  generatedContent?: Prisma.NoteUpdateManyWithoutUserNestedInput
+  activityAttempts?: Prisma.ActivityAttemptUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  pageFeedbacks?: Prisma.PageFeedbackUpdateManyWithoutUserNestedInput
+  promptFeedbacks?: Prisma.PromptUpdateManyWithoutUserNestedInput
+  studentQuestions?: Prisma.StudentQuestionUpdateManyWithoutUserNestedInput
+  questionReplies?: Prisma.QuestionReplyUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutPageViewsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string
+  lastName?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  modulesAsTeacher?: Prisma.ModuleUncheckedUpdateManyWithoutTeacherNestedInput
+  enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutUserNestedInput
+  generatedContent?: Prisma.NoteUncheckedUpdateManyWithoutUserNestedInput
+  activityAttempts?: Prisma.ActivityAttemptUncheckedUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  pageFeedbacks?: Prisma.PageFeedbackUncheckedUpdateManyWithoutUserNestedInput
+  promptFeedbacks?: Prisma.PromptUncheckedUpdateManyWithoutUserNestedInput
   studentQuestions?: Prisma.StudentQuestionUncheckedUpdateManyWithoutUserNestedInput
   questionReplies?: Prisma.QuestionReplyUncheckedUpdateManyWithoutUserNestedInput
 }
@@ -810,9 +939,10 @@ export type UserCreateWithoutActivityAttemptsInput = {
   generatedContent?: Prisma.NoteCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   pageFeedbacks?: Prisma.PageFeedbackCreateNestedManyWithoutUserInput
-  promptFeedbacks?: Prisma.PromptFeedbackCreateNestedManyWithoutUserInput
+  promptFeedbacks?: Prisma.PromptCreateNestedManyWithoutUserInput
   studentQuestions?: Prisma.StudentQuestionCreateNestedManyWithoutUserInput
   questionReplies?: Prisma.QuestionReplyCreateNestedManyWithoutUserInput
+  pageViews?: Prisma.PageViewCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutActivityAttemptsInput = {
@@ -830,9 +960,10 @@ export type UserUncheckedCreateWithoutActivityAttemptsInput = {
   generatedContent?: Prisma.NoteUncheckedCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   pageFeedbacks?: Prisma.PageFeedbackUncheckedCreateNestedManyWithoutUserInput
-  promptFeedbacks?: Prisma.PromptFeedbackUncheckedCreateNestedManyWithoutUserInput
+  promptFeedbacks?: Prisma.PromptUncheckedCreateNestedManyWithoutUserInput
   studentQuestions?: Prisma.StudentQuestionUncheckedCreateNestedManyWithoutUserInput
   questionReplies?: Prisma.QuestionReplyUncheckedCreateNestedManyWithoutUserInput
+  pageViews?: Prisma.PageViewUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutActivityAttemptsInput = {
@@ -866,9 +997,10 @@ export type UserUpdateWithoutActivityAttemptsInput = {
   generatedContent?: Prisma.NoteUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   pageFeedbacks?: Prisma.PageFeedbackUpdateManyWithoutUserNestedInput
-  promptFeedbacks?: Prisma.PromptFeedbackUpdateManyWithoutUserNestedInput
+  promptFeedbacks?: Prisma.PromptUpdateManyWithoutUserNestedInput
   studentQuestions?: Prisma.StudentQuestionUpdateManyWithoutUserNestedInput
   questionReplies?: Prisma.QuestionReplyUpdateManyWithoutUserNestedInput
+  pageViews?: Prisma.PageViewUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutActivityAttemptsInput = {
@@ -886,9 +1018,10 @@ export type UserUncheckedUpdateWithoutActivityAttemptsInput = {
   generatedContent?: Prisma.NoteUncheckedUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   pageFeedbacks?: Prisma.PageFeedbackUncheckedUpdateManyWithoutUserNestedInput
-  promptFeedbacks?: Prisma.PromptFeedbackUncheckedUpdateManyWithoutUserNestedInput
+  promptFeedbacks?: Prisma.PromptUncheckedUpdateManyWithoutUserNestedInput
   studentQuestions?: Prisma.StudentQuestionUncheckedUpdateManyWithoutUserNestedInput
   questionReplies?: Prisma.QuestionReplyUncheckedUpdateManyWithoutUserNestedInput
+  pageViews?: Prisma.PageViewUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutPromptFeedbacksInput = {
@@ -909,6 +1042,7 @@ export type UserCreateWithoutPromptFeedbacksInput = {
   pageFeedbacks?: Prisma.PageFeedbackCreateNestedManyWithoutUserInput
   studentQuestions?: Prisma.StudentQuestionCreateNestedManyWithoutUserInput
   questionReplies?: Prisma.QuestionReplyCreateNestedManyWithoutUserInput
+  pageViews?: Prisma.PageViewCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutPromptFeedbacksInput = {
@@ -929,6 +1063,7 @@ export type UserUncheckedCreateWithoutPromptFeedbacksInput = {
   pageFeedbacks?: Prisma.PageFeedbackUncheckedCreateNestedManyWithoutUserInput
   studentQuestions?: Prisma.StudentQuestionUncheckedCreateNestedManyWithoutUserInput
   questionReplies?: Prisma.QuestionReplyUncheckedCreateNestedManyWithoutUserInput
+  pageViews?: Prisma.PageViewUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutPromptFeedbacksInput = {
@@ -965,6 +1100,7 @@ export type UserUpdateWithoutPromptFeedbacksInput = {
   pageFeedbacks?: Prisma.PageFeedbackUpdateManyWithoutUserNestedInput
   studentQuestions?: Prisma.StudentQuestionUpdateManyWithoutUserNestedInput
   questionReplies?: Prisma.QuestionReplyUpdateManyWithoutUserNestedInput
+  pageViews?: Prisma.PageViewUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutPromptFeedbacksInput = {
@@ -985,6 +1121,7 @@ export type UserUncheckedUpdateWithoutPromptFeedbacksInput = {
   pageFeedbacks?: Prisma.PageFeedbackUncheckedUpdateManyWithoutUserNestedInput
   studentQuestions?: Prisma.StudentQuestionUncheckedUpdateManyWithoutUserNestedInput
   questionReplies?: Prisma.QuestionReplyUncheckedUpdateManyWithoutUserNestedInput
+  pageViews?: Prisma.PageViewUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutPageFeedbacksInput = {
@@ -1002,9 +1139,10 @@ export type UserCreateWithoutPageFeedbacksInput = {
   generatedContent?: Prisma.NoteCreateNestedManyWithoutUserInput
   activityAttempts?: Prisma.ActivityAttemptCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
-  promptFeedbacks?: Prisma.PromptFeedbackCreateNestedManyWithoutUserInput
+  promptFeedbacks?: Prisma.PromptCreateNestedManyWithoutUserInput
   studentQuestions?: Prisma.StudentQuestionCreateNestedManyWithoutUserInput
   questionReplies?: Prisma.QuestionReplyCreateNestedManyWithoutUserInput
+  pageViews?: Prisma.PageViewCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutPageFeedbacksInput = {
@@ -1022,9 +1160,10 @@ export type UserUncheckedCreateWithoutPageFeedbacksInput = {
   generatedContent?: Prisma.NoteUncheckedCreateNestedManyWithoutUserInput
   activityAttempts?: Prisma.ActivityAttemptUncheckedCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
-  promptFeedbacks?: Prisma.PromptFeedbackUncheckedCreateNestedManyWithoutUserInput
+  promptFeedbacks?: Prisma.PromptUncheckedCreateNestedManyWithoutUserInput
   studentQuestions?: Prisma.StudentQuestionUncheckedCreateNestedManyWithoutUserInput
   questionReplies?: Prisma.QuestionReplyUncheckedCreateNestedManyWithoutUserInput
+  pageViews?: Prisma.PageViewUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutPageFeedbacksInput = {
@@ -1058,9 +1197,10 @@ export type UserUpdateWithoutPageFeedbacksInput = {
   generatedContent?: Prisma.NoteUpdateManyWithoutUserNestedInput
   activityAttempts?: Prisma.ActivityAttemptUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
-  promptFeedbacks?: Prisma.PromptFeedbackUpdateManyWithoutUserNestedInput
+  promptFeedbacks?: Prisma.PromptUpdateManyWithoutUserNestedInput
   studentQuestions?: Prisma.StudentQuestionUpdateManyWithoutUserNestedInput
   questionReplies?: Prisma.QuestionReplyUpdateManyWithoutUserNestedInput
+  pageViews?: Prisma.PageViewUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutPageFeedbacksInput = {
@@ -1078,9 +1218,10 @@ export type UserUncheckedUpdateWithoutPageFeedbacksInput = {
   generatedContent?: Prisma.NoteUncheckedUpdateManyWithoutUserNestedInput
   activityAttempts?: Prisma.ActivityAttemptUncheckedUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
-  promptFeedbacks?: Prisma.PromptFeedbackUncheckedUpdateManyWithoutUserNestedInput
+  promptFeedbacks?: Prisma.PromptUncheckedUpdateManyWithoutUserNestedInput
   studentQuestions?: Prisma.StudentQuestionUncheckedUpdateManyWithoutUserNestedInput
   questionReplies?: Prisma.QuestionReplyUncheckedUpdateManyWithoutUserNestedInput
+  pageViews?: Prisma.PageViewUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutGeneratedContentInput = {
@@ -1098,9 +1239,10 @@ export type UserCreateWithoutGeneratedContentInput = {
   activityAttempts?: Prisma.ActivityAttemptCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   pageFeedbacks?: Prisma.PageFeedbackCreateNestedManyWithoutUserInput
-  promptFeedbacks?: Prisma.PromptFeedbackCreateNestedManyWithoutUserInput
+  promptFeedbacks?: Prisma.PromptCreateNestedManyWithoutUserInput
   studentQuestions?: Prisma.StudentQuestionCreateNestedManyWithoutUserInput
   questionReplies?: Prisma.QuestionReplyCreateNestedManyWithoutUserInput
+  pageViews?: Prisma.PageViewCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutGeneratedContentInput = {
@@ -1118,9 +1260,10 @@ export type UserUncheckedCreateWithoutGeneratedContentInput = {
   activityAttempts?: Prisma.ActivityAttemptUncheckedCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   pageFeedbacks?: Prisma.PageFeedbackUncheckedCreateNestedManyWithoutUserInput
-  promptFeedbacks?: Prisma.PromptFeedbackUncheckedCreateNestedManyWithoutUserInput
+  promptFeedbacks?: Prisma.PromptUncheckedCreateNestedManyWithoutUserInput
   studentQuestions?: Prisma.StudentQuestionUncheckedCreateNestedManyWithoutUserInput
   questionReplies?: Prisma.QuestionReplyUncheckedCreateNestedManyWithoutUserInput
+  pageViews?: Prisma.PageViewUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutGeneratedContentInput = {
@@ -1154,9 +1297,10 @@ export type UserUpdateWithoutGeneratedContentInput = {
   activityAttempts?: Prisma.ActivityAttemptUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   pageFeedbacks?: Prisma.PageFeedbackUpdateManyWithoutUserNestedInput
-  promptFeedbacks?: Prisma.PromptFeedbackUpdateManyWithoutUserNestedInput
+  promptFeedbacks?: Prisma.PromptUpdateManyWithoutUserNestedInput
   studentQuestions?: Prisma.StudentQuestionUpdateManyWithoutUserNestedInput
   questionReplies?: Prisma.QuestionReplyUpdateManyWithoutUserNestedInput
+  pageViews?: Prisma.PageViewUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutGeneratedContentInput = {
@@ -1174,9 +1318,10 @@ export type UserUncheckedUpdateWithoutGeneratedContentInput = {
   activityAttempts?: Prisma.ActivityAttemptUncheckedUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   pageFeedbacks?: Prisma.PageFeedbackUncheckedUpdateManyWithoutUserNestedInput
-  promptFeedbacks?: Prisma.PromptFeedbackUncheckedUpdateManyWithoutUserNestedInput
+  promptFeedbacks?: Prisma.PromptUncheckedUpdateManyWithoutUserNestedInput
   studentQuestions?: Prisma.StudentQuestionUncheckedUpdateManyWithoutUserNestedInput
   questionReplies?: Prisma.QuestionReplyUncheckedUpdateManyWithoutUserNestedInput
+  pageViews?: Prisma.PageViewUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutStudentQuestionsInput = {
@@ -1195,8 +1340,9 @@ export type UserCreateWithoutStudentQuestionsInput = {
   activityAttempts?: Prisma.ActivityAttemptCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   pageFeedbacks?: Prisma.PageFeedbackCreateNestedManyWithoutUserInput
-  promptFeedbacks?: Prisma.PromptFeedbackCreateNestedManyWithoutUserInput
+  promptFeedbacks?: Prisma.PromptCreateNestedManyWithoutUserInput
   questionReplies?: Prisma.QuestionReplyCreateNestedManyWithoutUserInput
+  pageViews?: Prisma.PageViewCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutStudentQuestionsInput = {
@@ -1215,8 +1361,9 @@ export type UserUncheckedCreateWithoutStudentQuestionsInput = {
   activityAttempts?: Prisma.ActivityAttemptUncheckedCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   pageFeedbacks?: Prisma.PageFeedbackUncheckedCreateNestedManyWithoutUserInput
-  promptFeedbacks?: Prisma.PromptFeedbackUncheckedCreateNestedManyWithoutUserInput
+  promptFeedbacks?: Prisma.PromptUncheckedCreateNestedManyWithoutUserInput
   questionReplies?: Prisma.QuestionReplyUncheckedCreateNestedManyWithoutUserInput
+  pageViews?: Prisma.PageViewUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutStudentQuestionsInput = {
@@ -1251,8 +1398,9 @@ export type UserUpdateWithoutStudentQuestionsInput = {
   activityAttempts?: Prisma.ActivityAttemptUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   pageFeedbacks?: Prisma.PageFeedbackUpdateManyWithoutUserNestedInput
-  promptFeedbacks?: Prisma.PromptFeedbackUpdateManyWithoutUserNestedInput
+  promptFeedbacks?: Prisma.PromptUpdateManyWithoutUserNestedInput
   questionReplies?: Prisma.QuestionReplyUpdateManyWithoutUserNestedInput
+  pageViews?: Prisma.PageViewUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutStudentQuestionsInput = {
@@ -1271,8 +1419,9 @@ export type UserUncheckedUpdateWithoutStudentQuestionsInput = {
   activityAttempts?: Prisma.ActivityAttemptUncheckedUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   pageFeedbacks?: Prisma.PageFeedbackUncheckedUpdateManyWithoutUserNestedInput
-  promptFeedbacks?: Prisma.PromptFeedbackUncheckedUpdateManyWithoutUserNestedInput
+  promptFeedbacks?: Prisma.PromptUncheckedUpdateManyWithoutUserNestedInput
   questionReplies?: Prisma.QuestionReplyUncheckedUpdateManyWithoutUserNestedInput
+  pageViews?: Prisma.PageViewUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutQuestionRepliesInput = {
@@ -1291,8 +1440,9 @@ export type UserCreateWithoutQuestionRepliesInput = {
   activityAttempts?: Prisma.ActivityAttemptCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   pageFeedbacks?: Prisma.PageFeedbackCreateNestedManyWithoutUserInput
-  promptFeedbacks?: Prisma.PromptFeedbackCreateNestedManyWithoutUserInput
+  promptFeedbacks?: Prisma.PromptCreateNestedManyWithoutUserInput
   studentQuestions?: Prisma.StudentQuestionCreateNestedManyWithoutUserInput
+  pageViews?: Prisma.PageViewCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutQuestionRepliesInput = {
@@ -1311,8 +1461,9 @@ export type UserUncheckedCreateWithoutQuestionRepliesInput = {
   activityAttempts?: Prisma.ActivityAttemptUncheckedCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   pageFeedbacks?: Prisma.PageFeedbackUncheckedCreateNestedManyWithoutUserInput
-  promptFeedbacks?: Prisma.PromptFeedbackUncheckedCreateNestedManyWithoutUserInput
+  promptFeedbacks?: Prisma.PromptUncheckedCreateNestedManyWithoutUserInput
   studentQuestions?: Prisma.StudentQuestionUncheckedCreateNestedManyWithoutUserInput
+  pageViews?: Prisma.PageViewUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutQuestionRepliesInput = {
@@ -1347,8 +1498,9 @@ export type UserUpdateWithoutQuestionRepliesInput = {
   activityAttempts?: Prisma.ActivityAttemptUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   pageFeedbacks?: Prisma.PageFeedbackUpdateManyWithoutUserNestedInput
-  promptFeedbacks?: Prisma.PromptFeedbackUpdateManyWithoutUserNestedInput
+  promptFeedbacks?: Prisma.PromptUpdateManyWithoutUserNestedInput
   studentQuestions?: Prisma.StudentQuestionUpdateManyWithoutUserNestedInput
+  pageViews?: Prisma.PageViewUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutQuestionRepliesInput = {
@@ -1367,8 +1519,9 @@ export type UserUncheckedUpdateWithoutQuestionRepliesInput = {
   activityAttempts?: Prisma.ActivityAttemptUncheckedUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   pageFeedbacks?: Prisma.PageFeedbackUncheckedUpdateManyWithoutUserNestedInput
-  promptFeedbacks?: Prisma.PromptFeedbackUncheckedUpdateManyWithoutUserNestedInput
+  promptFeedbacks?: Prisma.PromptUncheckedUpdateManyWithoutUserNestedInput
   studentQuestions?: Prisma.StudentQuestionUncheckedUpdateManyWithoutUserNestedInput
+  pageViews?: Prisma.PageViewUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutNotificationsInput = {
@@ -1386,9 +1539,10 @@ export type UserCreateWithoutNotificationsInput = {
   generatedContent?: Prisma.NoteCreateNestedManyWithoutUserInput
   activityAttempts?: Prisma.ActivityAttemptCreateNestedManyWithoutUserInput
   pageFeedbacks?: Prisma.PageFeedbackCreateNestedManyWithoutUserInput
-  promptFeedbacks?: Prisma.PromptFeedbackCreateNestedManyWithoutUserInput
+  promptFeedbacks?: Prisma.PromptCreateNestedManyWithoutUserInput
   studentQuestions?: Prisma.StudentQuestionCreateNestedManyWithoutUserInput
   questionReplies?: Prisma.QuestionReplyCreateNestedManyWithoutUserInput
+  pageViews?: Prisma.PageViewCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutNotificationsInput = {
@@ -1406,9 +1560,10 @@ export type UserUncheckedCreateWithoutNotificationsInput = {
   generatedContent?: Prisma.NoteUncheckedCreateNestedManyWithoutUserInput
   activityAttempts?: Prisma.ActivityAttemptUncheckedCreateNestedManyWithoutUserInput
   pageFeedbacks?: Prisma.PageFeedbackUncheckedCreateNestedManyWithoutUserInput
-  promptFeedbacks?: Prisma.PromptFeedbackUncheckedCreateNestedManyWithoutUserInput
+  promptFeedbacks?: Prisma.PromptUncheckedCreateNestedManyWithoutUserInput
   studentQuestions?: Prisma.StudentQuestionUncheckedCreateNestedManyWithoutUserInput
   questionReplies?: Prisma.QuestionReplyUncheckedCreateNestedManyWithoutUserInput
+  pageViews?: Prisma.PageViewUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutNotificationsInput = {
@@ -1442,9 +1597,10 @@ export type UserUpdateWithoutNotificationsInput = {
   generatedContent?: Prisma.NoteUpdateManyWithoutUserNestedInput
   activityAttempts?: Prisma.ActivityAttemptUpdateManyWithoutUserNestedInput
   pageFeedbacks?: Prisma.PageFeedbackUpdateManyWithoutUserNestedInput
-  promptFeedbacks?: Prisma.PromptFeedbackUpdateManyWithoutUserNestedInput
+  promptFeedbacks?: Prisma.PromptUpdateManyWithoutUserNestedInput
   studentQuestions?: Prisma.StudentQuestionUpdateManyWithoutUserNestedInput
   questionReplies?: Prisma.QuestionReplyUpdateManyWithoutUserNestedInput
+  pageViews?: Prisma.PageViewUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutNotificationsInput = {
@@ -1462,9 +1618,10 @@ export type UserUncheckedUpdateWithoutNotificationsInput = {
   generatedContent?: Prisma.NoteUncheckedUpdateManyWithoutUserNestedInput
   activityAttempts?: Prisma.ActivityAttemptUncheckedUpdateManyWithoutUserNestedInput
   pageFeedbacks?: Prisma.PageFeedbackUncheckedUpdateManyWithoutUserNestedInput
-  promptFeedbacks?: Prisma.PromptFeedbackUncheckedUpdateManyWithoutUserNestedInput
+  promptFeedbacks?: Prisma.PromptUncheckedUpdateManyWithoutUserNestedInput
   studentQuestions?: Prisma.StudentQuestionUncheckedUpdateManyWithoutUserNestedInput
   questionReplies?: Prisma.QuestionReplyUncheckedUpdateManyWithoutUserNestedInput
+  pageViews?: Prisma.PageViewUncheckedUpdateManyWithoutUserNestedInput
 }
 
 
@@ -1482,6 +1639,7 @@ export type UserCountOutputType = {
   promptFeedbacks: number
   studentQuestions: number
   questionReplies: number
+  pageViews: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1494,6 +1652,7 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   promptFeedbacks?: boolean | UserCountOutputTypeCountPromptFeedbacksArgs
   studentQuestions?: boolean | UserCountOutputTypeCountStudentQuestionsArgs
   questionReplies?: boolean | UserCountOutputTypeCountQuestionRepliesArgs
+  pageViews?: boolean | UserCountOutputTypeCountPageViewsArgs
 }
 
 /**
@@ -1552,7 +1711,7 @@ export type UserCountOutputTypeCountPageFeedbacksArgs<ExtArgs extends runtime.Ty
  * UserCountOutputType without action
  */
 export type UserCountOutputTypeCountPromptFeedbacksArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.PromptFeedbackWhereInput
+  where?: Prisma.PromptWhereInput
 }
 
 /**
@@ -1567,6 +1726,13 @@ export type UserCountOutputTypeCountStudentQuestionsArgs<ExtArgs extends runtime
  */
 export type UserCountOutputTypeCountQuestionRepliesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.QuestionReplyWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountPageViewsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.PageViewWhereInput
 }
 
 
@@ -1589,6 +1755,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   promptFeedbacks?: boolean | Prisma.User$promptFeedbacksArgs<ExtArgs>
   studentQuestions?: boolean | Prisma.User$studentQuestionsArgs<ExtArgs>
   questionReplies?: boolean | Prisma.User$questionRepliesArgs<ExtArgs>
+  pageViews?: boolean | Prisma.User$pageViewsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -1639,6 +1806,7 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   promptFeedbacks?: boolean | Prisma.User$promptFeedbacksArgs<ExtArgs>
   studentQuestions?: boolean | Prisma.User$studentQuestionsArgs<ExtArgs>
   questionReplies?: boolean | Prisma.User$questionRepliesArgs<ExtArgs>
+  pageViews?: boolean | Prisma.User$pageViewsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -1653,9 +1821,10 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     activityAttempts: Prisma.$ActivityAttemptPayload<ExtArgs>[]
     notifications: Prisma.$NotificationPayload<ExtArgs>[]
     pageFeedbacks: Prisma.$PageFeedbackPayload<ExtArgs>[]
-    promptFeedbacks: Prisma.$PromptFeedbackPayload<ExtArgs>[]
+    promptFeedbacks: Prisma.$PromptPayload<ExtArgs>[]
     studentQuestions: Prisma.$StudentQuestionPayload<ExtArgs>[]
     questionReplies: Prisma.$QuestionReplyPayload<ExtArgs>[]
+    pageViews: Prisma.$PageViewPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -2067,9 +2236,10 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   activityAttempts<T extends Prisma.User$activityAttemptsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$activityAttemptsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ActivityAttemptPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   notifications<T extends Prisma.User$notificationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$notificationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   pageFeedbacks<T extends Prisma.User$pageFeedbacksArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$pageFeedbacksArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PageFeedbackPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  promptFeedbacks<T extends Prisma.User$promptFeedbacksArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$promptFeedbacksArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PromptFeedbackPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  promptFeedbacks<T extends Prisma.User$promptFeedbacksArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$promptFeedbacksArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PromptPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   studentQuestions<T extends Prisma.User$studentQuestionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$studentQuestionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$StudentQuestionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   questionReplies<T extends Prisma.User$questionRepliesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$questionRepliesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$QuestionReplyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  pageViews<T extends Prisma.User$pageViewsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$pageViewsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PageViewPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2644,23 +2814,23 @@ export type User$pageFeedbacksArgs<ExtArgs extends runtime.Types.Extensions.Inte
  */
 export type User$promptFeedbacksArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the PromptFeedback
+   * Select specific fields to fetch from the Prompt
    */
-  select?: Prisma.PromptFeedbackSelect<ExtArgs> | null
+  select?: Prisma.PromptSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the PromptFeedback
+   * Omit specific fields from the Prompt
    */
-  omit?: Prisma.PromptFeedbackOmit<ExtArgs> | null
+  omit?: Prisma.PromptOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.PromptFeedbackInclude<ExtArgs> | null
-  where?: Prisma.PromptFeedbackWhereInput
-  orderBy?: Prisma.PromptFeedbackOrderByWithRelationInput | Prisma.PromptFeedbackOrderByWithRelationInput[]
-  cursor?: Prisma.PromptFeedbackWhereUniqueInput
+  include?: Prisma.PromptInclude<ExtArgs> | null
+  where?: Prisma.PromptWhereInput
+  orderBy?: Prisma.PromptOrderByWithRelationInput | Prisma.PromptOrderByWithRelationInput[]
+  cursor?: Prisma.PromptWhereUniqueInput
   take?: number
   skip?: number
-  distinct?: Prisma.PromptFeedbackScalarFieldEnum | Prisma.PromptFeedbackScalarFieldEnum[]
+  distinct?: Prisma.PromptScalarFieldEnum | Prisma.PromptScalarFieldEnum[]
 }
 
 /**
@@ -2709,6 +2879,30 @@ export type User$questionRepliesArgs<ExtArgs extends runtime.Types.Extensions.In
   take?: number
   skip?: number
   distinct?: Prisma.QuestionReplyScalarFieldEnum | Prisma.QuestionReplyScalarFieldEnum[]
+}
+
+/**
+ * User.pageViews
+ */
+export type User$pageViewsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the PageView
+   */
+  select?: Prisma.PageViewSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the PageView
+   */
+  omit?: Prisma.PageViewOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PageViewInclude<ExtArgs> | null
+  where?: Prisma.PageViewWhereInput
+  orderBy?: Prisma.PageViewOrderByWithRelationInput | Prisma.PageViewOrderByWithRelationInput[]
+  cursor?: Prisma.PageViewWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.PageViewScalarFieldEnum | Prisma.PageViewScalarFieldEnum[]
 }
 
 /**
