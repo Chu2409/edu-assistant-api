@@ -40,7 +40,11 @@ export type PageRelationMinAggregateOutputType = {
   relatedPageId: string | null
   similarityScore: number | null
   relationType: $Enums.RelationType | null
+  mentionText: string | null
   explanation: string | null
+  isEmbedded: boolean | null
+  embeddedAt: Date | null
+  calculatedAt: Date | null
   createdAt: Date | null
 }
 
@@ -50,7 +54,11 @@ export type PageRelationMaxAggregateOutputType = {
   relatedPageId: string | null
   similarityScore: number | null
   relationType: $Enums.RelationType | null
+  mentionText: string | null
   explanation: string | null
+  isEmbedded: boolean | null
+  embeddedAt: Date | null
+  calculatedAt: Date | null
   createdAt: Date | null
 }
 
@@ -60,8 +68,11 @@ export type PageRelationCountAggregateOutputType = {
   relatedPageId: number
   similarityScore: number
   relationType: number
-  commonThemes: number
+  mentionText: number
   explanation: number
+  isEmbedded: number
+  embeddedAt: number
+  calculatedAt: number
   createdAt: number
   _all: number
 }
@@ -81,7 +92,11 @@ export type PageRelationMinAggregateInputType = {
   relatedPageId?: true
   similarityScore?: true
   relationType?: true
+  mentionText?: true
   explanation?: true
+  isEmbedded?: true
+  embeddedAt?: true
+  calculatedAt?: true
   createdAt?: true
 }
 
@@ -91,7 +106,11 @@ export type PageRelationMaxAggregateInputType = {
   relatedPageId?: true
   similarityScore?: true
   relationType?: true
+  mentionText?: true
   explanation?: true
+  isEmbedded?: true
+  embeddedAt?: true
+  calculatedAt?: true
   createdAt?: true
 }
 
@@ -101,8 +120,11 @@ export type PageRelationCountAggregateInputType = {
   relatedPageId?: true
   similarityScore?: true
   relationType?: true
-  commonThemes?: true
+  mentionText?: true
   explanation?: true
+  isEmbedded?: true
+  embeddedAt?: true
+  calculatedAt?: true
   createdAt?: true
   _all?: true
 }
@@ -199,8 +221,11 @@ export type PageRelationGroupByOutputType = {
   relatedPageId: string
   similarityScore: number
   relationType: $Enums.RelationType
-  commonThemes: string[]
+  mentionText: string
   explanation: string | null
+  isEmbedded: boolean
+  embeddedAt: Date | null
+  calculatedAt: Date
   createdAt: Date
   _count: PageRelationCountAggregateOutputType | null
   _avg: PageRelationAvgAggregateOutputType | null
@@ -233,8 +258,11 @@ export type PageRelationWhereInput = {
   relatedPageId?: Prisma.StringFilter<"PageRelation"> | string
   similarityScore?: Prisma.FloatFilter<"PageRelation"> | number
   relationType?: Prisma.EnumRelationTypeFilter<"PageRelation"> | $Enums.RelationType
-  commonThemes?: Prisma.StringNullableListFilter<"PageRelation">
+  mentionText?: Prisma.StringFilter<"PageRelation"> | string
   explanation?: Prisma.StringNullableFilter<"PageRelation"> | string | null
+  isEmbedded?: Prisma.BoolFilter<"PageRelation"> | boolean
+  embeddedAt?: Prisma.DateTimeNullableFilter<"PageRelation"> | Date | string | null
+  calculatedAt?: Prisma.DateTimeFilter<"PageRelation"> | Date | string
   createdAt?: Prisma.DateTimeFilter<"PageRelation"> | Date | string
   originPage?: Prisma.XOR<Prisma.PageScalarRelationFilter, Prisma.PageWhereInput>
   relatedPage?: Prisma.XOR<Prisma.PageScalarRelationFilter, Prisma.PageWhereInput>
@@ -246,8 +274,11 @@ export type PageRelationOrderByWithRelationInput = {
   relatedPageId?: Prisma.SortOrder
   similarityScore?: Prisma.SortOrder
   relationType?: Prisma.SortOrder
-  commonThemes?: Prisma.SortOrder
+  mentionText?: Prisma.SortOrder
   explanation?: Prisma.SortOrderInput | Prisma.SortOrder
+  isEmbedded?: Prisma.SortOrder
+  embeddedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  calculatedAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   originPage?: Prisma.PageOrderByWithRelationInput
   relatedPage?: Prisma.PageOrderByWithRelationInput
@@ -263,8 +294,11 @@ export type PageRelationWhereUniqueInput = Prisma.AtLeast<{
   relatedPageId?: Prisma.StringFilter<"PageRelation"> | string
   similarityScore?: Prisma.FloatFilter<"PageRelation"> | number
   relationType?: Prisma.EnumRelationTypeFilter<"PageRelation"> | $Enums.RelationType
-  commonThemes?: Prisma.StringNullableListFilter<"PageRelation">
+  mentionText?: Prisma.StringFilter<"PageRelation"> | string
   explanation?: Prisma.StringNullableFilter<"PageRelation"> | string | null
+  isEmbedded?: Prisma.BoolFilter<"PageRelation"> | boolean
+  embeddedAt?: Prisma.DateTimeNullableFilter<"PageRelation"> | Date | string | null
+  calculatedAt?: Prisma.DateTimeFilter<"PageRelation"> | Date | string
   createdAt?: Prisma.DateTimeFilter<"PageRelation"> | Date | string
   originPage?: Prisma.XOR<Prisma.PageScalarRelationFilter, Prisma.PageWhereInput>
   relatedPage?: Prisma.XOR<Prisma.PageScalarRelationFilter, Prisma.PageWhereInput>
@@ -276,8 +310,11 @@ export type PageRelationOrderByWithAggregationInput = {
   relatedPageId?: Prisma.SortOrder
   similarityScore?: Prisma.SortOrder
   relationType?: Prisma.SortOrder
-  commonThemes?: Prisma.SortOrder
+  mentionText?: Prisma.SortOrder
   explanation?: Prisma.SortOrderInput | Prisma.SortOrder
+  isEmbedded?: Prisma.SortOrder
+  embeddedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  calculatedAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   _count?: Prisma.PageRelationCountOrderByAggregateInput
   _avg?: Prisma.PageRelationAvgOrderByAggregateInput
@@ -295,8 +332,11 @@ export type PageRelationScalarWhereWithAggregatesInput = {
   relatedPageId?: Prisma.StringWithAggregatesFilter<"PageRelation"> | string
   similarityScore?: Prisma.FloatWithAggregatesFilter<"PageRelation"> | number
   relationType?: Prisma.EnumRelationTypeWithAggregatesFilter<"PageRelation"> | $Enums.RelationType
-  commonThemes?: Prisma.StringNullableListFilter<"PageRelation">
+  mentionText?: Prisma.StringWithAggregatesFilter<"PageRelation"> | string
   explanation?: Prisma.StringNullableWithAggregatesFilter<"PageRelation"> | string | null
+  isEmbedded?: Prisma.BoolWithAggregatesFilter<"PageRelation"> | boolean
+  embeddedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"PageRelation"> | Date | string | null
+  calculatedAt?: Prisma.DateTimeWithAggregatesFilter<"PageRelation"> | Date | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"PageRelation"> | Date | string
 }
 
@@ -304,8 +344,11 @@ export type PageRelationCreateInput = {
   id?: string
   similarityScore: number
   relationType: $Enums.RelationType
-  commonThemes?: Prisma.PageRelationCreatecommonThemesInput | string[]
+  mentionText: string
   explanation?: string | null
+  isEmbedded?: boolean
+  embeddedAt?: Date | string | null
+  calculatedAt?: Date | string
   createdAt?: Date | string
   originPage: Prisma.PageCreateNestedOneWithoutRelatedPagesFromInput
   relatedPage: Prisma.PageCreateNestedOneWithoutRelatedPagesToInput
@@ -317,8 +360,11 @@ export type PageRelationUncheckedCreateInput = {
   relatedPageId: string
   similarityScore: number
   relationType: $Enums.RelationType
-  commonThemes?: Prisma.PageRelationCreatecommonThemesInput | string[]
+  mentionText: string
   explanation?: string | null
+  isEmbedded?: boolean
+  embeddedAt?: Date | string | null
+  calculatedAt?: Date | string
   createdAt?: Date | string
 }
 
@@ -326,8 +372,11 @@ export type PageRelationUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   similarityScore?: Prisma.FloatFieldUpdateOperationsInput | number
   relationType?: Prisma.EnumRelationTypeFieldUpdateOperationsInput | $Enums.RelationType
-  commonThemes?: Prisma.PageRelationUpdatecommonThemesInput | string[]
+  mentionText?: Prisma.StringFieldUpdateOperationsInput | string
   explanation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isEmbedded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  embeddedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  calculatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   originPage?: Prisma.PageUpdateOneRequiredWithoutRelatedPagesFromNestedInput
   relatedPage?: Prisma.PageUpdateOneRequiredWithoutRelatedPagesToNestedInput
@@ -339,8 +388,11 @@ export type PageRelationUncheckedUpdateInput = {
   relatedPageId?: Prisma.StringFieldUpdateOperationsInput | string
   similarityScore?: Prisma.FloatFieldUpdateOperationsInput | number
   relationType?: Prisma.EnumRelationTypeFieldUpdateOperationsInput | $Enums.RelationType
-  commonThemes?: Prisma.PageRelationUpdatecommonThemesInput | string[]
+  mentionText?: Prisma.StringFieldUpdateOperationsInput | string
   explanation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isEmbedded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  embeddedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  calculatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -350,8 +402,11 @@ export type PageRelationCreateManyInput = {
   relatedPageId: string
   similarityScore: number
   relationType: $Enums.RelationType
-  commonThemes?: Prisma.PageRelationCreatecommonThemesInput | string[]
+  mentionText: string
   explanation?: string | null
+  isEmbedded?: boolean
+  embeddedAt?: Date | string | null
+  calculatedAt?: Date | string
   createdAt?: Date | string
 }
 
@@ -359,8 +414,11 @@ export type PageRelationUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   similarityScore?: Prisma.FloatFieldUpdateOperationsInput | number
   relationType?: Prisma.EnumRelationTypeFieldUpdateOperationsInput | $Enums.RelationType
-  commonThemes?: Prisma.PageRelationUpdatecommonThemesInput | string[]
+  mentionText?: Prisma.StringFieldUpdateOperationsInput | string
   explanation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isEmbedded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  embeddedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  calculatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -370,8 +428,11 @@ export type PageRelationUncheckedUpdateManyInput = {
   relatedPageId?: Prisma.StringFieldUpdateOperationsInput | string
   similarityScore?: Prisma.FloatFieldUpdateOperationsInput | number
   relationType?: Prisma.EnumRelationTypeFieldUpdateOperationsInput | $Enums.RelationType
-  commonThemes?: Prisma.PageRelationUpdatecommonThemesInput | string[]
+  mentionText?: Prisma.StringFieldUpdateOperationsInput | string
   explanation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isEmbedded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  embeddedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  calculatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -385,14 +446,6 @@ export type PageRelationOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
 }
 
-export type StringNullableListFilter<$PrismaModel = never> = {
-  equals?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel> | null
-  has?: string | Prisma.StringFieldRefInput<$PrismaModel> | null
-  hasEvery?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel>
-  hasSome?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel>
-  isEmpty?: boolean
-}
-
 export type PageRelationOriginPageIdRelatedPageIdCompoundUniqueInput = {
   originPageId: string
   relatedPageId: string
@@ -404,8 +457,11 @@ export type PageRelationCountOrderByAggregateInput = {
   relatedPageId?: Prisma.SortOrder
   similarityScore?: Prisma.SortOrder
   relationType?: Prisma.SortOrder
-  commonThemes?: Prisma.SortOrder
+  mentionText?: Prisma.SortOrder
   explanation?: Prisma.SortOrder
+  isEmbedded?: Prisma.SortOrder
+  embeddedAt?: Prisma.SortOrder
+  calculatedAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -419,7 +475,11 @@ export type PageRelationMaxOrderByAggregateInput = {
   relatedPageId?: Prisma.SortOrder
   similarityScore?: Prisma.SortOrder
   relationType?: Prisma.SortOrder
+  mentionText?: Prisma.SortOrder
   explanation?: Prisma.SortOrder
+  isEmbedded?: Prisma.SortOrder
+  embeddedAt?: Prisma.SortOrder
+  calculatedAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -429,7 +489,11 @@ export type PageRelationMinOrderByAggregateInput = {
   relatedPageId?: Prisma.SortOrder
   similarityScore?: Prisma.SortOrder
   relationType?: Prisma.SortOrder
+  mentionText?: Prisma.SortOrder
   explanation?: Prisma.SortOrder
+  isEmbedded?: Prisma.SortOrder
+  embeddedAt?: Prisma.SortOrder
+  calculatedAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -521,25 +585,19 @@ export type PageRelationUncheckedUpdateManyWithoutRelatedPageNestedInput = {
   deleteMany?: Prisma.PageRelationScalarWhereInput | Prisma.PageRelationScalarWhereInput[]
 }
 
-export type PageRelationCreatecommonThemesInput = {
-  set: string[]
-}
-
 export type EnumRelationTypeFieldUpdateOperationsInput = {
   set?: $Enums.RelationType
-}
-
-export type PageRelationUpdatecommonThemesInput = {
-  set?: string[]
-  push?: string | string[]
 }
 
 export type PageRelationCreateWithoutOriginPageInput = {
   id?: string
   similarityScore: number
   relationType: $Enums.RelationType
-  commonThemes?: Prisma.PageRelationCreatecommonThemesInput | string[]
+  mentionText: string
   explanation?: string | null
+  isEmbedded?: boolean
+  embeddedAt?: Date | string | null
+  calculatedAt?: Date | string
   createdAt?: Date | string
   relatedPage: Prisma.PageCreateNestedOneWithoutRelatedPagesToInput
 }
@@ -549,8 +607,11 @@ export type PageRelationUncheckedCreateWithoutOriginPageInput = {
   relatedPageId: string
   similarityScore: number
   relationType: $Enums.RelationType
-  commonThemes?: Prisma.PageRelationCreatecommonThemesInput | string[]
+  mentionText: string
   explanation?: string | null
+  isEmbedded?: boolean
+  embeddedAt?: Date | string | null
+  calculatedAt?: Date | string
   createdAt?: Date | string
 }
 
@@ -568,8 +629,11 @@ export type PageRelationCreateWithoutRelatedPageInput = {
   id?: string
   similarityScore: number
   relationType: $Enums.RelationType
-  commonThemes?: Prisma.PageRelationCreatecommonThemesInput | string[]
+  mentionText: string
   explanation?: string | null
+  isEmbedded?: boolean
+  embeddedAt?: Date | string | null
+  calculatedAt?: Date | string
   createdAt?: Date | string
   originPage: Prisma.PageCreateNestedOneWithoutRelatedPagesFromInput
 }
@@ -579,8 +643,11 @@ export type PageRelationUncheckedCreateWithoutRelatedPageInput = {
   originPageId: string
   similarityScore: number
   relationType: $Enums.RelationType
-  commonThemes?: Prisma.PageRelationCreatecommonThemesInput | string[]
+  mentionText: string
   explanation?: string | null
+  isEmbedded?: boolean
+  embeddedAt?: Date | string | null
+  calculatedAt?: Date | string
   createdAt?: Date | string
 }
 
@@ -619,8 +686,11 @@ export type PageRelationScalarWhereInput = {
   relatedPageId?: Prisma.StringFilter<"PageRelation"> | string
   similarityScore?: Prisma.FloatFilter<"PageRelation"> | number
   relationType?: Prisma.EnumRelationTypeFilter<"PageRelation"> | $Enums.RelationType
-  commonThemes?: Prisma.StringNullableListFilter<"PageRelation">
+  mentionText?: Prisma.StringFilter<"PageRelation"> | string
   explanation?: Prisma.StringNullableFilter<"PageRelation"> | string | null
+  isEmbedded?: Prisma.BoolFilter<"PageRelation"> | boolean
+  embeddedAt?: Prisma.DateTimeNullableFilter<"PageRelation"> | Date | string | null
+  calculatedAt?: Prisma.DateTimeFilter<"PageRelation"> | Date | string
   createdAt?: Prisma.DateTimeFilter<"PageRelation"> | Date | string
 }
 
@@ -645,8 +715,11 @@ export type PageRelationCreateManyOriginPageInput = {
   relatedPageId: string
   similarityScore: number
   relationType: $Enums.RelationType
-  commonThemes?: Prisma.PageRelationCreatecommonThemesInput | string[]
+  mentionText: string
   explanation?: string | null
+  isEmbedded?: boolean
+  embeddedAt?: Date | string | null
+  calculatedAt?: Date | string
   createdAt?: Date | string
 }
 
@@ -655,8 +728,11 @@ export type PageRelationCreateManyRelatedPageInput = {
   originPageId: string
   similarityScore: number
   relationType: $Enums.RelationType
-  commonThemes?: Prisma.PageRelationCreatecommonThemesInput | string[]
+  mentionText: string
   explanation?: string | null
+  isEmbedded?: boolean
+  embeddedAt?: Date | string | null
+  calculatedAt?: Date | string
   createdAt?: Date | string
 }
 
@@ -664,8 +740,11 @@ export type PageRelationUpdateWithoutOriginPageInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   similarityScore?: Prisma.FloatFieldUpdateOperationsInput | number
   relationType?: Prisma.EnumRelationTypeFieldUpdateOperationsInput | $Enums.RelationType
-  commonThemes?: Prisma.PageRelationUpdatecommonThemesInput | string[]
+  mentionText?: Prisma.StringFieldUpdateOperationsInput | string
   explanation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isEmbedded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  embeddedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  calculatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   relatedPage?: Prisma.PageUpdateOneRequiredWithoutRelatedPagesToNestedInput
 }
@@ -675,8 +754,11 @@ export type PageRelationUncheckedUpdateWithoutOriginPageInput = {
   relatedPageId?: Prisma.StringFieldUpdateOperationsInput | string
   similarityScore?: Prisma.FloatFieldUpdateOperationsInput | number
   relationType?: Prisma.EnumRelationTypeFieldUpdateOperationsInput | $Enums.RelationType
-  commonThemes?: Prisma.PageRelationUpdatecommonThemesInput | string[]
+  mentionText?: Prisma.StringFieldUpdateOperationsInput | string
   explanation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isEmbedded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  embeddedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  calculatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -685,8 +767,11 @@ export type PageRelationUncheckedUpdateManyWithoutOriginPageInput = {
   relatedPageId?: Prisma.StringFieldUpdateOperationsInput | string
   similarityScore?: Prisma.FloatFieldUpdateOperationsInput | number
   relationType?: Prisma.EnumRelationTypeFieldUpdateOperationsInput | $Enums.RelationType
-  commonThemes?: Prisma.PageRelationUpdatecommonThemesInput | string[]
+  mentionText?: Prisma.StringFieldUpdateOperationsInput | string
   explanation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isEmbedded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  embeddedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  calculatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -694,8 +779,11 @@ export type PageRelationUpdateWithoutRelatedPageInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   similarityScore?: Prisma.FloatFieldUpdateOperationsInput | number
   relationType?: Prisma.EnumRelationTypeFieldUpdateOperationsInput | $Enums.RelationType
-  commonThemes?: Prisma.PageRelationUpdatecommonThemesInput | string[]
+  mentionText?: Prisma.StringFieldUpdateOperationsInput | string
   explanation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isEmbedded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  embeddedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  calculatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   originPage?: Prisma.PageUpdateOneRequiredWithoutRelatedPagesFromNestedInput
 }
@@ -705,8 +793,11 @@ export type PageRelationUncheckedUpdateWithoutRelatedPageInput = {
   originPageId?: Prisma.StringFieldUpdateOperationsInput | string
   similarityScore?: Prisma.FloatFieldUpdateOperationsInput | number
   relationType?: Prisma.EnumRelationTypeFieldUpdateOperationsInput | $Enums.RelationType
-  commonThemes?: Prisma.PageRelationUpdatecommonThemesInput | string[]
+  mentionText?: Prisma.StringFieldUpdateOperationsInput | string
   explanation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isEmbedded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  embeddedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  calculatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -715,8 +806,11 @@ export type PageRelationUncheckedUpdateManyWithoutRelatedPageInput = {
   originPageId?: Prisma.StringFieldUpdateOperationsInput | string
   similarityScore?: Prisma.FloatFieldUpdateOperationsInput | number
   relationType?: Prisma.EnumRelationTypeFieldUpdateOperationsInput | $Enums.RelationType
-  commonThemes?: Prisma.PageRelationUpdatecommonThemesInput | string[]
+  mentionText?: Prisma.StringFieldUpdateOperationsInput | string
   explanation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isEmbedded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  embeddedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  calculatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -728,8 +822,11 @@ export type PageRelationSelect<ExtArgs extends runtime.Types.Extensions.Internal
   relatedPageId?: boolean
   similarityScore?: boolean
   relationType?: boolean
-  commonThemes?: boolean
+  mentionText?: boolean
   explanation?: boolean
+  isEmbedded?: boolean
+  embeddedAt?: boolean
+  calculatedAt?: boolean
   createdAt?: boolean
   originPage?: boolean | Prisma.PageDefaultArgs<ExtArgs>
   relatedPage?: boolean | Prisma.PageDefaultArgs<ExtArgs>
@@ -741,8 +838,11 @@ export type PageRelationSelectCreateManyAndReturn<ExtArgs extends runtime.Types.
   relatedPageId?: boolean
   similarityScore?: boolean
   relationType?: boolean
-  commonThemes?: boolean
+  mentionText?: boolean
   explanation?: boolean
+  isEmbedded?: boolean
+  embeddedAt?: boolean
+  calculatedAt?: boolean
   createdAt?: boolean
   originPage?: boolean | Prisma.PageDefaultArgs<ExtArgs>
   relatedPage?: boolean | Prisma.PageDefaultArgs<ExtArgs>
@@ -754,8 +854,11 @@ export type PageRelationSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.
   relatedPageId?: boolean
   similarityScore?: boolean
   relationType?: boolean
-  commonThemes?: boolean
+  mentionText?: boolean
   explanation?: boolean
+  isEmbedded?: boolean
+  embeddedAt?: boolean
+  calculatedAt?: boolean
   createdAt?: boolean
   originPage?: boolean | Prisma.PageDefaultArgs<ExtArgs>
   relatedPage?: boolean | Prisma.PageDefaultArgs<ExtArgs>
@@ -767,12 +870,15 @@ export type PageRelationSelectScalar = {
   relatedPageId?: boolean
   similarityScore?: boolean
   relationType?: boolean
-  commonThemes?: boolean
+  mentionText?: boolean
   explanation?: boolean
+  isEmbedded?: boolean
+  embeddedAt?: boolean
+  calculatedAt?: boolean
   createdAt?: boolean
 }
 
-export type PageRelationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "originPageId" | "relatedPageId" | "similarityScore" | "relationType" | "commonThemes" | "explanation" | "createdAt", ExtArgs["result"]["pageRelation"]>
+export type PageRelationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "originPageId" | "relatedPageId" | "similarityScore" | "relationType" | "mentionText" | "explanation" | "isEmbedded" | "embeddedAt" | "calculatedAt" | "createdAt", ExtArgs["result"]["pageRelation"]>
 export type PageRelationInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   originPage?: boolean | Prisma.PageDefaultArgs<ExtArgs>
   relatedPage?: boolean | Prisma.PageDefaultArgs<ExtArgs>
@@ -798,8 +904,11 @@ export type $PageRelationPayload<ExtArgs extends runtime.Types.Extensions.Intern
     relatedPageId: string
     similarityScore: number
     relationType: $Enums.RelationType
-    commonThemes: string[]
+    mentionText: string
     explanation: string | null
+    isEmbedded: boolean
+    embeddedAt: Date | null
+    calculatedAt: Date
     createdAt: Date
   }, ExtArgs["result"]["pageRelation"]>
   composites: {}
@@ -1231,8 +1340,11 @@ export interface PageRelationFieldRefs {
   readonly relatedPageId: Prisma.FieldRef<"PageRelation", 'String'>
   readonly similarityScore: Prisma.FieldRef<"PageRelation", 'Float'>
   readonly relationType: Prisma.FieldRef<"PageRelation", 'RelationType'>
-  readonly commonThemes: Prisma.FieldRef<"PageRelation", 'String[]'>
+  readonly mentionText: Prisma.FieldRef<"PageRelation", 'String'>
   readonly explanation: Prisma.FieldRef<"PageRelation", 'String'>
+  readonly isEmbedded: Prisma.FieldRef<"PageRelation", 'Boolean'>
+  readonly embeddedAt: Prisma.FieldRef<"PageRelation", 'DateTime'>
+  readonly calculatedAt: Prisma.FieldRef<"PageRelation", 'DateTime'>
   readonly createdAt: Prisma.FieldRef<"PageRelation", 'DateTime'>
 }
     

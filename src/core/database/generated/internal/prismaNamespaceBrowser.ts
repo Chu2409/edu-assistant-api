@@ -149,8 +149,12 @@ export const PageScalarFieldEnum = {
   moduleId: 'moduleId',
   title: 'title',
   content: 'content',
+  rawContent: 'rawContent',
   orderIndex: 'orderIndex',
+  keywords: 'keywords',
   isPublished: 'isPublished',
+  lastProcessedAt: 'lastProcessedAt',
+  processingVersion: 'processingVersion',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -179,8 +183,11 @@ export const PageRelationScalarFieldEnum = {
   relatedPageId: 'relatedPageId',
   similarityScore: 'similarityScore',
   relationType: 'relationType',
-  commonThemes: 'commonThemes',
+  mentionText: 'mentionText',
   explanation: 'explanation',
+  isEmbedded: 'isEmbedded',
+  embeddedAt: 'embeddedAt',
+  calculatedAt: 'calculatedAt',
   createdAt: 'createdAt'
 } as const
 
@@ -190,8 +197,10 @@ export type PageRelationScalarFieldEnum = (typeof PageRelationScalarFieldEnum)[k
 export const PageConceptScalarFieldEnum = {
   id: 'id',
   pageId: 'pageId',
-  name: 'name',
+  term: 'term',
   definition: 'definition',
+  htmlId: 'htmlId',
+  category: 'category',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const

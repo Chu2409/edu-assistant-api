@@ -117,17 +117,20 @@ model Enrollment {
 // ============================================
 
 model Page {
-  id          String                       @id @default(cuid())
-  moduleId    String                       @map("module_id")
-  title       String
-  content     String                       @db.Text
-  orderIndex  Int                          @map("order_index") // orden en el módulo
-  embedding   Unsupported("vector(1536)")? // RF-6: embeddings para contenidos relacionados
-  isPublished Boolean                      @default(false) @map("is_published")
-  createdAt   DateTime                     @default(now()) @map("created_at")
-  updatedAt   DateTime                     @updatedAt @map("updated_at")
+  id                String                       @id @default(cuid())
+  moduleId          String                       @map("module_id")
+  title             String
+  content           String                       @db.Text // HTML CON conceptos Y enlaces ya incrustados
+  rawContent        String?                      @map("raw_content") @db.Text
+  orderIndex        Int                          @map("order_index")
+  embedding         Unsupported("vector(1536)")?
+  keywords          String[] // Mantener para búsquedas
+  isPublished       Boolean                      @default(false) @map("is_published")
+  lastProcessedAt   DateTime?                    @map("last_processed_at") // Cuándo se procesó el HTML
+  processingVersion Int                          @default(1) @map("processing_version") // Para re-procesar si cambias lógica
+  createdAt         DateTime                     @default(now()) @map("created_at")
+  updatedAt         DateTime                     @updatedAt @map("updated_at")
 
-  // Relations
   module           Module            @relation(fields: [moduleId], references: [id], onDelete: Cascade)
   activities       Activity[]
   relatedPagesFrom PageRelation[]    @relation("OriginPage")
@@ -143,6 +146,7 @@ model Page {
 
   @@unique([moduleId, orderIndex])
   @@index([moduleId])
+  @@index([lastProcessedAt]) // NEW: para batch que actualiza HTMLs viejos
   @@map("pages")
 }
 
@@ -188,19 +192,22 @@ model PageRelation {
   id              String       @id @default(cuid())
   originPageId    String       @map("origin_page_id")
   relatedPageId   String       @map("related_page_id")
-  similarityScore Float        @map("similarity_score") // 0-1
+  similarityScore Float        @map("similarity_score")
   relationType    RelationType @map("relation_type")
-  commonThemes    String[]     @map("common_themes")
-  explanation     String?      @db.Text // por qué están relacionadas
+  mentionText     String       @map("mention_text") // Texto exacto enlazado: "respiración celular"
+  explanation     String?      @db.Text
+  isEmbedded      Boolean      @default(false) @map("is_embedded") // Ya está en el HTML?
+  embeddedAt      DateTime?    @map("embedded_at") // Cuándo se incrustó
+  calculatedAt    DateTime     @default(now()) @map("calculated_at")
   createdAt       DateTime     @default(now()) @map("created_at")
 
-  // Relations
   originPage  Page @relation("OriginPage", fields: [originPageId], references: [id], onDelete: Cascade)
   relatedPage Page @relation("RelatedPage", fields: [relatedPageId], references: [id], onDelete: Cascade)
 
   @@unique([originPageId, relatedPageId])
   @@index([originPageId])
-  @@index([similarityScore])
+  @@index([relatedPageId])
+  @@index([isEmbedded]) // NEW: filtrar las que faltan incrustar
   @@map("page_relations")
 }
 
@@ -210,16 +217,18 @@ model PageRelation {
 model PageConcept {
   id         String   @id @default(cuid())
   pageId     String   @map("page_id")
-  name       String
-  definition String?  @db.Text
+  term       String
+  definition String   @db.Text
+  htmlId     String   @map("html_id") // id único en el HTML: "concept-c123"
+  category   String?
   createdAt  DateTime @default(now()) @map("created_at")
   updatedAt  DateTime @updatedAt @map("updated_at")
 
-  // Relations
   page Page @relation(fields: [pageId], references: [id], onDelete: Cascade)
 
-  @@unique([pageId, name])
+  @@unique([pageId, term])
   @@index([pageId])
+  @@index([htmlId]) // NEW: buscar por ID en HTML
   @@map("page_concepts")
 }
 

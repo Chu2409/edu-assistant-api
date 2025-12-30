@@ -27,8 +27,10 @@ export type AggregatePageConcept = {
 export type PageConceptMinAggregateOutputType = {
   id: string | null
   pageId: string | null
-  name: string | null
+  term: string | null
   definition: string | null
+  htmlId: string | null
+  category: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -36,8 +38,10 @@ export type PageConceptMinAggregateOutputType = {
 export type PageConceptMaxAggregateOutputType = {
   id: string | null
   pageId: string | null
-  name: string | null
+  term: string | null
   definition: string | null
+  htmlId: string | null
+  category: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -45,8 +49,10 @@ export type PageConceptMaxAggregateOutputType = {
 export type PageConceptCountAggregateOutputType = {
   id: number
   pageId: number
-  name: number
+  term: number
   definition: number
+  htmlId: number
+  category: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -56,8 +62,10 @@ export type PageConceptCountAggregateOutputType = {
 export type PageConceptMinAggregateInputType = {
   id?: true
   pageId?: true
-  name?: true
+  term?: true
   definition?: true
+  htmlId?: true
+  category?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -65,8 +73,10 @@ export type PageConceptMinAggregateInputType = {
 export type PageConceptMaxAggregateInputType = {
   id?: true
   pageId?: true
-  name?: true
+  term?: true
   definition?: true
+  htmlId?: true
+  category?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -74,8 +84,10 @@ export type PageConceptMaxAggregateInputType = {
 export type PageConceptCountAggregateInputType = {
   id?: true
   pageId?: true
-  name?: true
+  term?: true
   definition?: true
+  htmlId?: true
+  category?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -156,8 +168,10 @@ export type PageConceptGroupByArgs<ExtArgs extends runtime.Types.Extensions.Inte
 export type PageConceptGroupByOutputType = {
   id: string
   pageId: string
-  name: string
-  definition: string | null
+  term: string
+  definition: string
+  htmlId: string
+  category: string | null
   createdAt: Date
   updatedAt: Date
   _count: PageConceptCountAggregateOutputType | null
@@ -186,8 +200,10 @@ export type PageConceptWhereInput = {
   NOT?: Prisma.PageConceptWhereInput | Prisma.PageConceptWhereInput[]
   id?: Prisma.StringFilter<"PageConcept"> | string
   pageId?: Prisma.StringFilter<"PageConcept"> | string
-  name?: Prisma.StringFilter<"PageConcept"> | string
-  definition?: Prisma.StringNullableFilter<"PageConcept"> | string | null
+  term?: Prisma.StringFilter<"PageConcept"> | string
+  definition?: Prisma.StringFilter<"PageConcept"> | string
+  htmlId?: Prisma.StringFilter<"PageConcept"> | string
+  category?: Prisma.StringNullableFilter<"PageConcept"> | string | null
   createdAt?: Prisma.DateTimeFilter<"PageConcept"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"PageConcept"> | Date | string
   page?: Prisma.XOR<Prisma.PageScalarRelationFilter, Prisma.PageWhereInput>
@@ -196,8 +212,10 @@ export type PageConceptWhereInput = {
 export type PageConceptOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   pageId?: Prisma.SortOrder
-  name?: Prisma.SortOrder
-  definition?: Prisma.SortOrderInput | Prisma.SortOrder
+  term?: Prisma.SortOrder
+  definition?: Prisma.SortOrder
+  htmlId?: Prisma.SortOrder
+  category?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   page?: Prisma.PageOrderByWithRelationInput
@@ -205,23 +223,27 @@ export type PageConceptOrderByWithRelationInput = {
 
 export type PageConceptWhereUniqueInput = Prisma.AtLeast<{
   id?: string
-  pageId_name?: Prisma.PageConceptPageIdNameCompoundUniqueInput
+  pageId_term?: Prisma.PageConceptPageIdTermCompoundUniqueInput
   AND?: Prisma.PageConceptWhereInput | Prisma.PageConceptWhereInput[]
   OR?: Prisma.PageConceptWhereInput[]
   NOT?: Prisma.PageConceptWhereInput | Prisma.PageConceptWhereInput[]
   pageId?: Prisma.StringFilter<"PageConcept"> | string
-  name?: Prisma.StringFilter<"PageConcept"> | string
-  definition?: Prisma.StringNullableFilter<"PageConcept"> | string | null
+  term?: Prisma.StringFilter<"PageConcept"> | string
+  definition?: Prisma.StringFilter<"PageConcept"> | string
+  htmlId?: Prisma.StringFilter<"PageConcept"> | string
+  category?: Prisma.StringNullableFilter<"PageConcept"> | string | null
   createdAt?: Prisma.DateTimeFilter<"PageConcept"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"PageConcept"> | Date | string
   page?: Prisma.XOR<Prisma.PageScalarRelationFilter, Prisma.PageWhereInput>
-}, "id" | "pageId_name">
+}, "id" | "pageId_term">
 
 export type PageConceptOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   pageId?: Prisma.SortOrder
-  name?: Prisma.SortOrder
-  definition?: Prisma.SortOrderInput | Prisma.SortOrder
+  term?: Prisma.SortOrder
+  definition?: Prisma.SortOrder
+  htmlId?: Prisma.SortOrder
+  category?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.PageConceptCountOrderByAggregateInput
@@ -235,16 +257,20 @@ export type PageConceptScalarWhereWithAggregatesInput = {
   NOT?: Prisma.PageConceptScalarWhereWithAggregatesInput | Prisma.PageConceptScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"PageConcept"> | string
   pageId?: Prisma.StringWithAggregatesFilter<"PageConcept"> | string
-  name?: Prisma.StringWithAggregatesFilter<"PageConcept"> | string
-  definition?: Prisma.StringNullableWithAggregatesFilter<"PageConcept"> | string | null
+  term?: Prisma.StringWithAggregatesFilter<"PageConcept"> | string
+  definition?: Prisma.StringWithAggregatesFilter<"PageConcept"> | string
+  htmlId?: Prisma.StringWithAggregatesFilter<"PageConcept"> | string
+  category?: Prisma.StringNullableWithAggregatesFilter<"PageConcept"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"PageConcept"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"PageConcept"> | Date | string
 }
 
 export type PageConceptCreateInput = {
   id?: string
-  name: string
-  definition?: string | null
+  term: string
+  definition: string
+  htmlId: string
+  category?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   page: Prisma.PageCreateNestedOneWithoutConceptMentionsInput
@@ -253,16 +279,20 @@ export type PageConceptCreateInput = {
 export type PageConceptUncheckedCreateInput = {
   id?: string
   pageId: string
-  name: string
-  definition?: string | null
+  term: string
+  definition: string
+  htmlId: string
+  category?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
 
 export type PageConceptUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  definition?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  term?: Prisma.StringFieldUpdateOperationsInput | string
+  definition?: Prisma.StringFieldUpdateOperationsInput | string
+  htmlId?: Prisma.StringFieldUpdateOperationsInput | string
+  category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   page?: Prisma.PageUpdateOneRequiredWithoutConceptMentionsNestedInput
@@ -271,8 +301,10 @@ export type PageConceptUpdateInput = {
 export type PageConceptUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   pageId?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  definition?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  term?: Prisma.StringFieldUpdateOperationsInput | string
+  definition?: Prisma.StringFieldUpdateOperationsInput | string
+  htmlId?: Prisma.StringFieldUpdateOperationsInput | string
+  category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -280,16 +312,20 @@ export type PageConceptUncheckedUpdateInput = {
 export type PageConceptCreateManyInput = {
   id?: string
   pageId: string
-  name: string
-  definition?: string | null
+  term: string
+  definition: string
+  htmlId: string
+  category?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
 
 export type PageConceptUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  definition?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  term?: Prisma.StringFieldUpdateOperationsInput | string
+  definition?: Prisma.StringFieldUpdateOperationsInput | string
+  htmlId?: Prisma.StringFieldUpdateOperationsInput | string
+  category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -297,8 +333,10 @@ export type PageConceptUpdateManyMutationInput = {
 export type PageConceptUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   pageId?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  definition?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  term?: Prisma.StringFieldUpdateOperationsInput | string
+  definition?: Prisma.StringFieldUpdateOperationsInput | string
+  htmlId?: Prisma.StringFieldUpdateOperationsInput | string
+  category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -313,16 +351,18 @@ export type PageConceptOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
 }
 
-export type PageConceptPageIdNameCompoundUniqueInput = {
+export type PageConceptPageIdTermCompoundUniqueInput = {
   pageId: string
-  name: string
+  term: string
 }
 
 export type PageConceptCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   pageId?: Prisma.SortOrder
-  name?: Prisma.SortOrder
+  term?: Prisma.SortOrder
   definition?: Prisma.SortOrder
+  htmlId?: Prisma.SortOrder
+  category?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -330,8 +370,10 @@ export type PageConceptCountOrderByAggregateInput = {
 export type PageConceptMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   pageId?: Prisma.SortOrder
-  name?: Prisma.SortOrder
+  term?: Prisma.SortOrder
   definition?: Prisma.SortOrder
+  htmlId?: Prisma.SortOrder
+  category?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -339,8 +381,10 @@ export type PageConceptMaxOrderByAggregateInput = {
 export type PageConceptMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   pageId?: Prisma.SortOrder
-  name?: Prisma.SortOrder
+  term?: Prisma.SortOrder
   definition?: Prisma.SortOrder
+  htmlId?: Prisma.SortOrder
+  category?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -389,16 +433,20 @@ export type PageConceptUncheckedUpdateManyWithoutPageNestedInput = {
 
 export type PageConceptCreateWithoutPageInput = {
   id?: string
-  name: string
-  definition?: string | null
+  term: string
+  definition: string
+  htmlId: string
+  category?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
 
 export type PageConceptUncheckedCreateWithoutPageInput = {
   id?: string
-  name: string
-  definition?: string | null
+  term: string
+  definition: string
+  htmlId: string
+  category?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -435,40 +483,50 @@ export type PageConceptScalarWhereInput = {
   NOT?: Prisma.PageConceptScalarWhereInput | Prisma.PageConceptScalarWhereInput[]
   id?: Prisma.StringFilter<"PageConcept"> | string
   pageId?: Prisma.StringFilter<"PageConcept"> | string
-  name?: Prisma.StringFilter<"PageConcept"> | string
-  definition?: Prisma.StringNullableFilter<"PageConcept"> | string | null
+  term?: Prisma.StringFilter<"PageConcept"> | string
+  definition?: Prisma.StringFilter<"PageConcept"> | string
+  htmlId?: Prisma.StringFilter<"PageConcept"> | string
+  category?: Prisma.StringNullableFilter<"PageConcept"> | string | null
   createdAt?: Prisma.DateTimeFilter<"PageConcept"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"PageConcept"> | Date | string
 }
 
 export type PageConceptCreateManyPageInput = {
   id?: string
-  name: string
-  definition?: string | null
+  term: string
+  definition: string
+  htmlId: string
+  category?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
 
 export type PageConceptUpdateWithoutPageInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  definition?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  term?: Prisma.StringFieldUpdateOperationsInput | string
+  definition?: Prisma.StringFieldUpdateOperationsInput | string
+  htmlId?: Prisma.StringFieldUpdateOperationsInput | string
+  category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type PageConceptUncheckedUpdateWithoutPageInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  definition?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  term?: Prisma.StringFieldUpdateOperationsInput | string
+  definition?: Prisma.StringFieldUpdateOperationsInput | string
+  htmlId?: Prisma.StringFieldUpdateOperationsInput | string
+  category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type PageConceptUncheckedUpdateManyWithoutPageInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  definition?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  term?: Prisma.StringFieldUpdateOperationsInput | string
+  definition?: Prisma.StringFieldUpdateOperationsInput | string
+  htmlId?: Prisma.StringFieldUpdateOperationsInput | string
+  category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -478,8 +536,10 @@ export type PageConceptUncheckedUpdateManyWithoutPageInput = {
 export type PageConceptSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   pageId?: boolean
-  name?: boolean
+  term?: boolean
   definition?: boolean
+  htmlId?: boolean
+  category?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   page?: boolean | Prisma.PageDefaultArgs<ExtArgs>
@@ -488,8 +548,10 @@ export type PageConceptSelect<ExtArgs extends runtime.Types.Extensions.InternalA
 export type PageConceptSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   pageId?: boolean
-  name?: boolean
+  term?: boolean
   definition?: boolean
+  htmlId?: boolean
+  category?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   page?: boolean | Prisma.PageDefaultArgs<ExtArgs>
@@ -498,8 +560,10 @@ export type PageConceptSelectCreateManyAndReturn<ExtArgs extends runtime.Types.E
 export type PageConceptSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   pageId?: boolean
-  name?: boolean
+  term?: boolean
   definition?: boolean
+  htmlId?: boolean
+  category?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   page?: boolean | Prisma.PageDefaultArgs<ExtArgs>
@@ -508,13 +572,15 @@ export type PageConceptSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.E
 export type PageConceptSelectScalar = {
   id?: boolean
   pageId?: boolean
-  name?: boolean
+  term?: boolean
   definition?: boolean
+  htmlId?: boolean
+  category?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type PageConceptOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "pageId" | "name" | "definition" | "createdAt" | "updatedAt", ExtArgs["result"]["pageConcept"]>
+export type PageConceptOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "pageId" | "term" | "definition" | "htmlId" | "category" | "createdAt" | "updatedAt", ExtArgs["result"]["pageConcept"]>
 export type PageConceptInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   page?: boolean | Prisma.PageDefaultArgs<ExtArgs>
 }
@@ -533,8 +599,10 @@ export type $PageConceptPayload<ExtArgs extends runtime.Types.Extensions.Interna
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     pageId: string
-    name: string
-    definition: string | null
+    term: string
+    definition: string
+    htmlId: string
+    category: string | null
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["pageConcept"]>
@@ -963,8 +1031,10 @@ export interface Prisma__PageConceptClient<T, Null = never, ExtArgs extends runt
 export interface PageConceptFieldRefs {
   readonly id: Prisma.FieldRef<"PageConcept", 'String'>
   readonly pageId: Prisma.FieldRef<"PageConcept", 'String'>
-  readonly name: Prisma.FieldRef<"PageConcept", 'String'>
+  readonly term: Prisma.FieldRef<"PageConcept", 'String'>
   readonly definition: Prisma.FieldRef<"PageConcept", 'String'>
+  readonly htmlId: Prisma.FieldRef<"PageConcept", 'String'>
+  readonly category: Prisma.FieldRef<"PageConcept", 'String'>
   readonly createdAt: Prisma.FieldRef<"PageConcept", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"PageConcept", 'DateTime'>
 }
