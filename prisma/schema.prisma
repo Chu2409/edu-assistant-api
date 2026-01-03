@@ -220,7 +220,6 @@ model PageConcept {
   term       String
   definition String   @db.Text
   htmlId     String   @map("html_id") // id único en el HTML: "concept-c123"
-  category   String?
   createdAt  DateTime @default(now()) @map("created_at")
   updatedAt  DateTime @updatedAt @map("updated_at")
 
