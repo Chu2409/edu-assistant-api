@@ -19,15 +19,18 @@ enum Role {
 }
 
 model User {
-  id        String   @id @default(cuid())
-  email     String   @unique
-  password  String
-  firstName String   @map("first_name")
-  lastName  String   @map("last_name")
-  role      Role     @default(STUDENT)
-  isActive  Boolean  @default(true) @map("is_active")
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
+  id             String    @id @default(cuid())
+  email          String    @unique
+  role           Role      @default(STUDENT)
+  name           String    @map("name") // Nombre completo desde Microsoft
+  lastName       String    @map("last_name") // Apellido completo desde Microsoft
+  isActive       Boolean   @default(true) @map("is_active")
+  microsoftId    String    @unique @map("microsoft_id") // ID único de Microsoft
+  displayName    String    @map("display_name") // Nombre completo desde Microsoft
+  profilePicture String?   @map("profile_picture") // URL de foto de perfil (opcional)
+  lastLoginAt    DateTime? @map("last_login_at") // Última vez que inició sesión
+  createdAt      DateTime  @default(now()) @map("created_at")
+  updatedAt      DateTime  @updatedAt @map("updated_at")
 
   // Relations
   modulesAsTeacher Module[]          @relation("TeacherModules")
@@ -41,6 +44,7 @@ model User {
   questionReplies  QuestionReply[]
   pageViews        PageView[]
 
+  @@index([microsoftId])
   @@map("users")
 }
 

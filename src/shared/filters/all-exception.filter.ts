@@ -115,7 +115,7 @@ export class GlobalExceptionFilter implements ExceptionFilter {
       exceptionMessage: exceptionDetails.message,
       exceptionCode: exceptionDetails.code,
       exceptionMeta: exceptionDetails.meta,
-      stack: exceptionDetails.stack,
+      // stack: exceptionDetails.stack,
     }
 
     // Log error with different levels based on exception type
@@ -132,11 +132,11 @@ export class GlobalExceptionFilter implements ExceptionFilter {
     }
 
     // Additional detailed logging for debugging
-    if (process.env.NODE_ENV === 'development') {
-      this.logger.debug('Full exception details', {
-        ...logContext,
-        fullException: originalException,
-      })
-    }
+    // if (process.env.NODE_ENV === 'development') {
+    //   this.logger.debug('Full exception details', {
+    //     ...logContext,
+    //     // fullException: originalException,
+    //   })
+    // }
   }
 }

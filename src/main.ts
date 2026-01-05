@@ -1,6 +1,6 @@
 import { NestFactory } from '@nestjs/core'
 import { AppModule } from './app.module'
-import { Logger, ValidationPipe, VersioningType } from '@nestjs/common'
+import { Logger, ValidationPipe } from '@nestjs/common'
 import { useContainer } from 'class-validator'
 import { ResponseInterceptor } from './shared/interceptors/response.interceptor'
 import { GlobalExceptionFilter } from './shared/filters/all-exception.filter'
@@ -32,10 +32,10 @@ async function bootstrap() {
   app.useGlobalFilters(new GlobalExceptionFilter())
   useContainer(app.select(AppModule), { fallbackOnErrors: true })
 
-  app.enableVersioning({
-    type: VersioningType.URI,
-    defaultVersion: '1',
-  })
+  // app.enableVersioning({
+  //   type: VersioningType.URI,
+  //   defaultVersion: '1',
+  // })
   app.setGlobalPrefix('api')
 
   const config = new DocumentBuilder()
