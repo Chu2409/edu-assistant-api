@@ -4,7 +4,7 @@ import { ConfigService } from '@nestjs/config'
 import { JwtPayload } from './interfaces/jwt-payload.interface'
 import { DBService } from 'src/core/database/database.service'
 import { Role, User } from 'src/core/database/generated/client'
-import { ValidateMicrosoftUserDto } from './dtos/validate-microsoft-user.dto'
+import { ValidateMicrosoftUserDto } from './dtos/req/validate-microsoft-user.dto'
 
 @Injectable()
 export class AuthService {
