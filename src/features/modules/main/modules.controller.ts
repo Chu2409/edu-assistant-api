@@ -59,6 +59,19 @@ export class ModulesController {
     return this.modulesService.findAll(params, user)
   }
 
+  @Get('my-enrolled')
+  @ApiOperation({ summary: 'Listar módulos donde estoy inscrito' })
+  @ApiQuery({ name: 'page', required: false, type: Number, example: 1 })
+  @ApiQuery({ name: 'limit', required: false, type: Number, example: 10 })
+  @ApiStandardResponse([ModuleDto])
+  @ApiResponse({ status: 401, description: 'No autorizado' })
+  findMyEnrolledModules(
+    @Query() params: BaseParamsReqDto,
+    @GetUser() user: User,
+  ): Promise<ModuleDto[]> {
+    return this.modulesService.findMyEnrolledModules(params, user)
+  }
+
   @Get(':id')
   @ApiOperation({ summary: 'Obtener un módulo por ID' })
   @ApiParam({

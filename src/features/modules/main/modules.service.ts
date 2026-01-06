@@ -67,6 +67,32 @@ export class ModulesService {
     return modules.map((module) => this.mapToDto(module))
   }
 
+  async findMyEnrolledModules(
+    params: BaseParamsReqDto,
+    user: User,
+  ): Promise<ModuleDto[]> {
+    const enrollments = await this.dbService.enrollment.findMany({
+      where: {
+        userId: user.id,
+        isActive: true,
+      },
+      include: {
+        module: {
+          include: {
+            aiConfiguration: true,
+          },
+        },
+      },
+      skip: (params.page - 1) * params.limit,
+      take: params.limit,
+      orderBy: {
+        enrolledAt: 'desc',
+      },
+    })
+
+    return enrollments.map((enrollment) => this.mapToDto(enrollment.module))
+  }
+
   async findOne(id: string, user: User): Promise<ModuleDto> {
     const module = await this.dbService.module.findUnique({
       where: { id },
