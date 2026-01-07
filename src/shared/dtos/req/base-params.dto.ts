@@ -1,6 +1,6 @@
 import { ApiPropertyOptional } from '@nestjs/swagger'
 import { Type } from 'class-transformer'
-import { IsInt, IsOptional, Min } from 'class-validator'
+import { IsInt, IsOptional, IsString, Min } from 'class-validator'
 
 export class BaseParamsReqDto {
   @IsOptional()
@@ -26,4 +26,13 @@ export class BaseParamsReqDto {
     default: 10,
   })
   limit: number = 10
+
+  @IsOptional()
+  @IsString()
+  @ApiPropertyOptional({
+    description: 'Search query',
+    example: 'search query',
+    required: false,
+  })
+  search?: string
 }

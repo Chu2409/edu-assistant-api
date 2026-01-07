@@ -5,27 +5,23 @@ import {
   Body,
   Patch,
   Param,
-  Delete,
   Query,
-  HttpCode,
   HttpStatus,
 } from '@nestjs/common'
-import {
-  ApiTags,
-  ApiOperation,
-  ApiResponse,
-  ApiParam,
-  ApiQuery,
-} from '@nestjs/swagger'
+import { ApiTags, ApiOperation, ApiResponse, ApiParam } from '@nestjs/swagger'
 import { ModulesService } from './modules.service'
 import { CreateModuleDto } from './dtos/req/create-module.dto'
 import { UpdateModuleDto } from './dtos/req/update-module.dto'
 import { ModuleDto } from './dtos/res/module.dto'
-import { BaseParamsReqDto } from 'src/shared/dtos/req/base-params.dto'
 import { JwtAuth } from 'src/features/auth/decorators/jwt-auth.decorator'
 import { GetUser } from 'src/features/auth/decorators/get-user.decorator'
 import { Role, type User } from 'src/core/database/generated/client'
-import { ApiStandardResponse } from 'src/shared/decorators/api-standard-response.decorator'
+import {
+  ApiPaginatedResponse,
+  ApiStandardResponse,
+} from 'src/shared/decorators/api-standard-response.decorator'
+import { ModuleFiltersDto } from './dtos/req/module-filters.dto'
+import { ApiPaginatedRes } from 'src/shared/dtos/res/api-response.dto'
 
 @ApiTags('Modules')
 @Controller('modules')
@@ -34,7 +30,10 @@ export class ModulesController {
   constructor(private readonly modulesService: ModulesService) {}
 
   @Post()
-  @ApiOperation({ summary: 'Crear un nuevo módulo' })
+  @ApiOperation({
+    summary: 'Crear un nuevo módulo',
+    description: 'Solo el profesor puede crear un nuevo módulo',
+  })
   @ApiStandardResponse(ModuleDto, HttpStatus.CREATED)
   @ApiResponse({ status: 401, description: 'No autorizado' })
   @ApiResponse({ status: 400, description: 'Datos inválidos' })
@@ -47,33 +46,41 @@ export class ModulesController {
   }
 
   @Get()
-  @ApiOperation({ summary: 'Obtener todos los módulos' })
-  @ApiQuery({ name: 'page', required: false, type: Number, example: 1 })
-  @ApiQuery({ name: 'limit', required: false, type: Number, example: 10 })
-  @ApiStandardResponse([ModuleDto])
+  @ApiOperation({
+    summary: 'Obtener todos los módulos',
+    description:
+      'El profesor puede obtener todos los módulos, el estudiante puede obtener todos los módulos públicos y los módulos donde está inscrito',
+  })
+  @ApiPaginatedResponse(ModuleDto)
   @ApiResponse({ status: 401, description: 'No autorizado' })
   findAll(
-    @Query() params: BaseParamsReqDto,
+    @Query() params: ModuleFiltersDto,
     @GetUser() user: User,
-  ): Promise<ModuleDto[]> {
+  ): Promise<ApiPaginatedRes<ModuleDto>> {
     return this.modulesService.findAll(params, user)
   }
 
-  @Get('my-enrolled')
-  @ApiOperation({ summary: 'Listar módulos donde estoy inscrito' })
-  @ApiQuery({ name: 'page', required: false, type: Number, example: 1 })
-  @ApiQuery({ name: 'limit', required: false, type: Number, example: 10 })
-  @ApiStandardResponse([ModuleDto])
+  @Get('available')
+  @JwtAuth(Role.STUDENT)
+  @ApiOperation({
+    summary: 'Listar módulos disponibles',
+    description:
+      'El estudiante puede obtener todos los módulos disponibles para inscribirse',
+  })
+  @ApiPaginatedResponse(ModuleDto)
   @ApiResponse({ status: 401, description: 'No autorizado' })
-  findMyEnrolledModules(
-    @Query() params: BaseParamsReqDto,
-    @GetUser() user: User,
-  ): Promise<ModuleDto[]> {
-    return this.modulesService.findMyEnrolledModules(params, user)
+  findModulesAvailable(
+    @Query() params: ModuleFiltersDto,
+  ): Promise<ApiPaginatedRes<ModuleDto>> {
+    return this.modulesService.findModulesAvailable(params)
   }
 
   @Get(':id')
-  @ApiOperation({ summary: 'Obtener un módulo por ID' })
+  @ApiOperation({
+    summary: 'Obtener un módulo por ID',
+    description:
+      'Solo el profesor propietario, estudiante inscrito o módulo público pueden acceder',
+  })
   @ApiParam({
     name: 'id',
     description: 'ID del módulo',
@@ -86,12 +93,16 @@ export class ModulesController {
     status: 403,
     description: 'Sin permisos para acceder al módulo',
   })
+  @JwtAuth(Role.TEACHER, Role.STUDENT)
   findOne(@Param('id') id: string, @GetUser() user: User): Promise<ModuleDto> {
     return this.modulesService.findOne(id, user)
   }
 
   @Patch(':id')
-  @ApiOperation({ summary: 'Actualizar un módulo' })
+  @ApiOperation({
+    summary: 'Actualizar un módulo',
+    description: 'Solo el profesor propietario puede actualizar el módulo',
+  })
   @ApiParam({
     name: 'id',
     description: 'ID del módulo',
@@ -113,23 +124,29 @@ export class ModulesController {
     return this.modulesService.update(id, updateModuleDto, user)
   }
 
-  @Delete(':id')
-  @HttpCode(HttpStatus.NO_CONTENT)
-  @ApiOperation({ summary: 'Eliminar un módulo' })
+  @Patch(':id/toggle-active')
+  @JwtAuth(Role.TEACHER)
+  @ApiOperation({
+    summary: 'Alternar estado activo/inactivo de un módulo',
+    description:
+      'Alterna el estado isActive del módulo. Si está activo lo desactiva y viceversa. Solo el profesor propietario puede cambiar el estado.',
+  })
   @ApiParam({
     name: 'id',
     description: 'ID del módulo',
     example: 'clx1234567890',
   })
-  @ApiResponse({ status: 204, description: 'Módulo eliminado exitosamente' })
+  @ApiStandardResponse(ModuleDto)
   @ApiResponse({ status: 401, description: 'No autorizado' })
   @ApiResponse({ status: 404, description: 'Módulo no encontrado' })
   @ApiResponse({
     status: 403,
-    description: 'Solo el profesor propietario puede eliminar',
+    description: 'Solo el profesor propietario puede cambiar el estado',
   })
-  @JwtAuth(Role.TEACHER)
-  remove(@Param('id') id: string, @GetUser() user: User): Promise<void> {
-    return this.modulesService.remove(id, user)
+  toggleActive(
+    @Param('id') id: string,
+    @GetUser() user: User,
+  ): Promise<ModuleDto> {
+    return this.modulesService.toggleActive(id, user)
   }
 }

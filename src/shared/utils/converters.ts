@@ -1,6 +1,6 @@
 export const convertToFilterWhere = (
-  value?: number | number[],
-): number[] | undefined => {
+  value?: string | string[],
+): string[] | undefined => {
   if (value === undefined) return undefined
 
   return Array.isArray(value) ? value : [value]

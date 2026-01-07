@@ -7,13 +7,15 @@ import { DBService } from 'src/core/database/database.service'
 import { CreateModuleDto } from './dtos/req/create-module.dto'
 import { UpdateModuleDto } from './dtos/req/update-module.dto'
 import { ModuleDto } from './dtos/res/module.dto'
-import type {
-  AiConfiguration,
-  Module,
-  User,
+import {
+  Role,
+  type Prisma,
+  type User,
 } from 'src/core/database/generated/client'
-import { BaseParamsReqDto } from 'src/shared/dtos/req/base-params.dto'
-import { AiConfigurationDto } from 'src/features/modules/ai-configurations/dtos/res/ai-configuration.dto'
+import { ModuleFiltersDto } from './dtos/req/module-filters.dto'
+import { ApiPaginatedRes } from 'src/shared/dtos/res/api-response.dto'
+import { ModulesMapper } from './mappers/modules.mapper'
+import { convertToFilterWhere } from 'src/shared/utils/converters'
 
 @Injectable()
 export class ModulesService {
@@ -46,51 +48,102 @@ export class ModulesService {
       },
     })
 
-    return this.mapToDto(module)
+    return ModulesMapper.mapToDto(module)
   }
 
-  async findAll(params: BaseParamsReqDto, user: User): Promise<ModuleDto[]> {
-    const modules = await this.dbService.module.findMany({
-      where: {
-        OR: [{ teacherId: user.id }, { isPublic: true }],
-      },
-      skip: (params.page - 1) * params.limit,
-      take: params.limit,
-      orderBy: {
-        createdAt: 'desc',
-      },
-      include: {
-        aiConfiguration: true,
-      },
-    })
-
-    return modules.map((module) => this.mapToDto(module))
-  }
-
-  async findMyEnrolledModules(
-    params: BaseParamsReqDto,
+  async findAll(
+    params: ModuleFiltersDto,
     user: User,
-  ): Promise<ModuleDto[]> {
-    const enrollments = await this.dbService.enrollment.findMany({
-      where: {
-        userId: user.id,
-        isActive: true,
-      },
-      include: {
-        module: {
-          include: {
-            aiConfiguration: true,
-          },
-        },
-      },
-      skip: (params.page - 1) * params.limit,
-      take: params.limit,
-      orderBy: {
-        enrolledAt: 'desc',
-      },
-    })
+  ): Promise<ApiPaginatedRes<ModuleDto>> {
+    const where: Prisma.ModuleWhereInput = {}
 
-    return enrollments.map((enrollment) => this.mapToDto(enrollment.module))
+    if (user.role === Role.TEACHER) {
+      where.teacherId = user.id
+    } else if (user.role === Role.STUDENT) {
+      where.enrollments = {
+        some: { userId: user.id, isActive: true },
+      }
+      where.isActive = true
+      where.teacherId = { in: convertToFilterWhere(params.teacherId) }
+    }
+
+    if (params.search) {
+      where.AND = {
+        OR: [
+          { title: { contains: params.search, mode: 'insensitive' } },
+          { description: { contains: params.search, mode: 'insensitive' } },
+        ],
+      }
+    }
+
+    const [entities, total] = await Promise.all([
+      this.dbService.module.findMany({
+        where,
+        skip: (params.page - 1) * params.limit,
+        take: params.limit,
+        orderBy: {
+          createdAt: 'desc',
+        },
+        include: {
+          aiConfiguration: true,
+        },
+      }),
+      this.dbService.module.count({
+        where,
+      }),
+    ])
+
+    return {
+      records: entities.map((entity) => ModulesMapper.mapToDto(entity)),
+      total,
+      limit: params.limit,
+      page: params.page,
+      pages: Math.ceil(total / params.limit),
+    }
+  }
+
+  async findModulesAvailable(
+    params: ModuleFiltersDto,
+  ): Promise<ApiPaginatedRes<ModuleDto>> {
+    const where: Prisma.ModuleWhereInput = {}
+
+    where.isPublic = true
+    where.isActive = true
+    where.teacherId = { in: convertToFilterWhere(params.teacherId) }
+
+    if (params.search) {
+      where.AND = {
+        OR: [
+          { title: { contains: params.search, mode: 'insensitive' } },
+          { description: { contains: params.search, mode: 'insensitive' } },
+        ],
+      }
+    }
+
+    const [entities, total] = await Promise.all([
+      this.dbService.module.findMany({
+        where,
+        skip: (params.page - 1) * params.limit,
+        take: params.limit,
+        orderBy: {
+          createdAt: 'desc',
+        },
+        include: {
+          aiConfiguration: true,
+        },
+      }),
+      this.dbService.module.count({
+        where,
+      }),
+    ])
+
+    return {
+      records: entities.map((entity) => ModulesMapper.mapToDto(entity)),
+      total,
+      limit: params.limit,
+      page: params.page,
+      pages: Math.ceil(total / params.limit),
+    }
   }
 
   async findOne(id: string, user: User): Promise<ModuleDto> {
@@ -98,6 +151,7 @@ export class ModulesService {
       where: { id },
       include: {
         aiConfiguration: true,
+        enrollments: true,
       },
     })
 
@@ -105,14 +159,25 @@ export class ModulesService {
       throw new NotFoundException(`Módulo con ID ${id} no encontrado`)
     }
 
-    // Verificar permisos: solo el profesor o módulos públicos
-    if (module.teacherId !== user.id && !module.isPublic) {
+    // Si el módulo no está activo, solo el profesor propietario puede acceder
+    if (!module.isActive && module.teacherId !== user.id) {
       throw new ForbiddenException(
         'No tienes permisos para acceder a este módulo',
       )
     }
 
-    return this.mapToDto(module)
+    // Verificar permisos: solo el profesor, módulos públicos o estudiantes inscritos
+    if (
+      module.teacherId !== user.id &&
+      !module.isPublic &&
+      !module.enrollments.some((enrollment) => enrollment.userId === user.id)
+    ) {
+      throw new ForbiddenException(
+        'No tienes permisos para acceder a este módulo',
+      )
+    }
+
+    return ModulesMapper.mapToDto(module)
   }
 
   async update(
@@ -142,7 +207,26 @@ export class ModulesService {
     const { aiConfiguration, ...moduleData } = updateModuleDto
 
     // Construir datos de actualización con nested write para aiConfiguration
-    const updateData: any = { ...moduleData }
+    const updateData: {
+      title?: string
+      description?: string
+      isPublic?: boolean
+      allowSelfEnroll?: boolean
+      logoUrl?: string | null
+      isActive?: boolean
+      aiConfiguration?: {
+        update?: {
+          language?: string
+          contextPrompt?: string | null
+          temperature?: number
+        }
+        create?: {
+          language: string
+          contextPrompt?: string | null
+          temperature: number
+        }
+      }
+    } = { ...moduleData }
 
     if (aiConfiguration !== undefined) {
       if (existingModule.aiConfiguration) {
@@ -180,13 +264,16 @@ export class ModulesService {
       },
     })
 
-    return this.mapToDto(module)
+    return ModulesMapper.mapToDto(module)
   }
 
-  async remove(id: string, user: User): Promise<void> {
+  async toggleActive(id: string, user: User): Promise<ModuleDto> {
     // Verificar que el módulo existe y pertenece al usuario
     const existingModule = await this.dbService.module.findUnique({
       where: { id },
+      include: {
+        aiConfiguration: true,
+      },
     })
 
     if (!existingModule) {
@@ -195,46 +282,21 @@ export class ModulesService {
 
     if (existingModule.teacherId !== user.id) {
       throw new ForbiddenException(
-        'Solo el profesor propietario puede eliminar el módulo',
+        'Solo el profesor propietario puede cambiar el estado del módulo',
       )
     }
 
-    await this.dbService.module.delete({
+    // Alternar el estado de isActive
+    const module = await this.dbService.module.update({
       where: { id },
+      data: {
+        isActive: !existingModule.isActive,
+      },
+      include: {
+        aiConfiguration: true,
+      },
     })
-  }
 
-  private mapToDto(
-    module: Module & { aiConfiguration?: AiConfiguration | null },
-  ): ModuleDto {
-    return {
-      id: module.id,
-      title: module.title,
-      description: module.description,
-      teacherId: module.teacherId,
-      isPublic: module.isPublic,
-      allowSelfEnroll: module.allowSelfEnroll,
-      logoUrl: module.logoUrl,
-      isActive: module.isActive,
-      createdAt: module.createdAt,
-      updatedAt: module.updatedAt,
-      aiConfiguration: module.aiConfiguration
-        ? this.mapAiConfigurationToDto(module.aiConfiguration)
-        : null,
-    }
-  }
-
-  private mapAiConfigurationToDto(
-    aiConfig: AiConfiguration,
-  ): AiConfigurationDto {
-    return {
-      id: aiConfig.id,
-      moduleId: aiConfig.moduleId,
-      language: aiConfig.language,
-      contextPrompt: aiConfig.contextPrompt,
-      temperature: aiConfig.temperature,
-      createdAt: aiConfig.createdAt,
-      updatedAt: aiConfig.updatedAt,
-    }
+    return ModulesMapper.mapToDto(module)
   }
 }
