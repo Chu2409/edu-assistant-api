@@ -3,21 +3,21 @@ import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger'
 export class EnrollmentDto {
   @ApiProperty({
     description: 'ID de la inscripción',
-    example: 'clx1234567890',
+    example: 1,
   })
-  id: string
+  id: number
 
   @ApiProperty({
     description: 'ID del usuario inscrito',
-    example: 'clx0987654321',
+    example: 1,
   })
-  userId: string
+  userId: number
 
   @ApiProperty({
     description: 'ID del módulo',
-    example: 'clx1122334455',
+    example: 1,
   })
-  moduleId: string
+  moduleId: number
 
   @ApiProperty({
     description: 'Fecha de inscripción',

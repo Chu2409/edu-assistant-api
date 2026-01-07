@@ -7,6 +7,7 @@ import {
   Param,
   Query,
   HttpStatus,
+  ParseIntPipe,
 } from '@nestjs/common'
 import { ApiTags, ApiOperation, ApiResponse, ApiParam } from '@nestjs/swagger'
 import { ModulesService } from './modules.service'
@@ -20,7 +21,10 @@ import {
   ApiPaginatedResponse,
   ApiStandardResponse,
 } from 'src/shared/decorators/api-standard-response.decorator'
-import { ModuleFiltersDto } from './dtos/req/module-filters.dto'
+import {
+  ModulesAllFiltersDto,
+  ModulesAvailableFiltersDto,
+} from './dtos/req/module-filters.dto'
 import { ApiPaginatedRes } from 'src/shared/dtos/res/api-response.dto'
 
 @ApiTags('Modules')
@@ -54,7 +58,7 @@ export class ModulesController {
   @ApiPaginatedResponse(ModuleDto)
   @ApiResponse({ status: 401, description: 'No autorizado' })
   findAll(
-    @Query() params: ModuleFiltersDto,
+    @Query() params: ModulesAllFiltersDto,
     @GetUser() user: User,
   ): Promise<ApiPaginatedRes<ModuleDto>> {
     return this.modulesService.findAll(params, user)
@@ -70,7 +74,7 @@ export class ModulesController {
   @ApiPaginatedResponse(ModuleDto)
   @ApiResponse({ status: 401, description: 'No autorizado' })
   findModulesAvailable(
-    @Query() params: ModuleFiltersDto,
+    @Query() params: ModulesAvailableFiltersDto,
   ): Promise<ApiPaginatedRes<ModuleDto>> {
     return this.modulesService.findModulesAvailable(params)
   }
@@ -84,7 +88,7 @@ export class ModulesController {
   @ApiParam({
     name: 'id',
     description: 'ID del módulo',
-    example: 'clx1234567890',
+    example: 1,
   })
   @ApiStandardResponse(ModuleDto)
   @ApiResponse({ status: 401, description: 'No autorizado' })
@@ -94,7 +98,10 @@ export class ModulesController {
     description: 'Sin permisos para acceder al módulo',
   })
   @JwtAuth(Role.TEACHER, Role.STUDENT)
-  findOne(@Param('id') id: string, @GetUser() user: User): Promise<ModuleDto> {
+  findOne(
+    @Param('id', ParseIntPipe) id: number,
+    @GetUser() user: User,
+  ): Promise<ModuleDto> {
     return this.modulesService.findOne(id, user)
   }
 
@@ -106,7 +113,7 @@ export class ModulesController {
   @ApiParam({
     name: 'id',
     description: 'ID del módulo',
-    example: 'clx1234567890',
+    example: 1,
   })
   @ApiStandardResponse(ModuleDto)
   @ApiResponse({ status: 401, description: 'No autorizado' })
@@ -117,36 +124,36 @@ export class ModulesController {
   })
   @JwtAuth(Role.TEACHER)
   update(
-    @Param('id') id: string,
+    @Param('id', ParseIntPipe) id: number,
     @Body() updateModuleDto: UpdateModuleDto,
     @GetUser() user: User,
   ): Promise<ModuleDto> {
     return this.modulesService.update(id, updateModuleDto, user)
   }
 
-  @Patch(':id/toggle-active')
-  @JwtAuth(Role.TEACHER)
-  @ApiOperation({
-    summary: 'Alternar estado activo/inactivo de un módulo',
-    description:
-      'Alterna el estado isActive del módulo. Si está activo lo desactiva y viceversa. Solo el profesor propietario puede cambiar el estado.',
-  })
-  @ApiParam({
-    name: 'id',
-    description: 'ID del módulo',
-    example: 'clx1234567890',
-  })
-  @ApiStandardResponse(ModuleDto)
-  @ApiResponse({ status: 401, description: 'No autorizado' })
-  @ApiResponse({ status: 404, description: 'Módulo no encontrado' })
-  @ApiResponse({
-    status: 403,
-    description: 'Solo el profesor propietario puede cambiar el estado',
-  })
-  toggleActive(
-    @Param('id') id: string,
-    @GetUser() user: User,
-  ): Promise<ModuleDto> {
-    return this.modulesService.toggleActive(id, user)
-  }
+  // @Patch(':id/toggle-active')
+  // @JwtAuth(Role.TEACHER)
+  // @ApiOperation({
+  //   summary: 'Alternar estado activo/inactivo de un módulo',
+  //   description:
+  //     'Alterna el estado isActive del módulo. Si está activo lo desactiva y viceversa. Solo el profesor propietario puede cambiar el estado.',
+  // })
+  // @ApiParam({
+  //   name: 'id',
+  //   description: 'ID del módulo',
+  //   example: 1,
+  // })
+  // @ApiStandardResponse(ModuleDto)
+  // @ApiResponse({ status: 401, description: 'No autorizado' })
+  // @ApiResponse({ status: 404, description: 'Módulo no encontrado' })
+  // @ApiResponse({
+  //   status: 403,
+  //   description: 'Solo el profesor propietario puede cambiar el estado',
+  // })
+  // toggleActive(
+  //   @Param('id', ParseIntPipe) id: number,
+  //   @GetUser() user: User,
+  // ): Promise<ModuleDto> {
+  //   return this.modulesService.toggleActive(id, user)
+  // }
 }

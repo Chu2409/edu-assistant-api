@@ -1,12 +1,12 @@
 import { ApiProperty } from '@nestjs/swagger'
-import { IsString, IsNotEmpty } from 'class-validator'
+import { IsInt, IsNotEmpty } from 'class-validator'
 
 export class CreateEnrollmentDto {
   @ApiProperty({
     description: 'ID del módulo al que se quiere inscribir',
-    example: 'clx1234567890',
+    example: 1,
   })
-  @IsString()
+  @IsInt()
   @IsNotEmpty()
-  moduleId: string
+  moduleId: number
 }

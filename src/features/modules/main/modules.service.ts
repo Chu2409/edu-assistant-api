@@ -12,7 +12,10 @@ import {
   type Prisma,
   type User,
 } from 'src/core/database/generated/client'
-import { ModuleFiltersDto } from './dtos/req/module-filters.dto'
+import {
+  ModulesAllFiltersDto,
+  ModulesAvailableFiltersDto,
+} from './dtos/req/module-filters.dto'
 import { ApiPaginatedRes } from 'src/shared/dtos/res/api-response.dto'
 import { ModulesMapper } from './mappers/modules.mapper'
 import { convertToFilterWhere } from 'src/shared/utils/converters'
@@ -52,13 +55,14 @@ export class ModulesService {
   }
 
   async findAll(
-    params: ModuleFiltersDto,
+    params: ModulesAllFiltersDto,
     user: User,
   ): Promise<ApiPaginatedRes<ModuleDto>> {
     const where: Prisma.ModuleWhereInput = {}
 
     if (user.role === Role.TEACHER) {
       where.teacherId = user.id
+      where.isPublic = params.isPublic
     } else if (user.role === Role.STUDENT) {
       where.enrollments = {
         some: { userId: user.id, isActive: true },
@@ -103,7 +107,7 @@ export class ModulesService {
   }
 
   async findModulesAvailable(
-    params: ModuleFiltersDto,
+    params: ModulesAvailableFiltersDto,
   ): Promise<ApiPaginatedRes<ModuleDto>> {
     const where: Prisma.ModuleWhereInput = {}
 
@@ -146,7 +150,7 @@ export class ModulesService {
     }
   }
 
-  async findOne(id: string, user: User): Promise<ModuleDto> {
+  async findOne(id: number, user: User): Promise<ModuleDto> {
     const module = await this.dbService.module.findUnique({
       where: { id },
       include: {
@@ -181,7 +185,7 @@ export class ModulesService {
   }
 
   async update(
-    id: string,
+    id: number,
     updateModuleDto: UpdateModuleDto,
     user: User,
   ): Promise<ModuleDto> {
@@ -267,7 +271,7 @@ export class ModulesService {
     return ModulesMapper.mapToDto(module)
   }
 
-  async toggleActive(id: string, user: User): Promise<ModuleDto> {
+  async toggleActive(id: number, user: User): Promise<ModuleDto> {
     // Verificar que el módulo existe y pertenece al usuario
     const existingModule = await this.dbService.module.findUnique({
       where: { id },

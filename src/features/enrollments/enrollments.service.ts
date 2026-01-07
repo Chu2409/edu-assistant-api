@@ -79,6 +79,8 @@ export class EnrollmentsService {
       },
     })
 
+    // TODO: Enviar notificación al profesor
+
     return this.mapToDto(enrollment)
   }
 
@@ -98,6 +100,10 @@ export class EnrollmentsService {
       throw new NotFoundException(
         `Módulo con ID ${bulkEnrollDto.moduleId} no encontrado`,
       )
+    }
+
+    if (!module.isActive) {
+      throw new BadRequestException('El módulo no está activo')
     }
 
     if (module.teacherId !== teacher.id) {
@@ -164,6 +170,8 @@ export class EnrollmentsService {
       })
     }
 
+    // TODO: Enviar notificación a los estudiantes inscritos
+
     // Obtener todas las inscripciones actualizadas
     const allEnrollments = await this.dbService.enrollment.findMany({
       where: {
@@ -178,31 +186,10 @@ export class EnrollmentsService {
   }
 
   /**
-   * Listar todas las inscripciones del usuario
-   */
-  async findMyEnrollments(
-    params: BaseParamsReqDto,
-    user: User,
-  ): Promise<EnrollmentDto[]> {
-    const enrollments = await this.dbService.enrollment.findMany({
-      where: {
-        userId: user.id,
-      },
-      skip: (params.page - 1) * params.limit,
-      take: params.limit,
-      orderBy: {
-        enrolledAt: 'desc',
-      },
-    })
-
-    return enrollments.map((enrollment) => this.mapToDto(enrollment))
-  }
-
-  /**
    * Listar estudiantes inscritos en un módulo (solo para el profesor)
    */
   async findModuleEnrollments(
-    moduleId: string,
+    moduleId: number,
     params: BaseParamsReqDto,
     teacher: User,
   ): Promise<EnrollmentDto[]> {
@@ -241,7 +228,7 @@ export class EnrollmentsService {
   /**
    * Obtener una inscripción por ID
    */
-  async findOne(id: string, user: User): Promise<EnrollmentDto> {
+  async findOne(id: number, user: User): Promise<EnrollmentDto> {
     const enrollment = await this.dbService.enrollment.findUnique({
       where: { id },
       include: {
@@ -270,7 +257,7 @@ export class EnrollmentsService {
    * Actualizar una inscripción
    */
   async update(
-    id: string,
+    id: number,
     updateEnrollmentDto: UpdateEnrollmentDto,
     user: User,
   ): Promise<EnrollmentDto> {
@@ -298,9 +285,7 @@ export class EnrollmentsService {
         isActive: updateEnrollmentDto.isActive,
         completedAt: updateEnrollmentDto.completedAt
           ? new Date(updateEnrollmentDto.completedAt)
-          : updateEnrollmentDto.completedAt === null
-            ? null
-            : undefined,
+          : undefined,
       },
     })
 
@@ -310,13 +295,16 @@ export class EnrollmentsService {
   /**
    * Desinscribirse de un módulo (el usuario se desinscribe a sí mismo)
    */
-  async selfUnenroll(moduleId: string, user: User): Promise<void> {
+  async selfUnenroll(moduleId: number, user: User): Promise<void> {
     const enrollment = await this.dbService.enrollment.findUnique({
       where: {
         userId_moduleId: {
           userId: user.id,
           moduleId,
         },
+      },
+      include: {
+        module: true,
       },
     })
 
@@ -328,18 +316,19 @@ export class EnrollmentsService {
       throw new BadRequestException('Ya estás desinscrito de este módulo')
     }
 
-    await this.dbService.enrollment.update({
+    if (!enrollment.module.allowSelfUnenroll) {
+      throw new ForbiddenException('Este módulo no permite auto-desinscripción')
+    }
+
+    await this.dbService.enrollment.delete({
       where: { id: enrollment.id },
-      data: {
-        isActive: false,
-      },
     })
   }
 
   /**
    * Eliminar una inscripción (solo profesor)
    */
-  async remove(id: string, teacher: User): Promise<void> {
+  async remove(id: number, teacher: User): Promise<void> {
     const enrollment = await this.dbService.enrollment.findUnique({
       where: { id },
       include: {

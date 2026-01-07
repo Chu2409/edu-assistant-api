@@ -1,5 +1,6 @@
 import { ApiPropertyOptional } from '@nestjs/swagger'
-import { IsBoolean, IsOptional, IsDateString } from 'class-validator'
+import { Type } from 'class-transformer'
+import { IsBoolean, IsOptional, IsDate } from 'class-validator'
 
 export class UpdateEnrollmentDto {
   @ApiPropertyOptional({
@@ -16,6 +17,7 @@ export class UpdateEnrollmentDto {
     nullable: true,
   })
   @IsOptional()
-  @IsDateString()
-  completedAt?: string | null
+  @IsDate()
+  @Type(() => Date)
+  completedAt?: Date
 }

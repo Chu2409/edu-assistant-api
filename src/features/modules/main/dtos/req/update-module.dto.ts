@@ -50,6 +50,15 @@ export class UpdateModuleDto {
   allowSelfEnroll?: boolean
 
   @ApiPropertyOptional({
+    description: 'Permite auto-desinscripción de estudiantes',
+    example: true,
+    default: true,
+  })
+  @IsOptional()
+  @IsBoolean()
+  allowSelfUnenroll?: boolean
+
+  @ApiPropertyOptional({
     description: 'URL del logo del módulo',
     example: 'https://example.com/new-logo.png',
     nullable: true,

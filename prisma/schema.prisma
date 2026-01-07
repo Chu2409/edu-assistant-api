@@ -19,7 +19,7 @@ enum Role {
 }
 
 model User {
-  id             String    @id @default(cuid())
+  id             Int       @id @default(autoincrement())
   email          String    @unique
   role           Role      @default(STUDENT)
   name           String    @map("name") // Nombre completo desde Microsoft
@@ -53,16 +53,17 @@ model User {
 // ============================================
 
 model Module {
-  id              String   @id @default(cuid())
-  title           String
-  description     String?  @db.Text
-  teacherId       String   @map("teacher_id")
-  isPublic        Boolean  @default(false) @map("is_public") // RF-1b: restricción de enrolamiento
-  allowSelfEnroll Boolean  @default(true) @map("allow_self_enroll") // RF-1: enrolarse libremente
-  logoUrl         String?  @map("logo_url")
-  isActive        Boolean  @default(true) @map("is_active")
-  createdAt       DateTime @default(now()) @map("created_at")
-  updatedAt       DateTime @updatedAt @map("updated_at")
+  id                Int      @id @default(autoincrement())
+  title             String
+  description       String?  @db.Text
+  teacherId         Int      @map("teacher_id")
+  isPublic          Boolean  @default(false) @map("is_public")
+  allowSelfEnroll   Boolean  @default(true) @map("allow_self_enroll")
+  allowSelfUnenroll Boolean  @default(true) @map("allow_self_unenroll")
+  logoUrl           String?  @map("logo_url")
+  isActive          Boolean  @default(true) @map("is_active")
+  createdAt         DateTime @default(now()) @map("created_at")
+  updatedAt         DateTime @updatedAt @map("updated_at")
 
   // Relations
   teacher         User             @relation("TeacherModules", fields: [teacherId], references: [id], onDelete: Cascade)
@@ -80,8 +81,8 @@ model Module {
 // ============================================
 
 model AiConfiguration {
-  id            String   @id @default(cuid())
-  moduleId      String   @unique @map("module_id")
+  id            Int      @id @default(autoincrement())
+  moduleId      Int      @unique @map("module_id")
   language      String   @default("es") // RF-9: idioma específico
   contextPrompt String?  @map("context_prompt") @db.Text // RF-10: contexto personalizado del módulo
   temperature   Float    @default(0.7)
@@ -99,9 +100,9 @@ model AiConfiguration {
 // ============================================
 
 model Enrollment {
-  id          String    @id @default(cuid())
-  userId      String    @map("user_id")
-  moduleId    String    @map("module_id")
+  id          Int       @id @default(autoincrement())
+  userId      Int       @map("user_id")
+  moduleId    Int       @map("module_id")
   enrolledAt  DateTime  @default(now()) @map("enrolled_at")
   completedAt DateTime? @map("completed_at")
   isActive    Boolean   @default(true) @map("is_active")
@@ -121,8 +122,8 @@ model Enrollment {
 // ============================================
 
 model Page {
-  id                String                       @id @default(cuid())
-  moduleId          String                       @map("module_id")
+  id                Int                          @id @default(autoincrement())
+  moduleId          Int                          @map("module_id")
   title             String
   content           String                       @db.Text // HTML CON conceptos Y enlaces ya incrustados
   rawContent        String?                      @map("raw_content") @db.Text
@@ -159,9 +160,9 @@ model Page {
 // ============================================
 
 model PageView {
-  id            String   @id @default(cuid())
-  userId        String   @map("user_id")
-  pageId        String   @map("page_id")
+  id            Int      @id @default(autoincrement())
+  userId        Int      @map("user_id")
+  pageId        Int      @map("page_id")
   firstViewedAt DateTime @default(now()) @map("first_viewed_at")
   lastViewedAt  DateTime @updatedAt @map("last_viewed_at")
   viewCount     Int      @default(1) @map("view_count") // número de veces que ha visto la página
@@ -193,9 +194,9 @@ enum RelationType {
 }
 
 model PageRelation {
-  id              String       @id @default(cuid())
-  originPageId    String       @map("origin_page_id")
-  relatedPageId   String       @map("related_page_id")
+  id              Int          @id @default(autoincrement())
+  originPageId    Int          @map("origin_page_id")
+  relatedPageId   Int          @map("related_page_id")
   similarityScore Float        @map("similarity_score")
   relationType    RelationType @map("relation_type")
   mentionText     String       @map("mention_text") // Texto exacto enlazado: "respiración celular"
@@ -219,8 +220,8 @@ model PageRelation {
 // MODULE CONCEPTS (RF-7)
 // ============================================
 model PageConcept {
-  id         String   @id @default(cuid())
-  pageId     String   @map("page_id")
+  id         Int      @id @default(autoincrement())
+  pageId     Int      @map("page_id")
   term       String
   definition String   @db.Text
   htmlId     String   @map("html_id") // id único en el HTML: "concept-c123"
@@ -250,8 +251,8 @@ enum ActivityType {
 }
 
 model Activity {
-  id                  String       @id @default(cuid())
-  pageId              String       @map("page_id")
+  id                  Int          @id @default(autoincrement())
+  pageId              Int          @map("page_id")
   type                ActivityType
   question            String       @db.Text
   options             Json? // para multiple choice, matching, etc.
@@ -261,7 +262,7 @@ model Activity {
   orderIndex          Int          @map("order_index")
   isApprovedByTeacher Boolean      @default(false) @map("is_approved_by_teacher") // RF-8: aprobado por docente
   usedAsExample       Boolean      @default(false) @map("used_as_example") // RF-8a: usado para generar más
-  generatedFromId     String?      @map("generated_from_id") // RF-8a: generado a partir de otro
+  generatedFromId     Int?         @map("generated_from_id") // RF-8a: generado a partir de otro
   createdAt           DateTime     @default(now()) @map("created_at")
   updatedAt           DateTime     @updatedAt @map("updated_at")
 
@@ -282,9 +283,9 @@ model Activity {
 // ============================================
 
 model ActivityAttempt {
-  id            String   @id @default(cuid())
-  activityId    String   @map("activity_id")
-  userId        String   @map("user_id")
+  id            Int      @id @default(autoincrement())
+  activityId    Int      @map("activity_id")
+  userId        Int      @map("user_id")
   studentAnswer Json     @map("student_answer")
   isCorrect     Boolean  @map("is_correct")
   attemptNumber Int      @map("attempt_number") // número de intento
@@ -304,9 +305,9 @@ model ActivityAttempt {
 // GENERATED CONTENT (RF-4, RF-5)
 // ============================================
 model Prompt {
-  id        String   @id @default(cuid())
-  pageId    String?  @map("page_id")
-  userId    String   @map("user_id") // quien solicitó la generación
+  id        Int      @id @default(autoincrement())
+  pageId    Int?     @map("page_id")
+  userId    Int      @map("user_id") // quien solicitó la generación
   prompt    String   @db.Text
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
@@ -321,9 +322,9 @@ model Prompt {
 }
 
 model PageFeedback {
-  id     String  @id @default(cuid())
-  pageId String? @map("page_id")
-  userId String  @map("user_id") // quien solicitó la generación
+  id     Int  @id @default(autoincrement())
+  pageId Int? @map("page_id")
+  userId Int  @map("user_id") // quien solicitó la generación
 
   feedback  String   @db.Text
   createdAt DateTime @default(now()) @map("created_at")
@@ -349,9 +350,9 @@ enum ContentType {
 }
 
 model Note {
-  id        String   @id @default(cuid())
-  pageId    String?  @map("page_id")
-  userId    String   @map("user_id") // quien solicitó la generación
+  id        Int      @id @default(autoincrement())
+  pageId    Int?     @map("page_id")
+  userId    Int      @map("user_id") // quien solicitó la generación
   content   String   @db.Text
   createdAt DateTime @default(now()) @map("created_at")
 
@@ -369,9 +370,9 @@ model Note {
 // ============================================
 
 model StudentQuestion {
-  id        String   @id @default(cuid())
-  userId    String   @map("user_id")
-  pageId    String   @map("page_id")
+  id        Int      @id @default(autoincrement())
+  userId    Int      @map("user_id")
+  pageId    Int      @map("page_id")
   question  String   @map("question") @db.Text
   isPublic  Boolean  @default(true) @map("is_public") // visible en foro
   upvotes   Int      @default(0) // para priorizar en foro
@@ -390,9 +391,9 @@ model StudentQuestion {
 }
 
 model QuestionReply {
-  id            String   @id @default(cuid())
-  questionId    String   @map("question_id")
-  userId        String   @map("user_id")
+  id            Int      @id @default(autoincrement())
+  questionId    Int      @map("question_id")
+  userId        Int      @map("user_id")
   replyText     String   @map("reply_text") @db.Text
   isFromTeacher Boolean  @default(false) @map("is_from_teacher")
   createdAt     DateTime @default(now()) @map("created_at")
@@ -421,12 +422,12 @@ enum NotificationType {
 }
 
 model Notification {
-  id                String           @id @default(cuid())
-  userId            String           @map("user_id")
+  id                Int              @id @default(autoincrement())
+  userId            Int              @map("user_id")
   type              NotificationType
   title             String
   message           String           @db.Text
-  relatedEntityId   String?          @map("related_entity_id") // ID de lección, pregunta, etc.
+  relatedEntityId   Int?             @map("related_entity_id") // ID de lección, pregunta, etc.
   relatedEntityType String?          @map("related_entity_type")
   isRead            Boolean          @default(false) @map("is_read")
   emailSent         Boolean          @default(false) @map("email_sent")
@@ -446,8 +447,8 @@ model Notification {
 // ============================================
 
 model Podcast {
-  id            String   @id @default(cuid())
-  pageId        String?  @map("page_id")
+  id            Int      @id @default(autoincrement())
+  pageId        Int?     @map("page_id")
   title         String
   description   String?  @db.Text
   audioUrl      String   @map("audio_url") // URL externa (S3, Cloudinary, etc.)
@@ -477,8 +478,8 @@ enum MediaType {
 }
 
 model MediaResource {
-  id           String    @id @default(cuid())
-  pageId       String?   @map("page_id")
+  id           Int       @id @default(autoincrement())
+  pageId       Int?      @map("page_id")
   type         MediaType
   title        String?
   url          String // URL externa
@@ -500,12 +501,12 @@ model MediaResource {
 // ============================================
 
 model ModuleMetrics {
-  id                    String   @id @default(cuid())
-  moduleId              String   @unique @map("module_id")
+  id                    Int      @id @default(autoincrement())
+  moduleId              Int      @unique @map("module_id")
   totalViews            Int      @default(0) @map("total_views")
   totalStudents         Int      @default(0) @map("total_students")
   averageCompletionRate Float    @default(0) @map("average_completion_rate")
-  mostViewedPageId      String?  @map("most_viewed_page_id")
+  mostViewedPageId      Int?     @map("most_viewed_page_id")
   lastCalculatedAt      DateTime @default(now()) @map("last_calculated_at")
 
   // Relations

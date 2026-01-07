@@ -1,21 +1,21 @@
 import { ApiProperty } from '@nestjs/swagger'
-import { IsArray, IsString, ArrayMinSize } from 'class-validator'
+import { IsArray, ArrayMinSize, IsInt } from 'class-validator'
 
 export class BulkEnrollStudentsDto {
   @ApiProperty({
     description: 'ID del módulo',
-    example: 'clx1234567890',
+    example: 1,
   })
-  @IsString()
-  moduleId: string
+  @IsInt()
+  moduleId: number
 
   @ApiProperty({
     description: 'Lista de IDs de estudiantes a inscribir',
-    example: ['clx0987654321', 'clx1122334455'],
-    type: [String],
+    example: [1, 2],
+    type: [Number],
   })
   @IsArray()
   @ArrayMinSize(1)
-  @IsString({ each: true })
-  studentIds: string[]
+  @IsInt({ each: true })
+  studentIds: number[]
 }

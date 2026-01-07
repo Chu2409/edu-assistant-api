@@ -9,6 +9,7 @@ import {
   Query,
   HttpCode,
   HttpStatus,
+  ParseIntPipe,
 } from '@nestjs/common'
 import {
   ApiTags,
@@ -35,7 +36,10 @@ export class EnrollmentsController {
   constructor(private readonly enrollmentsService: EnrollmentsService) {}
 
   @Post('self')
-  @ApiOperation({ summary: 'Inscribirse a un módulo (auto-inscripción)' })
+  @ApiOperation({
+    summary: 'Inscribirse a un módulo (auto-inscripción)',
+    description: 'El usuario se inscribe a sí mismo en un módulo',
+  })
   @ApiStandardResponse(EnrollmentDto, HttpStatus.CREATED)
   @ApiResponse({ status: 401, description: 'No autorizado' })
   @ApiResponse({
@@ -44,6 +48,7 @@ export class EnrollmentsController {
   })
   @ApiResponse({ status: 404, description: 'Módulo no encontrado' })
   @ApiResponse({ status: 409, description: 'Ya estás inscrito en este módulo' })
+  @JwtAuth(Role.STUDENT)
   selfEnroll(
     @Body() createEnrollmentDto: CreateEnrollmentDto,
     @GetUser() user: User,
@@ -55,6 +60,7 @@ export class EnrollmentsController {
   @JwtAuth(Role.TEACHER)
   @ApiOperation({
     summary: 'Inscribir múltiples estudiantes a un módulo (solo profesores)',
+    description: 'El profesor inscribe a múltiples estudiantes en un módulo',
   })
   @ApiStandardResponse([EnrollmentDto], HttpStatus.CREATED)
   @ApiResponse({ status: 401, description: 'No autorizado' })
@@ -73,19 +79,6 @@ export class EnrollmentsController {
     return this.enrollmentsService.bulkEnrollStudents(bulkEnrollDto, user)
   }
 
-  @Get('my')
-  @ApiOperation({ summary: 'Listar mis inscripciones' })
-  @ApiQuery({ name: 'page', required: false, type: Number, example: 1 })
-  @ApiQuery({ name: 'limit', required: false, type: Number, example: 10 })
-  @ApiStandardResponse([EnrollmentDto])
-  @ApiResponse({ status: 401, description: 'No autorizado' })
-  findMyEnrollments(
-    @Query() params: BaseParamsReqDto,
-    @GetUser() user: User,
-  ): Promise<EnrollmentDto[]> {
-    return this.enrollmentsService.findMyEnrollments(params, user)
-  }
-
   @Get('module/:moduleId')
   @JwtAuth(Role.TEACHER)
   @ApiOperation({
@@ -94,7 +87,7 @@ export class EnrollmentsController {
   @ApiParam({
     name: 'moduleId',
     description: 'ID del módulo',
-    example: 'clx1234567890',
+    example: 1,
   })
   @ApiQuery({ name: 'page', required: false, type: Number, example: 1 })
   @ApiQuery({ name: 'limit', required: false, type: Number, example: 10 })
@@ -106,7 +99,7 @@ export class EnrollmentsController {
   })
   @ApiResponse({ status: 404, description: 'Módulo no encontrado' })
   findModuleEnrollments(
-    @Param('moduleId') moduleId: string,
+    @Param('moduleId', ParseIntPipe) moduleId: number,
     @Query() params: BaseParamsReqDto,
     @GetUser() user: User,
   ): Promise<EnrollmentDto[]> {
@@ -118,7 +111,7 @@ export class EnrollmentsController {
   @ApiParam({
     name: 'id',
     description: 'ID de la inscripción',
-    example: 'clx1234567890',
+    example: 1,
   })
   @ApiStandardResponse(EnrollmentDto)
   @ApiResponse({ status: 401, description: 'No autorizado' })
@@ -128,7 +121,7 @@ export class EnrollmentsController {
   })
   @ApiResponse({ status: 404, description: 'Inscripción no encontrada' })
   findOne(
-    @Param('id') id: string,
+    @Param('id', ParseIntPipe) id: number,
     @GetUser() user: User,
   ): Promise<EnrollmentDto> {
     return this.enrollmentsService.findOne(id, user)
@@ -140,7 +133,7 @@ export class EnrollmentsController {
   @ApiParam({
     name: 'id',
     description: 'ID de la inscripción',
-    example: 'clx1234567890',
+    example: 1,
   })
   @ApiStandardResponse(EnrollmentDto)
   @ApiResponse({ status: 401, description: 'No autorizado' })
@@ -150,7 +143,7 @@ export class EnrollmentsController {
   })
   @ApiResponse({ status: 404, description: 'Inscripción no encontrada' })
   update(
-    @Param('id') id: string,
+    @Param('id', ParseIntPipe) id: number,
     @Body() updateEnrollmentDto: UpdateEnrollmentDto,
     @GetUser() user: User,
   ): Promise<EnrollmentDto> {
@@ -163,13 +156,14 @@ export class EnrollmentsController {
   @ApiParam({
     name: 'moduleId',
     description: 'ID del módulo',
-    example: 'clx1234567890',
+    example: 1,
   })
   @ApiResponse({ status: 204, description: 'Desinscripción exitosa' })
   @ApiResponse({ status: 401, description: 'No autorizado' })
   @ApiResponse({ status: 404, description: 'No estás inscrito en este módulo' })
+  @JwtAuth(Role.STUDENT)
   selfUnenroll(
-    @Param('moduleId') moduleId: string,
+    @Param('moduleId', ParseIntPipe) moduleId: number,
     @GetUser() user: User,
   ): Promise<void> {
     return this.enrollmentsService.selfUnenroll(moduleId, user)
@@ -182,7 +176,7 @@ export class EnrollmentsController {
   @ApiParam({
     name: 'id',
     description: 'ID de la inscripción',
-    example: 'clx1234567890',
+    example: 1,
   })
   @ApiResponse({
     status: 204,
@@ -194,7 +188,10 @@ export class EnrollmentsController {
     description: 'Solo el profesor propietario puede eliminar',
   })
   @ApiResponse({ status: 404, description: 'Inscripción no encontrada' })
-  remove(@Param('id') id: string, @GetUser() user: User): Promise<void> {
+  remove(
+    @Param('id', ParseIntPipe) id: number,
+    @GetUser() user: User,
+  ): Promise<void> {
     return this.enrollmentsService.remove(id, user)
   }
 }

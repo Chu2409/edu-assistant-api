@@ -4,9 +4,9 @@ import { AiConfigurationDto } from 'src/features/modules/ai-configurations/dtos/
 export class ModuleDto {
   @ApiProperty({
     description: 'ID del módulo',
-    example: 'clx1234567890',
+    example: 1,
   })
-  id: string
+  id: number
 
   @ApiProperty({
     description: 'Título del módulo',
@@ -23,9 +23,9 @@ export class ModuleDto {
 
   @ApiProperty({
     description: 'ID del profesor que creó el módulo',
-    example: 'clx0987654321',
+    example: 1,
   })
-  teacherId: string
+  teacherId: number
 
   @ApiProperty({
     description: 'Indica si el módulo es público',

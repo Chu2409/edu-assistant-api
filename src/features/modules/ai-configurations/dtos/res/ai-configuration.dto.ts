@@ -3,15 +3,15 @@ import { ApiProperty } from '@nestjs/swagger'
 export class AiConfigurationDto {
   @ApiProperty({
     description: 'ID de la configuración de IA',
-    example: 'clx1234567890',
+    example: 1,
   })
-  id: string
+  id: number
 
   @ApiProperty({
     description: 'ID del módulo asociado',
-    example: 'clx0987654321',
+    example: 1,
   })
-  moduleId: string
+  moduleId: number
 
   @ApiProperty({
     description: 'Idioma para la configuración de IA',

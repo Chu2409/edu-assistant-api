@@ -1,9 +1,9 @@
 import { ApiPropertyOptional } from '@nestjs/swagger'
 import { Type } from 'class-transformer'
-import { IsBoolean, IsOptional, IsString } from 'class-validator'
+import { IsBoolean, IsInt, IsOptional } from 'class-validator'
 import { BaseParamsReqDto } from 'src/shared/dtos/req/base-params.dto'
 
-export class ModuleFiltersDto extends BaseParamsReqDto {
+export class ModulesAllFiltersDto extends BaseParamsReqDto {
   @IsOptional()
   @IsBoolean()
   @ApiPropertyOptional({
@@ -15,7 +15,14 @@ export class ModuleFiltersDto extends BaseParamsReqDto {
   isPublic?: boolean
 
   @IsOptional()
-  @Type(() => String)
-  @IsString({ each: true })
-  teacherId?: string | string[]
+  @Type(() => Number)
+  @IsInt({ each: true })
+  teacherId?: number | number[]
+}
+
+export class ModulesAvailableFiltersDto extends BaseParamsReqDto {
+  @IsOptional()
+  @Type(() => Number)
+  @IsInt({ each: true })
+  teacherId?: number | number[]
 }
