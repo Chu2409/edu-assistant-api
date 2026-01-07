@@ -10,16 +10,14 @@ import { CreateEnrollmentDto } from './dtos/req/create-enrollment.dto'
 import { UpdateEnrollmentDto } from './dtos/req/update-enrollment.dto'
 import { BulkEnrollStudentsDto } from './dtos/req/bulk-enroll-students.dto'
 import { EnrollmentDto } from './dtos/res/enrollment.dto'
-import type { Enrollment, User } from 'src/core/database/generated/client'
-import { BaseParamsReqDto } from 'src/shared/dtos/req/base-params.dto'
+import type { User } from 'src/core/database/generated/client'
+import { EnrollmentsMapper } from './mappers/enrollments.mapper'
+import { EnrollmentStudentsDto } from './dtos/res/enrollment-student.dto'
 
 @Injectable()
 export class EnrollmentsService {
   constructor(private readonly dbService: DBService) {}
 
-  /**
-   * El usuario se enrola a sí mismo en un módulo
-   */
   async selfEnroll(
     createEnrollmentDto: CreateEnrollmentDto,
     user: User,
@@ -68,7 +66,7 @@ export class EnrollmentsService {
           completedAt: null,
         },
       })
-      return this.mapToDto(enrollment)
+      return EnrollmentsMapper.mapToDto(enrollment)
     }
 
     // Crear nueva inscripción
@@ -81,12 +79,9 @@ export class EnrollmentsService {
 
     // TODO: Enviar notificación al profesor
 
-    return this.mapToDto(enrollment)
+    return EnrollmentsMapper.mapToDto(enrollment)
   }
 
-  /**
-   * El profesor enrola a múltiples estudiantes en un módulo
-   */
   async bulkEnrollStudents(
     bulkEnrollDto: BulkEnrollStudentsDto,
     teacher: User,
@@ -125,7 +120,6 @@ export class EnrollmentsService {
       throw new NotFoundException('Uno o más estudiantes no fueron encontrados')
     }
 
-    // Verificar inscripciones existentes
     const existingEnrollments = await this.dbService.enrollment.findMany({
       where: {
         moduleId: bulkEnrollDto.moduleId,
@@ -140,7 +134,6 @@ export class EnrollmentsService {
       (id) => !existingUserIds.has(id),
     )
 
-    // Crear nuevas inscripciones
     const enrollmentsToCreate = newStudentIds.map((userId) => ({
       userId,
       moduleId: bulkEnrollDto.moduleId,
@@ -172,7 +165,6 @@ export class EnrollmentsService {
 
     // TODO: Enviar notificación a los estudiantes inscritos
 
-    // Obtener todas las inscripciones actualizadas
     const allEnrollments = await this.dbService.enrollment.findMany({
       where: {
         moduleId: bulkEnrollDto.moduleId,
@@ -182,18 +174,15 @@ export class EnrollmentsService {
       },
     })
 
-    return allEnrollments.map((enrollment) => this.mapToDto(enrollment))
+    return allEnrollments.map((enrollment) =>
+      EnrollmentsMapper.mapToDto(enrollment),
+    )
   }
 
-  /**
-   * Listar estudiantes inscritos en un módulo (solo para el profesor)
-   */
   async findModuleEnrollments(
     moduleId: number,
-    params: BaseParamsReqDto,
     teacher: User,
-  ): Promise<EnrollmentDto[]> {
-    // Verificar que el módulo existe y pertenece al profesor
+  ): Promise<EnrollmentStudentsDto[]> {
     const module = await this.dbService.module.findUnique({
       where: { id: moduleId },
     })
@@ -215,47 +204,16 @@ export class EnrollmentsService {
       include: {
         user: true,
       },
-      skip: (params.page - 1) * params.limit,
-      take: params.limit,
       orderBy: {
         enrolledAt: 'desc',
       },
     })
 
-    return enrollments.map((enrollment) => this.mapToDto(enrollment))
+    return enrollments.map((enrollment) =>
+      EnrollmentsMapper.mapToEnrollmentStudentsDto(enrollment),
+    )
   }
 
-  /**
-   * Obtener una inscripción por ID
-   */
-  async findOne(id: number, user: User): Promise<EnrollmentDto> {
-    const enrollment = await this.dbService.enrollment.findUnique({
-      where: { id },
-      include: {
-        module: true,
-      },
-    })
-
-    if (!enrollment) {
-      throw new NotFoundException(`Inscripción con ID ${id} no encontrada`)
-    }
-
-    // Verificar permisos: solo el usuario o el profesor del módulo
-    if (
-      enrollment.userId !== user.id &&
-      enrollment.module.teacherId !== user.id
-    ) {
-      throw new ForbiddenException(
-        'No tienes permisos para ver esta inscripción',
-      )
-    }
-
-    return this.mapToDto(enrollment)
-  }
-
-  /**
-   * Actualizar una inscripción
-   */
   async update(
     id: number,
     updateEnrollmentDto: UpdateEnrollmentDto,
@@ -272,7 +230,6 @@ export class EnrollmentsService {
       throw new NotFoundException(`Inscripción con ID ${id} no encontrada`)
     }
 
-    // Solo el profesor del módulo puede actualizar inscripciones
     if (enrollment.module.teacherId !== user.id) {
       throw new ForbiddenException(
         'Solo el profesor propietario puede actualizar inscripciones',
@@ -289,13 +246,10 @@ export class EnrollmentsService {
       },
     })
 
-    return this.mapToDto(updatedEnrollment)
+    return EnrollmentsMapper.mapToDto(updatedEnrollment)
   }
 
-  /**
-   * Desinscribirse de un módulo (el usuario se desinscribe a sí mismo)
-   */
-  async selfUnenroll(moduleId: number, user: User): Promise<void> {
+  async selfUnenroll(moduleId: number, user: User): Promise<EnrollmentDto> {
     const enrollment = await this.dbService.enrollment.findUnique({
       where: {
         userId_moduleId: {
@@ -323,12 +277,11 @@ export class EnrollmentsService {
     await this.dbService.enrollment.delete({
       where: { id: enrollment.id },
     })
+
+    return EnrollmentsMapper.mapToDto(enrollment)
   }
 
-  /**
-   * Eliminar una inscripción (solo profesor)
-   */
-  async remove(id: number, teacher: User): Promise<void> {
+  async remove(id: number, teacher: User): Promise<EnrollmentDto> {
     const enrollment = await this.dbService.enrollment.findUnique({
       where: { id },
       include: {
@@ -349,16 +302,7 @@ export class EnrollmentsService {
     await this.dbService.enrollment.delete({
       where: { id },
     })
-  }
 
-  private mapToDto(enrollment: Enrollment): EnrollmentDto {
-    return {
-      id: enrollment.id,
-      userId: enrollment.userId,
-      moduleId: enrollment.moduleId,
-      enrolledAt: enrollment.enrolledAt,
-      completedAt: enrollment.completedAt,
-      isActive: enrollment.isActive,
-    }
+    return EnrollmentsMapper.mapToDto(enrollment)
   }
 }
