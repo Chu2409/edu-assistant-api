@@ -19,6 +19,7 @@ import {
 import { ApiPaginatedRes } from 'src/shared/dtos/res/api-response.dto'
 import { ModulesMapper } from './mappers/modules.mapper'
 import { convertToFilterWhere } from 'src/shared/utils/converters'
+import { ModulePagesDto } from './dtos/res/module-pages.dto'
 
 @Injectable()
 export class ModulesService {
@@ -150,12 +151,13 @@ export class ModulesService {
     }
   }
 
-  async findOne(id: number, user: User): Promise<ModuleDto> {
+  async findOne(id: number, user: User): Promise<ModulePagesDto> {
     const module = await this.dbService.module.findUnique({
       where: { id },
       include: {
         aiConfiguration: true,
         enrollments: true,
+        pages: true,
       },
     })
 
@@ -181,7 +183,7 @@ export class ModulesService {
       )
     }
 
-    return ModulesMapper.mapToDto(module)
+    return ModulesMapper.mapToModulePagesDto(module)
   }
 
   async update(

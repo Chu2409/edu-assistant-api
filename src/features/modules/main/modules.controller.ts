@@ -26,6 +26,7 @@ import {
   ModulesAvailableFiltersDto,
 } from './dtos/req/module-filters.dto'
 import { ApiPaginatedRes } from 'src/shared/dtos/res/api-response.dto'
+import { ModulePagesDto } from './dtos/res/module-pages.dto'
 
 @ApiTags('Modules')
 @Controller('modules')
@@ -90,7 +91,7 @@ export class ModulesController {
     description: 'ID del módulo',
     example: 1,
   })
-  @ApiStandardResponse(ModuleDto)
+  @ApiStandardResponse(ModulePagesDto)
   @ApiResponse({ status: 401, description: 'No autorizado' })
   @ApiResponse({ status: 404, description: 'Módulo no encontrado' })
   @ApiResponse({
@@ -101,7 +102,7 @@ export class ModulesController {
   findOne(
     @Param('id', ParseIntPipe) id: number,
     @GetUser() user: User,
-  ): Promise<ModuleDto> {
+  ): Promise<ModulePagesDto> {
     return this.modulesService.findOne(id, user)
   }
 
