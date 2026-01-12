@@ -1,22 +1,42 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger'
+import {
+  IsString,
+  IsOptional,
+  IsBoolean,
+  IsInt,
+  IsArray,
+  MinLength,
+  MaxLength,
+  Min,
+} from 'class-validator'
+import { Type } from 'class-transformer'
 
-export class PageDto {
+export class CreatePageDto {
   @ApiProperty({
-    description: 'ID de la página',
+    description: 'ID del módulo al que pertenece la página',
     example: 1,
   })
-  id: number
+  @Type(() => Number)
+  @IsInt()
+  @Min(1)
+  moduleId: number
 
   @ApiProperty({
     description: 'Título de la página',
     example: 'Introducción a la Programación',
+    minLength: 3,
+    maxLength: 200,
   })
+  @IsString()
+  @MinLength(3)
+  @MaxLength(200)
   title: string
 
   @ApiProperty({
     description: 'Contenido HTML procesado con conceptos y enlaces incrustados',
     example: '<p>Este es el contenido HTML procesado...</p>',
   })
+  @IsString()
   content: string
 
   @ApiPropertyOptional({
@@ -24,50 +44,36 @@ export class PageDto {
     example: 'Este es el contenido original en texto plano',
     nullable: true,
   })
-  rawContent: string | null
+  @IsOptional()
+  @IsString()
+  rawContent?: string
 
   @ApiProperty({
     description: 'Índice de orden de la página dentro del módulo',
     example: 1,
   })
+  @Type(() => Number)
+  @IsInt()
+  @Min(1)
   orderIndex: number
 
-  @ApiProperty({
+  @ApiPropertyOptional({
     description: 'Palabras clave para búsquedas',
     example: ['programación', 'introducción', 'básicos'],
     type: [String],
+    default: [],
   })
-  keywords: string[]
-
-  @ApiProperty({
-    description: 'Indica si la página está publicada',
-    example: false,
-  })
-  isPublished: boolean
+  @IsOptional()
+  @IsArray()
+  @IsString({ each: true })
+  keywords?: string[]
 
   @ApiPropertyOptional({
-    description: 'Fecha de último procesamiento del HTML',
-    example: '2024-01-01T00:00:00.000Z',
-    nullable: true,
+    description: 'Indica si la página está publicada',
+    example: false,
+    default: false,
   })
-  lastProcessedAt: Date | null
-
-  @ApiProperty({
-    description:
-      'Versión de procesamiento para re-procesar si cambia la lógica',
-    example: 1,
-  })
-  processingVersion: number
-
-  @ApiProperty({
-    description: 'Fecha de creación de la página',
-    example: '2024-01-01T00:00:00.000Z',
-  })
-  createdAt: Date
-
-  @ApiProperty({
-    description: 'Fecha de última actualización de la página',
-    example: '2024-01-02T00:00:00.000Z',
-  })
-  updatedAt: Date
+  @IsOptional()
+  @IsBoolean()
+  isPublished?: boolean
 }

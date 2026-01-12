@@ -5,6 +5,7 @@ export class PagesMapper {
   static mapToDto(page: Page): PageDto {
     return {
       id: page.id,
+      moduleId: page.moduleId,
       title: page.title,
       content: page.content,
       rawContent: page.rawContent,

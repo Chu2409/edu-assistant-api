@@ -5,9 +5,16 @@ import { ResponseInterceptor } from './shared/interceptors/response.interceptor'
 import { AuthModule } from './features/auth/auth.module'
 import { ModulesModule } from './features/modules/main/modules.module'
 import { EnrollmentsModule } from './features/enrollments/enrollments.module'
+import { PagesModule } from './features/pages/main/pages.module'
 
 @Module({
-  imports: [CoreModule, AuthModule, ModulesModule, EnrollmentsModule],
+  imports: [
+    CoreModule,
+    AuthModule,
+    ModulesModule,
+    EnrollmentsModule,
+    PagesModule,
+  ],
   controllers: [HealthController],
   providers: [
     ResponseInterceptor,

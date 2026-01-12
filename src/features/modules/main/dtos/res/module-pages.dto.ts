@@ -1,6 +1,6 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger'
 import { AiConfigurationDto } from 'src/features/modules/ai-configurations/dtos/res/ai-configuration.dto'
-import { PageDto } from 'src/features/pages/dtos/res/page.dto'
+import { PageDto } from 'src/features/pages/main/dtos/res/page.dto'
 
 export class ModulePagesDto {
   @ApiProperty({
