@@ -19,6 +19,7 @@ import {
 import { PagesService } from './pages.service'
 import { CreatePageDto } from './dtos/req/create-page.dto'
 import { UpdatePageDto } from './dtos/req/update-page.dto'
+import { ReorderPagesDto } from './dtos/req/reorder-pages.dto'
 import { PageDto } from './dtos/res/page.dto'
 import { BaseParamsReqDto } from 'src/shared/dtos/req/base-params.dto'
 import { JwtAuth } from 'src/features/auth/decorators/jwt-auth.decorator'
@@ -118,6 +119,27 @@ export class PagesController {
     @GetUser() user: User,
   ): Promise<FullPageDto> {
     return this.pagesService.findOne(id, user)
+  }
+
+  @Patch('reorder')
+  @ApiOperation({
+    summary: 'Reordenar páginas',
+    description:
+      'Actualiza los índices de orden de múltiples páginas. Solo el profesor propietario puede reordenar páginas',
+  })
+  @ApiStandardResponse(undefined, HttpStatus.NO_CONTENT)
+  @ApiResponse({ status: 401, description: 'No autorizado' })
+  @ApiResponse({ status: 404, description: 'Una o más páginas no encontradas' })
+  @ApiResponse({
+    status: 403,
+    description: 'Solo el profesor propietario puede reordenar páginas',
+  })
+  @JwtAuth(Role.TEACHER)
+  async reorder(
+    @Body() reorderPagesDto: ReorderPagesDto,
+    @GetUser() user: User,
+  ): Promise<void> {
+    return this.pagesService.reorder(reorderPagesDto, user)
   }
 
   @Patch(':id')

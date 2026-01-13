@@ -127,7 +127,7 @@ model Page {
   title             String
   content           String                       @db.Text // HTML CON conceptos Y enlaces ya incrustados
   rawContent        String?                      @map("raw_content") @db.Text
-  orderIndex        Int?                         @map("order_index")
+  orderIndex        Int                          @map("order_index")
   embedding         Unsupported("vector(1536)")?
   keywords          String[] // Mantener para búsquedas
   isPublished       Boolean                      @default(false) @map("is_published")

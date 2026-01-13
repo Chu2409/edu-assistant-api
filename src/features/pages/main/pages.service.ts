@@ -6,6 +6,7 @@ import {
 import { DBService } from 'src/core/database/database.service'
 import { CreatePageDto } from './dtos/req/create-page.dto'
 import { UpdatePageDto } from './dtos/req/update-page.dto'
+import { ReorderPagesDto } from './dtos/req/reorder-pages.dto'
 import { PageDto } from './dtos/res/page.dto'
 import {
   Enrollment,
@@ -38,10 +39,6 @@ export class PagesService {
       throw new ForbiddenException(
         'Solo el profesor propietario puede crear páginas en este módulo',
       )
-    }
-
-    if (!module.isActive) {
-      throw new ForbiddenException('El módulo no está activo')
     }
 
     const lastPage = await this.dbService.page.findFirst({
@@ -193,7 +190,8 @@ export class PagesService {
     if (
       !page.module.isPublic &&
       !page.module.enrollments.some(
-        (enrollment: Enrollment) => enrollment.userId === user.id,
+        (enrollment: Enrollment) =>
+          enrollment.userId === user.id && enrollment.isActive,
       )
     ) {
       throw new ForbiddenException('No tienes permisos para ver esta página')
@@ -262,5 +260,69 @@ export class PagesService {
     })
 
     return PagesMapper.mapToDto(page)
+  }
+
+  async reorder(reorderPagesDto: ReorderPagesDto, user: User): Promise<void> {
+    if (reorderPagesDto.pages.length === 0) {
+      return
+    }
+
+    // Validar que los índices de orden sean únicos
+    const orderIndices = reorderPagesDto.pages.map((p) => p.orderIndex)
+    const uniqueOrderIndices = new Set(orderIndices)
+    if (orderIndices.length !== uniqueOrderIndices.size) {
+      const duplicates = orderIndices.filter(
+        (index, i) => orderIndices.indexOf(index) !== i,
+      )
+      throw new ForbiddenException(
+        `Los índices de orden deben ser únicos. Índices duplicados: ${[...new Set(duplicates)].join(', ')}`,
+      )
+    }
+
+    // Obtener todas las páginas a actualizar para verificar permisos
+    const pageIds = reorderPagesDto.pages.map((p) => p.id)
+    const pages = await this.dbService.page.findMany({
+      where: {
+        id: { in: pageIds },
+      },
+      include: {
+        module: true,
+      },
+    })
+
+    if (pages.length !== pageIds.length) {
+      const foundIds = pages.map((p) => p.id)
+      const missingIds = pageIds.filter((id) => !foundIds.includes(id))
+      throw new NotFoundException(
+        `Páginas con IDs ${missingIds.join(', ')} no encontradas`,
+      )
+    }
+
+    // Verificar que todas las páginas pertenecen al mismo módulo
+    const moduleIds = [...new Set(pages.map((p) => p.moduleId))]
+    if (moduleIds.length > 1) {
+      throw new ForbiddenException(
+        'Todas las páginas deben pertenecer al mismo módulo',
+      )
+    }
+
+    const module = pages[0].module
+
+    // Solo el profesor propietario puede reordenar páginas
+    if (module.teacherId !== user.id) {
+      throw new ForbiddenException(
+        'Solo el profesor propietario puede reordenar las páginas de este módulo',
+      )
+    }
+
+    // Actualizar los orderIndex de todas las páginas en una transacción
+    await this.dbService.$transaction(
+      reorderPagesDto.pages.map((pageReorder) =>
+        this.dbService.page.update({
+          where: { id: pageReorder.id },
+          data: { orderIndex: pageReorder.orderIndex },
+        }),
+      ),
+    )
   }
 }

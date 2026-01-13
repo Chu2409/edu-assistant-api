@@ -684,6 +684,14 @@ export type ActivityUpdateManyWithoutGeneratedFromNestedInput = {
   deleteMany?: Prisma.ActivityScalarWhereInput | Prisma.ActivityScalarWhereInput[]
 }
 
+export type NullableIntFieldUpdateOperationsInput = {
+  set?: number | null
+  increment?: number
+  decrement?: number
+  multiply?: number
+  divide?: number
+}
+
 export type ActivityUncheckedUpdateManyWithoutGeneratedFromNestedInput = {
   create?: Prisma.XOR<Prisma.ActivityCreateWithoutGeneratedFromInput, Prisma.ActivityUncheckedCreateWithoutGeneratedFromInput> | Prisma.ActivityCreateWithoutGeneratedFromInput[] | Prisma.ActivityUncheckedCreateWithoutGeneratedFromInput[]
   connectOrCreate?: Prisma.ActivityCreateOrConnectWithoutGeneratedFromInput | Prisma.ActivityCreateOrConnectWithoutGeneratedFromInput[]
