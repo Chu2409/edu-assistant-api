@@ -3,13 +3,10 @@ import {
   IsString,
   IsOptional,
   IsBoolean,
-  IsInt,
   IsArray,
   MinLength,
   MaxLength,
-  Min,
 } from 'class-validator'
-import { Type } from 'class-transformer'
 
 export class UpdatePageDto {
   @ApiPropertyOptional({
@@ -40,16 +37,6 @@ export class UpdatePageDto {
   @IsOptional()
   @IsString()
   rawContent?: string | null
-
-  @ApiPropertyOptional({
-    description: 'Índice de orden de la página dentro del módulo',
-    example: 2,
-  })
-  @IsOptional()
-  @Type(() => Number)
-  @IsInt()
-  @Min(1)
-  orderIndex?: number
 
   @ApiPropertyOptional({
     description: 'Palabras clave para búsquedas',

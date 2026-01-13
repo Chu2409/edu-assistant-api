@@ -5,7 +5,6 @@ import {
   Body,
   Patch,
   Param,
-  Delete,
   Query,
   HttpStatus,
   ParseIntPipe,
@@ -30,6 +29,7 @@ import {
   ApiStandardResponse,
 } from 'src/shared/decorators/api-standard-response.decorator'
 import { ApiPaginatedRes } from 'src/shared/dtos/res/api-response.dto'
+import { FullPageDto } from './dtos/res/full-page.dto'
 
 @ApiTags('Pages')
 @Controller('pages')
@@ -106,7 +106,7 @@ export class PagesController {
     description: 'ID de la página',
     example: 1,
   })
-  @ApiStandardResponse(PageDto)
+  @ApiStandardResponse(FullPageDto)
   @ApiResponse({ status: 401, description: 'No autorizado' })
   @ApiResponse({ status: 404, description: 'Página no encontrada' })
   @ApiResponse({
@@ -116,7 +116,7 @@ export class PagesController {
   findOne(
     @Param('id', ParseIntPipe) id: number,
     @GetUser() user: User,
-  ): Promise<PageDto> {
+  ): Promise<FullPageDto> {
     return this.pagesService.findOne(id, user)
   }
 
@@ -148,30 +148,5 @@ export class PagesController {
     @GetUser() user: User,
   ): Promise<PageDto> {
     return this.pagesService.update(id, updatePageDto, user)
-  }
-
-  @Delete(':id')
-  @ApiOperation({
-    summary: 'Eliminar una página',
-    description: 'Solo el profesor propietario puede eliminar la página',
-  })
-  @ApiParam({
-    name: 'id',
-    description: 'ID de la página',
-    example: 1,
-  })
-  @ApiResponse({ status: 204, description: 'Página eliminada exitosamente' })
-  @ApiResponse({ status: 401, description: 'No autorizado' })
-  @ApiResponse({ status: 404, description: 'Página no encontrada' })
-  @ApiResponse({
-    status: 403,
-    description: 'Solo el profesor propietario puede eliminar',
-  })
-  @JwtAuth(Role.TEACHER)
-  remove(
-    @Param('id', ParseIntPipe) id: number,
-    @GetUser() user: User,
-  ): Promise<void> {
-    return this.pagesService.remove(id, user)
   }
 }

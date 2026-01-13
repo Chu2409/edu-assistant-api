@@ -1,6 +1,9 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger'
+import { NoteDto } from 'src/features/pages/notes/dtos/res/note.dto'
+import { PageFeedbackDto } from 'src/features/pages/page-feedbacks/dtos/res/page-feedback.dto'
+import { StudentQuestionDto } from 'src/features/pages/student-questions/dtos/res/student-question.dto'
 
-export class PageDto {
+export class FullPageDto {
   @ApiProperty({
     description: 'ID de la página',
     example: 1,
@@ -76,4 +79,24 @@ export class PageDto {
     example: '2024-01-02T00:00:00.000Z',
   })
   updatedAt: Date
+
+  @ApiProperty({
+    description: 'Preguntas de los estudiantes',
+    type: [StudentQuestionDto],
+  })
+  studentQuestions: StudentQuestionDto[]
+
+  @ApiPropertyOptional({
+    description: 'Reseñas de la página',
+    type: [PageFeedbackDto],
+    nullable: true,
+  })
+  pageFeedbacks: PageFeedbackDto[] | null
+
+  @ApiPropertyOptional({
+    description: 'Notas de la página',
+    type: [NoteDto],
+    nullable: true,
+  })
+  notes: NoteDto[] | null
 }

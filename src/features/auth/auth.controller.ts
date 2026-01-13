@@ -1,4 +1,4 @@
-import { Controller, Get, Res } from '@nestjs/common'
+import { Controller, Get, HttpStatus, Res } from '@nestjs/common'
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger'
 import type { Response } from 'express'
 import { AuthService } from './auth.service'
@@ -7,6 +7,8 @@ import { CustomConfigService } from 'src/core/config/config.service'
 import { GetUser } from './decorators/get-user.decorator'
 import { MicrosoftAuth } from './decorators/microsoft-auth.decorator'
 import { JwtAuth } from './decorators/jwt-auth.decorator'
+import { ApiStandardResponse } from 'src/shared/decorators/api-standard-response.decorator'
+import { UserDto } from '../users/dtos/res/user.dto'
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -32,15 +34,9 @@ export class AuthController {
   @Get('profile')
   @JwtAuth()
   @ApiOperation({ summary: 'Obtener perfil del usuario autenticado' })
-  @ApiResponse({
-    status: 200,
-    description: 'Perfil del usuario obtenido exitosamente',
-  })
+  @ApiStandardResponse(UserDto)
   @ApiResponse({ status: 401, description: 'No autorizado' })
   getProfile(@GetUser() user: User) {
-    return {
-      message: 'Perfil del usuario autenticado',
-      user,
-    }
+    return user
   }
 }

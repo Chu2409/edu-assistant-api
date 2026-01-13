@@ -6,6 +6,7 @@ import {
 import { ModuleDto } from '../dtos/res/module.dto'
 import { AiConfigurationDto } from '../../ai-configurations/dtos/res/ai-configuration.dto'
 import { ModulePagesDto } from '../dtos/res/module-pages.dto'
+import { PagesMapper } from 'src/features/pages/main/mappers/pages.mapper'
 
 export class ModulesMapper {
   static mapToDto(
@@ -45,7 +46,7 @@ export class ModulesMapper {
   static mapToModulePagesDto(
     module: Module & {
       aiConfiguration?: AiConfiguration | null
-      pages?: Page[]
+      pages: Page[]
     },
   ): ModulePagesDto {
     return {
@@ -62,6 +63,7 @@ export class ModulesMapper {
       aiConfiguration: module.aiConfiguration
         ? this.mapAiConfigurationToDto(module.aiConfiguration)
         : null,
+      pages: module.pages.map((page) => PagesMapper.mapToDto(page)),
     }
   }
 }

@@ -2,13 +2,13 @@ import {
   Injectable,
   NotFoundException,
   ForbiddenException,
-  ConflictException,
 } from '@nestjs/common'
 import { DBService } from 'src/core/database/database.service'
 import { CreatePageDto } from './dtos/req/create-page.dto'
 import { UpdatePageDto } from './dtos/req/update-page.dto'
 import { PageDto } from './dtos/res/page.dto'
 import {
+  Enrollment,
   Role,
   type Prisma,
   type User,
@@ -16,6 +16,7 @@ import {
 import { BaseParamsReqDto } from 'src/shared/dtos/req/base-params.dto'
 import { PagesMapper } from './mappers/pages.mapper'
 import { ApiPaginatedRes } from 'src/shared/dtos/res/api-response.dto'
+import { FullPageDto } from './dtos/res/full-page.dto'
 
 @Injectable()
 export class PagesService {
@@ -32,7 +33,6 @@ export class PagesService {
         `Módulo con ID ${createPageDto.moduleId} no encontrado`,
       )
     }
-
     // Solo el profesor propietario puede crear páginas
     if (module.teacherId !== user.id) {
       throw new ForbiddenException(
@@ -40,21 +40,14 @@ export class PagesService {
       )
     }
 
-    // Verificar que no existe otra página con el mismo orderIndex en el módulo
-    const existingPage = await this.dbService.page.findUnique({
-      where: {
-        moduleId_orderIndex: {
-          moduleId: createPageDto.moduleId,
-          orderIndex: createPageDto.orderIndex,
-        },
-      },
-    })
-
-    if (existingPage) {
-      throw new ConflictException(
-        `Ya existe una página con el índice de orden ${createPageDto.orderIndex} en este módulo`,
-      )
+    if (!module.isActive) {
+      throw new ForbiddenException('El módulo no está activo')
     }
+
+    const lastPage = await this.dbService.page.findFirst({
+      where: { moduleId: createPageDto.moduleId },
+      orderBy: { orderIndex: 'desc' },
+    })
 
     const page = await this.dbService.page.create({
       data: {
@@ -62,9 +55,9 @@ export class PagesService {
         title: createPageDto.title,
         content: createPageDto.content,
         rawContent: createPageDto.rawContent,
-        orderIndex: createPageDto.orderIndex,
         keywords: createPageDto.keywords ?? [],
         isPublished: createPageDto.isPublished ?? false,
+        orderIndex: lastPage?.orderIndex ? lastPage.orderIndex + 1 : 1,
       },
     })
 
@@ -139,13 +132,19 @@ export class PagesService {
     }
   }
 
-  async findOne(id: number, user: User): Promise<PageDto> {
+  private async findOneToTeacher(id: number, user: User) {
     const page = await this.dbService.page.findUnique({
       where: { id },
       include: {
-        module: {
+        pageFeedbacks: {
           include: {
-            enrollments: true,
+            user: true,
+          },
+        },
+        module: true,
+        studentQuestions: {
+          include: {
+            user: true,
           },
         },
       },
@@ -155,27 +154,66 @@ export class PagesService {
       throw new NotFoundException(`Página con ID ${id} no encontrada`)
     }
 
-    // Verificar permisos: solo el profesor, módulos públicos o estudiantes inscritos
+    if (page.module.teacherId !== user.id) {
+      throw new ForbiddenException('No tienes permisos para ver esta página')
+    }
+
+    return page
+  }
+
+  private async findOneToStudent(id: number, user: User) {
+    const page = await this.dbService.page.findUnique({
+      where: { id },
+      include: {
+        module: {
+          include: {
+            enrollments: true,
+          },
+        },
+        studentQuestions: {
+          include: {
+            user: true,
+          },
+          where: {
+            OR: [{ isPublic: true }, { userId: user.id }],
+          },
+        },
+        notes: {
+          where: {
+            userId: user.id,
+          },
+        },
+      },
+    })
+
+    if (!page) {
+      throw new NotFoundException(`Página con ID ${id} no encontrada`)
+    }
+
     if (
-      page.module.teacherId !== user.id &&
       !page.module.isPublic &&
       !page.module.enrollments.some(
-        (enrollment) => enrollment.userId === user.id,
+        (enrollment: Enrollment) => enrollment.userId === user.id,
       )
     ) {
       throw new ForbiddenException('No tienes permisos para ver esta página')
     }
 
-    // Si es estudiante y la página no está publicada, solo el profesor puede verla
-    if (
-      user.role === Role.STUDENT &&
-      !page.isPublished &&
-      page.module.teacherId !== user.id
-    ) {
+    if (!page.isPublished) {
       throw new ForbiddenException('Esta página no está publicada aún')
     }
 
-    return PagesMapper.mapToDto(page)
+    return page
+  }
+
+  async findOne(id: number, user: User): Promise<FullPageDto> {
+    if (user.role === Role.STUDENT) {
+      const page = await this.findOneToStudent(id, user)
+      return PagesMapper.mapToFullPageDto(page)
+    }
+
+    const page = await this.findOneToTeacher(id, user)
+    return PagesMapper.mapToFullPageDto(page)
   }
 
   async update(
@@ -202,27 +240,6 @@ export class PagesService {
       )
     }
 
-    // Si se está actualizando el orderIndex, verificar que no existe conflicto
-    if (
-      updatePageDto.orderIndex !== undefined &&
-      updatePageDto.orderIndex !== existingPage.orderIndex
-    ) {
-      const conflictingPage = await this.dbService.page.findUnique({
-        where: {
-          moduleId_orderIndex: {
-            moduleId: existingPage.moduleId,
-            orderIndex: updatePageDto.orderIndex,
-          },
-        },
-      })
-
-      if (conflictingPage && conflictingPage.id !== id) {
-        throw new ConflictException(
-          `Ya existe una página con el índice de orden ${updatePageDto.orderIndex} en este módulo`,
-        )
-      }
-    }
-
     const page = await this.dbService.page.update({
       where: { id },
       data: {
@@ -235,9 +252,6 @@ export class PagesService {
         ...(updatePageDto.rawContent !== undefined && {
           rawContent: updatePageDto.rawContent,
         }),
-        ...(updatePageDto.orderIndex !== undefined && {
-          orderIndex: updatePageDto.orderIndex,
-        }),
         ...(updatePageDto.keywords !== undefined && {
           keywords: updatePageDto.keywords,
         }),
@@ -248,30 +262,5 @@ export class PagesService {
     })
 
     return PagesMapper.mapToDto(page)
-  }
-
-  async remove(id: number, user: User): Promise<void> {
-    // Verificar que la página existe
-    const existingPage = await this.dbService.page.findUnique({
-      where: { id },
-      include: {
-        module: true,
-      },
-    })
-
-    if (!existingPage) {
-      throw new NotFoundException(`Página con ID ${id} no encontrada`)
-    }
-
-    // Solo el profesor propietario puede eliminar páginas
-    if (existingPage.module.teacherId !== user.id) {
-      throw new ForbiddenException(
-        'Solo el profesor propietario puede eliminar esta página',
-      )
-    }
-
-    await this.dbService.page.delete({
-      where: { id },
-    })
   }
 }

@@ -235,7 +235,7 @@ export type PageGroupByOutputType = {
   title: string
   content: string
   rawContent: string | null
-  orderIndex: number
+  orderIndex: number | null
   keywords: string[]
   isPublished: boolean
   lastProcessedAt: Date | null
@@ -273,7 +273,7 @@ export type PageWhereInput = {
   title?: Prisma.StringFilter<"Page"> | string
   content?: Prisma.StringFilter<"Page"> | string
   rawContent?: Prisma.StringNullableFilter<"Page"> | string | null
-  orderIndex?: Prisma.IntFilter<"Page"> | number
+  orderIndex?: Prisma.IntNullableFilter<"Page"> | number | null
   keywords?: Prisma.StringNullableListFilter<"Page">
   isPublished?: Prisma.BoolFilter<"Page"> | boolean
   lastProcessedAt?: Prisma.DateTimeNullableFilter<"Page"> | Date | string | null
@@ -300,7 +300,7 @@ export type PageOrderByWithRelationInput = {
   title?: Prisma.SortOrder
   content?: Prisma.SortOrder
   rawContent?: Prisma.SortOrderInput | Prisma.SortOrder
-  orderIndex?: Prisma.SortOrder
+  orderIndex?: Prisma.SortOrderInput | Prisma.SortOrder
   keywords?: Prisma.SortOrder
   isPublished?: Prisma.SortOrder
   lastProcessedAt?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -331,7 +331,7 @@ export type PageWhereUniqueInput = Prisma.AtLeast<{
   title?: Prisma.StringFilter<"Page"> | string
   content?: Prisma.StringFilter<"Page"> | string
   rawContent?: Prisma.StringNullableFilter<"Page"> | string | null
-  orderIndex?: Prisma.IntFilter<"Page"> | number
+  orderIndex?: Prisma.IntNullableFilter<"Page"> | number | null
   keywords?: Prisma.StringNullableListFilter<"Page">
   isPublished?: Prisma.BoolFilter<"Page"> | boolean
   lastProcessedAt?: Prisma.DateTimeNullableFilter<"Page"> | Date | string | null
@@ -358,7 +358,7 @@ export type PageOrderByWithAggregationInput = {
   title?: Prisma.SortOrder
   content?: Prisma.SortOrder
   rawContent?: Prisma.SortOrderInput | Prisma.SortOrder
-  orderIndex?: Prisma.SortOrder
+  orderIndex?: Prisma.SortOrderInput | Prisma.SortOrder
   keywords?: Prisma.SortOrder
   isPublished?: Prisma.SortOrder
   lastProcessedAt?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -381,7 +381,7 @@ export type PageScalarWhereWithAggregatesInput = {
   title?: Prisma.StringWithAggregatesFilter<"Page"> | string
   content?: Prisma.StringWithAggregatesFilter<"Page"> | string
   rawContent?: Prisma.StringNullableWithAggregatesFilter<"Page"> | string | null
-  orderIndex?: Prisma.IntWithAggregatesFilter<"Page"> | number
+  orderIndex?: Prisma.IntNullableWithAggregatesFilter<"Page"> | number | null
   keywords?: Prisma.StringNullableListFilter<"Page">
   isPublished?: Prisma.BoolWithAggregatesFilter<"Page"> | boolean
   lastProcessedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Page"> | Date | string | null
@@ -394,7 +394,7 @@ export type PageCreateInput = {
   title: string
   content: string
   rawContent?: string | null
-  orderIndex: number
+  orderIndex?: number | null
   keywords?: Prisma.PageCreatekeywordsInput | string[]
   isPublished?: boolean
   lastProcessedAt?: Date | string | null
@@ -421,7 +421,7 @@ export type PageUncheckedCreateInput = {
   title: string
   content: string
   rawContent?: string | null
-  orderIndex: number
+  orderIndex?: number | null
   keywords?: Prisma.PageCreatekeywordsInput | string[]
   isPublished?: boolean
   lastProcessedAt?: Date | string | null
@@ -445,7 +445,7 @@ export type PageUpdateInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
   rawContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
+  orderIndex?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   keywords?: Prisma.PageUpdatekeywordsInput | string[]
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastProcessedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -472,7 +472,7 @@ export type PageUncheckedUpdateInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
   rawContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
+  orderIndex?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   keywords?: Prisma.PageUpdatekeywordsInput | string[]
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastProcessedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -498,7 +498,7 @@ export type PageCreateManyInput = {
   title: string
   content: string
   rawContent?: string | null
-  orderIndex: number
+  orderIndex?: number | null
   keywords?: Prisma.PageCreatekeywordsInput | string[]
   isPublished?: boolean
   lastProcessedAt?: Date | string | null
@@ -511,7 +511,7 @@ export type PageUpdateManyMutationInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
   rawContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
+  orderIndex?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   keywords?: Prisma.PageUpdatekeywordsInput | string[]
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastProcessedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -526,7 +526,7 @@ export type PageUncheckedUpdateManyInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
   rawContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
+  orderIndex?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   keywords?: Prisma.PageUpdatekeywordsInput | string[]
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastProcessedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -669,6 +669,14 @@ export type PageUncheckedUpdateManyWithoutModuleNestedInput = {
 
 export type PageCreatekeywordsInput = {
   set: string[]
+}
+
+export type NullableIntFieldUpdateOperationsInput = {
+  set?: number | null
+  increment?: number
+  decrement?: number
+  multiply?: number
+  divide?: number
 }
 
 export type PageUpdatekeywordsInput = {
@@ -844,7 +852,7 @@ export type PageCreateWithoutModuleInput = {
   title: string
   content: string
   rawContent?: string | null
-  orderIndex: number
+  orderIndex?: number | null
   keywords?: Prisma.PageCreatekeywordsInput | string[]
   isPublished?: boolean
   lastProcessedAt?: Date | string | null
@@ -869,7 +877,7 @@ export type PageUncheckedCreateWithoutModuleInput = {
   title: string
   content: string
   rawContent?: string | null
-  orderIndex: number
+  orderIndex?: number | null
   keywords?: Prisma.PageCreatekeywordsInput | string[]
   isPublished?: boolean
   lastProcessedAt?: Date | string | null
@@ -924,7 +932,7 @@ export type PageScalarWhereInput = {
   title?: Prisma.StringFilter<"Page"> | string
   content?: Prisma.StringFilter<"Page"> | string
   rawContent?: Prisma.StringNullableFilter<"Page"> | string | null
-  orderIndex?: Prisma.IntFilter<"Page"> | number
+  orderIndex?: Prisma.IntNullableFilter<"Page"> | number | null
   keywords?: Prisma.StringNullableListFilter<"Page">
   isPublished?: Prisma.BoolFilter<"Page"> | boolean
   lastProcessedAt?: Prisma.DateTimeNullableFilter<"Page"> | Date | string | null
@@ -937,7 +945,7 @@ export type PageCreateWithoutPageViewsInput = {
   title: string
   content: string
   rawContent?: string | null
-  orderIndex: number
+  orderIndex?: number | null
   keywords?: Prisma.PageCreatekeywordsInput | string[]
   isPublished?: boolean
   lastProcessedAt?: Date | string | null
@@ -963,7 +971,7 @@ export type PageUncheckedCreateWithoutPageViewsInput = {
   title: string
   content: string
   rawContent?: string | null
-  orderIndex: number
+  orderIndex?: number | null
   keywords?: Prisma.PageCreatekeywordsInput | string[]
   isPublished?: boolean
   lastProcessedAt?: Date | string | null
@@ -1002,7 +1010,7 @@ export type PageUpdateWithoutPageViewsInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
   rawContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
+  orderIndex?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   keywords?: Prisma.PageUpdatekeywordsInput | string[]
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastProcessedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1028,7 +1036,7 @@ export type PageUncheckedUpdateWithoutPageViewsInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
   rawContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
+  orderIndex?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   keywords?: Prisma.PageUpdatekeywordsInput | string[]
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastProcessedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1051,7 +1059,7 @@ export type PageCreateWithoutRelatedPagesFromInput = {
   title: string
   content: string
   rawContent?: string | null
-  orderIndex: number
+  orderIndex?: number | null
   keywords?: Prisma.PageCreatekeywordsInput | string[]
   isPublished?: boolean
   lastProcessedAt?: Date | string | null
@@ -1077,7 +1085,7 @@ export type PageUncheckedCreateWithoutRelatedPagesFromInput = {
   title: string
   content: string
   rawContent?: string | null
-  orderIndex: number
+  orderIndex?: number | null
   keywords?: Prisma.PageCreatekeywordsInput | string[]
   isPublished?: boolean
   lastProcessedAt?: Date | string | null
@@ -1105,7 +1113,7 @@ export type PageCreateWithoutRelatedPagesToInput = {
   title: string
   content: string
   rawContent?: string | null
-  orderIndex: number
+  orderIndex?: number | null
   keywords?: Prisma.PageCreatekeywordsInput | string[]
   isPublished?: boolean
   lastProcessedAt?: Date | string | null
@@ -1131,7 +1139,7 @@ export type PageUncheckedCreateWithoutRelatedPagesToInput = {
   title: string
   content: string
   rawContent?: string | null
-  orderIndex: number
+  orderIndex?: number | null
   keywords?: Prisma.PageCreatekeywordsInput | string[]
   isPublished?: boolean
   lastProcessedAt?: Date | string | null
@@ -1170,7 +1178,7 @@ export type PageUpdateWithoutRelatedPagesFromInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
   rawContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
+  orderIndex?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   keywords?: Prisma.PageUpdatekeywordsInput | string[]
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastProcessedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1196,7 +1204,7 @@ export type PageUncheckedUpdateWithoutRelatedPagesFromInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
   rawContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
+  orderIndex?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   keywords?: Prisma.PageUpdatekeywordsInput | string[]
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastProcessedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1230,7 +1238,7 @@ export type PageUpdateWithoutRelatedPagesToInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
   rawContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
+  orderIndex?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   keywords?: Prisma.PageUpdatekeywordsInput | string[]
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastProcessedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1256,7 +1264,7 @@ export type PageUncheckedUpdateWithoutRelatedPagesToInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
   rawContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
+  orderIndex?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   keywords?: Prisma.PageUpdatekeywordsInput | string[]
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastProcessedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1279,7 +1287,7 @@ export type PageCreateWithoutConceptMentionsInput = {
   title: string
   content: string
   rawContent?: string | null
-  orderIndex: number
+  orderIndex?: number | null
   keywords?: Prisma.PageCreatekeywordsInput | string[]
   isPublished?: boolean
   lastProcessedAt?: Date | string | null
@@ -1305,7 +1313,7 @@ export type PageUncheckedCreateWithoutConceptMentionsInput = {
   title: string
   content: string
   rawContent?: string | null
-  orderIndex: number
+  orderIndex?: number | null
   keywords?: Prisma.PageCreatekeywordsInput | string[]
   isPublished?: boolean
   lastProcessedAt?: Date | string | null
@@ -1344,7 +1352,7 @@ export type PageUpdateWithoutConceptMentionsInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
   rawContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
+  orderIndex?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   keywords?: Prisma.PageUpdatekeywordsInput | string[]
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastProcessedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1370,7 +1378,7 @@ export type PageUncheckedUpdateWithoutConceptMentionsInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
   rawContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
+  orderIndex?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   keywords?: Prisma.PageUpdatekeywordsInput | string[]
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastProcessedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1393,7 +1401,7 @@ export type PageCreateWithoutActivitiesInput = {
   title: string
   content: string
   rawContent?: string | null
-  orderIndex: number
+  orderIndex?: number | null
   keywords?: Prisma.PageCreatekeywordsInput | string[]
   isPublished?: boolean
   lastProcessedAt?: Date | string | null
@@ -1419,7 +1427,7 @@ export type PageUncheckedCreateWithoutActivitiesInput = {
   title: string
   content: string
   rawContent?: string | null
-  orderIndex: number
+  orderIndex?: number | null
   keywords?: Prisma.PageCreatekeywordsInput | string[]
   isPublished?: boolean
   lastProcessedAt?: Date | string | null
@@ -1458,7 +1466,7 @@ export type PageUpdateWithoutActivitiesInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
   rawContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
+  orderIndex?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   keywords?: Prisma.PageUpdatekeywordsInput | string[]
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastProcessedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1484,7 +1492,7 @@ export type PageUncheckedUpdateWithoutActivitiesInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
   rawContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
+  orderIndex?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   keywords?: Prisma.PageUpdatekeywordsInput | string[]
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastProcessedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1507,7 +1515,7 @@ export type PageCreateWithoutPromptFeedbacksInput = {
   title: string
   content: string
   rawContent?: string | null
-  orderIndex: number
+  orderIndex?: number | null
   keywords?: Prisma.PageCreatekeywordsInput | string[]
   isPublished?: boolean
   lastProcessedAt?: Date | string | null
@@ -1533,7 +1541,7 @@ export type PageUncheckedCreateWithoutPromptFeedbacksInput = {
   title: string
   content: string
   rawContent?: string | null
-  orderIndex: number
+  orderIndex?: number | null
   keywords?: Prisma.PageCreatekeywordsInput | string[]
   isPublished?: boolean
   lastProcessedAt?: Date | string | null
@@ -1572,7 +1580,7 @@ export type PageUpdateWithoutPromptFeedbacksInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
   rawContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
+  orderIndex?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   keywords?: Prisma.PageUpdatekeywordsInput | string[]
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastProcessedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1598,7 +1606,7 @@ export type PageUncheckedUpdateWithoutPromptFeedbacksInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
   rawContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
+  orderIndex?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   keywords?: Prisma.PageUpdatekeywordsInput | string[]
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastProcessedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1621,7 +1629,7 @@ export type PageCreateWithoutPageFeedbacksInput = {
   title: string
   content: string
   rawContent?: string | null
-  orderIndex: number
+  orderIndex?: number | null
   keywords?: Prisma.PageCreatekeywordsInput | string[]
   isPublished?: boolean
   lastProcessedAt?: Date | string | null
@@ -1647,7 +1655,7 @@ export type PageUncheckedCreateWithoutPageFeedbacksInput = {
   title: string
   content: string
   rawContent?: string | null
-  orderIndex: number
+  orderIndex?: number | null
   keywords?: Prisma.PageCreatekeywordsInput | string[]
   isPublished?: boolean
   lastProcessedAt?: Date | string | null
@@ -1686,7 +1694,7 @@ export type PageUpdateWithoutPageFeedbacksInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
   rawContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
+  orderIndex?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   keywords?: Prisma.PageUpdatekeywordsInput | string[]
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastProcessedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1712,7 +1720,7 @@ export type PageUncheckedUpdateWithoutPageFeedbacksInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
   rawContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
+  orderIndex?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   keywords?: Prisma.PageUpdatekeywordsInput | string[]
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastProcessedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1735,7 +1743,7 @@ export type PageCreateWithoutNotesInput = {
   title: string
   content: string
   rawContent?: string | null
-  orderIndex: number
+  orderIndex?: number | null
   keywords?: Prisma.PageCreatekeywordsInput | string[]
   isPublished?: boolean
   lastProcessedAt?: Date | string | null
@@ -1761,7 +1769,7 @@ export type PageUncheckedCreateWithoutNotesInput = {
   title: string
   content: string
   rawContent?: string | null
-  orderIndex: number
+  orderIndex?: number | null
   keywords?: Prisma.PageCreatekeywordsInput | string[]
   isPublished?: boolean
   lastProcessedAt?: Date | string | null
@@ -1800,7 +1808,7 @@ export type PageUpdateWithoutNotesInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
   rawContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
+  orderIndex?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   keywords?: Prisma.PageUpdatekeywordsInput | string[]
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastProcessedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1826,7 +1834,7 @@ export type PageUncheckedUpdateWithoutNotesInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
   rawContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
+  orderIndex?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   keywords?: Prisma.PageUpdatekeywordsInput | string[]
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastProcessedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1849,7 +1857,7 @@ export type PageCreateWithoutStudentQuestionsInput = {
   title: string
   content: string
   rawContent?: string | null
-  orderIndex: number
+  orderIndex?: number | null
   keywords?: Prisma.PageCreatekeywordsInput | string[]
   isPublished?: boolean
   lastProcessedAt?: Date | string | null
@@ -1875,7 +1883,7 @@ export type PageUncheckedCreateWithoutStudentQuestionsInput = {
   title: string
   content: string
   rawContent?: string | null
-  orderIndex: number
+  orderIndex?: number | null
   keywords?: Prisma.PageCreatekeywordsInput | string[]
   isPublished?: boolean
   lastProcessedAt?: Date | string | null
@@ -1914,7 +1922,7 @@ export type PageUpdateWithoutStudentQuestionsInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
   rawContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
+  orderIndex?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   keywords?: Prisma.PageUpdatekeywordsInput | string[]
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastProcessedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1940,7 +1948,7 @@ export type PageUncheckedUpdateWithoutStudentQuestionsInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
   rawContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
+  orderIndex?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   keywords?: Prisma.PageUpdatekeywordsInput | string[]
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastProcessedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1963,7 +1971,7 @@ export type PageCreateWithoutPodcastsInput = {
   title: string
   content: string
   rawContent?: string | null
-  orderIndex: number
+  orderIndex?: number | null
   keywords?: Prisma.PageCreatekeywordsInput | string[]
   isPublished?: boolean
   lastProcessedAt?: Date | string | null
@@ -1989,7 +1997,7 @@ export type PageUncheckedCreateWithoutPodcastsInput = {
   title: string
   content: string
   rawContent?: string | null
-  orderIndex: number
+  orderIndex?: number | null
   keywords?: Prisma.PageCreatekeywordsInput | string[]
   isPublished?: boolean
   lastProcessedAt?: Date | string | null
@@ -2028,7 +2036,7 @@ export type PageUpdateWithoutPodcastsInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
   rawContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
+  orderIndex?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   keywords?: Prisma.PageUpdatekeywordsInput | string[]
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastProcessedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2054,7 +2062,7 @@ export type PageUncheckedUpdateWithoutPodcastsInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
   rawContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
+  orderIndex?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   keywords?: Prisma.PageUpdatekeywordsInput | string[]
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastProcessedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2077,7 +2085,7 @@ export type PageCreateWithoutMediaResourcesInput = {
   title: string
   content: string
   rawContent?: string | null
-  orderIndex: number
+  orderIndex?: number | null
   keywords?: Prisma.PageCreatekeywordsInput | string[]
   isPublished?: boolean
   lastProcessedAt?: Date | string | null
@@ -2103,7 +2111,7 @@ export type PageUncheckedCreateWithoutMediaResourcesInput = {
   title: string
   content: string
   rawContent?: string | null
-  orderIndex: number
+  orderIndex?: number | null
   keywords?: Prisma.PageCreatekeywordsInput | string[]
   isPublished?: boolean
   lastProcessedAt?: Date | string | null
@@ -2142,7 +2150,7 @@ export type PageUpdateWithoutMediaResourcesInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
   rawContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
+  orderIndex?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   keywords?: Prisma.PageUpdatekeywordsInput | string[]
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastProcessedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2168,7 +2176,7 @@ export type PageUncheckedUpdateWithoutMediaResourcesInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
   rawContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
+  orderIndex?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   keywords?: Prisma.PageUpdatekeywordsInput | string[]
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastProcessedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2192,7 +2200,7 @@ export type PageCreateManyModuleInput = {
   title: string
   content: string
   rawContent?: string | null
-  orderIndex: number
+  orderIndex?: number | null
   keywords?: Prisma.PageCreatekeywordsInput | string[]
   isPublished?: boolean
   lastProcessedAt?: Date | string | null
@@ -2205,7 +2213,7 @@ export type PageUpdateWithoutModuleInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
   rawContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
+  orderIndex?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   keywords?: Prisma.PageUpdatekeywordsInput | string[]
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastProcessedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2230,7 +2238,7 @@ export type PageUncheckedUpdateWithoutModuleInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
   rawContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
+  orderIndex?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   keywords?: Prisma.PageUpdatekeywordsInput | string[]
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastProcessedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2255,7 +2263,7 @@ export type PageUncheckedUpdateManyWithoutModuleInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
   rawContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
+  orderIndex?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   keywords?: Prisma.PageUpdatekeywordsInput | string[]
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastProcessedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2505,7 +2513,7 @@ export type $PagePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     title: string
     content: string
     rawContent: string | null
-    orderIndex: number
+    orderIndex: number | null
     keywords: string[]
     isPublished: boolean
     lastProcessedAt: Date | null

@@ -48,15 +48,6 @@ export class CreatePageDto {
   @IsString()
   rawContent?: string
 
-  @ApiProperty({
-    description: 'Índice de orden de la página dentro del módulo',
-    example: 1,
-  })
-  @Type(() => Number)
-  @IsInt()
-  @Min(1)
-  orderIndex: number
-
   @ApiPropertyOptional({
     description: 'Palabras clave para búsquedas',
     example: ['programación', 'introducción', 'básicos'],
