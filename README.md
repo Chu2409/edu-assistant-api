@@ -29,16 +29,6 @@ pnpm install
 cp .env.example .env
 ```
 
-Edita el archivo `.env` y configura las siguientes variables de entorno según tu entorno local:
-
-- `PORT`: Puerto en el que correrá la aplicación (por defecto: 3000)
-- `DB_URL`: URL de conexión a la base de datos PostgreSQL
-- `JWT_SECRET`: Secret key para la firma de tokens JWT
-- `DB_PORT`: Puerto de PostgreSQL (usado por Docker Compose)
-- `DB_USER`: Usuario de PostgreSQL
-- `DB_PASSWORD`: Contraseña de PostgreSQL
-- `DB_NAME`: Nombre de la base de datos
-
 ## Base de Datos
 
 ### Levantar la base de datos con Docker

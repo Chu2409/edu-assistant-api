@@ -19,13 +19,19 @@ const user2 = (): Prisma.UserCreateInput => ({
 })
 
 export const createUser1 = async (prisma: PrismaClient) => {
-  return await prisma.user.create({
-    data: user1(),
+  const user = user1()
+  return await prisma.user.upsert({
+    where: { email: user.email },
+    update: user,
+    create: user,
   })
 }
 
 export const createUser2 = async (prisma: PrismaClient) => {
-  return await prisma.user.create({
-    data: user2(),
+  const user = user2()
+  return await prisma.user.upsert({
+    where: { email: user.email },
+    update: user,
+    create: user,
   })
 }
