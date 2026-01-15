@@ -6,11 +6,6 @@ import {
 import { DBService } from 'src/core/database/database.service'
 import { HtmlProcessorService } from './html-processor.service'
 import { GenerateContentDto } from './dtos/req/generate-content.dto'
-import {
-  GenerateContentResponseDto,
-  GenerateContentStatsDto,
-} from './dtos/res/generate-content-response.dto'
-import { PagesMapper } from '../main/mappers/pages.mapper'
 import { type User } from 'src/core/database/generated/client'
 import { AIService } from 'src/providers/ai/ai.service'
 
@@ -22,12 +17,7 @@ export class ContentGenerationService {
     private readonly htmlProcessor: HtmlProcessorService,
   ) {}
 
-  async generateContent(
-    dto: GenerateContentDto,
-    user: User,
-  ): Promise<GenerateContentResponseDto> {
-    const startTime = Date.now()
-
+  async generateContent(dto: GenerateContentDto, user: User) {
     // 1. Obtener AiConfiguration del módulo
     const module = await this.dbService.module.findUnique({
       where: { id: dto.moduleId },
@@ -48,15 +38,10 @@ export class ContentGenerationService {
     }
 
     const aiConfig = module.aiConfiguration
-    if (!aiConfig) {
-      throw new NotFoundException(
-        `No se encontró configuración de IA para el módulo ${dto.moduleId}`,
-      )
-    }
 
     // 2. Construir prompt completo
-    const language = aiConfig.language || 'es'
-    const moduleContext = aiConfig.contextPrompt || ''
+    const language = aiConfig?.language || 'es'
+    const moduleContext = aiConfig?.contextPrompt || ''
     const prompt = this.buildPrompt(
       dto.topic,
       language,
@@ -67,107 +52,7 @@ export class ContentGenerationService {
     // 3. MOCK: Llamar AIService.generateContent() (devuelve HTML fake)
     const rawHtml = await this.aiService.generateContent(fullPrompt)
 
-    // 4. MOCK: Llamar AIService.extractConcepts() (devuelve conceptos fake)
-    const concepts = await this.aiService.extractConcepts(rawHtml)
-
-    // 5. Incrustar conceptos en HTML (HtmlProcessorService)
-    const conceptsToEmbed = concepts.map((concept, index) => ({
-      term: concept.term,
-      definition: concept.definition,
-      htmlId: `concept-c${Date.now()}-${index}`,
-    }))
-
-    const processedHtml = this.htmlProcessor.embedConcepts(
-      rawHtml,
-      conceptsToEmbed,
-    )
-
-    // 6. Generar embedding MOCK (vector fake)
-    const embedding = await this.aiService.generateEmbedding(processedHtml)
-
-    // 7. Extraer keywords simples (sin IA)
-    const keywords = this.extractKeywords(dto.topic, rawHtml)
-
-    // 8. Obtener el último orderIndex para la nueva página
-    const lastPage = await this.dbService.page.findFirst({
-      where: { moduleId: dto.moduleId },
-      orderBy: { orderIndex: 'desc' },
-    })
-
-    const orderIndex = lastPage?.orderIndex ? lastPage.orderIndex + 1 : 1
-
-    // 9. Crear Page con todo procesado
-    // Nota: embedding se omite por ahora ya que Prisma no maneja directamente el tipo vector
-    // En producción, se debería usar una consulta SQL raw para insertar el embedding
-    const page = await this.dbService.page.create({
-      data: {
-        moduleId: dto.moduleId,
-        title: dto.topic,
-        content: processedHtml,
-        rawContent: rawHtml,
-        orderIndex,
-        keywords,
-        isPublished: false,
-        lastProcessedAt: new Date(),
-        processingVersion: 1,
-      },
-    })
-
-    // MOCK: Actualizar embedding usando SQL raw (solo para desarrollo)
-    // En producción, esto debería hacerse de manera más robusta
-    if (embedding.length > 0) {
-      await this.dbService.$executeRawUnsafe(
-        'UPDATE pages SET embedding = $1::vector WHERE id = $2',
-        `[${embedding.join(',')}]`,
-        page.id,
-      )
-    }
-
-    // 10. Crear PageConcepts
-    const pageConcepts = await Promise.all(
-      conceptsToEmbed.map((concept) =>
-        this.dbService.pageConcept.create({
-          data: {
-            pageId: page.id,
-            term: concept.term,
-            definition: concept.definition,
-            htmlId: concept.htmlId,
-          },
-        }),
-      ),
-    )
-
-    // 11. Guardar Prompt usado (auditoría)
-    await this.dbService.prompt.create({
-      data: {
-        pageId: page.id,
-        userId: user.id,
-        prompt,
-      },
-    })
-
-    const processingTimeMs = Date.now() - startTime
-
-    // Construir respuesta
-    const stats: GenerateContentStatsDto = {
-      wordsCount: this.countWords(processedHtml),
-      conceptsExtracted: pageConcepts.length,
-      processingTimeMs,
-    }
-
-    return {
-      page: PagesMapper.mapToDto(page),
-      concepts: pageConcepts.map((pc) => ({
-        id: pc.id,
-        pageId: pc.pageId,
-        term: pc.term,
-        definition: pc.definition,
-        htmlId: pc.htmlId,
-        createdAt: pc.createdAt,
-        updatedAt: pc.updatedAt,
-      })),
-      stats,
-    }
+    return rawHtml
   }
 
   /**

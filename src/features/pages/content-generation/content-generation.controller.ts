@@ -1,8 +1,7 @@
-import { Controller, Post, Body, HttpStatus } from '@nestjs/common'
+import { Controller, Post, Body } from '@nestjs/common'
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger'
 import { ContentGenerationService } from './content-generation.service'
 import { GenerateContentDto } from './dtos/req/generate-content.dto'
-import { GenerateContentResponseDto } from './dtos/res/generate-content-response.dto'
 import { JwtAuth } from 'src/features/auth/decorators/jwt-auth.decorator'
 import { GetUser } from 'src/features/auth/decorators/get-user.decorator'
 import { Role, type User } from 'src/core/database/generated/client'
@@ -22,7 +21,7 @@ export class ContentGenerationController {
     description:
       'Genera contenido educativo usando IA para un módulo. Solo disponible para profesores.',
   })
-  @ApiStandardResponse(GenerateContentResponseDto, HttpStatus.CREATED)
+  @ApiStandardResponse(String)
   @ApiResponse({ status: 401, description: 'No autorizado' })
   @ApiResponse({
     status: 403,
@@ -34,10 +33,10 @@ export class ContentGenerationController {
   })
   @ApiResponse({ status: 400, description: 'Datos inválidos' })
   @JwtAuth(Role.TEACHER)
-  async generateContent(
+  generateContent(
     @Body() generateContentDto: GenerateContentDto,
     @GetUser() user: User,
-  ): Promise<GenerateContentResponseDto> {
+  ) {
     return this.contentGenerationService.generateContent(
       generateContentDto,
       user,

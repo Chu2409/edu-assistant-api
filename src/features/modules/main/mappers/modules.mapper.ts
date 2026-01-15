@@ -37,7 +37,6 @@ export class ModulesMapper {
       moduleId: aiConfig.moduleId,
       language: aiConfig.language,
       contextPrompt: aiConfig.contextPrompt,
-      temperature: aiConfig.temperature,
       createdAt: aiConfig.createdAt,
       updatedAt: aiConfig.updatedAt,
     }

@@ -29,13 +29,11 @@ export type AggregateAiConfiguration = {
 export type AiConfigurationAvgAggregateOutputType = {
   id: number | null
   moduleId: number | null
-  temperature: number | null
 }
 
 export type AiConfigurationSumAggregateOutputType = {
   id: number | null
   moduleId: number | null
-  temperature: number | null
 }
 
 export type AiConfigurationMinAggregateOutputType = {
@@ -43,7 +41,6 @@ export type AiConfigurationMinAggregateOutputType = {
   moduleId: number | null
   language: string | null
   contextPrompt: string | null
-  temperature: number | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -53,7 +50,6 @@ export type AiConfigurationMaxAggregateOutputType = {
   moduleId: number | null
   language: string | null
   contextPrompt: string | null
-  temperature: number | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -63,7 +59,6 @@ export type AiConfigurationCountAggregateOutputType = {
   moduleId: number
   language: number
   contextPrompt: number
-  temperature: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -73,13 +68,11 @@ export type AiConfigurationCountAggregateOutputType = {
 export type AiConfigurationAvgAggregateInputType = {
   id?: true
   moduleId?: true
-  temperature?: true
 }
 
 export type AiConfigurationSumAggregateInputType = {
   id?: true
   moduleId?: true
-  temperature?: true
 }
 
 export type AiConfigurationMinAggregateInputType = {
@@ -87,7 +80,6 @@ export type AiConfigurationMinAggregateInputType = {
   moduleId?: true
   language?: true
   contextPrompt?: true
-  temperature?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -97,7 +89,6 @@ export type AiConfigurationMaxAggregateInputType = {
   moduleId?: true
   language?: true
   contextPrompt?: true
-  temperature?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -107,7 +98,6 @@ export type AiConfigurationCountAggregateInputType = {
   moduleId?: true
   language?: true
   contextPrompt?: true
-  temperature?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -204,7 +194,6 @@ export type AiConfigurationGroupByOutputType = {
   moduleId: number
   language: string
   contextPrompt: string | null
-  temperature: number
   createdAt: Date
   updatedAt: Date
   _count: AiConfigurationCountAggregateOutputType | null
@@ -237,7 +226,6 @@ export type AiConfigurationWhereInput = {
   moduleId?: Prisma.IntFilter<"AiConfiguration"> | number
   language?: Prisma.StringFilter<"AiConfiguration"> | string
   contextPrompt?: Prisma.StringNullableFilter<"AiConfiguration"> | string | null
-  temperature?: Prisma.FloatFilter<"AiConfiguration"> | number
   createdAt?: Prisma.DateTimeFilter<"AiConfiguration"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"AiConfiguration"> | Date | string
   module?: Prisma.XOR<Prisma.ModuleScalarRelationFilter, Prisma.ModuleWhereInput>
@@ -248,7 +236,6 @@ export type AiConfigurationOrderByWithRelationInput = {
   moduleId?: Prisma.SortOrder
   language?: Prisma.SortOrder
   contextPrompt?: Prisma.SortOrderInput | Prisma.SortOrder
-  temperature?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   module?: Prisma.ModuleOrderByWithRelationInput
@@ -262,7 +249,6 @@ export type AiConfigurationWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.AiConfigurationWhereInput | Prisma.AiConfigurationWhereInput[]
   language?: Prisma.StringFilter<"AiConfiguration"> | string
   contextPrompt?: Prisma.StringNullableFilter<"AiConfiguration"> | string | null
-  temperature?: Prisma.FloatFilter<"AiConfiguration"> | number
   createdAt?: Prisma.DateTimeFilter<"AiConfiguration"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"AiConfiguration"> | Date | string
   module?: Prisma.XOR<Prisma.ModuleScalarRelationFilter, Prisma.ModuleWhereInput>
@@ -273,7 +259,6 @@ export type AiConfigurationOrderByWithAggregationInput = {
   moduleId?: Prisma.SortOrder
   language?: Prisma.SortOrder
   contextPrompt?: Prisma.SortOrderInput | Prisma.SortOrder
-  temperature?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.AiConfigurationCountOrderByAggregateInput
@@ -291,7 +276,6 @@ export type AiConfigurationScalarWhereWithAggregatesInput = {
   moduleId?: Prisma.IntWithAggregatesFilter<"AiConfiguration"> | number
   language?: Prisma.StringWithAggregatesFilter<"AiConfiguration"> | string
   contextPrompt?: Prisma.StringNullableWithAggregatesFilter<"AiConfiguration"> | string | null
-  temperature?: Prisma.FloatWithAggregatesFilter<"AiConfiguration"> | number
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"AiConfiguration"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"AiConfiguration"> | Date | string
 }
@@ -299,7 +283,6 @@ export type AiConfigurationScalarWhereWithAggregatesInput = {
 export type AiConfigurationCreateInput = {
   language?: string
   contextPrompt?: string | null
-  temperature?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   module: Prisma.ModuleCreateNestedOneWithoutAiConfigurationInput
@@ -310,7 +293,6 @@ export type AiConfigurationUncheckedCreateInput = {
   moduleId: number
   language?: string
   contextPrompt?: string | null
-  temperature?: number
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -318,7 +300,6 @@ export type AiConfigurationUncheckedCreateInput = {
 export type AiConfigurationUpdateInput = {
   language?: Prisma.StringFieldUpdateOperationsInput | string
   contextPrompt?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  temperature?: Prisma.FloatFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   module?: Prisma.ModuleUpdateOneRequiredWithoutAiConfigurationNestedInput
@@ -329,7 +310,6 @@ export type AiConfigurationUncheckedUpdateInput = {
   moduleId?: Prisma.IntFieldUpdateOperationsInput | number
   language?: Prisma.StringFieldUpdateOperationsInput | string
   contextPrompt?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  temperature?: Prisma.FloatFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -339,7 +319,6 @@ export type AiConfigurationCreateManyInput = {
   moduleId: number
   language?: string
   contextPrompt?: string | null
-  temperature?: number
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -347,7 +326,6 @@ export type AiConfigurationCreateManyInput = {
 export type AiConfigurationUpdateManyMutationInput = {
   language?: Prisma.StringFieldUpdateOperationsInput | string
   contextPrompt?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  temperature?: Prisma.FloatFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -357,7 +335,6 @@ export type AiConfigurationUncheckedUpdateManyInput = {
   moduleId?: Prisma.IntFieldUpdateOperationsInput | number
   language?: Prisma.StringFieldUpdateOperationsInput | string
   contextPrompt?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  temperature?: Prisma.FloatFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -372,7 +349,6 @@ export type AiConfigurationCountOrderByAggregateInput = {
   moduleId?: Prisma.SortOrder
   language?: Prisma.SortOrder
   contextPrompt?: Prisma.SortOrder
-  temperature?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -380,7 +356,6 @@ export type AiConfigurationCountOrderByAggregateInput = {
 export type AiConfigurationAvgOrderByAggregateInput = {
   id?: Prisma.SortOrder
   moduleId?: Prisma.SortOrder
-  temperature?: Prisma.SortOrder
 }
 
 export type AiConfigurationMaxOrderByAggregateInput = {
@@ -388,7 +363,6 @@ export type AiConfigurationMaxOrderByAggregateInput = {
   moduleId?: Prisma.SortOrder
   language?: Prisma.SortOrder
   contextPrompt?: Prisma.SortOrder
-  temperature?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -398,7 +372,6 @@ export type AiConfigurationMinOrderByAggregateInput = {
   moduleId?: Prisma.SortOrder
   language?: Prisma.SortOrder
   contextPrompt?: Prisma.SortOrder
-  temperature?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -406,7 +379,6 @@ export type AiConfigurationMinOrderByAggregateInput = {
 export type AiConfigurationSumOrderByAggregateInput = {
   id?: Prisma.SortOrder
   moduleId?: Prisma.SortOrder
-  temperature?: Prisma.SortOrder
 }
 
 export type AiConfigurationCreateNestedOneWithoutModuleInput = {
@@ -441,18 +413,9 @@ export type AiConfigurationUncheckedUpdateOneWithoutModuleNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.AiConfigurationUpdateToOneWithWhereWithoutModuleInput, Prisma.AiConfigurationUpdateWithoutModuleInput>, Prisma.AiConfigurationUncheckedUpdateWithoutModuleInput>
 }
 
-export type FloatFieldUpdateOperationsInput = {
-  set?: number
-  increment?: number
-  decrement?: number
-  multiply?: number
-  divide?: number
-}
-
 export type AiConfigurationCreateWithoutModuleInput = {
   language?: string
   contextPrompt?: string | null
-  temperature?: number
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -461,7 +424,6 @@ export type AiConfigurationUncheckedCreateWithoutModuleInput = {
   id?: number
   language?: string
   contextPrompt?: string | null
-  temperature?: number
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -485,7 +447,6 @@ export type AiConfigurationUpdateToOneWithWhereWithoutModuleInput = {
 export type AiConfigurationUpdateWithoutModuleInput = {
   language?: Prisma.StringFieldUpdateOperationsInput | string
   contextPrompt?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  temperature?: Prisma.FloatFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -494,7 +455,6 @@ export type AiConfigurationUncheckedUpdateWithoutModuleInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   language?: Prisma.StringFieldUpdateOperationsInput | string
   contextPrompt?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  temperature?: Prisma.FloatFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -506,7 +466,6 @@ export type AiConfigurationSelect<ExtArgs extends runtime.Types.Extensions.Inter
   moduleId?: boolean
   language?: boolean
   contextPrompt?: boolean
-  temperature?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   module?: boolean | Prisma.ModuleDefaultArgs<ExtArgs>
@@ -517,7 +476,6 @@ export type AiConfigurationSelectCreateManyAndReturn<ExtArgs extends runtime.Typ
   moduleId?: boolean
   language?: boolean
   contextPrompt?: boolean
-  temperature?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   module?: boolean | Prisma.ModuleDefaultArgs<ExtArgs>
@@ -528,7 +486,6 @@ export type AiConfigurationSelectUpdateManyAndReturn<ExtArgs extends runtime.Typ
   moduleId?: boolean
   language?: boolean
   contextPrompt?: boolean
-  temperature?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   module?: boolean | Prisma.ModuleDefaultArgs<ExtArgs>
@@ -539,12 +496,11 @@ export type AiConfigurationSelectScalar = {
   moduleId?: boolean
   language?: boolean
   contextPrompt?: boolean
-  temperature?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type AiConfigurationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "moduleId" | "language" | "contextPrompt" | "temperature" | "createdAt" | "updatedAt", ExtArgs["result"]["aiConfiguration"]>
+export type AiConfigurationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "moduleId" | "language" | "contextPrompt" | "createdAt" | "updatedAt", ExtArgs["result"]["aiConfiguration"]>
 export type AiConfigurationInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   module?: boolean | Prisma.ModuleDefaultArgs<ExtArgs>
 }
@@ -565,7 +521,6 @@ export type $AiConfigurationPayload<ExtArgs extends runtime.Types.Extensions.Int
     moduleId: number
     language: string
     contextPrompt: string | null
-    temperature: number
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["aiConfiguration"]>
@@ -996,7 +951,6 @@ export interface AiConfigurationFieldRefs {
   readonly moduleId: Prisma.FieldRef<"AiConfiguration", 'Int'>
   readonly language: Prisma.FieldRef<"AiConfiguration", 'String'>
   readonly contextPrompt: Prisma.FieldRef<"AiConfiguration", 'String'>
-  readonly temperature: Prisma.FieldRef<"AiConfiguration", 'Float'>
   readonly createdAt: Prisma.FieldRef<"AiConfiguration", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"AiConfiguration", 'DateTime'>
 }

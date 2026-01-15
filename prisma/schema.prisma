@@ -85,7 +85,6 @@ model AiConfiguration {
   moduleId      Int      @unique @map("module_id")
   language      String   @default("es") // RF-9: idioma específico
   contextPrompt String?  @map("context_prompt") @db.Text // RF-10: contexto personalizado del módulo
-  temperature   Float    @default(0.7)
   createdAt     DateTime @default(now()) @map("created_at")
   updatedAt     DateTime @updatedAt @map("updated_at")
 
@@ -126,7 +125,6 @@ model Page {
   moduleId          Int                          @map("module_id")
   title             String
   content           String                       @db.Text // HTML CON conceptos Y enlaces ya incrustados
-  rawContent        String?                      @map("raw_content") @db.Text
   orderIndex        Int                          @map("order_index")
   embedding         Unsupported("vector(1536)")?
   keywords          String[] // Mantener para búsquedas

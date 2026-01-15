@@ -51,7 +51,6 @@ export class PagesService {
         moduleId: createPageDto.moduleId,
         title: createPageDto.title,
         content: createPageDto.content,
-        rawContent: createPageDto.rawContent,
         keywords: createPageDto.keywords ?? [],
         isPublished: createPageDto.isPublished ?? false,
         orderIndex: lastPage?.orderIndex ? lastPage.orderIndex + 1 : 1,
@@ -247,9 +246,7 @@ export class PagesService {
         ...(updatePageDto.content !== undefined && {
           content: updatePageDto.content,
         }),
-        ...(updatePageDto.rawContent !== undefined && {
-          rawContent: updatePageDto.rawContent,
-        }),
+
         ...(updatePageDto.keywords !== undefined && {
           keywords: updatePageDto.keywords,
         }),

@@ -40,15 +40,6 @@ export class CreatePageDto {
   content: string
 
   @ApiPropertyOptional({
-    description: 'Contenido original sin procesar',
-    example: 'Este es el contenido original en texto plano',
-    nullable: true,
-  })
-  @IsOptional()
-  @IsString()
-  rawContent?: string
-
-  @ApiPropertyOptional({
     description: 'Palabras clave para búsquedas',
     example: ['programación', 'introducción', 'básicos'],
     type: [String],
