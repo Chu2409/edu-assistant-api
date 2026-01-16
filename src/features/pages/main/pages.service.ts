@@ -18,21 +18,25 @@ import { BaseParamsReqDto } from 'src/shared/dtos/req/base-params.dto'
 import { PagesMapper } from './mappers/pages.mapper'
 import { ApiPaginatedRes } from 'src/shared/dtos/res/api-response.dto'
 import { FullPageDto } from './dtos/res/full-page.dto'
+import { AIService } from 'src/providers/ai/ai.service'
+import { HtmlProcessorService } from '../content-generation/html-processor.service'
 
 @Injectable()
 export class PagesService {
-  constructor(private readonly dbService: DBService) {}
+  constructor(
+    private readonly dbService: DBService,
+    private readonly aiService: AIService,
+    private readonly htmlProcessor: HtmlProcessorService,
+  ) { }
 
-  async create(createPageDto: CreatePageDto, user: User): Promise<PageDto> {
+  async create(dto: CreatePageDto, user: User): Promise<PageDto> {
     // Verificar que el módulo existe
     const module = await this.dbService.module.findUnique({
-      where: { id: createPageDto.moduleId },
+      where: { id: dto.moduleId },
     })
 
     if (!module) {
-      throw new NotFoundException(
-        `Módulo con ID ${createPageDto.moduleId} no encontrado`,
-      )
+      throw new NotFoundException(`Módulo con ID ${dto.moduleId} no encontrado`)
     }
     // Solo el profesor propietario puede crear páginas
     if (module.teacherId !== user.id) {
@@ -42,20 +46,46 @@ export class PagesService {
     }
 
     const lastPage = await this.dbService.page.findFirst({
-      where: { moduleId: createPageDto.moduleId },
+      where: { moduleId: dto.moduleId },
       orderBy: { orderIndex: 'desc' },
     })
 
+    const concepts = await this.aiService.extractConcepts(dto.content)
+
+    const conceptsToEmbed = concepts.map((concept, index) => ({
+      term: concept.term,
+      definition: concept.definition,
+      htmlId: `concept-c${Date.now()}-${index}`,
+    }))
+
+    const processedHtml = this.htmlProcessor.embedConcepts(
+      dto.content,
+      conceptsToEmbed,
+    )
+
     const page = await this.dbService.page.create({
       data: {
-        moduleId: createPageDto.moduleId,
-        title: createPageDto.title,
-        content: createPageDto.content,
-        keywords: createPageDto.keywords ?? [],
-        isPublished: createPageDto.isPublished ?? false,
+        moduleId: dto.moduleId,
+        title: dto.title,
+        content: processedHtml,
+        keywords: dto.keywords ?? [],
+        isPublished: dto.isPublished ?? false,
         orderIndex: lastPage?.orderIndex ? lastPage.orderIndex + 1 : 1,
       },
     })
+
+    await Promise.all(
+      conceptsToEmbed.map((concept) =>
+        this.dbService.pageConcept.create({
+          data: {
+            pageId: page.id,
+            term: concept.term,
+            definition: concept.definition,
+            htmlId: concept.htmlId,
+          },
+        }),
+      ),
+    )
 
     return PagesMapper.mapToDto(page)
   }
