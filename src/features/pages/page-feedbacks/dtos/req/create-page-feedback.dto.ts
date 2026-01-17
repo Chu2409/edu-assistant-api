@@ -1,5 +1,5 @@
-import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import { ApiProperty } from '@nestjs/swagger'
+import { IsNotEmpty, IsNumber, IsString } from 'class-validator'
 
 export class CreatePageFeedbackDto {
   @ApiProperty({
@@ -8,7 +8,7 @@ export class CreatePageFeedbackDto {
   })
   @IsNumber()
   @IsNotEmpty()
-  pageId: number;
+  pageId: number
 
   @ApiProperty({
     description: 'El contenido del feedback',
@@ -16,5 +16,5 @@ export class CreatePageFeedbackDto {
   })
   @IsString()
   @IsNotEmpty()
-  feedback: string;
+  feedback: string
 }
