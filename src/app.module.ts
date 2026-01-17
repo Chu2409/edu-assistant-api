@@ -7,6 +7,7 @@ import { ModulesModule } from './features/modules/main/modules.module'
 import { EnrollmentsModule } from './features/enrollments/enrollments.module'
 import { PagesModule } from './features/pages/main/pages.module'
 import { PageFeedbacksModule } from './features/pages/page-feedbacks/page-feedbacks.module'
+import { PageNotesModule } from './features/pages/notes/page-notes.module'
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { PageFeedbacksModule } from './features/pages/page-feedbacks/page-feedba
     EnrollmentsModule,
     PagesModule,
     PageFeedbacksModule,
+    PageNotesModule,
   ],
   controllers: [HealthController],
   providers: [
