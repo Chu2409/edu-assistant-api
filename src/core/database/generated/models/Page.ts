@@ -45,7 +45,6 @@ export type PageMinAggregateOutputType = {
   moduleId: number | null
   title: string | null
   content: string | null
-  rawContent: string | null
   orderIndex: number | null
   isPublished: boolean | null
   lastProcessedAt: Date | null
@@ -59,7 +58,6 @@ export type PageMaxAggregateOutputType = {
   moduleId: number | null
   title: string | null
   content: string | null
-  rawContent: string | null
   orderIndex: number | null
   isPublished: boolean | null
   lastProcessedAt: Date | null
@@ -73,7 +71,6 @@ export type PageCountAggregateOutputType = {
   moduleId: number
   title: number
   content: number
-  rawContent: number
   orderIndex: number
   keywords: number
   isPublished: number
@@ -104,7 +101,6 @@ export type PageMinAggregateInputType = {
   moduleId?: true
   title?: true
   content?: true
-  rawContent?: true
   orderIndex?: true
   isPublished?: true
   lastProcessedAt?: true
@@ -118,7 +114,6 @@ export type PageMaxAggregateInputType = {
   moduleId?: true
   title?: true
   content?: true
-  rawContent?: true
   orderIndex?: true
   isPublished?: true
   lastProcessedAt?: true
@@ -132,7 +127,6 @@ export type PageCountAggregateInputType = {
   moduleId?: true
   title?: true
   content?: true
-  rawContent?: true
   orderIndex?: true
   keywords?: true
   isPublished?: true
@@ -234,7 +228,6 @@ export type PageGroupByOutputType = {
   moduleId: number
   title: string
   content: string
-  rawContent: string | null
   orderIndex: number
   keywords: string[]
   isPublished: boolean
@@ -272,7 +265,6 @@ export type PageWhereInput = {
   moduleId?: Prisma.IntFilter<"Page"> | number
   title?: Prisma.StringFilter<"Page"> | string
   content?: Prisma.StringFilter<"Page"> | string
-  rawContent?: Prisma.StringNullableFilter<"Page"> | string | null
   orderIndex?: Prisma.IntFilter<"Page"> | number
   keywords?: Prisma.StringNullableListFilter<"Page">
   isPublished?: Prisma.BoolFilter<"Page"> | boolean
@@ -299,7 +291,6 @@ export type PageOrderByWithRelationInput = {
   moduleId?: Prisma.SortOrder
   title?: Prisma.SortOrder
   content?: Prisma.SortOrder
-  rawContent?: Prisma.SortOrderInput | Prisma.SortOrder
   orderIndex?: Prisma.SortOrder
   keywords?: Prisma.SortOrder
   isPublished?: Prisma.SortOrder
@@ -330,7 +321,6 @@ export type PageWhereUniqueInput = Prisma.AtLeast<{
   moduleId?: Prisma.IntFilter<"Page"> | number
   title?: Prisma.StringFilter<"Page"> | string
   content?: Prisma.StringFilter<"Page"> | string
-  rawContent?: Prisma.StringNullableFilter<"Page"> | string | null
   orderIndex?: Prisma.IntFilter<"Page"> | number
   keywords?: Prisma.StringNullableListFilter<"Page">
   isPublished?: Prisma.BoolFilter<"Page"> | boolean
@@ -357,7 +347,6 @@ export type PageOrderByWithAggregationInput = {
   moduleId?: Prisma.SortOrder
   title?: Prisma.SortOrder
   content?: Prisma.SortOrder
-  rawContent?: Prisma.SortOrderInput | Prisma.SortOrder
   orderIndex?: Prisma.SortOrder
   keywords?: Prisma.SortOrder
   isPublished?: Prisma.SortOrder
@@ -380,7 +369,6 @@ export type PageScalarWhereWithAggregatesInput = {
   moduleId?: Prisma.IntWithAggregatesFilter<"Page"> | number
   title?: Prisma.StringWithAggregatesFilter<"Page"> | string
   content?: Prisma.StringWithAggregatesFilter<"Page"> | string
-  rawContent?: Prisma.StringNullableWithAggregatesFilter<"Page"> | string | null
   orderIndex?: Prisma.IntWithAggregatesFilter<"Page"> | number
   keywords?: Prisma.StringNullableListFilter<"Page">
   isPublished?: Prisma.BoolWithAggregatesFilter<"Page"> | boolean
@@ -393,7 +381,6 @@ export type PageScalarWhereWithAggregatesInput = {
 export type PageCreateInput = {
   title: string
   content: string
-  rawContent?: string | null
   orderIndex: number
   keywords?: Prisma.PageCreatekeywordsInput | string[]
   isPublished?: boolean
@@ -420,7 +407,6 @@ export type PageUncheckedCreateInput = {
   moduleId: number
   title: string
   content: string
-  rawContent?: string | null
   orderIndex: number
   keywords?: Prisma.PageCreatekeywordsInput | string[]
   isPublished?: boolean
@@ -444,7 +430,6 @@ export type PageUncheckedCreateInput = {
 export type PageUpdateInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
-  rawContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
   keywords?: Prisma.PageUpdatekeywordsInput | string[]
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -471,7 +456,6 @@ export type PageUncheckedUpdateInput = {
   moduleId?: Prisma.IntFieldUpdateOperationsInput | number
   title?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
-  rawContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
   keywords?: Prisma.PageUpdatekeywordsInput | string[]
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -497,7 +481,6 @@ export type PageCreateManyInput = {
   moduleId: number
   title: string
   content: string
-  rawContent?: string | null
   orderIndex: number
   keywords?: Prisma.PageCreatekeywordsInput | string[]
   isPublished?: boolean
@@ -510,7 +493,6 @@ export type PageCreateManyInput = {
 export type PageUpdateManyMutationInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
-  rawContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
   keywords?: Prisma.PageUpdatekeywordsInput | string[]
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -525,7 +507,6 @@ export type PageUncheckedUpdateManyInput = {
   moduleId?: Prisma.IntFieldUpdateOperationsInput | number
   title?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
-  rawContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
   keywords?: Prisma.PageUpdatekeywordsInput | string[]
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -563,7 +544,6 @@ export type PageCountOrderByAggregateInput = {
   moduleId?: Prisma.SortOrder
   title?: Prisma.SortOrder
   content?: Prisma.SortOrder
-  rawContent?: Prisma.SortOrder
   orderIndex?: Prisma.SortOrder
   keywords?: Prisma.SortOrder
   isPublished?: Prisma.SortOrder
@@ -585,7 +565,6 @@ export type PageMaxOrderByAggregateInput = {
   moduleId?: Prisma.SortOrder
   title?: Prisma.SortOrder
   content?: Prisma.SortOrder
-  rawContent?: Prisma.SortOrder
   orderIndex?: Prisma.SortOrder
   isPublished?: Prisma.SortOrder
   lastProcessedAt?: Prisma.SortOrder
@@ -599,7 +578,6 @@ export type PageMinOrderByAggregateInput = {
   moduleId?: Prisma.SortOrder
   title?: Prisma.SortOrder
   content?: Prisma.SortOrder
-  rawContent?: Prisma.SortOrder
   orderIndex?: Prisma.SortOrder
   isPublished?: Prisma.SortOrder
   lastProcessedAt?: Prisma.SortOrder
@@ -843,7 +821,6 @@ export type PageUpdateOneWithoutMediaResourcesNestedInput = {
 export type PageCreateWithoutModuleInput = {
   title: string
   content: string
-  rawContent?: string | null
   orderIndex: number
   keywords?: Prisma.PageCreatekeywordsInput | string[]
   isPublished?: boolean
@@ -868,7 +845,6 @@ export type PageUncheckedCreateWithoutModuleInput = {
   id?: number
   title: string
   content: string
-  rawContent?: string | null
   orderIndex: number
   keywords?: Prisma.PageCreatekeywordsInput | string[]
   isPublished?: boolean
@@ -923,7 +899,6 @@ export type PageScalarWhereInput = {
   moduleId?: Prisma.IntFilter<"Page"> | number
   title?: Prisma.StringFilter<"Page"> | string
   content?: Prisma.StringFilter<"Page"> | string
-  rawContent?: Prisma.StringNullableFilter<"Page"> | string | null
   orderIndex?: Prisma.IntFilter<"Page"> | number
   keywords?: Prisma.StringNullableListFilter<"Page">
   isPublished?: Prisma.BoolFilter<"Page"> | boolean
@@ -936,7 +911,6 @@ export type PageScalarWhereInput = {
 export type PageCreateWithoutPageViewsInput = {
   title: string
   content: string
-  rawContent?: string | null
   orderIndex: number
   keywords?: Prisma.PageCreatekeywordsInput | string[]
   isPublished?: boolean
@@ -962,7 +936,6 @@ export type PageUncheckedCreateWithoutPageViewsInput = {
   moduleId: number
   title: string
   content: string
-  rawContent?: string | null
   orderIndex: number
   keywords?: Prisma.PageCreatekeywordsInput | string[]
   isPublished?: boolean
@@ -1001,7 +974,6 @@ export type PageUpdateToOneWithWhereWithoutPageViewsInput = {
 export type PageUpdateWithoutPageViewsInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
-  rawContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
   keywords?: Prisma.PageUpdatekeywordsInput | string[]
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1027,7 +999,6 @@ export type PageUncheckedUpdateWithoutPageViewsInput = {
   moduleId?: Prisma.IntFieldUpdateOperationsInput | number
   title?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
-  rawContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
   keywords?: Prisma.PageUpdatekeywordsInput | string[]
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1050,7 +1021,6 @@ export type PageUncheckedUpdateWithoutPageViewsInput = {
 export type PageCreateWithoutRelatedPagesFromInput = {
   title: string
   content: string
-  rawContent?: string | null
   orderIndex: number
   keywords?: Prisma.PageCreatekeywordsInput | string[]
   isPublished?: boolean
@@ -1076,7 +1046,6 @@ export type PageUncheckedCreateWithoutRelatedPagesFromInput = {
   moduleId: number
   title: string
   content: string
-  rawContent?: string | null
   orderIndex: number
   keywords?: Prisma.PageCreatekeywordsInput | string[]
   isPublished?: boolean
@@ -1104,7 +1073,6 @@ export type PageCreateOrConnectWithoutRelatedPagesFromInput = {
 export type PageCreateWithoutRelatedPagesToInput = {
   title: string
   content: string
-  rawContent?: string | null
   orderIndex: number
   keywords?: Prisma.PageCreatekeywordsInput | string[]
   isPublished?: boolean
@@ -1130,7 +1098,6 @@ export type PageUncheckedCreateWithoutRelatedPagesToInput = {
   moduleId: number
   title: string
   content: string
-  rawContent?: string | null
   orderIndex: number
   keywords?: Prisma.PageCreatekeywordsInput | string[]
   isPublished?: boolean
@@ -1169,7 +1136,6 @@ export type PageUpdateToOneWithWhereWithoutRelatedPagesFromInput = {
 export type PageUpdateWithoutRelatedPagesFromInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
-  rawContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
   keywords?: Prisma.PageUpdatekeywordsInput | string[]
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1195,7 +1161,6 @@ export type PageUncheckedUpdateWithoutRelatedPagesFromInput = {
   moduleId?: Prisma.IntFieldUpdateOperationsInput | number
   title?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
-  rawContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
   keywords?: Prisma.PageUpdatekeywordsInput | string[]
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1229,7 +1194,6 @@ export type PageUpdateToOneWithWhereWithoutRelatedPagesToInput = {
 export type PageUpdateWithoutRelatedPagesToInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
-  rawContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
   keywords?: Prisma.PageUpdatekeywordsInput | string[]
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1255,7 +1219,6 @@ export type PageUncheckedUpdateWithoutRelatedPagesToInput = {
   moduleId?: Prisma.IntFieldUpdateOperationsInput | number
   title?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
-  rawContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
   keywords?: Prisma.PageUpdatekeywordsInput | string[]
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1278,7 +1241,6 @@ export type PageUncheckedUpdateWithoutRelatedPagesToInput = {
 export type PageCreateWithoutConceptMentionsInput = {
   title: string
   content: string
-  rawContent?: string | null
   orderIndex: number
   keywords?: Prisma.PageCreatekeywordsInput | string[]
   isPublished?: boolean
@@ -1304,7 +1266,6 @@ export type PageUncheckedCreateWithoutConceptMentionsInput = {
   moduleId: number
   title: string
   content: string
-  rawContent?: string | null
   orderIndex: number
   keywords?: Prisma.PageCreatekeywordsInput | string[]
   isPublished?: boolean
@@ -1343,7 +1304,6 @@ export type PageUpdateToOneWithWhereWithoutConceptMentionsInput = {
 export type PageUpdateWithoutConceptMentionsInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
-  rawContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
   keywords?: Prisma.PageUpdatekeywordsInput | string[]
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1369,7 +1329,6 @@ export type PageUncheckedUpdateWithoutConceptMentionsInput = {
   moduleId?: Prisma.IntFieldUpdateOperationsInput | number
   title?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
-  rawContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
   keywords?: Prisma.PageUpdatekeywordsInput | string[]
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1392,7 +1351,6 @@ export type PageUncheckedUpdateWithoutConceptMentionsInput = {
 export type PageCreateWithoutActivitiesInput = {
   title: string
   content: string
-  rawContent?: string | null
   orderIndex: number
   keywords?: Prisma.PageCreatekeywordsInput | string[]
   isPublished?: boolean
@@ -1418,7 +1376,6 @@ export type PageUncheckedCreateWithoutActivitiesInput = {
   moduleId: number
   title: string
   content: string
-  rawContent?: string | null
   orderIndex: number
   keywords?: Prisma.PageCreatekeywordsInput | string[]
   isPublished?: boolean
@@ -1457,7 +1414,6 @@ export type PageUpdateToOneWithWhereWithoutActivitiesInput = {
 export type PageUpdateWithoutActivitiesInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
-  rawContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
   keywords?: Prisma.PageUpdatekeywordsInput | string[]
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1483,7 +1439,6 @@ export type PageUncheckedUpdateWithoutActivitiesInput = {
   moduleId?: Prisma.IntFieldUpdateOperationsInput | number
   title?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
-  rawContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
   keywords?: Prisma.PageUpdatekeywordsInput | string[]
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1506,7 +1461,6 @@ export type PageUncheckedUpdateWithoutActivitiesInput = {
 export type PageCreateWithoutPromptFeedbacksInput = {
   title: string
   content: string
-  rawContent?: string | null
   orderIndex: number
   keywords?: Prisma.PageCreatekeywordsInput | string[]
   isPublished?: boolean
@@ -1532,7 +1486,6 @@ export type PageUncheckedCreateWithoutPromptFeedbacksInput = {
   moduleId: number
   title: string
   content: string
-  rawContent?: string | null
   orderIndex: number
   keywords?: Prisma.PageCreatekeywordsInput | string[]
   isPublished?: boolean
@@ -1571,7 +1524,6 @@ export type PageUpdateToOneWithWhereWithoutPromptFeedbacksInput = {
 export type PageUpdateWithoutPromptFeedbacksInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
-  rawContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
   keywords?: Prisma.PageUpdatekeywordsInput | string[]
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1597,7 +1549,6 @@ export type PageUncheckedUpdateWithoutPromptFeedbacksInput = {
   moduleId?: Prisma.IntFieldUpdateOperationsInput | number
   title?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
-  rawContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
   keywords?: Prisma.PageUpdatekeywordsInput | string[]
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1620,7 +1571,6 @@ export type PageUncheckedUpdateWithoutPromptFeedbacksInput = {
 export type PageCreateWithoutPageFeedbacksInput = {
   title: string
   content: string
-  rawContent?: string | null
   orderIndex: number
   keywords?: Prisma.PageCreatekeywordsInput | string[]
   isPublished?: boolean
@@ -1646,7 +1596,6 @@ export type PageUncheckedCreateWithoutPageFeedbacksInput = {
   moduleId: number
   title: string
   content: string
-  rawContent?: string | null
   orderIndex: number
   keywords?: Prisma.PageCreatekeywordsInput | string[]
   isPublished?: boolean
@@ -1685,7 +1634,6 @@ export type PageUpdateToOneWithWhereWithoutPageFeedbacksInput = {
 export type PageUpdateWithoutPageFeedbacksInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
-  rawContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
   keywords?: Prisma.PageUpdatekeywordsInput | string[]
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1711,7 +1659,6 @@ export type PageUncheckedUpdateWithoutPageFeedbacksInput = {
   moduleId?: Prisma.IntFieldUpdateOperationsInput | number
   title?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
-  rawContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
   keywords?: Prisma.PageUpdatekeywordsInput | string[]
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1734,7 +1681,6 @@ export type PageUncheckedUpdateWithoutPageFeedbacksInput = {
 export type PageCreateWithoutNotesInput = {
   title: string
   content: string
-  rawContent?: string | null
   orderIndex: number
   keywords?: Prisma.PageCreatekeywordsInput | string[]
   isPublished?: boolean
@@ -1760,7 +1706,6 @@ export type PageUncheckedCreateWithoutNotesInput = {
   moduleId: number
   title: string
   content: string
-  rawContent?: string | null
   orderIndex: number
   keywords?: Prisma.PageCreatekeywordsInput | string[]
   isPublished?: boolean
@@ -1799,7 +1744,6 @@ export type PageUpdateToOneWithWhereWithoutNotesInput = {
 export type PageUpdateWithoutNotesInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
-  rawContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
   keywords?: Prisma.PageUpdatekeywordsInput | string[]
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1825,7 +1769,6 @@ export type PageUncheckedUpdateWithoutNotesInput = {
   moduleId?: Prisma.IntFieldUpdateOperationsInput | number
   title?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
-  rawContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
   keywords?: Prisma.PageUpdatekeywordsInput | string[]
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1848,7 +1791,6 @@ export type PageUncheckedUpdateWithoutNotesInput = {
 export type PageCreateWithoutStudentQuestionsInput = {
   title: string
   content: string
-  rawContent?: string | null
   orderIndex: number
   keywords?: Prisma.PageCreatekeywordsInput | string[]
   isPublished?: boolean
@@ -1874,7 +1816,6 @@ export type PageUncheckedCreateWithoutStudentQuestionsInput = {
   moduleId: number
   title: string
   content: string
-  rawContent?: string | null
   orderIndex: number
   keywords?: Prisma.PageCreatekeywordsInput | string[]
   isPublished?: boolean
@@ -1913,7 +1854,6 @@ export type PageUpdateToOneWithWhereWithoutStudentQuestionsInput = {
 export type PageUpdateWithoutStudentQuestionsInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
-  rawContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
   keywords?: Prisma.PageUpdatekeywordsInput | string[]
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1939,7 +1879,6 @@ export type PageUncheckedUpdateWithoutStudentQuestionsInput = {
   moduleId?: Prisma.IntFieldUpdateOperationsInput | number
   title?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
-  rawContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
   keywords?: Prisma.PageUpdatekeywordsInput | string[]
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1962,7 +1901,6 @@ export type PageUncheckedUpdateWithoutStudentQuestionsInput = {
 export type PageCreateWithoutPodcastsInput = {
   title: string
   content: string
-  rawContent?: string | null
   orderIndex: number
   keywords?: Prisma.PageCreatekeywordsInput | string[]
   isPublished?: boolean
@@ -1988,7 +1926,6 @@ export type PageUncheckedCreateWithoutPodcastsInput = {
   moduleId: number
   title: string
   content: string
-  rawContent?: string | null
   orderIndex: number
   keywords?: Prisma.PageCreatekeywordsInput | string[]
   isPublished?: boolean
@@ -2027,7 +1964,6 @@ export type PageUpdateToOneWithWhereWithoutPodcastsInput = {
 export type PageUpdateWithoutPodcastsInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
-  rawContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
   keywords?: Prisma.PageUpdatekeywordsInput | string[]
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -2053,7 +1989,6 @@ export type PageUncheckedUpdateWithoutPodcastsInput = {
   moduleId?: Prisma.IntFieldUpdateOperationsInput | number
   title?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
-  rawContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
   keywords?: Prisma.PageUpdatekeywordsInput | string[]
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -2076,7 +2011,6 @@ export type PageUncheckedUpdateWithoutPodcastsInput = {
 export type PageCreateWithoutMediaResourcesInput = {
   title: string
   content: string
-  rawContent?: string | null
   orderIndex: number
   keywords?: Prisma.PageCreatekeywordsInput | string[]
   isPublished?: boolean
@@ -2102,7 +2036,6 @@ export type PageUncheckedCreateWithoutMediaResourcesInput = {
   moduleId: number
   title: string
   content: string
-  rawContent?: string | null
   orderIndex: number
   keywords?: Prisma.PageCreatekeywordsInput | string[]
   isPublished?: boolean
@@ -2141,7 +2074,6 @@ export type PageUpdateToOneWithWhereWithoutMediaResourcesInput = {
 export type PageUpdateWithoutMediaResourcesInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
-  rawContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
   keywords?: Prisma.PageUpdatekeywordsInput | string[]
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -2167,7 +2099,6 @@ export type PageUncheckedUpdateWithoutMediaResourcesInput = {
   moduleId?: Prisma.IntFieldUpdateOperationsInput | number
   title?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
-  rawContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
   keywords?: Prisma.PageUpdatekeywordsInput | string[]
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -2191,7 +2122,6 @@ export type PageCreateManyModuleInput = {
   id?: number
   title: string
   content: string
-  rawContent?: string | null
   orderIndex: number
   keywords?: Prisma.PageCreatekeywordsInput | string[]
   isPublished?: boolean
@@ -2204,7 +2134,6 @@ export type PageCreateManyModuleInput = {
 export type PageUpdateWithoutModuleInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
-  rawContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
   keywords?: Prisma.PageUpdatekeywordsInput | string[]
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -2229,7 +2158,6 @@ export type PageUncheckedUpdateWithoutModuleInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   title?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
-  rawContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
   keywords?: Prisma.PageUpdatekeywordsInput | string[]
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -2254,7 +2182,6 @@ export type PageUncheckedUpdateManyWithoutModuleInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   title?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
-  rawContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
   keywords?: Prisma.PageUpdatekeywordsInput | string[]
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -2390,7 +2317,6 @@ export type PageSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   moduleId?: boolean
   title?: boolean
   content?: boolean
-  rawContent?: boolean
   orderIndex?: boolean
   keywords?: boolean
   isPublished?: boolean
@@ -2418,7 +2344,6 @@ export type PageSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   moduleId?: boolean
   title?: boolean
   content?: boolean
-  rawContent?: boolean
   orderIndex?: boolean
   keywords?: boolean
   isPublished?: boolean
@@ -2434,7 +2359,6 @@ export type PageSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   moduleId?: boolean
   title?: boolean
   content?: boolean
-  rawContent?: boolean
   orderIndex?: boolean
   keywords?: boolean
   isPublished?: boolean
@@ -2450,7 +2374,6 @@ export type PageSelectScalar = {
   moduleId?: boolean
   title?: boolean
   content?: boolean
-  rawContent?: boolean
   orderIndex?: boolean
   keywords?: boolean
   isPublished?: boolean
@@ -2460,7 +2383,7 @@ export type PageSelectScalar = {
   updatedAt?: boolean
 }
 
-export type PageOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "moduleId" | "title" | "content" | "rawContent" | "orderIndex" | "keywords" | "isPublished" | "lastProcessedAt" | "processingVersion" | "createdAt" | "updatedAt", ExtArgs["result"]["page"]>
+export type PageOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "moduleId" | "title" | "content" | "orderIndex" | "keywords" | "isPublished" | "lastProcessedAt" | "processingVersion" | "createdAt" | "updatedAt", ExtArgs["result"]["page"]>
 export type PageInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   module?: boolean | Prisma.ModuleDefaultArgs<ExtArgs>
   activities?: boolean | Prisma.Page$activitiesArgs<ExtArgs>
@@ -2504,7 +2427,6 @@ export type $PagePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     moduleId: number
     title: string
     content: string
-    rawContent: string | null
     orderIndex: number
     keywords: string[]
     isPublished: boolean
@@ -2951,7 +2873,6 @@ export interface PageFieldRefs {
   readonly moduleId: Prisma.FieldRef<"Page", 'Int'>
   readonly title: Prisma.FieldRef<"Page", 'String'>
   readonly content: Prisma.FieldRef<"Page", 'String'>
-  readonly rawContent: Prisma.FieldRef<"Page", 'String'>
   readonly orderIndex: Prisma.FieldRef<"Page", 'Int'>
   readonly keywords: Prisma.FieldRef<"Page", 'String[]'>
   readonly isPublished: Prisma.FieldRef<"Page", 'Boolean'>

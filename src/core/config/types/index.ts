@@ -11,4 +11,7 @@ export interface IConfig {
 
   JWT_SECRET: string
   JWT_EXPIRATION: string
+
+  REDIS_HOST: string
+  REDIS_PORT: number
 }

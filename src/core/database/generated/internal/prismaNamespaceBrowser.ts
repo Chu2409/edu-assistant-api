@@ -128,7 +128,6 @@ export const AiConfigurationScalarFieldEnum = {
   moduleId: 'moduleId',
   language: 'language',
   contextPrompt: 'contextPrompt',
-  temperature: 'temperature',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -153,7 +152,6 @@ export const PageScalarFieldEnum = {
   moduleId: 'moduleId',
   title: 'title',
   content: 'content',
-  rawContent: 'rawContent',
   orderIndex: 'orderIndex',
   keywords: 'keywords',
   isPublished: 'isPublished',

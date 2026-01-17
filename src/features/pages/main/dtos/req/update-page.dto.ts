@@ -30,15 +30,6 @@ export class UpdatePageDto {
   content?: string
 
   @ApiPropertyOptional({
-    description: 'Contenido original sin procesar',
-    example: 'Este es el contenido original en texto plano actualizado',
-    nullable: true,
-  })
-  @IsOptional()
-  @IsString()
-  rawContent?: string | null
-
-  @ApiPropertyOptional({
     description: 'Palabras clave para búsquedas',
     example: ['programación', 'avanzado', 'conceptos'],
     type: [String],

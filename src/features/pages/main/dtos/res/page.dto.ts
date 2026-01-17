@@ -26,13 +26,6 @@ export class PageDto {
   content: string
 
   @ApiPropertyOptional({
-    description: 'Contenido original sin procesar',
-    example: 'Este es el contenido original en texto plano',
-    nullable: true,
-  })
-  rawContent: string | null
-
-  @ApiPropertyOptional({
     description: 'Índice de orden de la página dentro del módulo',
     example: 1,
   })

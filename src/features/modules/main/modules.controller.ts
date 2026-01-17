@@ -69,14 +69,15 @@ export class ModulesController {
   @ApiOperation({
     summary: 'Listar módulos disponibles',
     description:
-      'El estudiante puede obtener todos los módulos disponibles para inscribirse',
+      'El estudiante puede obtener todos los módulos disponibles para inscribirse (excluyendo aquellos en los que ya está enrolado)',
   })
   @ApiPaginatedResponse(ModuleDto)
   @ApiResponse({ status: 401, description: 'No autorizado' })
   findModulesAvailable(
     @Query() params: ModulesAvailableFiltersDto,
+    @GetUser() user: User,
   ): Promise<ApiPaginatedRes<ModuleDto>> {
-    return this.modulesService.findModulesAvailable(params)
+    return this.modulesService.findModulesAvailable(params, user)
   }
 
   @Get(':id')

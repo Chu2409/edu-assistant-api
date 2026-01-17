@@ -15,6 +15,11 @@ export const config = (): { APP: IConfig } => ({
 
     JWT_SECRET: process.env.JWT_SECRET!,
     JWT_EXPIRATION: process.env.JWT_EXPIRATION || '24h',
+
+    REDIS_HOST: process.env.REDIS_HOST!,
+    REDIS_PORT: process.env.REDIS_PORT
+      ? parseInt(process.env.REDIS_PORT, 10)
+      : 6379,
   },
 })
 
@@ -40,4 +45,7 @@ export const configValidationSchema = Joi.object<IConfig>({
 
   JWT_SECRET: Joi.string().min(30).required(),
   JWT_EXPIRATION: Joi.string().default('24h'),
+
+  REDIS_HOST: Joi.string().hostname().required(),
+  REDIS_PORT: Joi.number().default(6379),
 })
