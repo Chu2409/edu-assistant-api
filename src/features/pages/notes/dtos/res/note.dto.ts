@@ -8,8 +8,21 @@ export class NoteDto {
   id: number
 
   @ApiProperty({
-    description: 'Contenido de la nota',
-    example: 'Este es el contenido de la nota',
+    description: 'ID de la página a la que pertenece la nota',
+    example: 1,
+    nullable: true,
+  })
+  pageId: number | null
+
+  @ApiProperty({
+    description: 'ID del usuario que creó la nota',
+    example: 1,
+  })
+  userId: number
+
+  @ApiProperty({
+    description: 'El contenido de la nota',
+    example: 'Este es el contenido de la nota.',
   })
   content: string
 

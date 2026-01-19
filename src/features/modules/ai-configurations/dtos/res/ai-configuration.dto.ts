@@ -27,12 +27,6 @@ export class AiConfigurationDto {
   contextPrompt: string | null
 
   @ApiProperty({
-    description: 'Temperatura para la generación de IA',
-    example: 0.7,
-  })
-  temperature: number
-
-  @ApiProperty({
     description: 'Fecha de creación de la configuración',
     example: '2024-01-01T00:00:00.000Z',
   })

@@ -41,7 +41,6 @@ export class ModulesService {
               create: {
                 language: createModuleDto.aiConfiguration.language ?? 'es',
                 contextPrompt: createModuleDto.aiConfiguration.contextPrompt,
-                temperature: createModuleDto.aiConfiguration.temperature ?? 0.7,
               },
             }
           : undefined,
@@ -108,12 +107,17 @@ export class ModulesService {
 
   async findModulesAvailable(
     params: ModulesAvailableFiltersDto,
+    user: User,
   ): Promise<ApiPaginatedRes<ModuleDto>> {
     const where: Prisma.ModuleWhereInput = {}
 
     where.isPublic = true
     where.isActive = true
     where.teacherId = { in: convertToFilterWhere(params.teacherId) }
+    // Excluir módulos donde el estudiante ya está enrolado
+    where.enrollments = {
+      none: { userId: user.id },
+    }
 
     if (params.search) {
       where.AND = {
@@ -219,12 +223,10 @@ export class ModulesService {
         update?: {
           language?: string
           contextPrompt?: string | null
-          temperature?: number
         }
         create?: {
           language: string
           contextPrompt?: string | null
-          temperature: number
         }
       }
     } = { ...moduleData }
@@ -240,9 +242,6 @@ export class ModulesService {
             ...(aiConfiguration.contextPrompt !== undefined && {
               contextPrompt: aiConfiguration.contextPrompt,
             }),
-            ...(aiConfiguration.temperature !== undefined && {
-              temperature: aiConfiguration.temperature,
-            }),
           },
         }
       } else {
@@ -251,7 +250,6 @@ export class ModulesService {
           create: {
             language: aiConfiguration.language ?? 'es',
             contextPrompt: aiConfiguration.contextPrompt,
-            temperature: aiConfiguration.temperature ?? 0.7,
           },
         }
       }

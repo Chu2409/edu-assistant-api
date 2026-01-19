@@ -568,6 +568,14 @@ export type PageViewUncheckedUpdateManyWithoutPageNestedInput = {
   deleteMany?: Prisma.PageViewScalarWhereInput | Prisma.PageViewScalarWhereInput[]
 }
 
+export type FloatFieldUpdateOperationsInput = {
+  set?: number
+  increment?: number
+  decrement?: number
+  multiply?: number
+  divide?: number
+}
+
 export type PageViewCreateWithoutUserInput = {
   firstViewedAt?: Date | string
   lastViewedAt?: Date | string

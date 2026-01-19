@@ -1,5 +1,5 @@
 import { ApiPropertyOptional } from '@nestjs/swagger'
-import { IsString, IsOptional, IsNumber, Min, Max } from 'class-validator'
+import { IsString, IsOptional } from 'class-validator'
 
 export class CreateAiConfigurationDto {
   @ApiPropertyOptional({
@@ -19,17 +19,4 @@ export class CreateAiConfigurationDto {
   @IsOptional()
   @IsString()
   contextPrompt?: string
-
-  @ApiPropertyOptional({
-    description: 'Temperatura para la generación de IA (0.0 - 1.0)',
-    example: 0.7,
-    default: 0.7,
-    minimum: 0,
-    maximum: 1,
-  })
-  @IsOptional()
-  @IsNumber()
-  @Min(0)
-  @Max(1)
-  temperature?: number
 }
