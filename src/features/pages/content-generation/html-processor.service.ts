@@ -47,7 +47,7 @@ export class HtmlProcessorService {
       '>': '&gt;',
       '"': '&quot;',
       // eslint-disable-next-line prettier/prettier
-      '\'': '&#039;',
+      "'": '&#039;',
     }
     return str.replace(/[&<>"']/g, (m) => map[m])
   }

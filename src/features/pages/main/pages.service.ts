@@ -27,7 +27,7 @@ export class PagesService {
     private readonly dbService: DBService,
     private readonly aiService: AIService,
     private readonly htmlProcessor: HtmlProcessorService,
-  ) { }
+  ) {}
 
   async create(dto: CreatePageDto, user: User): Promise<PageDto> {
     // Verificar que el módulo existe

@@ -50,8 +50,8 @@ export class PagesMapper {
       ),
       pageFeedbacks: page.pageFeedbacks
         ? page.pageFeedbacks.map((pageFeedback) =>
-          PageFeedbacksMapper.mapToDto(pageFeedback),
-        )
+            PageFeedbacksMapper.mapToDto(pageFeedback),
+          )
         : null,
       notes: page.notes
         ? page.notes.map((note) => NotesMapper.mapToDto(note))
