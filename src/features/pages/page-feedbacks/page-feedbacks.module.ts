@@ -6,4 +6,4 @@ import { PageFeedbacksService } from './page-feedbacks.service'
   controllers: [PageFeedbacksController],
   providers: [PageFeedbacksService],
 })
-export class PageFeedbacksModule { }
+export class PageFeedbacksModule {}

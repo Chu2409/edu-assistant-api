@@ -17,7 +17,6 @@ export class PagesMapper {
       id: page.id,
       moduleId: page.moduleId,
       title: page.title,
-      content: page.content,
       orderIndex: page.orderIndex,
       keywords: page.keywords,
       isPublished: page.isPublished,
@@ -39,7 +38,6 @@ export class PagesMapper {
       id: page.id,
       moduleId: page.moduleId,
       title: page.title,
-      content: page.content,
       orderIndex: page.orderIndex,
       keywords: page.keywords,
       isPublished: page.isPublished,
@@ -52,8 +50,8 @@ export class PagesMapper {
       ),
       pageFeedbacks: page.pageFeedbacks
         ? page.pageFeedbacks.map((pageFeedback) =>
-            PageFeedbacksMapper.mapToDto(pageFeedback),
-          )
+          PageFeedbacksMapper.mapToDto(pageFeedback),
+        )
         : null,
       notes: page.notes
         ? page.notes.map((note) => NotesMapper.mapToDto(note))

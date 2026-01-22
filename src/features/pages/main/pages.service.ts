@@ -58,16 +58,10 @@ export class PagesService {
       htmlId: `concept-c${Date.now()}-${index}`,
     }))
 
-    const processedHtml = this.htmlProcessor.embedConcepts(
-      dto.content,
-      conceptsToEmbed,
-    )
-
     const page = await this.dbService.page.create({
       data: {
         moduleId: dto.moduleId,
         title: dto.title,
-        content: processedHtml,
         keywords: dto.keywords ?? [],
         isPublished: dto.isPublished ?? false,
         orderIndex: lastPage?.orderIndex ? lastPage.orderIndex + 1 : 1,
@@ -124,10 +118,7 @@ export class PagesService {
     }
 
     if (params.search) {
-      where.OR = [
-        { title: { contains: params.search, mode: 'insensitive' } },
-        { content: { contains: params.search, mode: 'insensitive' } },
-      ]
+      where.OR = [{ title: { contains: params.search, mode: 'insensitive' } }]
     }
 
     // Si es estudiante, solo mostrar páginas publicadas

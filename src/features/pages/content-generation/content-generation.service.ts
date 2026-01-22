@@ -15,7 +15,7 @@ export class ContentGenerationService {
     private readonly dbService: DBService,
     private readonly aiService: AIService,
     private readonly htmlProcessor: HtmlProcessorService,
-  ) { }
+  ) {}
 
   async generateContent(dto: GenerateContentDto, user: User) {
     // 1. Obtener AiConfiguration del módulo

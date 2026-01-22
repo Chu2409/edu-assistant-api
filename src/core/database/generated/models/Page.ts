@@ -44,7 +44,6 @@ export type PageMinAggregateOutputType = {
   id: number | null
   moduleId: number | null
   title: string | null
-  content: string | null
   orderIndex: number | null
   isPublished: boolean | null
   lastProcessedAt: Date | null
@@ -57,7 +56,6 @@ export type PageMaxAggregateOutputType = {
   id: number | null
   moduleId: number | null
   title: string | null
-  content: string | null
   orderIndex: number | null
   isPublished: boolean | null
   lastProcessedAt: Date | null
@@ -70,7 +68,6 @@ export type PageCountAggregateOutputType = {
   id: number
   moduleId: number
   title: number
-  content: number
   orderIndex: number
   keywords: number
   isPublished: number
@@ -100,7 +97,6 @@ export type PageMinAggregateInputType = {
   id?: true
   moduleId?: true
   title?: true
-  content?: true
   orderIndex?: true
   isPublished?: true
   lastProcessedAt?: true
@@ -113,7 +109,6 @@ export type PageMaxAggregateInputType = {
   id?: true
   moduleId?: true
   title?: true
-  content?: true
   orderIndex?: true
   isPublished?: true
   lastProcessedAt?: true
@@ -126,7 +121,6 @@ export type PageCountAggregateInputType = {
   id?: true
   moduleId?: true
   title?: true
-  content?: true
   orderIndex?: true
   keywords?: true
   isPublished?: true
@@ -227,7 +221,6 @@ export type PageGroupByOutputType = {
   id: number
   moduleId: number
   title: string
-  content: string
   orderIndex: number
   keywords: string[]
   isPublished: boolean
@@ -264,7 +257,6 @@ export type PageWhereInput = {
   id?: Prisma.IntFilter<"Page"> | number
   moduleId?: Prisma.IntFilter<"Page"> | number
   title?: Prisma.StringFilter<"Page"> | string
-  content?: Prisma.StringFilter<"Page"> | string
   orderIndex?: Prisma.IntFilter<"Page"> | number
   keywords?: Prisma.StringNullableListFilter<"Page">
   isPublished?: Prisma.BoolFilter<"Page"> | boolean
@@ -284,13 +276,14 @@ export type PageWhereInput = {
   promptFeedbacks?: Prisma.PromptListRelationFilter
   studentQuestions?: Prisma.StudentQuestionListRelationFilter
   pageViews?: Prisma.PageViewListRelationFilter
+  sessions?: Prisma.SessionListRelationFilter
+  blocks?: Prisma.BlockListRelationFilter
 }
 
 export type PageOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   moduleId?: Prisma.SortOrder
   title?: Prisma.SortOrder
-  content?: Prisma.SortOrder
   orderIndex?: Prisma.SortOrder
   keywords?: Prisma.SortOrder
   isPublished?: Prisma.SortOrder
@@ -310,6 +303,8 @@ export type PageOrderByWithRelationInput = {
   promptFeedbacks?: Prisma.PromptOrderByRelationAggregateInput
   studentQuestions?: Prisma.StudentQuestionOrderByRelationAggregateInput
   pageViews?: Prisma.PageViewOrderByRelationAggregateInput
+  sessions?: Prisma.SessionOrderByRelationAggregateInput
+  blocks?: Prisma.BlockOrderByRelationAggregateInput
 }
 
 export type PageWhereUniqueInput = Prisma.AtLeast<{
@@ -320,7 +315,6 @@ export type PageWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.PageWhereInput | Prisma.PageWhereInput[]
   moduleId?: Prisma.IntFilter<"Page"> | number
   title?: Prisma.StringFilter<"Page"> | string
-  content?: Prisma.StringFilter<"Page"> | string
   orderIndex?: Prisma.IntFilter<"Page"> | number
   keywords?: Prisma.StringNullableListFilter<"Page">
   isPublished?: Prisma.BoolFilter<"Page"> | boolean
@@ -340,13 +334,14 @@ export type PageWhereUniqueInput = Prisma.AtLeast<{
   promptFeedbacks?: Prisma.PromptListRelationFilter
   studentQuestions?: Prisma.StudentQuestionListRelationFilter
   pageViews?: Prisma.PageViewListRelationFilter
+  sessions?: Prisma.SessionListRelationFilter
+  blocks?: Prisma.BlockListRelationFilter
 }, "id" | "moduleId_orderIndex">
 
 export type PageOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   moduleId?: Prisma.SortOrder
   title?: Prisma.SortOrder
-  content?: Prisma.SortOrder
   orderIndex?: Prisma.SortOrder
   keywords?: Prisma.SortOrder
   isPublished?: Prisma.SortOrder
@@ -368,7 +363,6 @@ export type PageScalarWhereWithAggregatesInput = {
   id?: Prisma.IntWithAggregatesFilter<"Page"> | number
   moduleId?: Prisma.IntWithAggregatesFilter<"Page"> | number
   title?: Prisma.StringWithAggregatesFilter<"Page"> | string
-  content?: Prisma.StringWithAggregatesFilter<"Page"> | string
   orderIndex?: Prisma.IntWithAggregatesFilter<"Page"> | number
   keywords?: Prisma.StringNullableListFilter<"Page">
   isPublished?: Prisma.BoolWithAggregatesFilter<"Page"> | boolean
@@ -380,7 +374,6 @@ export type PageScalarWhereWithAggregatesInput = {
 
 export type PageCreateInput = {
   title: string
-  content: string
   orderIndex: number
   keywords?: Prisma.PageCreatekeywordsInput | string[]
   isPublished?: boolean
@@ -400,13 +393,14 @@ export type PageCreateInput = {
   promptFeedbacks?: Prisma.PromptCreateNestedManyWithoutPageInput
   studentQuestions?: Prisma.StudentQuestionCreateNestedManyWithoutPageInput
   pageViews?: Prisma.PageViewCreateNestedManyWithoutPageInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutPageInput
+  blocks?: Prisma.BlockCreateNestedManyWithoutPageInput
 }
 
 export type PageUncheckedCreateInput = {
   id?: number
   moduleId: number
   title: string
-  content: string
   orderIndex: number
   keywords?: Prisma.PageCreatekeywordsInput | string[]
   isPublished?: boolean
@@ -425,11 +419,12 @@ export type PageUncheckedCreateInput = {
   promptFeedbacks?: Prisma.PromptUncheckedCreateNestedManyWithoutPageInput
   studentQuestions?: Prisma.StudentQuestionUncheckedCreateNestedManyWithoutPageInput
   pageViews?: Prisma.PageViewUncheckedCreateNestedManyWithoutPageInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutPageInput
+  blocks?: Prisma.BlockUncheckedCreateNestedManyWithoutPageInput
 }
 
 export type PageUpdateInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
-  content?: Prisma.StringFieldUpdateOperationsInput | string
   orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
   keywords?: Prisma.PageUpdatekeywordsInput | string[]
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -449,13 +444,14 @@ export type PageUpdateInput = {
   promptFeedbacks?: Prisma.PromptUpdateManyWithoutPageNestedInput
   studentQuestions?: Prisma.StudentQuestionUpdateManyWithoutPageNestedInput
   pageViews?: Prisma.PageViewUpdateManyWithoutPageNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutPageNestedInput
+  blocks?: Prisma.BlockUpdateManyWithoutPageNestedInput
 }
 
 export type PageUncheckedUpdateInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   moduleId?: Prisma.IntFieldUpdateOperationsInput | number
   title?: Prisma.StringFieldUpdateOperationsInput | string
-  content?: Prisma.StringFieldUpdateOperationsInput | string
   orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
   keywords?: Prisma.PageUpdatekeywordsInput | string[]
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -474,13 +470,14 @@ export type PageUncheckedUpdateInput = {
   promptFeedbacks?: Prisma.PromptUncheckedUpdateManyWithoutPageNestedInput
   studentQuestions?: Prisma.StudentQuestionUncheckedUpdateManyWithoutPageNestedInput
   pageViews?: Prisma.PageViewUncheckedUpdateManyWithoutPageNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutPageNestedInput
+  blocks?: Prisma.BlockUncheckedUpdateManyWithoutPageNestedInput
 }
 
 export type PageCreateManyInput = {
   id?: number
   moduleId: number
   title: string
-  content: string
   orderIndex: number
   keywords?: Prisma.PageCreatekeywordsInput | string[]
   isPublished?: boolean
@@ -492,7 +489,6 @@ export type PageCreateManyInput = {
 
 export type PageUpdateManyMutationInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
-  content?: Prisma.StringFieldUpdateOperationsInput | string
   orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
   keywords?: Prisma.PageUpdatekeywordsInput | string[]
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -506,7 +502,6 @@ export type PageUncheckedUpdateManyInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   moduleId?: Prisma.IntFieldUpdateOperationsInput | number
   title?: Prisma.StringFieldUpdateOperationsInput | string
-  content?: Prisma.StringFieldUpdateOperationsInput | string
   orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
   keywords?: Prisma.PageUpdatekeywordsInput | string[]
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -526,14 +521,6 @@ export type PageOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
 }
 
-export type StringNullableListFilter<$PrismaModel = never> = {
-  equals?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel> | null
-  has?: string | Prisma.StringFieldRefInput<$PrismaModel> | null
-  hasEvery?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel>
-  hasSome?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel>
-  isEmpty?: boolean
-}
-
 export type PageModuleIdOrderIndexCompoundUniqueInput = {
   moduleId: number
   orderIndex: number
@@ -543,7 +530,6 @@ export type PageCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   moduleId?: Prisma.SortOrder
   title?: Prisma.SortOrder
-  content?: Prisma.SortOrder
   orderIndex?: Prisma.SortOrder
   keywords?: Prisma.SortOrder
   isPublished?: Prisma.SortOrder
@@ -564,7 +550,6 @@ export type PageMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   moduleId?: Prisma.SortOrder
   title?: Prisma.SortOrder
-  content?: Prisma.SortOrder
   orderIndex?: Prisma.SortOrder
   isPublished?: Prisma.SortOrder
   lastProcessedAt?: Prisma.SortOrder
@@ -577,7 +562,6 @@ export type PageMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   moduleId?: Prisma.SortOrder
   title?: Prisma.SortOrder
-  content?: Prisma.SortOrder
   orderIndex?: Prisma.SortOrder
   isPublished?: Prisma.SortOrder
   lastProcessedAt?: Prisma.SortOrder
@@ -652,6 +636,34 @@ export type PageCreatekeywordsInput = {
 export type PageUpdatekeywordsInput = {
   set?: string[]
   push?: string | string[]
+}
+
+export type PageCreateNestedOneWithoutBlocksInput = {
+  create?: Prisma.XOR<Prisma.PageCreateWithoutBlocksInput, Prisma.PageUncheckedCreateWithoutBlocksInput>
+  connectOrCreate?: Prisma.PageCreateOrConnectWithoutBlocksInput
+  connect?: Prisma.PageWhereUniqueInput
+}
+
+export type PageUpdateOneRequiredWithoutBlocksNestedInput = {
+  create?: Prisma.XOR<Prisma.PageCreateWithoutBlocksInput, Prisma.PageUncheckedCreateWithoutBlocksInput>
+  connectOrCreate?: Prisma.PageCreateOrConnectWithoutBlocksInput
+  upsert?: Prisma.PageUpsertWithoutBlocksInput
+  connect?: Prisma.PageWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.PageUpdateToOneWithWhereWithoutBlocksInput, Prisma.PageUpdateWithoutBlocksInput>, Prisma.PageUncheckedUpdateWithoutBlocksInput>
+}
+
+export type PageCreateNestedOneWithoutSessionsInput = {
+  create?: Prisma.XOR<Prisma.PageCreateWithoutSessionsInput, Prisma.PageUncheckedCreateWithoutSessionsInput>
+  connectOrCreate?: Prisma.PageCreateOrConnectWithoutSessionsInput
+  connect?: Prisma.PageWhereUniqueInput
+}
+
+export type PageUpdateOneRequiredWithoutSessionsNestedInput = {
+  create?: Prisma.XOR<Prisma.PageCreateWithoutSessionsInput, Prisma.PageUncheckedCreateWithoutSessionsInput>
+  connectOrCreate?: Prisma.PageCreateOrConnectWithoutSessionsInput
+  upsert?: Prisma.PageUpsertWithoutSessionsInput
+  connect?: Prisma.PageWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.PageUpdateToOneWithWhereWithoutSessionsInput, Prisma.PageUpdateWithoutSessionsInput>, Prisma.PageUncheckedUpdateWithoutSessionsInput>
 }
 
 export type PageCreateNestedOneWithoutPageViewsInput = {
@@ -820,7 +832,6 @@ export type PageUpdateOneWithoutMediaResourcesNestedInput = {
 
 export type PageCreateWithoutModuleInput = {
   title: string
-  content: string
   orderIndex: number
   keywords?: Prisma.PageCreatekeywordsInput | string[]
   isPublished?: boolean
@@ -839,12 +850,13 @@ export type PageCreateWithoutModuleInput = {
   promptFeedbacks?: Prisma.PromptCreateNestedManyWithoutPageInput
   studentQuestions?: Prisma.StudentQuestionCreateNestedManyWithoutPageInput
   pageViews?: Prisma.PageViewCreateNestedManyWithoutPageInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutPageInput
+  blocks?: Prisma.BlockCreateNestedManyWithoutPageInput
 }
 
 export type PageUncheckedCreateWithoutModuleInput = {
   id?: number
   title: string
-  content: string
   orderIndex: number
   keywords?: Prisma.PageCreatekeywordsInput | string[]
   isPublished?: boolean
@@ -863,6 +875,8 @@ export type PageUncheckedCreateWithoutModuleInput = {
   promptFeedbacks?: Prisma.PromptUncheckedCreateNestedManyWithoutPageInput
   studentQuestions?: Prisma.StudentQuestionUncheckedCreateNestedManyWithoutPageInput
   pageViews?: Prisma.PageViewUncheckedCreateNestedManyWithoutPageInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutPageInput
+  blocks?: Prisma.BlockUncheckedCreateNestedManyWithoutPageInput
 }
 
 export type PageCreateOrConnectWithoutModuleInput = {
@@ -898,7 +912,6 @@ export type PageScalarWhereInput = {
   id?: Prisma.IntFilter<"Page"> | number
   moduleId?: Prisma.IntFilter<"Page"> | number
   title?: Prisma.StringFilter<"Page"> | string
-  content?: Prisma.StringFilter<"Page"> | string
   orderIndex?: Prisma.IntFilter<"Page"> | number
   keywords?: Prisma.StringNullableListFilter<"Page">
   isPublished?: Prisma.BoolFilter<"Page"> | boolean
@@ -908,9 +921,8 @@ export type PageScalarWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"Page"> | Date | string
 }
 
-export type PageCreateWithoutPageViewsInput = {
+export type PageCreateWithoutBlocksInput = {
   title: string
-  content: string
   orderIndex: number
   keywords?: Prisma.PageCreatekeywordsInput | string[]
   isPublished?: boolean
@@ -929,13 +941,14 @@ export type PageCreateWithoutPageViewsInput = {
   pageFeedbacks?: Prisma.PageFeedbackCreateNestedManyWithoutPageInput
   promptFeedbacks?: Prisma.PromptCreateNestedManyWithoutPageInput
   studentQuestions?: Prisma.StudentQuestionCreateNestedManyWithoutPageInput
+  pageViews?: Prisma.PageViewCreateNestedManyWithoutPageInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutPageInput
 }
 
-export type PageUncheckedCreateWithoutPageViewsInput = {
+export type PageUncheckedCreateWithoutBlocksInput = {
   id?: number
   moduleId: number
   title: string
-  content: string
   orderIndex: number
   keywords?: Prisma.PageCreatekeywordsInput | string[]
   isPublished?: boolean
@@ -953,6 +966,236 @@ export type PageUncheckedCreateWithoutPageViewsInput = {
   pageFeedbacks?: Prisma.PageFeedbackUncheckedCreateNestedManyWithoutPageInput
   promptFeedbacks?: Prisma.PromptUncheckedCreateNestedManyWithoutPageInput
   studentQuestions?: Prisma.StudentQuestionUncheckedCreateNestedManyWithoutPageInput
+  pageViews?: Prisma.PageViewUncheckedCreateNestedManyWithoutPageInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutPageInput
+}
+
+export type PageCreateOrConnectWithoutBlocksInput = {
+  where: Prisma.PageWhereUniqueInput
+  create: Prisma.XOR<Prisma.PageCreateWithoutBlocksInput, Prisma.PageUncheckedCreateWithoutBlocksInput>
+}
+
+export type PageUpsertWithoutBlocksInput = {
+  update: Prisma.XOR<Prisma.PageUpdateWithoutBlocksInput, Prisma.PageUncheckedUpdateWithoutBlocksInput>
+  create: Prisma.XOR<Prisma.PageCreateWithoutBlocksInput, Prisma.PageUncheckedCreateWithoutBlocksInput>
+  where?: Prisma.PageWhereInput
+}
+
+export type PageUpdateToOneWithWhereWithoutBlocksInput = {
+  where?: Prisma.PageWhereInput
+  data: Prisma.XOR<Prisma.PageUpdateWithoutBlocksInput, Prisma.PageUncheckedUpdateWithoutBlocksInput>
+}
+
+export type PageUpdateWithoutBlocksInput = {
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
+  keywords?: Prisma.PageUpdatekeywordsInput | string[]
+  isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  lastProcessedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  processingVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  module?: Prisma.ModuleUpdateOneRequiredWithoutPagesNestedInput
+  activities?: Prisma.ActivityUpdateManyWithoutPageNestedInput
+  relatedPagesFrom?: Prisma.PageRelationUpdateManyWithoutOriginPageNestedInput
+  relatedPagesTo?: Prisma.PageRelationUpdateManyWithoutRelatedPageNestedInput
+  conceptMentions?: Prisma.PageConceptUpdateManyWithoutPageNestedInput
+  notes?: Prisma.NoteUpdateManyWithoutPageNestedInput
+  podcasts?: Prisma.PodcastUpdateManyWithoutPageNestedInput
+  mediaResources?: Prisma.MediaResourceUpdateManyWithoutPageNestedInput
+  pageFeedbacks?: Prisma.PageFeedbackUpdateManyWithoutPageNestedInput
+  promptFeedbacks?: Prisma.PromptUpdateManyWithoutPageNestedInput
+  studentQuestions?: Prisma.StudentQuestionUpdateManyWithoutPageNestedInput
+  pageViews?: Prisma.PageViewUpdateManyWithoutPageNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutPageNestedInput
+}
+
+export type PageUncheckedUpdateWithoutBlocksInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  moduleId?: Prisma.IntFieldUpdateOperationsInput | number
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
+  keywords?: Prisma.PageUpdatekeywordsInput | string[]
+  isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  lastProcessedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  processingVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  activities?: Prisma.ActivityUncheckedUpdateManyWithoutPageNestedInput
+  relatedPagesFrom?: Prisma.PageRelationUncheckedUpdateManyWithoutOriginPageNestedInput
+  relatedPagesTo?: Prisma.PageRelationUncheckedUpdateManyWithoutRelatedPageNestedInput
+  conceptMentions?: Prisma.PageConceptUncheckedUpdateManyWithoutPageNestedInput
+  notes?: Prisma.NoteUncheckedUpdateManyWithoutPageNestedInput
+  podcasts?: Prisma.PodcastUncheckedUpdateManyWithoutPageNestedInput
+  mediaResources?: Prisma.MediaResourceUncheckedUpdateManyWithoutPageNestedInput
+  pageFeedbacks?: Prisma.PageFeedbackUncheckedUpdateManyWithoutPageNestedInput
+  promptFeedbacks?: Prisma.PromptUncheckedUpdateManyWithoutPageNestedInput
+  studentQuestions?: Prisma.StudentQuestionUncheckedUpdateManyWithoutPageNestedInput
+  pageViews?: Prisma.PageViewUncheckedUpdateManyWithoutPageNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutPageNestedInput
+}
+
+export type PageCreateWithoutSessionsInput = {
+  title: string
+  orderIndex: number
+  keywords?: Prisma.PageCreatekeywordsInput | string[]
+  isPublished?: boolean
+  lastProcessedAt?: Date | string | null
+  processingVersion?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  module: Prisma.ModuleCreateNestedOneWithoutPagesInput
+  activities?: Prisma.ActivityCreateNestedManyWithoutPageInput
+  relatedPagesFrom?: Prisma.PageRelationCreateNestedManyWithoutOriginPageInput
+  relatedPagesTo?: Prisma.PageRelationCreateNestedManyWithoutRelatedPageInput
+  conceptMentions?: Prisma.PageConceptCreateNestedManyWithoutPageInput
+  notes?: Prisma.NoteCreateNestedManyWithoutPageInput
+  podcasts?: Prisma.PodcastCreateNestedManyWithoutPageInput
+  mediaResources?: Prisma.MediaResourceCreateNestedManyWithoutPageInput
+  pageFeedbacks?: Prisma.PageFeedbackCreateNestedManyWithoutPageInput
+  promptFeedbacks?: Prisma.PromptCreateNestedManyWithoutPageInput
+  studentQuestions?: Prisma.StudentQuestionCreateNestedManyWithoutPageInput
+  pageViews?: Prisma.PageViewCreateNestedManyWithoutPageInput
+  blocks?: Prisma.BlockCreateNestedManyWithoutPageInput
+}
+
+export type PageUncheckedCreateWithoutSessionsInput = {
+  id?: number
+  moduleId: number
+  title: string
+  orderIndex: number
+  keywords?: Prisma.PageCreatekeywordsInput | string[]
+  isPublished?: boolean
+  lastProcessedAt?: Date | string | null
+  processingVersion?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  activities?: Prisma.ActivityUncheckedCreateNestedManyWithoutPageInput
+  relatedPagesFrom?: Prisma.PageRelationUncheckedCreateNestedManyWithoutOriginPageInput
+  relatedPagesTo?: Prisma.PageRelationUncheckedCreateNestedManyWithoutRelatedPageInput
+  conceptMentions?: Prisma.PageConceptUncheckedCreateNestedManyWithoutPageInput
+  notes?: Prisma.NoteUncheckedCreateNestedManyWithoutPageInput
+  podcasts?: Prisma.PodcastUncheckedCreateNestedManyWithoutPageInput
+  mediaResources?: Prisma.MediaResourceUncheckedCreateNestedManyWithoutPageInput
+  pageFeedbacks?: Prisma.PageFeedbackUncheckedCreateNestedManyWithoutPageInput
+  promptFeedbacks?: Prisma.PromptUncheckedCreateNestedManyWithoutPageInput
+  studentQuestions?: Prisma.StudentQuestionUncheckedCreateNestedManyWithoutPageInput
+  pageViews?: Prisma.PageViewUncheckedCreateNestedManyWithoutPageInput
+  blocks?: Prisma.BlockUncheckedCreateNestedManyWithoutPageInput
+}
+
+export type PageCreateOrConnectWithoutSessionsInput = {
+  where: Prisma.PageWhereUniqueInput
+  create: Prisma.XOR<Prisma.PageCreateWithoutSessionsInput, Prisma.PageUncheckedCreateWithoutSessionsInput>
+}
+
+export type PageUpsertWithoutSessionsInput = {
+  update: Prisma.XOR<Prisma.PageUpdateWithoutSessionsInput, Prisma.PageUncheckedUpdateWithoutSessionsInput>
+  create: Prisma.XOR<Prisma.PageCreateWithoutSessionsInput, Prisma.PageUncheckedCreateWithoutSessionsInput>
+  where?: Prisma.PageWhereInput
+}
+
+export type PageUpdateToOneWithWhereWithoutSessionsInput = {
+  where?: Prisma.PageWhereInput
+  data: Prisma.XOR<Prisma.PageUpdateWithoutSessionsInput, Prisma.PageUncheckedUpdateWithoutSessionsInput>
+}
+
+export type PageUpdateWithoutSessionsInput = {
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
+  keywords?: Prisma.PageUpdatekeywordsInput | string[]
+  isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  lastProcessedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  processingVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  module?: Prisma.ModuleUpdateOneRequiredWithoutPagesNestedInput
+  activities?: Prisma.ActivityUpdateManyWithoutPageNestedInput
+  relatedPagesFrom?: Prisma.PageRelationUpdateManyWithoutOriginPageNestedInput
+  relatedPagesTo?: Prisma.PageRelationUpdateManyWithoutRelatedPageNestedInput
+  conceptMentions?: Prisma.PageConceptUpdateManyWithoutPageNestedInput
+  notes?: Prisma.NoteUpdateManyWithoutPageNestedInput
+  podcasts?: Prisma.PodcastUpdateManyWithoutPageNestedInput
+  mediaResources?: Prisma.MediaResourceUpdateManyWithoutPageNestedInput
+  pageFeedbacks?: Prisma.PageFeedbackUpdateManyWithoutPageNestedInput
+  promptFeedbacks?: Prisma.PromptUpdateManyWithoutPageNestedInput
+  studentQuestions?: Prisma.StudentQuestionUpdateManyWithoutPageNestedInput
+  pageViews?: Prisma.PageViewUpdateManyWithoutPageNestedInput
+  blocks?: Prisma.BlockUpdateManyWithoutPageNestedInput
+}
+
+export type PageUncheckedUpdateWithoutSessionsInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  moduleId?: Prisma.IntFieldUpdateOperationsInput | number
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
+  keywords?: Prisma.PageUpdatekeywordsInput | string[]
+  isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  lastProcessedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  processingVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  activities?: Prisma.ActivityUncheckedUpdateManyWithoutPageNestedInput
+  relatedPagesFrom?: Prisma.PageRelationUncheckedUpdateManyWithoutOriginPageNestedInput
+  relatedPagesTo?: Prisma.PageRelationUncheckedUpdateManyWithoutRelatedPageNestedInput
+  conceptMentions?: Prisma.PageConceptUncheckedUpdateManyWithoutPageNestedInput
+  notes?: Prisma.NoteUncheckedUpdateManyWithoutPageNestedInput
+  podcasts?: Prisma.PodcastUncheckedUpdateManyWithoutPageNestedInput
+  mediaResources?: Prisma.MediaResourceUncheckedUpdateManyWithoutPageNestedInput
+  pageFeedbacks?: Prisma.PageFeedbackUncheckedUpdateManyWithoutPageNestedInput
+  promptFeedbacks?: Prisma.PromptUncheckedUpdateManyWithoutPageNestedInput
+  studentQuestions?: Prisma.StudentQuestionUncheckedUpdateManyWithoutPageNestedInput
+  pageViews?: Prisma.PageViewUncheckedUpdateManyWithoutPageNestedInput
+  blocks?: Prisma.BlockUncheckedUpdateManyWithoutPageNestedInput
+}
+
+export type PageCreateWithoutPageViewsInput = {
+  title: string
+  orderIndex: number
+  keywords?: Prisma.PageCreatekeywordsInput | string[]
+  isPublished?: boolean
+  lastProcessedAt?: Date | string | null
+  processingVersion?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  module: Prisma.ModuleCreateNestedOneWithoutPagesInput
+  activities?: Prisma.ActivityCreateNestedManyWithoutPageInput
+  relatedPagesFrom?: Prisma.PageRelationCreateNestedManyWithoutOriginPageInput
+  relatedPagesTo?: Prisma.PageRelationCreateNestedManyWithoutRelatedPageInput
+  conceptMentions?: Prisma.PageConceptCreateNestedManyWithoutPageInput
+  notes?: Prisma.NoteCreateNestedManyWithoutPageInput
+  podcasts?: Prisma.PodcastCreateNestedManyWithoutPageInput
+  mediaResources?: Prisma.MediaResourceCreateNestedManyWithoutPageInput
+  pageFeedbacks?: Prisma.PageFeedbackCreateNestedManyWithoutPageInput
+  promptFeedbacks?: Prisma.PromptCreateNestedManyWithoutPageInput
+  studentQuestions?: Prisma.StudentQuestionCreateNestedManyWithoutPageInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutPageInput
+  blocks?: Prisma.BlockCreateNestedManyWithoutPageInput
+}
+
+export type PageUncheckedCreateWithoutPageViewsInput = {
+  id?: number
+  moduleId: number
+  title: string
+  orderIndex: number
+  keywords?: Prisma.PageCreatekeywordsInput | string[]
+  isPublished?: boolean
+  lastProcessedAt?: Date | string | null
+  processingVersion?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  activities?: Prisma.ActivityUncheckedCreateNestedManyWithoutPageInput
+  relatedPagesFrom?: Prisma.PageRelationUncheckedCreateNestedManyWithoutOriginPageInput
+  relatedPagesTo?: Prisma.PageRelationUncheckedCreateNestedManyWithoutRelatedPageInput
+  conceptMentions?: Prisma.PageConceptUncheckedCreateNestedManyWithoutPageInput
+  notes?: Prisma.NoteUncheckedCreateNestedManyWithoutPageInput
+  podcasts?: Prisma.PodcastUncheckedCreateNestedManyWithoutPageInput
+  mediaResources?: Prisma.MediaResourceUncheckedCreateNestedManyWithoutPageInput
+  pageFeedbacks?: Prisma.PageFeedbackUncheckedCreateNestedManyWithoutPageInput
+  promptFeedbacks?: Prisma.PromptUncheckedCreateNestedManyWithoutPageInput
+  studentQuestions?: Prisma.StudentQuestionUncheckedCreateNestedManyWithoutPageInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutPageInput
+  blocks?: Prisma.BlockUncheckedCreateNestedManyWithoutPageInput
 }
 
 export type PageCreateOrConnectWithoutPageViewsInput = {
@@ -973,7 +1216,6 @@ export type PageUpdateToOneWithWhereWithoutPageViewsInput = {
 
 export type PageUpdateWithoutPageViewsInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
-  content?: Prisma.StringFieldUpdateOperationsInput | string
   orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
   keywords?: Prisma.PageUpdatekeywordsInput | string[]
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -992,13 +1234,14 @@ export type PageUpdateWithoutPageViewsInput = {
   pageFeedbacks?: Prisma.PageFeedbackUpdateManyWithoutPageNestedInput
   promptFeedbacks?: Prisma.PromptUpdateManyWithoutPageNestedInput
   studentQuestions?: Prisma.StudentQuestionUpdateManyWithoutPageNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutPageNestedInput
+  blocks?: Prisma.BlockUpdateManyWithoutPageNestedInput
 }
 
 export type PageUncheckedUpdateWithoutPageViewsInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   moduleId?: Prisma.IntFieldUpdateOperationsInput | number
   title?: Prisma.StringFieldUpdateOperationsInput | string
-  content?: Prisma.StringFieldUpdateOperationsInput | string
   orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
   keywords?: Prisma.PageUpdatekeywordsInput | string[]
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1016,11 +1259,12 @@ export type PageUncheckedUpdateWithoutPageViewsInput = {
   pageFeedbacks?: Prisma.PageFeedbackUncheckedUpdateManyWithoutPageNestedInput
   promptFeedbacks?: Prisma.PromptUncheckedUpdateManyWithoutPageNestedInput
   studentQuestions?: Prisma.StudentQuestionUncheckedUpdateManyWithoutPageNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutPageNestedInput
+  blocks?: Prisma.BlockUncheckedUpdateManyWithoutPageNestedInput
 }
 
 export type PageCreateWithoutRelatedPagesFromInput = {
   title: string
-  content: string
   orderIndex: number
   keywords?: Prisma.PageCreatekeywordsInput | string[]
   isPublished?: boolean
@@ -1039,13 +1283,14 @@ export type PageCreateWithoutRelatedPagesFromInput = {
   promptFeedbacks?: Prisma.PromptCreateNestedManyWithoutPageInput
   studentQuestions?: Prisma.StudentQuestionCreateNestedManyWithoutPageInput
   pageViews?: Prisma.PageViewCreateNestedManyWithoutPageInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutPageInput
+  blocks?: Prisma.BlockCreateNestedManyWithoutPageInput
 }
 
 export type PageUncheckedCreateWithoutRelatedPagesFromInput = {
   id?: number
   moduleId: number
   title: string
-  content: string
   orderIndex: number
   keywords?: Prisma.PageCreatekeywordsInput | string[]
   isPublished?: boolean
@@ -1063,6 +1308,8 @@ export type PageUncheckedCreateWithoutRelatedPagesFromInput = {
   promptFeedbacks?: Prisma.PromptUncheckedCreateNestedManyWithoutPageInput
   studentQuestions?: Prisma.StudentQuestionUncheckedCreateNestedManyWithoutPageInput
   pageViews?: Prisma.PageViewUncheckedCreateNestedManyWithoutPageInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutPageInput
+  blocks?: Prisma.BlockUncheckedCreateNestedManyWithoutPageInput
 }
 
 export type PageCreateOrConnectWithoutRelatedPagesFromInput = {
@@ -1072,7 +1319,6 @@ export type PageCreateOrConnectWithoutRelatedPagesFromInput = {
 
 export type PageCreateWithoutRelatedPagesToInput = {
   title: string
-  content: string
   orderIndex: number
   keywords?: Prisma.PageCreatekeywordsInput | string[]
   isPublished?: boolean
@@ -1091,13 +1337,14 @@ export type PageCreateWithoutRelatedPagesToInput = {
   promptFeedbacks?: Prisma.PromptCreateNestedManyWithoutPageInput
   studentQuestions?: Prisma.StudentQuestionCreateNestedManyWithoutPageInput
   pageViews?: Prisma.PageViewCreateNestedManyWithoutPageInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutPageInput
+  blocks?: Prisma.BlockCreateNestedManyWithoutPageInput
 }
 
 export type PageUncheckedCreateWithoutRelatedPagesToInput = {
   id?: number
   moduleId: number
   title: string
-  content: string
   orderIndex: number
   keywords?: Prisma.PageCreatekeywordsInput | string[]
   isPublished?: boolean
@@ -1115,6 +1362,8 @@ export type PageUncheckedCreateWithoutRelatedPagesToInput = {
   promptFeedbacks?: Prisma.PromptUncheckedCreateNestedManyWithoutPageInput
   studentQuestions?: Prisma.StudentQuestionUncheckedCreateNestedManyWithoutPageInput
   pageViews?: Prisma.PageViewUncheckedCreateNestedManyWithoutPageInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutPageInput
+  blocks?: Prisma.BlockUncheckedCreateNestedManyWithoutPageInput
 }
 
 export type PageCreateOrConnectWithoutRelatedPagesToInput = {
@@ -1135,7 +1384,6 @@ export type PageUpdateToOneWithWhereWithoutRelatedPagesFromInput = {
 
 export type PageUpdateWithoutRelatedPagesFromInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
-  content?: Prisma.StringFieldUpdateOperationsInput | string
   orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
   keywords?: Prisma.PageUpdatekeywordsInput | string[]
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1154,13 +1402,14 @@ export type PageUpdateWithoutRelatedPagesFromInput = {
   promptFeedbacks?: Prisma.PromptUpdateManyWithoutPageNestedInput
   studentQuestions?: Prisma.StudentQuestionUpdateManyWithoutPageNestedInput
   pageViews?: Prisma.PageViewUpdateManyWithoutPageNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutPageNestedInput
+  blocks?: Prisma.BlockUpdateManyWithoutPageNestedInput
 }
 
 export type PageUncheckedUpdateWithoutRelatedPagesFromInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   moduleId?: Prisma.IntFieldUpdateOperationsInput | number
   title?: Prisma.StringFieldUpdateOperationsInput | string
-  content?: Prisma.StringFieldUpdateOperationsInput | string
   orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
   keywords?: Prisma.PageUpdatekeywordsInput | string[]
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1178,6 +1427,8 @@ export type PageUncheckedUpdateWithoutRelatedPagesFromInput = {
   promptFeedbacks?: Prisma.PromptUncheckedUpdateManyWithoutPageNestedInput
   studentQuestions?: Prisma.StudentQuestionUncheckedUpdateManyWithoutPageNestedInput
   pageViews?: Prisma.PageViewUncheckedUpdateManyWithoutPageNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutPageNestedInput
+  blocks?: Prisma.BlockUncheckedUpdateManyWithoutPageNestedInput
 }
 
 export type PageUpsertWithoutRelatedPagesToInput = {
@@ -1193,7 +1444,6 @@ export type PageUpdateToOneWithWhereWithoutRelatedPagesToInput = {
 
 export type PageUpdateWithoutRelatedPagesToInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
-  content?: Prisma.StringFieldUpdateOperationsInput | string
   orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
   keywords?: Prisma.PageUpdatekeywordsInput | string[]
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1212,13 +1462,14 @@ export type PageUpdateWithoutRelatedPagesToInput = {
   promptFeedbacks?: Prisma.PromptUpdateManyWithoutPageNestedInput
   studentQuestions?: Prisma.StudentQuestionUpdateManyWithoutPageNestedInput
   pageViews?: Prisma.PageViewUpdateManyWithoutPageNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutPageNestedInput
+  blocks?: Prisma.BlockUpdateManyWithoutPageNestedInput
 }
 
 export type PageUncheckedUpdateWithoutRelatedPagesToInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   moduleId?: Prisma.IntFieldUpdateOperationsInput | number
   title?: Prisma.StringFieldUpdateOperationsInput | string
-  content?: Prisma.StringFieldUpdateOperationsInput | string
   orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
   keywords?: Prisma.PageUpdatekeywordsInput | string[]
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1236,11 +1487,12 @@ export type PageUncheckedUpdateWithoutRelatedPagesToInput = {
   promptFeedbacks?: Prisma.PromptUncheckedUpdateManyWithoutPageNestedInput
   studentQuestions?: Prisma.StudentQuestionUncheckedUpdateManyWithoutPageNestedInput
   pageViews?: Prisma.PageViewUncheckedUpdateManyWithoutPageNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutPageNestedInput
+  blocks?: Prisma.BlockUncheckedUpdateManyWithoutPageNestedInput
 }
 
 export type PageCreateWithoutConceptMentionsInput = {
   title: string
-  content: string
   orderIndex: number
   keywords?: Prisma.PageCreatekeywordsInput | string[]
   isPublished?: boolean
@@ -1259,13 +1511,14 @@ export type PageCreateWithoutConceptMentionsInput = {
   promptFeedbacks?: Prisma.PromptCreateNestedManyWithoutPageInput
   studentQuestions?: Prisma.StudentQuestionCreateNestedManyWithoutPageInput
   pageViews?: Prisma.PageViewCreateNestedManyWithoutPageInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutPageInput
+  blocks?: Prisma.BlockCreateNestedManyWithoutPageInput
 }
 
 export type PageUncheckedCreateWithoutConceptMentionsInput = {
   id?: number
   moduleId: number
   title: string
-  content: string
   orderIndex: number
   keywords?: Prisma.PageCreatekeywordsInput | string[]
   isPublished?: boolean
@@ -1283,6 +1536,8 @@ export type PageUncheckedCreateWithoutConceptMentionsInput = {
   promptFeedbacks?: Prisma.PromptUncheckedCreateNestedManyWithoutPageInput
   studentQuestions?: Prisma.StudentQuestionUncheckedCreateNestedManyWithoutPageInput
   pageViews?: Prisma.PageViewUncheckedCreateNestedManyWithoutPageInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutPageInput
+  blocks?: Prisma.BlockUncheckedCreateNestedManyWithoutPageInput
 }
 
 export type PageCreateOrConnectWithoutConceptMentionsInput = {
@@ -1303,7 +1558,6 @@ export type PageUpdateToOneWithWhereWithoutConceptMentionsInput = {
 
 export type PageUpdateWithoutConceptMentionsInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
-  content?: Prisma.StringFieldUpdateOperationsInput | string
   orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
   keywords?: Prisma.PageUpdatekeywordsInput | string[]
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1322,13 +1576,14 @@ export type PageUpdateWithoutConceptMentionsInput = {
   promptFeedbacks?: Prisma.PromptUpdateManyWithoutPageNestedInput
   studentQuestions?: Prisma.StudentQuestionUpdateManyWithoutPageNestedInput
   pageViews?: Prisma.PageViewUpdateManyWithoutPageNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutPageNestedInput
+  blocks?: Prisma.BlockUpdateManyWithoutPageNestedInput
 }
 
 export type PageUncheckedUpdateWithoutConceptMentionsInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   moduleId?: Prisma.IntFieldUpdateOperationsInput | number
   title?: Prisma.StringFieldUpdateOperationsInput | string
-  content?: Prisma.StringFieldUpdateOperationsInput | string
   orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
   keywords?: Prisma.PageUpdatekeywordsInput | string[]
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1346,11 +1601,12 @@ export type PageUncheckedUpdateWithoutConceptMentionsInput = {
   promptFeedbacks?: Prisma.PromptUncheckedUpdateManyWithoutPageNestedInput
   studentQuestions?: Prisma.StudentQuestionUncheckedUpdateManyWithoutPageNestedInput
   pageViews?: Prisma.PageViewUncheckedUpdateManyWithoutPageNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutPageNestedInput
+  blocks?: Prisma.BlockUncheckedUpdateManyWithoutPageNestedInput
 }
 
 export type PageCreateWithoutActivitiesInput = {
   title: string
-  content: string
   orderIndex: number
   keywords?: Prisma.PageCreatekeywordsInput | string[]
   isPublished?: boolean
@@ -1369,13 +1625,14 @@ export type PageCreateWithoutActivitiesInput = {
   promptFeedbacks?: Prisma.PromptCreateNestedManyWithoutPageInput
   studentQuestions?: Prisma.StudentQuestionCreateNestedManyWithoutPageInput
   pageViews?: Prisma.PageViewCreateNestedManyWithoutPageInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutPageInput
+  blocks?: Prisma.BlockCreateNestedManyWithoutPageInput
 }
 
 export type PageUncheckedCreateWithoutActivitiesInput = {
   id?: number
   moduleId: number
   title: string
-  content: string
   orderIndex: number
   keywords?: Prisma.PageCreatekeywordsInput | string[]
   isPublished?: boolean
@@ -1393,6 +1650,8 @@ export type PageUncheckedCreateWithoutActivitiesInput = {
   promptFeedbacks?: Prisma.PromptUncheckedCreateNestedManyWithoutPageInput
   studentQuestions?: Prisma.StudentQuestionUncheckedCreateNestedManyWithoutPageInput
   pageViews?: Prisma.PageViewUncheckedCreateNestedManyWithoutPageInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutPageInput
+  blocks?: Prisma.BlockUncheckedCreateNestedManyWithoutPageInput
 }
 
 export type PageCreateOrConnectWithoutActivitiesInput = {
@@ -1413,7 +1672,6 @@ export type PageUpdateToOneWithWhereWithoutActivitiesInput = {
 
 export type PageUpdateWithoutActivitiesInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
-  content?: Prisma.StringFieldUpdateOperationsInput | string
   orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
   keywords?: Prisma.PageUpdatekeywordsInput | string[]
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1432,13 +1690,14 @@ export type PageUpdateWithoutActivitiesInput = {
   promptFeedbacks?: Prisma.PromptUpdateManyWithoutPageNestedInput
   studentQuestions?: Prisma.StudentQuestionUpdateManyWithoutPageNestedInput
   pageViews?: Prisma.PageViewUpdateManyWithoutPageNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutPageNestedInput
+  blocks?: Prisma.BlockUpdateManyWithoutPageNestedInput
 }
 
 export type PageUncheckedUpdateWithoutActivitiesInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   moduleId?: Prisma.IntFieldUpdateOperationsInput | number
   title?: Prisma.StringFieldUpdateOperationsInput | string
-  content?: Prisma.StringFieldUpdateOperationsInput | string
   orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
   keywords?: Prisma.PageUpdatekeywordsInput | string[]
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1456,11 +1715,12 @@ export type PageUncheckedUpdateWithoutActivitiesInput = {
   promptFeedbacks?: Prisma.PromptUncheckedUpdateManyWithoutPageNestedInput
   studentQuestions?: Prisma.StudentQuestionUncheckedUpdateManyWithoutPageNestedInput
   pageViews?: Prisma.PageViewUncheckedUpdateManyWithoutPageNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutPageNestedInput
+  blocks?: Prisma.BlockUncheckedUpdateManyWithoutPageNestedInput
 }
 
 export type PageCreateWithoutPromptFeedbacksInput = {
   title: string
-  content: string
   orderIndex: number
   keywords?: Prisma.PageCreatekeywordsInput | string[]
   isPublished?: boolean
@@ -1479,13 +1739,14 @@ export type PageCreateWithoutPromptFeedbacksInput = {
   pageFeedbacks?: Prisma.PageFeedbackCreateNestedManyWithoutPageInput
   studentQuestions?: Prisma.StudentQuestionCreateNestedManyWithoutPageInput
   pageViews?: Prisma.PageViewCreateNestedManyWithoutPageInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutPageInput
+  blocks?: Prisma.BlockCreateNestedManyWithoutPageInput
 }
 
 export type PageUncheckedCreateWithoutPromptFeedbacksInput = {
   id?: number
   moduleId: number
   title: string
-  content: string
   orderIndex: number
   keywords?: Prisma.PageCreatekeywordsInput | string[]
   isPublished?: boolean
@@ -1503,6 +1764,8 @@ export type PageUncheckedCreateWithoutPromptFeedbacksInput = {
   pageFeedbacks?: Prisma.PageFeedbackUncheckedCreateNestedManyWithoutPageInput
   studentQuestions?: Prisma.StudentQuestionUncheckedCreateNestedManyWithoutPageInput
   pageViews?: Prisma.PageViewUncheckedCreateNestedManyWithoutPageInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutPageInput
+  blocks?: Prisma.BlockUncheckedCreateNestedManyWithoutPageInput
 }
 
 export type PageCreateOrConnectWithoutPromptFeedbacksInput = {
@@ -1523,7 +1786,6 @@ export type PageUpdateToOneWithWhereWithoutPromptFeedbacksInput = {
 
 export type PageUpdateWithoutPromptFeedbacksInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
-  content?: Prisma.StringFieldUpdateOperationsInput | string
   orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
   keywords?: Prisma.PageUpdatekeywordsInput | string[]
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1542,13 +1804,14 @@ export type PageUpdateWithoutPromptFeedbacksInput = {
   pageFeedbacks?: Prisma.PageFeedbackUpdateManyWithoutPageNestedInput
   studentQuestions?: Prisma.StudentQuestionUpdateManyWithoutPageNestedInput
   pageViews?: Prisma.PageViewUpdateManyWithoutPageNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutPageNestedInput
+  blocks?: Prisma.BlockUpdateManyWithoutPageNestedInput
 }
 
 export type PageUncheckedUpdateWithoutPromptFeedbacksInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   moduleId?: Prisma.IntFieldUpdateOperationsInput | number
   title?: Prisma.StringFieldUpdateOperationsInput | string
-  content?: Prisma.StringFieldUpdateOperationsInput | string
   orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
   keywords?: Prisma.PageUpdatekeywordsInput | string[]
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1566,11 +1829,12 @@ export type PageUncheckedUpdateWithoutPromptFeedbacksInput = {
   pageFeedbacks?: Prisma.PageFeedbackUncheckedUpdateManyWithoutPageNestedInput
   studentQuestions?: Prisma.StudentQuestionUncheckedUpdateManyWithoutPageNestedInput
   pageViews?: Prisma.PageViewUncheckedUpdateManyWithoutPageNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutPageNestedInput
+  blocks?: Prisma.BlockUncheckedUpdateManyWithoutPageNestedInput
 }
 
 export type PageCreateWithoutPageFeedbacksInput = {
   title: string
-  content: string
   orderIndex: number
   keywords?: Prisma.PageCreatekeywordsInput | string[]
   isPublished?: boolean
@@ -1589,13 +1853,14 @@ export type PageCreateWithoutPageFeedbacksInput = {
   promptFeedbacks?: Prisma.PromptCreateNestedManyWithoutPageInput
   studentQuestions?: Prisma.StudentQuestionCreateNestedManyWithoutPageInput
   pageViews?: Prisma.PageViewCreateNestedManyWithoutPageInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutPageInput
+  blocks?: Prisma.BlockCreateNestedManyWithoutPageInput
 }
 
 export type PageUncheckedCreateWithoutPageFeedbacksInput = {
   id?: number
   moduleId: number
   title: string
-  content: string
   orderIndex: number
   keywords?: Prisma.PageCreatekeywordsInput | string[]
   isPublished?: boolean
@@ -1613,6 +1878,8 @@ export type PageUncheckedCreateWithoutPageFeedbacksInput = {
   promptFeedbacks?: Prisma.PromptUncheckedCreateNestedManyWithoutPageInput
   studentQuestions?: Prisma.StudentQuestionUncheckedCreateNestedManyWithoutPageInput
   pageViews?: Prisma.PageViewUncheckedCreateNestedManyWithoutPageInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutPageInput
+  blocks?: Prisma.BlockUncheckedCreateNestedManyWithoutPageInput
 }
 
 export type PageCreateOrConnectWithoutPageFeedbacksInput = {
@@ -1633,7 +1900,6 @@ export type PageUpdateToOneWithWhereWithoutPageFeedbacksInput = {
 
 export type PageUpdateWithoutPageFeedbacksInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
-  content?: Prisma.StringFieldUpdateOperationsInput | string
   orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
   keywords?: Prisma.PageUpdatekeywordsInput | string[]
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1652,13 +1918,14 @@ export type PageUpdateWithoutPageFeedbacksInput = {
   promptFeedbacks?: Prisma.PromptUpdateManyWithoutPageNestedInput
   studentQuestions?: Prisma.StudentQuestionUpdateManyWithoutPageNestedInput
   pageViews?: Prisma.PageViewUpdateManyWithoutPageNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutPageNestedInput
+  blocks?: Prisma.BlockUpdateManyWithoutPageNestedInput
 }
 
 export type PageUncheckedUpdateWithoutPageFeedbacksInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   moduleId?: Prisma.IntFieldUpdateOperationsInput | number
   title?: Prisma.StringFieldUpdateOperationsInput | string
-  content?: Prisma.StringFieldUpdateOperationsInput | string
   orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
   keywords?: Prisma.PageUpdatekeywordsInput | string[]
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1676,11 +1943,12 @@ export type PageUncheckedUpdateWithoutPageFeedbacksInput = {
   promptFeedbacks?: Prisma.PromptUncheckedUpdateManyWithoutPageNestedInput
   studentQuestions?: Prisma.StudentQuestionUncheckedUpdateManyWithoutPageNestedInput
   pageViews?: Prisma.PageViewUncheckedUpdateManyWithoutPageNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutPageNestedInput
+  blocks?: Prisma.BlockUncheckedUpdateManyWithoutPageNestedInput
 }
 
 export type PageCreateWithoutNotesInput = {
   title: string
-  content: string
   orderIndex: number
   keywords?: Prisma.PageCreatekeywordsInput | string[]
   isPublished?: boolean
@@ -1699,13 +1967,14 @@ export type PageCreateWithoutNotesInput = {
   promptFeedbacks?: Prisma.PromptCreateNestedManyWithoutPageInput
   studentQuestions?: Prisma.StudentQuestionCreateNestedManyWithoutPageInput
   pageViews?: Prisma.PageViewCreateNestedManyWithoutPageInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutPageInput
+  blocks?: Prisma.BlockCreateNestedManyWithoutPageInput
 }
 
 export type PageUncheckedCreateWithoutNotesInput = {
   id?: number
   moduleId: number
   title: string
-  content: string
   orderIndex: number
   keywords?: Prisma.PageCreatekeywordsInput | string[]
   isPublished?: boolean
@@ -1723,6 +1992,8 @@ export type PageUncheckedCreateWithoutNotesInput = {
   promptFeedbacks?: Prisma.PromptUncheckedCreateNestedManyWithoutPageInput
   studentQuestions?: Prisma.StudentQuestionUncheckedCreateNestedManyWithoutPageInput
   pageViews?: Prisma.PageViewUncheckedCreateNestedManyWithoutPageInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutPageInput
+  blocks?: Prisma.BlockUncheckedCreateNestedManyWithoutPageInput
 }
 
 export type PageCreateOrConnectWithoutNotesInput = {
@@ -1743,7 +2014,6 @@ export type PageUpdateToOneWithWhereWithoutNotesInput = {
 
 export type PageUpdateWithoutNotesInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
-  content?: Prisma.StringFieldUpdateOperationsInput | string
   orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
   keywords?: Prisma.PageUpdatekeywordsInput | string[]
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1762,13 +2032,14 @@ export type PageUpdateWithoutNotesInput = {
   promptFeedbacks?: Prisma.PromptUpdateManyWithoutPageNestedInput
   studentQuestions?: Prisma.StudentQuestionUpdateManyWithoutPageNestedInput
   pageViews?: Prisma.PageViewUpdateManyWithoutPageNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutPageNestedInput
+  blocks?: Prisma.BlockUpdateManyWithoutPageNestedInput
 }
 
 export type PageUncheckedUpdateWithoutNotesInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   moduleId?: Prisma.IntFieldUpdateOperationsInput | number
   title?: Prisma.StringFieldUpdateOperationsInput | string
-  content?: Prisma.StringFieldUpdateOperationsInput | string
   orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
   keywords?: Prisma.PageUpdatekeywordsInput | string[]
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1786,11 +2057,12 @@ export type PageUncheckedUpdateWithoutNotesInput = {
   promptFeedbacks?: Prisma.PromptUncheckedUpdateManyWithoutPageNestedInput
   studentQuestions?: Prisma.StudentQuestionUncheckedUpdateManyWithoutPageNestedInput
   pageViews?: Prisma.PageViewUncheckedUpdateManyWithoutPageNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutPageNestedInput
+  blocks?: Prisma.BlockUncheckedUpdateManyWithoutPageNestedInput
 }
 
 export type PageCreateWithoutStudentQuestionsInput = {
   title: string
-  content: string
   orderIndex: number
   keywords?: Prisma.PageCreatekeywordsInput | string[]
   isPublished?: boolean
@@ -1809,13 +2081,14 @@ export type PageCreateWithoutStudentQuestionsInput = {
   pageFeedbacks?: Prisma.PageFeedbackCreateNestedManyWithoutPageInput
   promptFeedbacks?: Prisma.PromptCreateNestedManyWithoutPageInput
   pageViews?: Prisma.PageViewCreateNestedManyWithoutPageInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutPageInput
+  blocks?: Prisma.BlockCreateNestedManyWithoutPageInput
 }
 
 export type PageUncheckedCreateWithoutStudentQuestionsInput = {
   id?: number
   moduleId: number
   title: string
-  content: string
   orderIndex: number
   keywords?: Prisma.PageCreatekeywordsInput | string[]
   isPublished?: boolean
@@ -1833,6 +2106,8 @@ export type PageUncheckedCreateWithoutStudentQuestionsInput = {
   pageFeedbacks?: Prisma.PageFeedbackUncheckedCreateNestedManyWithoutPageInput
   promptFeedbacks?: Prisma.PromptUncheckedCreateNestedManyWithoutPageInput
   pageViews?: Prisma.PageViewUncheckedCreateNestedManyWithoutPageInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutPageInput
+  blocks?: Prisma.BlockUncheckedCreateNestedManyWithoutPageInput
 }
 
 export type PageCreateOrConnectWithoutStudentQuestionsInput = {
@@ -1853,7 +2128,6 @@ export type PageUpdateToOneWithWhereWithoutStudentQuestionsInput = {
 
 export type PageUpdateWithoutStudentQuestionsInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
-  content?: Prisma.StringFieldUpdateOperationsInput | string
   orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
   keywords?: Prisma.PageUpdatekeywordsInput | string[]
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1872,13 +2146,14 @@ export type PageUpdateWithoutStudentQuestionsInput = {
   pageFeedbacks?: Prisma.PageFeedbackUpdateManyWithoutPageNestedInput
   promptFeedbacks?: Prisma.PromptUpdateManyWithoutPageNestedInput
   pageViews?: Prisma.PageViewUpdateManyWithoutPageNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutPageNestedInput
+  blocks?: Prisma.BlockUpdateManyWithoutPageNestedInput
 }
 
 export type PageUncheckedUpdateWithoutStudentQuestionsInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   moduleId?: Prisma.IntFieldUpdateOperationsInput | number
   title?: Prisma.StringFieldUpdateOperationsInput | string
-  content?: Prisma.StringFieldUpdateOperationsInput | string
   orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
   keywords?: Prisma.PageUpdatekeywordsInput | string[]
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1896,11 +2171,12 @@ export type PageUncheckedUpdateWithoutStudentQuestionsInput = {
   pageFeedbacks?: Prisma.PageFeedbackUncheckedUpdateManyWithoutPageNestedInput
   promptFeedbacks?: Prisma.PromptUncheckedUpdateManyWithoutPageNestedInput
   pageViews?: Prisma.PageViewUncheckedUpdateManyWithoutPageNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutPageNestedInput
+  blocks?: Prisma.BlockUncheckedUpdateManyWithoutPageNestedInput
 }
 
 export type PageCreateWithoutPodcastsInput = {
   title: string
-  content: string
   orderIndex: number
   keywords?: Prisma.PageCreatekeywordsInput | string[]
   isPublished?: boolean
@@ -1919,13 +2195,14 @@ export type PageCreateWithoutPodcastsInput = {
   promptFeedbacks?: Prisma.PromptCreateNestedManyWithoutPageInput
   studentQuestions?: Prisma.StudentQuestionCreateNestedManyWithoutPageInput
   pageViews?: Prisma.PageViewCreateNestedManyWithoutPageInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutPageInput
+  blocks?: Prisma.BlockCreateNestedManyWithoutPageInput
 }
 
 export type PageUncheckedCreateWithoutPodcastsInput = {
   id?: number
   moduleId: number
   title: string
-  content: string
   orderIndex: number
   keywords?: Prisma.PageCreatekeywordsInput | string[]
   isPublished?: boolean
@@ -1943,6 +2220,8 @@ export type PageUncheckedCreateWithoutPodcastsInput = {
   promptFeedbacks?: Prisma.PromptUncheckedCreateNestedManyWithoutPageInput
   studentQuestions?: Prisma.StudentQuestionUncheckedCreateNestedManyWithoutPageInput
   pageViews?: Prisma.PageViewUncheckedCreateNestedManyWithoutPageInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutPageInput
+  blocks?: Prisma.BlockUncheckedCreateNestedManyWithoutPageInput
 }
 
 export type PageCreateOrConnectWithoutPodcastsInput = {
@@ -1963,7 +2242,6 @@ export type PageUpdateToOneWithWhereWithoutPodcastsInput = {
 
 export type PageUpdateWithoutPodcastsInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
-  content?: Prisma.StringFieldUpdateOperationsInput | string
   orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
   keywords?: Prisma.PageUpdatekeywordsInput | string[]
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1982,13 +2260,14 @@ export type PageUpdateWithoutPodcastsInput = {
   promptFeedbacks?: Prisma.PromptUpdateManyWithoutPageNestedInput
   studentQuestions?: Prisma.StudentQuestionUpdateManyWithoutPageNestedInput
   pageViews?: Prisma.PageViewUpdateManyWithoutPageNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutPageNestedInput
+  blocks?: Prisma.BlockUpdateManyWithoutPageNestedInput
 }
 
 export type PageUncheckedUpdateWithoutPodcastsInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   moduleId?: Prisma.IntFieldUpdateOperationsInput | number
   title?: Prisma.StringFieldUpdateOperationsInput | string
-  content?: Prisma.StringFieldUpdateOperationsInput | string
   orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
   keywords?: Prisma.PageUpdatekeywordsInput | string[]
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -2006,11 +2285,12 @@ export type PageUncheckedUpdateWithoutPodcastsInput = {
   promptFeedbacks?: Prisma.PromptUncheckedUpdateManyWithoutPageNestedInput
   studentQuestions?: Prisma.StudentQuestionUncheckedUpdateManyWithoutPageNestedInput
   pageViews?: Prisma.PageViewUncheckedUpdateManyWithoutPageNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutPageNestedInput
+  blocks?: Prisma.BlockUncheckedUpdateManyWithoutPageNestedInput
 }
 
 export type PageCreateWithoutMediaResourcesInput = {
   title: string
-  content: string
   orderIndex: number
   keywords?: Prisma.PageCreatekeywordsInput | string[]
   isPublished?: boolean
@@ -2029,13 +2309,14 @@ export type PageCreateWithoutMediaResourcesInput = {
   promptFeedbacks?: Prisma.PromptCreateNestedManyWithoutPageInput
   studentQuestions?: Prisma.StudentQuestionCreateNestedManyWithoutPageInput
   pageViews?: Prisma.PageViewCreateNestedManyWithoutPageInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutPageInput
+  blocks?: Prisma.BlockCreateNestedManyWithoutPageInput
 }
 
 export type PageUncheckedCreateWithoutMediaResourcesInput = {
   id?: number
   moduleId: number
   title: string
-  content: string
   orderIndex: number
   keywords?: Prisma.PageCreatekeywordsInput | string[]
   isPublished?: boolean
@@ -2053,6 +2334,8 @@ export type PageUncheckedCreateWithoutMediaResourcesInput = {
   promptFeedbacks?: Prisma.PromptUncheckedCreateNestedManyWithoutPageInput
   studentQuestions?: Prisma.StudentQuestionUncheckedCreateNestedManyWithoutPageInput
   pageViews?: Prisma.PageViewUncheckedCreateNestedManyWithoutPageInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutPageInput
+  blocks?: Prisma.BlockUncheckedCreateNestedManyWithoutPageInput
 }
 
 export type PageCreateOrConnectWithoutMediaResourcesInput = {
@@ -2073,7 +2356,6 @@ export type PageUpdateToOneWithWhereWithoutMediaResourcesInput = {
 
 export type PageUpdateWithoutMediaResourcesInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
-  content?: Prisma.StringFieldUpdateOperationsInput | string
   orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
   keywords?: Prisma.PageUpdatekeywordsInput | string[]
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -2092,13 +2374,14 @@ export type PageUpdateWithoutMediaResourcesInput = {
   promptFeedbacks?: Prisma.PromptUpdateManyWithoutPageNestedInput
   studentQuestions?: Prisma.StudentQuestionUpdateManyWithoutPageNestedInput
   pageViews?: Prisma.PageViewUpdateManyWithoutPageNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutPageNestedInput
+  blocks?: Prisma.BlockUpdateManyWithoutPageNestedInput
 }
 
 export type PageUncheckedUpdateWithoutMediaResourcesInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   moduleId?: Prisma.IntFieldUpdateOperationsInput | number
   title?: Prisma.StringFieldUpdateOperationsInput | string
-  content?: Prisma.StringFieldUpdateOperationsInput | string
   orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
   keywords?: Prisma.PageUpdatekeywordsInput | string[]
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -2116,12 +2399,13 @@ export type PageUncheckedUpdateWithoutMediaResourcesInput = {
   promptFeedbacks?: Prisma.PromptUncheckedUpdateManyWithoutPageNestedInput
   studentQuestions?: Prisma.StudentQuestionUncheckedUpdateManyWithoutPageNestedInput
   pageViews?: Prisma.PageViewUncheckedUpdateManyWithoutPageNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutPageNestedInput
+  blocks?: Prisma.BlockUncheckedUpdateManyWithoutPageNestedInput
 }
 
 export type PageCreateManyModuleInput = {
   id?: number
   title: string
-  content: string
   orderIndex: number
   keywords?: Prisma.PageCreatekeywordsInput | string[]
   isPublished?: boolean
@@ -2133,7 +2417,6 @@ export type PageCreateManyModuleInput = {
 
 export type PageUpdateWithoutModuleInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
-  content?: Prisma.StringFieldUpdateOperationsInput | string
   orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
   keywords?: Prisma.PageUpdatekeywordsInput | string[]
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -2152,12 +2435,13 @@ export type PageUpdateWithoutModuleInput = {
   promptFeedbacks?: Prisma.PromptUpdateManyWithoutPageNestedInput
   studentQuestions?: Prisma.StudentQuestionUpdateManyWithoutPageNestedInput
   pageViews?: Prisma.PageViewUpdateManyWithoutPageNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutPageNestedInput
+  blocks?: Prisma.BlockUpdateManyWithoutPageNestedInput
 }
 
 export type PageUncheckedUpdateWithoutModuleInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   title?: Prisma.StringFieldUpdateOperationsInput | string
-  content?: Prisma.StringFieldUpdateOperationsInput | string
   orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
   keywords?: Prisma.PageUpdatekeywordsInput | string[]
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -2176,12 +2460,13 @@ export type PageUncheckedUpdateWithoutModuleInput = {
   promptFeedbacks?: Prisma.PromptUncheckedUpdateManyWithoutPageNestedInput
   studentQuestions?: Prisma.StudentQuestionUncheckedUpdateManyWithoutPageNestedInput
   pageViews?: Prisma.PageViewUncheckedUpdateManyWithoutPageNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutPageNestedInput
+  blocks?: Prisma.BlockUncheckedUpdateManyWithoutPageNestedInput
 }
 
 export type PageUncheckedUpdateManyWithoutModuleInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   title?: Prisma.StringFieldUpdateOperationsInput | string
-  content?: Prisma.StringFieldUpdateOperationsInput | string
   orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
   keywords?: Prisma.PageUpdatekeywordsInput | string[]
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -2208,6 +2493,8 @@ export type PageCountOutputType = {
   promptFeedbacks: number
   studentQuestions: number
   pageViews: number
+  sessions: number
+  blocks: number
 }
 
 export type PageCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -2222,6 +2509,8 @@ export type PageCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   promptFeedbacks?: boolean | PageCountOutputTypeCountPromptFeedbacksArgs
   studentQuestions?: boolean | PageCountOutputTypeCountStudentQuestionsArgs
   pageViews?: boolean | PageCountOutputTypeCountPageViewsArgs
+  sessions?: boolean | PageCountOutputTypeCountSessionsArgs
+  blocks?: boolean | PageCountOutputTypeCountBlocksArgs
 }
 
 /**
@@ -2311,12 +2600,25 @@ export type PageCountOutputTypeCountPageViewsArgs<ExtArgs extends runtime.Types.
   where?: Prisma.PageViewWhereInput
 }
 
+/**
+ * PageCountOutputType without action
+ */
+export type PageCountOutputTypeCountSessionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.SessionWhereInput
+}
+
+/**
+ * PageCountOutputType without action
+ */
+export type PageCountOutputTypeCountBlocksArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.BlockWhereInput
+}
+
 
 export type PageSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   moduleId?: boolean
   title?: boolean
-  content?: boolean
   orderIndex?: boolean
   keywords?: boolean
   isPublished?: boolean
@@ -2336,6 +2638,8 @@ export type PageSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   promptFeedbacks?: boolean | Prisma.Page$promptFeedbacksArgs<ExtArgs>
   studentQuestions?: boolean | Prisma.Page$studentQuestionsArgs<ExtArgs>
   pageViews?: boolean | Prisma.Page$pageViewsArgs<ExtArgs>
+  sessions?: boolean | Prisma.Page$sessionsArgs<ExtArgs>
+  blocks?: boolean | Prisma.Page$blocksArgs<ExtArgs>
   _count?: boolean | Prisma.PageCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["page"]>
 
@@ -2343,7 +2647,6 @@ export type PageSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   id?: boolean
   moduleId?: boolean
   title?: boolean
-  content?: boolean
   orderIndex?: boolean
   keywords?: boolean
   isPublished?: boolean
@@ -2358,7 +2661,6 @@ export type PageSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   id?: boolean
   moduleId?: boolean
   title?: boolean
-  content?: boolean
   orderIndex?: boolean
   keywords?: boolean
   isPublished?: boolean
@@ -2373,7 +2675,6 @@ export type PageSelectScalar = {
   id?: boolean
   moduleId?: boolean
   title?: boolean
-  content?: boolean
   orderIndex?: boolean
   keywords?: boolean
   isPublished?: boolean
@@ -2383,7 +2684,7 @@ export type PageSelectScalar = {
   updatedAt?: boolean
 }
 
-export type PageOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "moduleId" | "title" | "content" | "orderIndex" | "keywords" | "isPublished" | "lastProcessedAt" | "processingVersion" | "createdAt" | "updatedAt", ExtArgs["result"]["page"]>
+export type PageOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "moduleId" | "title" | "orderIndex" | "keywords" | "isPublished" | "lastProcessedAt" | "processingVersion" | "createdAt" | "updatedAt", ExtArgs["result"]["page"]>
 export type PageInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   module?: boolean | Prisma.ModuleDefaultArgs<ExtArgs>
   activities?: boolean | Prisma.Page$activitiesArgs<ExtArgs>
@@ -2397,6 +2698,8 @@ export type PageInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   promptFeedbacks?: boolean | Prisma.Page$promptFeedbacksArgs<ExtArgs>
   studentQuestions?: boolean | Prisma.Page$studentQuestionsArgs<ExtArgs>
   pageViews?: boolean | Prisma.Page$pageViewsArgs<ExtArgs>
+  sessions?: boolean | Prisma.Page$sessionsArgs<ExtArgs>
+  blocks?: boolean | Prisma.Page$blocksArgs<ExtArgs>
   _count?: boolean | Prisma.PageCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type PageIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -2421,12 +2724,13 @@ export type $PagePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     promptFeedbacks: Prisma.$PromptPayload<ExtArgs>[]
     studentQuestions: Prisma.$StudentQuestionPayload<ExtArgs>[]
     pageViews: Prisma.$PageViewPayload<ExtArgs>[]
+    sessions: Prisma.$SessionPayload<ExtArgs>[]
+    blocks: Prisma.$BlockPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
     moduleId: number
     title: string
-    content: string
     orderIndex: number
     keywords: string[]
     isPublished: boolean
@@ -2840,6 +3144,8 @@ export interface Prisma__PageClient<T, Null = never, ExtArgs extends runtime.Typ
   promptFeedbacks<T extends Prisma.Page$promptFeedbacksArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Page$promptFeedbacksArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PromptPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   studentQuestions<T extends Prisma.Page$studentQuestionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Page$studentQuestionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$StudentQuestionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   pageViews<T extends Prisma.Page$pageViewsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Page$pageViewsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PageViewPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  sessions<T extends Prisma.Page$sessionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Page$sessionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  blocks<T extends Prisma.Page$blocksArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Page$blocksArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BlockPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2872,7 +3178,6 @@ export interface PageFieldRefs {
   readonly id: Prisma.FieldRef<"Page", 'Int'>
   readonly moduleId: Prisma.FieldRef<"Page", 'Int'>
   readonly title: Prisma.FieldRef<"Page", 'String'>
-  readonly content: Prisma.FieldRef<"Page", 'String'>
   readonly orderIndex: Prisma.FieldRef<"Page", 'Int'>
   readonly keywords: Prisma.FieldRef<"Page", 'String[]'>
   readonly isPublished: Prisma.FieldRef<"Page", 'Boolean'>
@@ -3537,6 +3842,54 @@ export type Page$pageViewsArgs<ExtArgs extends runtime.Types.Extensions.Internal
   take?: number
   skip?: number
   distinct?: Prisma.PageViewScalarFieldEnum | Prisma.PageViewScalarFieldEnum[]
+}
+
+/**
+ * Page.sessions
+ */
+export type Page$sessionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Session
+   */
+  select?: Prisma.SessionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Session
+   */
+  omit?: Prisma.SessionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.SessionInclude<ExtArgs> | null
+  where?: Prisma.SessionWhereInput
+  orderBy?: Prisma.SessionOrderByWithRelationInput | Prisma.SessionOrderByWithRelationInput[]
+  cursor?: Prisma.SessionWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.SessionScalarFieldEnum | Prisma.SessionScalarFieldEnum[]
+}
+
+/**
+ * Page.blocks
+ */
+export type Page$blocksArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Block
+   */
+  select?: Prisma.BlockSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Block
+   */
+  omit?: Prisma.BlockOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.BlockInclude<ExtArgs> | null
+  where?: Prisma.BlockWhereInput
+  orderBy?: Prisma.BlockOrderByWithRelationInput | Prisma.BlockOrderByWithRelationInput[]
+  cursor?: Prisma.BlockWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.BlockScalarFieldEnum | Prisma.BlockScalarFieldEnum[]
 }
 
 /**

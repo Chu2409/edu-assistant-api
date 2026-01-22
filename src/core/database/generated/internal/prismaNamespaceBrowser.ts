@@ -56,6 +56,9 @@ export const ModelName = {
   AiConfiguration: 'AiConfiguration',
   Enrollment: 'Enrollment',
   Page: 'Page',
+  Block: 'Block',
+  Session: 'Session',
+  Message: 'Message',
   PageView: 'PageView',
   PageRelation: 'PageRelation',
   PageConcept: 'PageConcept',
@@ -128,6 +131,12 @@ export const AiConfigurationScalarFieldEnum = {
   moduleId: 'moduleId',
   language: 'language',
   contextPrompt: 'contextPrompt',
+  targetLevel: 'targetLevel',
+  audience: 'audience',
+  learningObjectives: 'learningObjectives',
+  contentLength: 'contentLength',
+  codePolicy: 'codePolicy',
+  tone: 'tone',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -151,7 +160,6 @@ export const PageScalarFieldEnum = {
   id: 'id',
   moduleId: 'moduleId',
   title: 'title',
-  content: 'content',
   orderIndex: 'orderIndex',
   keywords: 'keywords',
   isPublished: 'isPublished',
@@ -162,6 +170,44 @@ export const PageScalarFieldEnum = {
 } as const
 
 export type PageScalarFieldEnum = (typeof PageScalarFieldEnum)[keyof typeof PageScalarFieldEnum]
+
+
+export const BlockScalarFieldEnum = {
+  id: 'id',
+  pageId: 'pageId',
+  type: 'type',
+  content: 'content',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type BlockScalarFieldEnum = (typeof BlockScalarFieldEnum)[keyof typeof BlockScalarFieldEnum]
+
+
+export const SessionScalarFieldEnum = {
+  id: 'id',
+  title: 'title',
+  startedAt: 'startedAt',
+  userId: 'userId',
+  pageId: 'pageId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type SessionScalarFieldEnum = (typeof SessionScalarFieldEnum)[keyof typeof SessionScalarFieldEnum]
+
+
+export const MessageScalarFieldEnum = {
+  id: 'id',
+  content: 'content',
+  metadata: 'metadata',
+  role: 'role',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  sessionId: 'sessionId'
+} as const
+
+export type MessageScalarFieldEnum = (typeof MessageScalarFieldEnum)[keyof typeof MessageScalarFieldEnum]
 
 
 export const PageViewScalarFieldEnum = {
@@ -371,19 +417,19 @@ export const SortOrder = {
 export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
 
 
+export const JsonNullValueInput = {
+  JsonNull: 'JsonNull'
+} as const
+
+export type JsonNullValueInput = (typeof JsonNullValueInput)[keyof typeof JsonNullValueInput]
+
+
 export const NullableJsonNullValueInput = {
   DbNull: 'DbNull',
   JsonNull: 'JsonNull'
 } as const
 
 export type NullableJsonNullValueInput = (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput]
-
-
-export const JsonNullValueInput = {
-  JsonNull: 'JsonNull'
-} as const
-
-export type JsonNullValueInput = (typeof JsonNullValueInput)[keyof typeof JsonNullValueInput]
 
 
 export const QueryMode = {

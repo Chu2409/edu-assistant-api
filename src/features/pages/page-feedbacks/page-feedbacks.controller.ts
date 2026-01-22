@@ -20,7 +20,7 @@ import { Role } from 'src/core/database/generated/enums'
 @Controller('page-feedbacks')
 @JwtAuth(Role.STUDENT)
 export class PageFeedbacksController {
-  constructor(private readonly pageFeedbacksService: PageFeedbacksService) { }
+  constructor(private readonly pageFeedbacksService: PageFeedbacksService) {}
 
   @Post()
   @ApiOperation({ summary: 'Crear un nuevo feedback para una página' })

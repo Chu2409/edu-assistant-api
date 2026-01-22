@@ -43,6 +43,7 @@ model User {
   studentQuestions StudentQuestion[]
   questionReplies  QuestionReply[]
   pageViews        PageView[]
+  sessions         Session[]
 
   @@index([microsoftId])
   @@map("users")
@@ -80,13 +81,50 @@ model Module {
 // AI CONFIGURATION (RF-9, RF-10)
 // ============================================
 
+enum AiTargetLevel {
+  BASIC
+  INTERMEDIATE
+  ADVANCED
+}
+
+enum AiAudience {
+  HIGH_SCHOOL
+  UNIVERSITY
+  PROFESSIONAL
+}
+
+enum AiLength {
+  SHORT
+  MEDIUM
+  LONG
+}
+
+enum AiCodePolicy {
+  NONE
+  EXERCISES
+  EXAMPLES
+}
+
+enum AiTone {
+  FORMAL
+  EDUCATIONAL
+  CASUAL
+}
+
 model AiConfiguration {
-  id            Int      @id @default(autoincrement())
-  moduleId      Int      @unique @map("module_id")
-  language      String   @default("es") // RF-9: idioma específico
-  contextPrompt String?  @map("context_prompt") @db.Text // RF-10: contexto personalizado del módulo
-  createdAt     DateTime @default(now()) @map("created_at")
-  updatedAt     DateTime @updatedAt @map("updated_at")
+  id                 Int           @id @default(autoincrement())
+  moduleId           Int           @unique @map("module_id")
+  language           String        @default("es") // RF-9: idioma específico
+  contextPrompt      String?       @map("context_prompt") // RF-10: contexto personalizado del módulo
+  targetLevel        AiTargetLevel @default(INTERMEDIATE) @map("target_level")
+  audience           AiAudience    @default(UNIVERSITY) @map("audience")
+  learningObjectives String[]      @map("learning_objectives")
+  contentLength      AiLength      @default(MEDIUM) @map("content_length")
+  codePolicy         AiCodePolicy  @default(EXAMPLES) @map("code_policty")
+  tone               AiTone        @default(EDUCATIONAL) @map("tone")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
 
   // Relations
   module Module @relation(fields: [moduleId], references: [id], onDelete: Cascade)
@@ -124,7 +162,6 @@ model Page {
   id                Int                          @id @default(autoincrement())
   moduleId          Int                          @map("module_id")
   title             String
-  content           String                       @db.Text // HTML CON conceptos Y enlaces ya incrustados
   orderIndex        Int                          @map("order_index")
   embedding         Unsupported("vector(1536)")?
   keywords          String[] // Mantener para búsquedas
@@ -146,11 +183,73 @@ model Page {
   promptFeedbacks  Prompt[]
   studentQuestions StudentQuestion[]
   pageViews        PageView[]
+  sessions         Session[]
+  blocks           Block[]
 
   @@unique([moduleId, orderIndex])
   @@index([moduleId])
   @@index([lastProcessedAt]) // NEW: para batch que actualiza HTMLs viejos
   @@map("pages")
+}
+
+enum BlockType {
+  TEXT
+  CODE
+  IMAGE
+  IMAGE_SUGGESTION
+}
+
+model Block {
+  id        Int       @id @default(autoincrement())
+  pageId    Int       @map("page_id")
+  type      BlockType @map("type")
+  content   Json      @map("content")
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+
+  page Page @relation(fields: [pageId], references: [id], onDelete: Cascade)
+
+  @@map("blocks")
+}
+
+model Session {
+  id        Int      @id @default(autoincrement())
+  title     String   @map("title")
+  startedAt DateTime @default(now()) @map("started_at")
+  userId    Int      @map("user_id")
+  pageId    Int      @map("page_id")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade, map: "sessions_user_id_fkey")
+  page Page @relation(fields: [pageId], references: [id], onDelete: Cascade, map: "sessions_page_id_fkey")
+
+  messages Message[]
+
+  @@unique([userId, pageId])
+  @@map("sessions")
+}
+
+enum MessageRole {
+  user
+  assistant
+  developer
+  tool
+  system
+}
+
+model Message {
+  id        Int         @id @default(autoincrement())
+  content   String      @map("content")
+  metadata  String?     @map("metadata")
+  role      MessageRole @map("role")
+  createdAt DateTime    @default(now()) @map("created_at")
+  updatedAt DateTime    @updatedAt @map("updated_at")
+
+  sessionId Int
+  session   Session @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
+  @@map("messages")
 }
 
 // ============================================

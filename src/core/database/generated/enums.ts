@@ -18,6 +18,72 @@ export const Role = {
 export type Role = (typeof Role)[keyof typeof Role]
 
 
+export const AiTargetLevel = {
+  BASIC: 'BASIC',
+  INTERMEDIATE: 'INTERMEDIATE',
+  ADVANCED: 'ADVANCED'
+} as const
+
+export type AiTargetLevel = (typeof AiTargetLevel)[keyof typeof AiTargetLevel]
+
+
+export const AiAudience = {
+  HIGH_SCHOOL: 'HIGH_SCHOOL',
+  UNIVERSITY: 'UNIVERSITY',
+  PROFESSIONAL: 'PROFESSIONAL'
+} as const
+
+export type AiAudience = (typeof AiAudience)[keyof typeof AiAudience]
+
+
+export const AiLength = {
+  SHORT: 'SHORT',
+  MEDIUM: 'MEDIUM',
+  LONG: 'LONG'
+} as const
+
+export type AiLength = (typeof AiLength)[keyof typeof AiLength]
+
+
+export const AiCodePolicy = {
+  NONE: 'NONE',
+  EXERCISES: 'EXERCISES',
+  EXAMPLES: 'EXAMPLES'
+} as const
+
+export type AiCodePolicy = (typeof AiCodePolicy)[keyof typeof AiCodePolicy]
+
+
+export const AiTone = {
+  FORMAL: 'FORMAL',
+  EDUCATIONAL: 'EDUCATIONAL',
+  CASUAL: 'CASUAL'
+} as const
+
+export type AiTone = (typeof AiTone)[keyof typeof AiTone]
+
+
+export const BlockType = {
+  TEXT: 'TEXT',
+  CODE: 'CODE',
+  IMAGE: 'IMAGE',
+  IMAGE_SUGGESTION: 'IMAGE_SUGGESTION'
+} as const
+
+export type BlockType = (typeof BlockType)[keyof typeof BlockType]
+
+
+export const MessageRole = {
+  user: 'user',
+  assistant: 'assistant',
+  developer: 'developer',
+  tool: 'tool',
+  system: 'system'
+} as const
+
+export type MessageRole = (typeof MessageRole)[keyof typeof MessageRole]
+
+
 export const RelationType = {
   SEMANTIC: 'SEMANTIC',
   PREREQUISITE: 'PREREQUISITE',

@@ -10,7 +10,7 @@ import { PageFeedbacksMapper } from './mappers/page-feedbacks.mapper'
 
 @Injectable()
 export class PageFeedbacksService {
-  constructor(private readonly dbService: DBService) { }
+  constructor(private readonly dbService: DBService) {}
 
   async create(userId: number, createPageFeedbackDto: CreatePageFeedbackDto) {
     const newFeedback = await this.dbService.pageFeedback.create({
