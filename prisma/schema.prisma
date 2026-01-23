@@ -340,11 +340,8 @@ model PageConcept {
 enum ActivityType {
   MULTIPLE_CHOICE
   TRUE_FALSE
-  SHORT_ANSWER
-  ESSAY
   FILL_BLANK
-  MATCHING
-  ORDERING
+  MATCH
 }
 
 model Activity {

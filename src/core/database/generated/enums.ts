@@ -88,11 +88,8 @@ export type RelationType = (typeof RelationType)[keyof typeof RelationType]
 export const ActivityType = {
   MULTIPLE_CHOICE: 'MULTIPLE_CHOICE',
   TRUE_FALSE: 'TRUE_FALSE',
-  SHORT_ANSWER: 'SHORT_ANSWER',
-  ESSAY: 'ESSAY',
   FILL_BLANK: 'FILL_BLANK',
-  MATCHING: 'MATCHING',
-  ORDERING: 'ORDERING',
+  MATCH: 'MATCH',
 } as const
 
 export type ActivityType = (typeof ActivityType)[keyof typeof ActivityType]
