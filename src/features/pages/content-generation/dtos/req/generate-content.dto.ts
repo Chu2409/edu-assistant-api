@@ -21,13 +21,4 @@ export class GenerateContentDto {
   @IsString()
   @MinLength(2)
   topic: string
-
-  @ApiProperty({
-    description: 'Prompt para la generación del contenido',
-    example:
-      'Genera un contenido sobre la fotosíntesis para estudiantes de primer año de secundaria',
-  })
-  @IsString()
-  @MinLength(5)
-  prompt: string
 }

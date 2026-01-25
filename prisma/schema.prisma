@@ -99,12 +99,6 @@ enum AiLength {
   LONG
 }
 
-enum AiCodePolicy {
-  NONE
-  EXERCISES
-  EXAMPLES
-}
-
 enum AiTone {
   FORMAL
   EDUCATIONAL
@@ -120,7 +114,6 @@ model AiConfiguration {
   audience           AiAudience    @default(UNIVERSITY) @map("audience")
   learningObjectives String[]      @map("learning_objectives")
   contentLength      AiLength      @default(MEDIUM) @map("content_length")
-  codePolicy         AiCodePolicy  @default(EXAMPLES) @map("code_policty")
   tone               AiTone        @default(EDUCATIONAL) @map("tone")
 
   createdAt DateTime @default(now()) @map("created_at")
@@ -168,6 +161,8 @@ model Page {
   isPublished       Boolean                      @default(false) @map("is_published")
   lastProcessedAt   DateTime?                    @map("last_processed_at") // Cuándo se procesó el HTML
   processingVersion Int                          @default(1) @map("processing_version") // Para re-procesar si cambias lógica
+  aiResponseId      String?                      @map("ai_response_id") // Para continuar conversación
+  hasManualEdits    Boolean                      @default(false) @map("has_manual_edits") // Si el profesor editó manualmente
   createdAt         DateTime                     @default(now()) @map("created_at")
   updatedAt         DateTime                     @updatedAt @map("updated_at")
 

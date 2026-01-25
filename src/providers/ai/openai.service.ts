@@ -1,6 +1,7 @@
 import { Injectable, OnModuleInit } from '@nestjs/common'
 import OpenAI from 'openai'
 import { CustomConfigService } from 'src/core/config/config.service'
+import { AiInput } from './interfaces/input.interface'
 
 @Injectable()
 export class OpenaiService implements OnModuleInit {
@@ -17,31 +18,21 @@ export class OpenaiService implements OnModuleInit {
 
   // 1. RESPONSES API (La nueva forma de Chat)
   // Maneja estado, multimodalidad y herramientas nativas.
-  async getResponse(prompt: string, previousResponseId?: string) {
+  async getResponse(input: AiInput[], previousResponseId?: string) {
     try {
       const response = await this.openai.responses.create({
         model: 'gpt-4.1-mini',
         // En Responses API, usamos 'input' en lugar de 'messages'
-        input: [
-          {
-            role: 'user',
-            content: [
-              {
-                type: 'input_text',
-                text: prompt,
-              },
-            ],
-          },
-        ],
+        input,
         // CLAVE: Si pasas el ID anterior, OpenAI recuerda el contexto automáticamente.
         previous_response_id: previousResponseId,
       })
 
-      // El SDK suele ofrecer un helper para obtener el texto final limpio
-      // O puedes acceder a response.output[0].content...
+      const content = JSON.parse(response.output_text)
+
       return {
-        content: response.output_text, // Helper del SDK (verificar versión)
-        responseId: response.id, // Guardar esto para continuar la charla después
+        content,
+        responseId: response.id,
       }
     } catch (error) {
       this.handleError(error)
