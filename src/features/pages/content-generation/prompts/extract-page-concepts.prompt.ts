@@ -1,37 +1,47 @@
 import { AiAudience, AiTargetLevel } from 'src/core/database/generated/enums'
 import { PromptInput } from '../interfaces/prompt-input.interface'
+import { TextBlock } from '../interfaces/content-block.interface'
 
-export interface ExtractPageTermsPrompt {
-  textBlocks: Array<{ markdown: string }> // Solo bloques de tipo text
+export interface ExtractPageConceptsPrompt {
+  textBlocks: TextBlock[] // Solo bloques de tipo text
   language: string
   targetLevel: AiTargetLevel
   audience: AiAudience
   maxTerms?: number
 }
 
-export const extractPageTermsPrompt = ({
+export const extractPageConceptsPrompt = ({
   textBlocks,
   language,
   targetLevel,
   audience,
   maxTerms = 10,
-}: ExtractPageTermsPrompt): PromptInput[] => [
+}: ExtractPageConceptsPrompt): PromptInput[] => [
   {
     role: 'system',
     content: `You are an expert educational content analyzer specialized in identifying key concepts and terms.
 
-# YOUR TASK
-Extract the most important terms/concepts from lesson text content and provide concise definitions suitable for tooltips.
+# OUTPUT FORMAT
+CRITICAL: Return ONLY raw JSON. Do NOT wrap in markdown code fences. Do NOT add \`\`\`json or \`\`\`. Just the JSON object.
 
-# OUTPUT FORMAT (valid JSON only)
+Expected format:
 {
   "terms": [
     {
-      "term": string,        // The exact term as it appears in the text
-      "definition": string   // Short, clear definition (1-2 sentences max)
+      "term": string,
+      "definition": string
     }
   ]
 }
+
+# CRITICAL TERM EXTRACTION RULE
+🚨 IMPORTANT: Extract terms EXACTLY as they appear in the text content.
+
+**Requirements:**
+- The "term" field MUST contain the EXACT word or phrase from the text
+- Use the exact spelling, including hyphens, capitalization variations are acceptable
+- Can be single words ("variable", "function") or compound phrases ("machine learning", "data structure")
+- The term must be searchable in the original text (case-insensitive matching)
 
 # TERM SELECTION CRITERIA
 
@@ -41,13 +51,16 @@ Extract the most important terms/concepts from lesson text content and provide c
 ✅ Specialized vocabulary that students may not know
 ✅ Important processes, methods, or principles
 ✅ Domain-specific jargon that requires explanation
+✅ Terms that appear verbatim in the text (single or multi-word)
 
 ## What NOT to Extract
+❌ Paraphrased or summarized concepts not in the text
 ❌ Common words that don't need definition
 ❌ Generic terms everyone knows
 ❌ Proper nouns (names of people, places, companies)
 ❌ Terms already extensively explained in the text
 ❌ Overly basic concepts for the target level
+❌ Made-up phrases that don't appear in the original text
 
 # DEFINITION GUIDELINES
 
@@ -69,10 +82,7 @@ Extract the most important terms/concepts from lesson text content and provide c
 - **PROFESSIONAL**: Industry-standard terminology, practical focus
 
 # TERM LIMIT
-Extract up to ${maxTerms} terms maximum, prioritizing the most important concepts.
-
-# OUTPUT
-Valid JSON only. No explanations outside the JSON structure.`,
+Extract up to ${maxTerms} terms maximum, prioritizing the most important concepts that appear verbatim in the text.`,
   },
   {
     role: 'user',
@@ -87,6 +97,6 @@ ${textBlocks.map((block, index) => `[TEXT BLOCK ${index + 1}]\n${block.markdown}
 - Audience: ${audience}
 - Maximum Terms: ${maxTerms}
 
-Extract the ${maxTerms} most important terms with their definitions. Return JSON only.`,
+CRITICAL: Extract ONLY terms that appear EXACTLY in the text above (case-insensitive). Return ${maxTerms} terms maximum. Return ONLY the JSON object. No markdown fences, no explanations.`,
   },
 ]

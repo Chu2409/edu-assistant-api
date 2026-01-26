@@ -2163,8 +2163,9 @@ export const PageScalarFieldEnum = {
   orderIndex: 'orderIndex',
   keywords: 'keywords',
   isPublished: 'isPublished',
-  lastProcessedAt: 'lastProcessedAt',
-  processingVersion: 'processingVersion',
+  aiResponseId: 'aiResponseId',
+  hasManualEdits: 'hasManualEdits',
+  conceptsProcessed: 'conceptsProcessed',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -2247,7 +2248,6 @@ export const PageConceptScalarFieldEnum = {
   pageId: 'pageId',
   term: 'term',
   definition: 'definition',
-  htmlId: 'htmlId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const

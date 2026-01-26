@@ -5,7 +5,12 @@ import {
   generatePageContentPrompt,
   GeneratePageContentPrompt,
 } from './prompts/generate-page-content.prompt'
-import { GeneratePageContentDto } from './dtos/res/generate-page-content.dto'
+import { PageContentGeneratedDto } from './dtos/res/page-content-generated.dto'
+import {
+  extractPageConceptsPrompt,
+  ExtractPageConceptsPrompt,
+} from './prompts/extract-page-concepts.prompt'
+import { PageConceptsExtractedDto } from './dtos/res/page-concepts-extracted.dto'
 
 @Injectable()
 export class ContentGenerationService {
@@ -16,11 +21,20 @@ export class ContentGenerationService {
 
   async generatePageContent(
     data: GeneratePageContentPrompt,
-  ): Promise<GeneratePageContentDto> {
+  ): Promise<PageContentGeneratedDto> {
     const prompt = generatePageContentPrompt(data)
-    // 3. MOCK: Llamar AIService.generateContent() (devuelve HTML fake)
     const content = await this.openAiService.getResponse(prompt)
 
-    return content!
+    return content
+  }
+
+  async extractPageConcepts(
+    data: ExtractPageConceptsPrompt,
+  ): Promise<PageConceptsExtractedDto> {
+    const prompt = extractPageConceptsPrompt(data)
+
+    const content = await this.openAiService.getResponse(prompt)
+
+    return content.content
   }
 }

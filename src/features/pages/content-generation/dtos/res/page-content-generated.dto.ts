@@ -40,7 +40,7 @@ export class Content {
   blocks: ContentBlock[]
 }
 
-export class GeneratePageContentDto {
+export class PageContentGeneratedDto {
   @ApiProperty({
     description: 'Contenido generado de la página',
     type: Content,

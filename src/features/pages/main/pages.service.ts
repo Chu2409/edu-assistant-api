@@ -18,7 +18,6 @@ import { BaseParamsReqDto } from 'src/shared/dtos/req/base-params.dto'
 import { PagesMapper } from './mappers/pages.mapper'
 import { ApiPaginatedRes } from 'src/shared/dtos/res/api-response.dto'
 import { FullPageDto } from './dtos/res/full-page.dto'
-import { OpenaiService } from 'src/providers/ai/openai.service'
 import { ContentGenerationService } from '../content-generation/content-generation.service'
 
 @Injectable()
@@ -290,13 +289,6 @@ export class PagesService {
       data: {
         ...(updatePageDto.title !== undefined && {
           title: updatePageDto.title,
-        }),
-        ...(updatePageDto.content !== undefined && {
-          content: updatePageDto.content,
-        }),
-
-        ...(updatePageDto.keywords !== undefined && {
-          keywords: updatePageDto.keywords,
         }),
         ...(updatePageDto.isPublished !== undefined && {
           isPublished: updatePageDto.isPublished,

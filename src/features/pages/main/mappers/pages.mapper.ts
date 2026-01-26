@@ -22,8 +22,6 @@ export class PagesMapper {
       orderIndex: page.orderIndex,
       keywords: page.keywords,
       isPublished: page.isPublished,
-      lastProcessedAt: page.lastProcessedAt,
-      processingVersion: page.processingVersion,
       createdAt: page.createdAt,
       updatedAt: page.updatedAt,
     }
@@ -44,8 +42,6 @@ export class PagesMapper {
       orderIndex: page.orderIndex,
       keywords: page.keywords,
       isPublished: page.isPublished,
-      lastProcessedAt: page.lastProcessedAt,
-      processingVersion: page.processingVersion,
       createdAt: page.createdAt,
       updatedAt: page.updatedAt,
       studentQuestions: page.studentQuestions.map((studentQuestion) =>

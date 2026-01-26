@@ -38,20 +38,6 @@ export class PageDto {
   })
   isPublished: boolean
 
-  @ApiPropertyOptional({
-    description: 'Fecha de último procesamiento del HTML',
-    example: '2024-01-01T00:00:00.000Z',
-    nullable: true,
-  })
-  lastProcessedAt: Date | null
-
-  @ApiProperty({
-    description:
-      'Versión de procesamiento para re-procesar si cambia la lógica',
-    example: 1,
-  })
-  processingVersion: number
-
   @ApiProperty({
     description: 'Fecha de creación de la página',
     example: '2024-01-01T00:00:00.000Z',

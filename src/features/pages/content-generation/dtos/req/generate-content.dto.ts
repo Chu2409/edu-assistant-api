@@ -1,6 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger'
-import { IsString, IsInt, MinLength, Min } from 'class-validator'
-import { Type } from 'class-transformer'
+import { IsString, MinLength } from 'class-validator'
 
 export class GenerateContentDto {
   @ApiProperty({

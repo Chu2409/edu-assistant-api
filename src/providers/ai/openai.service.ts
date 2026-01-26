@@ -1,4 +1,4 @@
-import { Injectable, OnModuleInit } from '@nestjs/common'
+import { Injectable, Logger, OnModuleInit } from '@nestjs/common'
 import OpenAI from 'openai'
 import { CustomConfigService } from 'src/core/config/config.service'
 import { PromptInput } from '../../features/pages/content-generation/interfaces/prompt-input.interface'
@@ -6,6 +6,7 @@ import { PromptInput } from '../../features/pages/content-generation/interfaces/
 @Injectable()
 export class OpenaiService implements OnModuleInit {
   private openai: OpenAI
+  private readonly logger = new Logger(OpenaiService.name)
 
   constructor(private customConfigService: CustomConfigService) {}
 
@@ -72,8 +73,9 @@ export class OpenaiService implements OnModuleInit {
     }
   }
 
-  private handleError(error: any) {
-    console.error('OpenAI Error:', error)
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  private handleError(error: any): never {
+    this.logger.error('OpenAI Error:', error)
     throw new Error('Error en la comunicación con OpenAI')
   }
 }
