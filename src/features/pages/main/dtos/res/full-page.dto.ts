@@ -1,4 +1,5 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger'
+import { BlockDto } from 'src/features/pages/blocks/dtos/res/block.dto'
 import { NoteDto } from 'src/features/pages/notes/dtos/res/note.dto'
 import { PageFeedbackDto } from 'src/features/pages/page-feedbacks/dtos/res/page-feedback.dto'
 import { StudentQuestionDto } from 'src/features/pages/student-questions/dtos/res/student-question.dto'
@@ -86,4 +87,38 @@ export class FullPageDto {
     nullable: true,
   })
   notes: NoteDto[] | null
+
+  @ApiProperty({
+    description: 'Array de bloques de contenido',
+    type: [BlockDto],
+    example: [
+      {
+        id: 1,
+        type: 'TEXT',
+        content: {
+          markdown:
+            '# Introducción\n\nTypeScript es un lenguaje de programación...',
+        },
+      },
+      {
+        id: 2,
+        type: 'CODE',
+        content: {
+          language: 'typescript',
+          code: 'const greeting: string = "Hello, World!"\nconsole.log(greeting)',
+        },
+      },
+      {
+        id: 3,
+        type: 'IMAGE_SUGGESTION',
+        content: {
+          prompt:
+            'Ejemplo gráfico de herencia en Java mostrando una clase Animal y subclases Perro y Gato, con flechas que indican la relación de herencia, estilo diagrama UML simplificado y claro para estudiantes universitarios.',
+          reason:
+            'Para ilustrar visualmente la herencia como concepto clave en Java.',
+        },
+      },
+    ],
+  })
+  blocks: BlockDto[]
 }

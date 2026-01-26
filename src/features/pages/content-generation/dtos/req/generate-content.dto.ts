@@ -4,21 +4,12 @@ import { Type } from 'class-transformer'
 
 export class GenerateContentDto {
   @ApiProperty({
-    description: 'ID del módulo para el cual se generará el contenido',
-    example: 1,
-  })
-  @Type(() => Number)
-  @IsInt()
-  @Min(1)
-  moduleId: number
-
-  @ApiProperty({
     description: 'Tema o tópico del contenido a generar',
-    example: 'Fotosíntesis',
+    example: 'Programación Orientada a Objetos en Java',
     minLength: 2,
     maxLength: 200,
   })
   @IsString()
   @MinLength(2)
-  topic: string
+  title: string
 }

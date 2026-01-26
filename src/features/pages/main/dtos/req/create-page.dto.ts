@@ -4,7 +4,6 @@ import {
   IsOptional,
   IsBoolean,
   IsInt,
-  IsArray,
   MinLength,
   MaxLength,
   Min,
@@ -31,24 +30,6 @@ export class CreatePageDto {
   @MinLength(3)
   @MaxLength(200)
   title: string
-
-  @ApiProperty({
-    description: 'Contenido HTML procesado con conceptos y enlaces incrustados',
-    example: '<p>Este es el contenido HTML procesado...</p>',
-  })
-  @IsString()
-  content: string
-
-  @ApiPropertyOptional({
-    description: 'Palabras clave para búsquedas',
-    example: ['programación', 'introducción', 'básicos'],
-    type: [String],
-    default: [],
-  })
-  @IsOptional()
-  @IsArray()
-  @IsString({ each: true })
-  keywords?: string[]
 
   @ApiPropertyOptional({
     description: 'Indica si la página está publicada',

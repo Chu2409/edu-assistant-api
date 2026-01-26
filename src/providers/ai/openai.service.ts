@@ -1,7 +1,7 @@
 import { Injectable, OnModuleInit } from '@nestjs/common'
 import OpenAI from 'openai'
 import { CustomConfigService } from 'src/core/config/config.service'
-import { AiInput } from './interfaces/input.interface'
+import { PromptInput } from '../../features/pages/content-generation/interfaces/prompt-input.interface'
 
 @Injectable()
 export class OpenaiService implements OnModuleInit {
@@ -18,7 +18,7 @@ export class OpenaiService implements OnModuleInit {
 
   // 1. RESPONSES API (La nueva forma de Chat)
   // Maneja estado, multimodalidad y herramientas nativas.
-  async getResponse(input: AiInput[], previousResponseId?: string) {
+  async getResponse(input: PromptInput[], previousResponseId?: string) {
     try {
       const response = await this.openai.responses.create({
         model: 'gpt-4.1-mini',

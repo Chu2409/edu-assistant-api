@@ -1,11 +1,11 @@
 import { Controller, Post, Body } from '@nestjs/common'
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger'
 import { ContentGenerationService } from './content-generation.service'
-import { GenerateContentDto } from './dtos/req/generate-content.dto'
 import { JwtAuth } from 'src/features/auth/decorators/jwt-auth.decorator'
-import { GetUser } from 'src/features/auth/decorators/get-user.decorator'
-import { Role, type User } from 'src/core/database/generated/client'
+import { Role } from 'src/core/database/generated/client'
 import { ApiStandardResponse } from 'src/shared/decorators/api-standard-response.decorator'
+import { GenerateContentDto } from './dtos/req/generate-content.dto'
+import { GeneratePageContentDto } from './dtos/res/generate-page-content.dto'
 
 @ApiTags('Content Generation')
 @Controller('content')
@@ -21,7 +21,7 @@ export class ContentGenerationController {
     description:
       'Genera contenido educativo usando IA para un módulo. Solo disponible para profesores.',
   })
-  @ApiStandardResponse(String)
+  @ApiStandardResponse(GeneratePageContentDto)
   @ApiResponse({ status: 401, description: 'No autorizado' })
   @ApiResponse({
     status: 403,
@@ -33,13 +33,15 @@ export class ContentGenerationController {
   })
   @ApiResponse({ status: 400, description: 'Datos inválidos' })
   @JwtAuth(Role.TEACHER)
-  generateContent(
-    @Body() generateContentDto: GenerateContentDto,
-    @GetUser() user: User,
-  ) {
-    return this.contentGenerationService.generateContent(
-      generateContentDto,
-      user,
-    )
+  generateContent(@Body() dto: GenerateContentDto) {
+    return this.contentGenerationService.generatePageContent({
+      title: dto.title,
+      audience: 'UNIVERSITY',
+      contentLength: 'MEDIUM',
+      language: 'en',
+      learningObjectives: ['Entender los conceptos básicos de programación'],
+      targetLevel: 'BASIC',
+      tone: 'EDUCATIONAL',
+    })
   }
 }

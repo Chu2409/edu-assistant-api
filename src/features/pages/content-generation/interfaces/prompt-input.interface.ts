@@ -1,4 +1,4 @@
-export interface AiInput {
+export interface PromptInput {
   role: 'system' | 'user' | 'assistant'
   content: string
 }

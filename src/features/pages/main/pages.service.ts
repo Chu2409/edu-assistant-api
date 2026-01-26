@@ -18,21 +18,21 @@ import { BaseParamsReqDto } from 'src/shared/dtos/req/base-params.dto'
 import { PagesMapper } from './mappers/pages.mapper'
 import { ApiPaginatedRes } from 'src/shared/dtos/res/api-response.dto'
 import { FullPageDto } from './dtos/res/full-page.dto'
-import { AIService } from 'src/providers/ai/ai.service'
-import { HtmlProcessorService } from '../content-generation/html-processor.service'
+import { OpenaiService } from 'src/providers/ai/openai.service'
+import { ContentGenerationService } from '../content-generation/content-generation.service'
 
 @Injectable()
 export class PagesService {
   constructor(
     private readonly dbService: DBService,
-    private readonly aiService: AIService,
-    private readonly htmlProcessor: HtmlProcessorService,
+    private readonly contentGenerationService: ContentGenerationService,
   ) {}
 
   async create(dto: CreatePageDto, user: User): Promise<PageDto> {
     // Verificar que el módulo existe
     const module = await this.dbService.module.findUnique({
       where: { id: dto.moduleId },
+      include: { aiConfiguration: true },
     })
 
     if (!module) {
@@ -50,36 +50,61 @@ export class PagesService {
       orderBy: { orderIndex: 'desc' },
     })
 
-    const concepts = await this.aiService.extractConcepts(dto.content)
+    const {
+      audience,
+      contentLength,
+      language,
+      learningObjectives,
+      targetLevel,
+      tone,
+      contextPrompt,
+    } = module.aiConfiguration!
 
-    const conceptsToEmbed = concepts.map((concept, index) => ({
-      term: concept.term,
-      definition: concept.definition,
-      htmlId: `concept-c${Date.now()}-${index}`,
-    }))
+    const generatedContent =
+      await this.contentGenerationService.generatePageContent({
+        title: dto.title,
+        audience,
+        contentLength,
+        language,
+        learningObjectives,
+        targetLevel,
+        tone,
+        contextPrompt: contextPrompt ?? undefined,
+      })
 
     const page = await this.dbService.page.create({
       data: {
         moduleId: dto.moduleId,
         title: dto.title,
-        keywords: dto.keywords ?? [],
         isPublished: dto.isPublished ?? false,
         orderIndex: lastPage?.orderIndex ? lastPage.orderIndex + 1 : 1,
       },
     })
 
     await Promise.all(
-      conceptsToEmbed.map((concept) =>
-        this.dbService.pageConcept.create({
+      generatedContent.content.blocks.map((block) =>
+        this.dbService.block.create({
           data: {
             pageId: page.id,
-            term: concept.term,
-            definition: concept.definition,
-            htmlId: concept.htmlId,
+            type: block.type,
+            content: JSON.stringify(block.content),
           },
         }),
       ),
     )
+
+    // await Promise.all(
+    //   conceptsToEmbed.map((concept) =>
+    //     this.dbService.pageConcept.create({
+    //       data: {
+    //         pageId: page.id,
+    //         term: concept.term,
+    //         definition: concept.definition,
+    //         htmlId: concept.htmlId,
+    //       },
+    //     }),
+    //   ),
+    // )
 
     return PagesMapper.mapToDto(page)
   }
@@ -164,6 +189,7 @@ export class PagesService {
             user: true,
           },
         },
+        blocks: true,
       },
     })
 
@@ -200,6 +226,7 @@ export class PagesService {
             userId: user.id,
           },
         },
+        blocks: true,
       },
     })
 
