@@ -8,7 +8,7 @@ export class OpenaiService implements OnModuleInit {
   private openai: OpenAI
   private readonly logger = new Logger(OpenaiService.name)
 
-  constructor(private customConfigService: CustomConfigService) {}
+  constructor(private customConfigService: CustomConfigService) { }
 
   onModuleInit() {
     // Inicializamos el cliente con la API Key
@@ -27,6 +27,7 @@ export class OpenaiService implements OnModuleInit {
         input,
         // CLAVE: Si pasas el ID anterior, OpenAI recuerda el contexto automáticamente.
         previous_response_id: previousResponseId,
+        temperature: 0.8,
       })
 
       const content = JSON.parse(response.output_text)

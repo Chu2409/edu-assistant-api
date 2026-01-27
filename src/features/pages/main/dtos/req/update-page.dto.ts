@@ -27,4 +27,12 @@ export class UpdatePageDto {
   @IsOptional()
   @IsBoolean()
   isPublished?: boolean
+
+  @ApiPropertyOptional({
+    description: 'Indica si la página tiene ediciones manuales',
+    example: true,
+  })
+  @IsOptional()
+  @IsBoolean()
+  hasManualEdits?: boolean
 }

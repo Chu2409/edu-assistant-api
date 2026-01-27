@@ -1,15 +1,20 @@
-// email.processor.ts
 import { Processor, WorkerHost } from '@nestjs/bullmq'
 import { Logger } from '@nestjs/common'
 import { Job } from 'bullmq'
 import { DBService } from 'src/core/database/database.service'
 import { QUEUE_NAMES } from 'src/shared/constants/queues'
+import { BlocksMapper } from '../blocks/mappers/blocks.mapper'
+import { ContentGenerationService } from '../content-generation/content-generation.service'
+import { TextBlock } from '../content-generation/interfaces/content-block.interface'
 
-@Processor(QUEUE_NAMES.CONCEPTS.NAME) // Debe coincidir con el nombre de la cola registrada
+@Processor(QUEUE_NAMES.CONCEPTS.NAME)
 export class ConceptsWorker extends WorkerHost {
   private readonly logger = new Logger(ConceptsWorker.name)
 
-  constructor(private readonly dbService: DBService) {
+  constructor(
+    private readonly dbService: DBService,
+    private readonly contentGenerationService: ContentGenerationService,
+  ) {
     super()
   }
 
@@ -30,12 +35,56 @@ export class ConceptsWorker extends WorkerHost {
 
     const { pageId } = job.data
 
-    console.log(`Procesando email para el usuario: ${job.data.pageId}...`)
+    this.logger.log(`Procesando conceptos para la página: ${pageId}...`)
 
-    // Simular tarea pesada (ej: llamar a una API de mailing)
-    await new Promise((resolve) => setTimeout(resolve, 3000))
+    const page = await this.dbService.page.findUnique({
+      where: { id: pageId },
+      include: {
+        blocks: true,
+        module: {
+          include: {
+            aiConfiguration: true,
+          },
+        },
+      },
+    })
 
-    console.log('Email enviado correctamente.')
+    if (!page) {
+      this.logger.error(`Página con ID ${pageId} no encontrada.`)
+      return
+    }
+
+    if (page.blocks.length === 0) {
+      this.logger.error(`Página con ID ${pageId} no tiene bloques.`)
+      return
+    }
+
+    const blocks = page.blocks.map((block) => BlocksMapper.mapToDto(block))
+
+    const concepts = await this.contentGenerationService.extractPageConcepts({
+      textBlocks: blocks
+        .filter((block) => block.type === 'TEXT')
+        .map((block) => block.content as TextBlock),
+      language: page.module.aiConfiguration?.language ?? 'es',
+      targetLevel: page.module.aiConfiguration?.targetLevel ?? 'INTERMEDIATE',
+      audience: page.module.aiConfiguration?.audience ?? 'UNIVERSITY',
+      maxTerms: 6,
+    })
+
+    await Promise.all(
+      concepts.terms.map((concept) =>
+        this.dbService.pageConcept.create({
+          data: { pageId, term: concept.term, definition: concept.definition },
+        }),
+      ),
+    )
+
+    await this.dbService.page.update({
+      where: { id: pageId },
+      data: { conceptsProcessed: true },
+    })
+
+    this.logger.log('Conceptos procesados correctamente.')
     return { sent: true }
   }
 }
