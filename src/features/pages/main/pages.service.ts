@@ -30,7 +30,7 @@ export class PagesService {
     private readonly contentGenerationService: ContentGenerationService,
     @InjectQueue(QUEUE_NAMES.CONCEPTS.NAME)
     private readonly conceptsProcessorQueue: Queue,
-  ) { }
+  ) {}
 
   async create(dto: CreatePageDto, user: User): Promise<PageDto> {
     // Verificar que el módulo existe

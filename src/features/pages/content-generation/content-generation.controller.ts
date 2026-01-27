@@ -11,6 +11,7 @@ import { ExtractConceptsDto } from './dtos/req/extract-concepts.dto'
 import { TextBlock } from './interfaces/content-block.interface'
 import { BlocksMapper } from '../blocks/mappers/blocks.mapper'
 import { PageConceptsExtractedDto } from './dtos/res/page-concepts-extracted.dto'
+import { RegenerateContentDto } from './dtos/req/regenarte-content.dto'
 
 @ApiTags('Content Generation')
 @Controller('content')
@@ -87,5 +88,30 @@ export class ContentGenerationController {
           ?.filter((b) => b.type === 'TEXT')
           .map((b) => b.content as TextBlock) || [],
     })
+  }
+
+  @Post('regenerate')
+  @ApiOperation({
+    summary: 'Regenerar contenido de página con IA',
+    description:
+      'Regenera el contenido de una página existente usando IA según las instrucciones proporcionadas. Si la página tiene ediciones manuales, se regenera sin contexto. Si no tiene ediciones manuales, se usa el contexto de la conversación anterior. Solo disponible para profesores.',
+  })
+  @ApiStandardResponse(PageContentGeneratedDto)
+  @ApiResponse({ status: 401, description: 'No autorizado' })
+  @ApiResponse({
+    status: 403,
+    description: 'Solo profesores pueden regenerar contenido',
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Página o configuración de IA no encontrada',
+  })
+  @ApiResponse({ status: 400, description: 'Datos inválidos' })
+  @JwtAuth(Role.TEACHER)
+  async regenerateContent(@Body() dto: RegenerateContentDto) {
+    return this.contentGenerationService.regeneratePageContent(
+      dto.pageId,
+      dto.instruction,
+    )
   }
 }

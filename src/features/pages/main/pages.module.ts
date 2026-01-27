@@ -18,4 +18,4 @@ import { QUEUE_NAMES } from 'src/shared/constants/queues'
   providers: [PagesService, ContentGenerationService],
   exports: [PagesService, ContentGenerationService],
 })
-export class PagesModule { }
+export class PagesModule {}

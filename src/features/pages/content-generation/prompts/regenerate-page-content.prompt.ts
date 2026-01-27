@@ -51,7 +51,7 @@ Output valid JSON only (no explanations outside JSON).`,
   },
 ]
 
-export const regenerateWithoutContextMessages = ({
+export const regenerateWithoutContextPrompt = ({
   currentBlocks,
   instruction,
   config,
@@ -96,7 +96,6 @@ CRITICAL: You MUST NEVER create two consecutive text blocks. Consolidate all tex
 ✅ Split blocks (separate content types)
 
 ## What You Must Preserve
-- Teacher's manual edits (unless instruction explicitly overrides)
 - Overall educational intent
 - Target audience and difficulty level
 - Specialized terminology or examples added manually
@@ -136,10 +135,9 @@ ${instruction}
 
 # TASK
 Make the necessary changes while:
-1. Respecting manual edits unless instruction says otherwise
-2. Maintaining pedagogical quality
-3. NEVER creating consecutive text blocks
-4. Ensuring coherent structure
+- Maintaining pedagogical quality
+- NEVER creating consecutive text blocks
+- Ensuring coherent structure
 
 Return COMPLETE updated lesson in JSON format.
 

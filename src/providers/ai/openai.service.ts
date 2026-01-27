@@ -8,7 +8,7 @@ export class OpenaiService implements OnModuleInit {
   private openai: OpenAI
   private readonly logger = new Logger(OpenaiService.name)
 
-  constructor(private customConfigService: CustomConfigService) { }
+  constructor(private customConfigService: CustomConfigService) {}
 
   onModuleInit() {
     // Inicializamos el cliente con la API Key
