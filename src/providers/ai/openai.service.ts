@@ -22,12 +22,12 @@ export class OpenaiService implements OnModuleInit {
   async getResponse(input: PromptInput[], previousResponseId?: string) {
     try {
       const response = await this.openai.responses.create({
-        model: 'gpt-4.1-mini',
+        model: 'gpt-5-mini',
         // En Responses API, usamos 'input' en lugar de 'messages'
         input,
         // CLAVE: Si pasas el ID anterior, OpenAI recuerda el contexto automáticamente.
         previous_response_id: previousResponseId,
-        temperature: 0.8,
+        // temperature: 0.8,
       })
 
       const content = JSON.parse(response.output_text)

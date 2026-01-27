@@ -115,7 +115,6 @@ export class ContentGenerationService {
     } else {
       // Si no tiene ediciones manuales, usar el contexto (con responseId)
       prompt = regeneratePageContentWithContextPrompt({
-        currentBlocks,
         instruction,
         config,
       })
