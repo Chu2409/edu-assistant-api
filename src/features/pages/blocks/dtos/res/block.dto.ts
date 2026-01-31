@@ -24,4 +24,10 @@ export class BlockDto {
     },
   })
   content: AiContent
+
+  @ApiProperty({
+    description: 'Contenido TipTap en formato JSON',
+    example: { type: 'doc', content: [] },
+  })
+  tipTapContent: Record<string, any> | null
 }

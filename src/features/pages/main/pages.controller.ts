@@ -19,6 +19,7 @@ import {
 import { PagesService } from './pages.service'
 import { CreatePageDto } from './dtos/req/create-page.dto'
 import { UpdatePageDto } from './dtos/req/update-page.dto'
+import { UpdatePageContentDto } from './dtos/req/update-page-content.dto'
 import { ReorderPagesDto } from './dtos/req/reorder-pages.dto'
 import { PageDto } from './dtos/res/page.dto'
 import { BaseParamsReqDto } from 'src/shared/dtos/req/base-params.dto'
@@ -170,5 +171,32 @@ export class PagesController {
     @GetUser() user: User,
   ): Promise<PageDto> {
     return this.pagesService.update(id, updatePageDto, user)
+  }
+
+  @Patch(':id/content')
+  @ApiOperation({
+    summary: 'Actualizar el contenido (bloques) de una página',
+    description:
+      'Permite crear, actualizar o reemplazar los bloques de contenido de una página. Si un bloque tiene ID, se actualiza; si no, se crea. Los bloques que no estén en la lista se eliminan.',
+  })
+  @ApiParam({
+    name: 'id',
+    description: 'ID de la página',
+    example: 1,
+  })
+  @ApiStandardResponse(PageDto)
+  @ApiResponse({ status: 401, description: 'No autorizado' })
+  @ApiResponse({ status: 404, description: 'Página no encontrada' })
+  @ApiResponse({
+    status: 403,
+    description: 'Solo el profesor propietario puede actualizar el contenido',
+  })
+  @JwtAuth(Role.TEACHER)
+  updateContent(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updatePageContentDto: UpdatePageContentDto,
+    @GetUser() user: User,
+  ): Promise<PageDto> {
+    return this.pagesService.updateContent(id, updatePageContentDto, user)
   }
 }

@@ -12,6 +12,7 @@ import {
 import { PageConceptsExtractedDto } from './dtos/res/page-concepts-extracted.dto'
 import { GeneratedPageContent } from './dtos/res/generated-page-content.dto'
 import { AiResponseDto } from 'src/providers/ai/dtos/ai-response.interface'
+import { GenerateContentDto } from './dtos/req/generate-content.dto'
 
 @Injectable()
 export class ContentGenerationService {
@@ -22,10 +23,33 @@ export class ContentGenerationService {
   ) {}
 
   async generatePageContent(
-    data: GeneratePageContentPrompt,
+    data: GenerateContentDto,
   ): Promise<AiResponseDto<GeneratedPageContent>> {
     this.logger.log('Generating page content')
-    const prompt = generatePageContentPrompt(data)
+
+    const page = await this.dbService.page.findUnique({
+      where: { id: data.pageId },
+      include: { module: { include: { aiConfiguration: true } } },
+    })
+
+    if (!page) {
+      throw new NotFoundException(`Page with id ${data.pageId} not found`)
+    }
+
+    const prompt = generatePageContentPrompt({
+      title: page.title,
+      instructions: data.instructions,
+      config: {
+        audience: data.audience ?? page.module.aiConfiguration!.audience,
+        contentLength:
+          data.contentLength ?? page.module.aiConfiguration!.contentLength,
+        language: data.language ?? page.module.aiConfiguration!.language,
+        targetLevel:
+          data.targetLevel ?? page.module.aiConfiguration!.targetLevel,
+        tone: data.tone ?? page.module.aiConfiguration!.tone,
+        learningObjectives: page.module.aiConfiguration!.learningObjectives,
+      },
+    })
     const content =
       await this.openAiService.getResponse<GeneratedPageContent>(prompt)
 

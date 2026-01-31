@@ -43,6 +43,7 @@ export type PageMinAggregateOutputType = {
   moduleId: number | null
   title: string | null
   orderIndex: number | null
+  compiledContent: string | null
   isPublished: boolean | null
   aiResponseId: string | null
   hasManualEdits: boolean | null
@@ -56,6 +57,7 @@ export type PageMaxAggregateOutputType = {
   moduleId: number | null
   title: string | null
   orderIndex: number | null
+  compiledContent: string | null
   isPublished: boolean | null
   aiResponseId: string | null
   hasManualEdits: boolean | null
@@ -70,6 +72,7 @@ export type PageCountAggregateOutputType = {
   title: number
   orderIndex: number
   keywords: number
+  compiledContent: number
   isPublished: number
   aiResponseId: number
   hasManualEdits: number
@@ -97,6 +100,7 @@ export type PageMinAggregateInputType = {
   moduleId?: true
   title?: true
   orderIndex?: true
+  compiledContent?: true
   isPublished?: true
   aiResponseId?: true
   hasManualEdits?: true
@@ -110,6 +114,7 @@ export type PageMaxAggregateInputType = {
   moduleId?: true
   title?: true
   orderIndex?: true
+  compiledContent?: true
   isPublished?: true
   aiResponseId?: true
   hasManualEdits?: true
@@ -124,6 +129,7 @@ export type PageCountAggregateInputType = {
   title?: true
   orderIndex?: true
   keywords?: true
+  compiledContent?: true
   isPublished?: true
   aiResponseId?: true
   hasManualEdits?: true
@@ -225,6 +231,7 @@ export type PageGroupByOutputType = {
   title: string
   orderIndex: number
   keywords: string[]
+  compiledContent: string | null
   isPublished: boolean
   aiResponseId: string | null
   hasManualEdits: boolean
@@ -262,6 +269,7 @@ export type PageWhereInput = {
   title?: Prisma.StringFilter<"Page"> | string
   orderIndex?: Prisma.IntFilter<"Page"> | number
   keywords?: Prisma.StringNullableListFilter<"Page">
+  compiledContent?: Prisma.StringNullableFilter<"Page"> | string | null
   isPublished?: Prisma.BoolFilter<"Page"> | boolean
   aiResponseId?: Prisma.StringNullableFilter<"Page"> | string | null
   hasManualEdits?: Prisma.BoolFilter<"Page"> | boolean
@@ -290,6 +298,7 @@ export type PageOrderByWithRelationInput = {
   title?: Prisma.SortOrder
   orderIndex?: Prisma.SortOrder
   keywords?: Prisma.SortOrder
+  compiledContent?: Prisma.SortOrderInput | Prisma.SortOrder
   isPublished?: Prisma.SortOrder
   aiResponseId?: Prisma.SortOrderInput | Prisma.SortOrder
   hasManualEdits?: Prisma.SortOrder
@@ -322,6 +331,7 @@ export type PageWhereUniqueInput = Prisma.AtLeast<{
   title?: Prisma.StringFilter<"Page"> | string
   orderIndex?: Prisma.IntFilter<"Page"> | number
   keywords?: Prisma.StringNullableListFilter<"Page">
+  compiledContent?: Prisma.StringNullableFilter<"Page"> | string | null
   isPublished?: Prisma.BoolFilter<"Page"> | boolean
   aiResponseId?: Prisma.StringNullableFilter<"Page"> | string | null
   hasManualEdits?: Prisma.BoolFilter<"Page"> | boolean
@@ -350,6 +360,7 @@ export type PageOrderByWithAggregationInput = {
   title?: Prisma.SortOrder
   orderIndex?: Prisma.SortOrder
   keywords?: Prisma.SortOrder
+  compiledContent?: Prisma.SortOrderInput | Prisma.SortOrder
   isPublished?: Prisma.SortOrder
   aiResponseId?: Prisma.SortOrderInput | Prisma.SortOrder
   hasManualEdits?: Prisma.SortOrder
@@ -372,6 +383,7 @@ export type PageScalarWhereWithAggregatesInput = {
   title?: Prisma.StringWithAggregatesFilter<"Page"> | string
   orderIndex?: Prisma.IntWithAggregatesFilter<"Page"> | number
   keywords?: Prisma.StringNullableListFilter<"Page">
+  compiledContent?: Prisma.StringNullableWithAggregatesFilter<"Page"> | string | null
   isPublished?: Prisma.BoolWithAggregatesFilter<"Page"> | boolean
   aiResponseId?: Prisma.StringNullableWithAggregatesFilter<"Page"> | string | null
   hasManualEdits?: Prisma.BoolWithAggregatesFilter<"Page"> | boolean
@@ -384,6 +396,7 @@ export type PageCreateInput = {
   title: string
   orderIndex: number
   keywords?: Prisma.PageCreatekeywordsInput | string[]
+  compiledContent?: string | null
   isPublished?: boolean
   aiResponseId?: string | null
   hasManualEdits?: boolean
@@ -412,6 +425,7 @@ export type PageUncheckedCreateInput = {
   title: string
   orderIndex: number
   keywords?: Prisma.PageCreatekeywordsInput | string[]
+  compiledContent?: string | null
   isPublished?: boolean
   aiResponseId?: string | null
   hasManualEdits?: boolean
@@ -437,6 +451,7 @@ export type PageUpdateInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
   keywords?: Prisma.PageUpdatekeywordsInput | string[]
+  compiledContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
   aiResponseId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   hasManualEdits?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -465,6 +480,7 @@ export type PageUncheckedUpdateInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
   keywords?: Prisma.PageUpdatekeywordsInput | string[]
+  compiledContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
   aiResponseId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   hasManualEdits?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -492,6 +508,7 @@ export type PageCreateManyInput = {
   title: string
   orderIndex: number
   keywords?: Prisma.PageCreatekeywordsInput | string[]
+  compiledContent?: string | null
   isPublished?: boolean
   aiResponseId?: string | null
   hasManualEdits?: boolean
@@ -504,6 +521,7 @@ export type PageUpdateManyMutationInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
   keywords?: Prisma.PageUpdatekeywordsInput | string[]
+  compiledContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
   aiResponseId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   hasManualEdits?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -518,6 +536,7 @@ export type PageUncheckedUpdateManyInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
   keywords?: Prisma.PageUpdatekeywordsInput | string[]
+  compiledContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
   aiResponseId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   hasManualEdits?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -547,6 +566,7 @@ export type PageCountOrderByAggregateInput = {
   title?: Prisma.SortOrder
   orderIndex?: Prisma.SortOrder
   keywords?: Prisma.SortOrder
+  compiledContent?: Prisma.SortOrder
   isPublished?: Prisma.SortOrder
   aiResponseId?: Prisma.SortOrder
   hasManualEdits?: Prisma.SortOrder
@@ -566,6 +586,7 @@ export type PageMaxOrderByAggregateInput = {
   moduleId?: Prisma.SortOrder
   title?: Prisma.SortOrder
   orderIndex?: Prisma.SortOrder
+  compiledContent?: Prisma.SortOrder
   isPublished?: Prisma.SortOrder
   aiResponseId?: Prisma.SortOrder
   hasManualEdits?: Prisma.SortOrder
@@ -579,6 +600,7 @@ export type PageMinOrderByAggregateInput = {
   moduleId?: Prisma.SortOrder
   title?: Prisma.SortOrder
   orderIndex?: Prisma.SortOrder
+  compiledContent?: Prisma.SortOrder
   isPublished?: Prisma.SortOrder
   aiResponseId?: Prisma.SortOrder
   hasManualEdits?: Prisma.SortOrder
@@ -850,6 +872,7 @@ export type PageCreateWithoutModuleInput = {
   title: string
   orderIndex: number
   keywords?: Prisma.PageCreatekeywordsInput | string[]
+  compiledContent?: string | null
   isPublished?: boolean
   aiResponseId?: string | null
   hasManualEdits?: boolean
@@ -876,6 +899,7 @@ export type PageUncheckedCreateWithoutModuleInput = {
   title: string
   orderIndex: number
   keywords?: Prisma.PageCreatekeywordsInput | string[]
+  compiledContent?: string | null
   isPublished?: boolean
   aiResponseId?: string | null
   hasManualEdits?: boolean
@@ -932,6 +956,7 @@ export type PageScalarWhereInput = {
   title?: Prisma.StringFilter<"Page"> | string
   orderIndex?: Prisma.IntFilter<"Page"> | number
   keywords?: Prisma.StringNullableListFilter<"Page">
+  compiledContent?: Prisma.StringNullableFilter<"Page"> | string | null
   isPublished?: Prisma.BoolFilter<"Page"> | boolean
   aiResponseId?: Prisma.StringNullableFilter<"Page"> | string | null
   hasManualEdits?: Prisma.BoolFilter<"Page"> | boolean
@@ -944,6 +969,7 @@ export type PageCreateWithoutBlocksInput = {
   title: string
   orderIndex: number
   keywords?: Prisma.PageCreatekeywordsInput | string[]
+  compiledContent?: string | null
   isPublished?: boolean
   aiResponseId?: string | null
   hasManualEdits?: boolean
@@ -971,6 +997,7 @@ export type PageUncheckedCreateWithoutBlocksInput = {
   title: string
   orderIndex: number
   keywords?: Prisma.PageCreatekeywordsInput | string[]
+  compiledContent?: string | null
   isPublished?: boolean
   aiResponseId?: string | null
   hasManualEdits?: boolean
@@ -1011,6 +1038,7 @@ export type PageUpdateWithoutBlocksInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
   keywords?: Prisma.PageUpdatekeywordsInput | string[]
+  compiledContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
   aiResponseId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   hasManualEdits?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1038,6 +1066,7 @@ export type PageUncheckedUpdateWithoutBlocksInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
   keywords?: Prisma.PageUpdatekeywordsInput | string[]
+  compiledContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
   aiResponseId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   hasManualEdits?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1062,6 +1091,7 @@ export type PageCreateWithoutSessionsInput = {
   title: string
   orderIndex: number
   keywords?: Prisma.PageCreatekeywordsInput | string[]
+  compiledContent?: string | null
   isPublished?: boolean
   aiResponseId?: string | null
   hasManualEdits?: boolean
@@ -1089,6 +1119,7 @@ export type PageUncheckedCreateWithoutSessionsInput = {
   title: string
   orderIndex: number
   keywords?: Prisma.PageCreatekeywordsInput | string[]
+  compiledContent?: string | null
   isPublished?: boolean
   aiResponseId?: string | null
   hasManualEdits?: boolean
@@ -1129,6 +1160,7 @@ export type PageUpdateWithoutSessionsInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
   keywords?: Prisma.PageUpdatekeywordsInput | string[]
+  compiledContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
   aiResponseId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   hasManualEdits?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1156,6 +1188,7 @@ export type PageUncheckedUpdateWithoutSessionsInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
   keywords?: Prisma.PageUpdatekeywordsInput | string[]
+  compiledContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
   aiResponseId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   hasManualEdits?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1180,6 +1213,7 @@ export type PageCreateWithoutPageViewsInput = {
   title: string
   orderIndex: number
   keywords?: Prisma.PageCreatekeywordsInput | string[]
+  compiledContent?: string | null
   isPublished?: boolean
   aiResponseId?: string | null
   hasManualEdits?: boolean
@@ -1207,6 +1241,7 @@ export type PageUncheckedCreateWithoutPageViewsInput = {
   title: string
   orderIndex: number
   keywords?: Prisma.PageCreatekeywordsInput | string[]
+  compiledContent?: string | null
   isPublished?: boolean
   aiResponseId?: string | null
   hasManualEdits?: boolean
@@ -1247,6 +1282,7 @@ export type PageUpdateWithoutPageViewsInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
   keywords?: Prisma.PageUpdatekeywordsInput | string[]
+  compiledContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
   aiResponseId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   hasManualEdits?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1274,6 +1310,7 @@ export type PageUncheckedUpdateWithoutPageViewsInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
   keywords?: Prisma.PageUpdatekeywordsInput | string[]
+  compiledContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
   aiResponseId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   hasManualEdits?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1298,6 +1335,7 @@ export type PageCreateWithoutRelatedPagesFromInput = {
   title: string
   orderIndex: number
   keywords?: Prisma.PageCreatekeywordsInput | string[]
+  compiledContent?: string | null
   isPublished?: boolean
   aiResponseId?: string | null
   hasManualEdits?: boolean
@@ -1325,6 +1363,7 @@ export type PageUncheckedCreateWithoutRelatedPagesFromInput = {
   title: string
   orderIndex: number
   keywords?: Prisma.PageCreatekeywordsInput | string[]
+  compiledContent?: string | null
   isPublished?: boolean
   aiResponseId?: string | null
   hasManualEdits?: boolean
@@ -1354,6 +1393,7 @@ export type PageCreateWithoutRelatedPagesToInput = {
   title: string
   orderIndex: number
   keywords?: Prisma.PageCreatekeywordsInput | string[]
+  compiledContent?: string | null
   isPublished?: boolean
   aiResponseId?: string | null
   hasManualEdits?: boolean
@@ -1381,6 +1421,7 @@ export type PageUncheckedCreateWithoutRelatedPagesToInput = {
   title: string
   orderIndex: number
   keywords?: Prisma.PageCreatekeywordsInput | string[]
+  compiledContent?: string | null
   isPublished?: boolean
   aiResponseId?: string | null
   hasManualEdits?: boolean
@@ -1421,6 +1462,7 @@ export type PageUpdateWithoutRelatedPagesFromInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
   keywords?: Prisma.PageUpdatekeywordsInput | string[]
+  compiledContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
   aiResponseId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   hasManualEdits?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1448,6 +1490,7 @@ export type PageUncheckedUpdateWithoutRelatedPagesFromInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
   keywords?: Prisma.PageUpdatekeywordsInput | string[]
+  compiledContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
   aiResponseId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   hasManualEdits?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1483,6 +1526,7 @@ export type PageUpdateWithoutRelatedPagesToInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
   keywords?: Prisma.PageUpdatekeywordsInput | string[]
+  compiledContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
   aiResponseId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   hasManualEdits?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1510,6 +1554,7 @@ export type PageUncheckedUpdateWithoutRelatedPagesToInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
   keywords?: Prisma.PageUpdatekeywordsInput | string[]
+  compiledContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
   aiResponseId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   hasManualEdits?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1534,6 +1579,7 @@ export type PageCreateWithoutConceptMentionsInput = {
   title: string
   orderIndex: number
   keywords?: Prisma.PageCreatekeywordsInput | string[]
+  compiledContent?: string | null
   isPublished?: boolean
   aiResponseId?: string | null
   hasManualEdits?: boolean
@@ -1561,6 +1607,7 @@ export type PageUncheckedCreateWithoutConceptMentionsInput = {
   title: string
   orderIndex: number
   keywords?: Prisma.PageCreatekeywordsInput | string[]
+  compiledContent?: string | null
   isPublished?: boolean
   aiResponseId?: string | null
   hasManualEdits?: boolean
@@ -1601,6 +1648,7 @@ export type PageUpdateWithoutConceptMentionsInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
   keywords?: Prisma.PageUpdatekeywordsInput | string[]
+  compiledContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
   aiResponseId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   hasManualEdits?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1628,6 +1676,7 @@ export type PageUncheckedUpdateWithoutConceptMentionsInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
   keywords?: Prisma.PageUpdatekeywordsInput | string[]
+  compiledContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
   aiResponseId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   hasManualEdits?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1652,6 +1701,7 @@ export type PageCreateWithoutActivitiesInput = {
   title: string
   orderIndex: number
   keywords?: Prisma.PageCreatekeywordsInput | string[]
+  compiledContent?: string | null
   isPublished?: boolean
   aiResponseId?: string | null
   hasManualEdits?: boolean
@@ -1679,6 +1729,7 @@ export type PageUncheckedCreateWithoutActivitiesInput = {
   title: string
   orderIndex: number
   keywords?: Prisma.PageCreatekeywordsInput | string[]
+  compiledContent?: string | null
   isPublished?: boolean
   aiResponseId?: string | null
   hasManualEdits?: boolean
@@ -1719,6 +1770,7 @@ export type PageUpdateWithoutActivitiesInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
   keywords?: Prisma.PageUpdatekeywordsInput | string[]
+  compiledContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
   aiResponseId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   hasManualEdits?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1746,6 +1798,7 @@ export type PageUncheckedUpdateWithoutActivitiesInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
   keywords?: Prisma.PageUpdatekeywordsInput | string[]
+  compiledContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
   aiResponseId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   hasManualEdits?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1770,6 +1823,7 @@ export type PageCreateWithoutPromptFeedbacksInput = {
   title: string
   orderIndex: number
   keywords?: Prisma.PageCreatekeywordsInput | string[]
+  compiledContent?: string | null
   isPublished?: boolean
   aiResponseId?: string | null
   hasManualEdits?: boolean
@@ -1797,6 +1851,7 @@ export type PageUncheckedCreateWithoutPromptFeedbacksInput = {
   title: string
   orderIndex: number
   keywords?: Prisma.PageCreatekeywordsInput | string[]
+  compiledContent?: string | null
   isPublished?: boolean
   aiResponseId?: string | null
   hasManualEdits?: boolean
@@ -1837,6 +1892,7 @@ export type PageUpdateWithoutPromptFeedbacksInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
   keywords?: Prisma.PageUpdatekeywordsInput | string[]
+  compiledContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
   aiResponseId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   hasManualEdits?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1864,6 +1920,7 @@ export type PageUncheckedUpdateWithoutPromptFeedbacksInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
   keywords?: Prisma.PageUpdatekeywordsInput | string[]
+  compiledContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
   aiResponseId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   hasManualEdits?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1888,6 +1945,7 @@ export type PageCreateWithoutPageFeedbacksInput = {
   title: string
   orderIndex: number
   keywords?: Prisma.PageCreatekeywordsInput | string[]
+  compiledContent?: string | null
   isPublished?: boolean
   aiResponseId?: string | null
   hasManualEdits?: boolean
@@ -1915,6 +1973,7 @@ export type PageUncheckedCreateWithoutPageFeedbacksInput = {
   title: string
   orderIndex: number
   keywords?: Prisma.PageCreatekeywordsInput | string[]
+  compiledContent?: string | null
   isPublished?: boolean
   aiResponseId?: string | null
   hasManualEdits?: boolean
@@ -1955,6 +2014,7 @@ export type PageUpdateWithoutPageFeedbacksInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
   keywords?: Prisma.PageUpdatekeywordsInput | string[]
+  compiledContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
   aiResponseId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   hasManualEdits?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1982,6 +2042,7 @@ export type PageUncheckedUpdateWithoutPageFeedbacksInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
   keywords?: Prisma.PageUpdatekeywordsInput | string[]
+  compiledContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
   aiResponseId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   hasManualEdits?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -2006,6 +2067,7 @@ export type PageCreateWithoutNotesInput = {
   title: string
   orderIndex: number
   keywords?: Prisma.PageCreatekeywordsInput | string[]
+  compiledContent?: string | null
   isPublished?: boolean
   aiResponseId?: string | null
   hasManualEdits?: boolean
@@ -2033,6 +2095,7 @@ export type PageUncheckedCreateWithoutNotesInput = {
   title: string
   orderIndex: number
   keywords?: Prisma.PageCreatekeywordsInput | string[]
+  compiledContent?: string | null
   isPublished?: boolean
   aiResponseId?: string | null
   hasManualEdits?: boolean
@@ -2073,6 +2136,7 @@ export type PageUpdateWithoutNotesInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
   keywords?: Prisma.PageUpdatekeywordsInput | string[]
+  compiledContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
   aiResponseId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   hasManualEdits?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -2100,6 +2164,7 @@ export type PageUncheckedUpdateWithoutNotesInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
   keywords?: Prisma.PageUpdatekeywordsInput | string[]
+  compiledContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
   aiResponseId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   hasManualEdits?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -2124,6 +2189,7 @@ export type PageCreateWithoutStudentQuestionsInput = {
   title: string
   orderIndex: number
   keywords?: Prisma.PageCreatekeywordsInput | string[]
+  compiledContent?: string | null
   isPublished?: boolean
   aiResponseId?: string | null
   hasManualEdits?: boolean
@@ -2151,6 +2217,7 @@ export type PageUncheckedCreateWithoutStudentQuestionsInput = {
   title: string
   orderIndex: number
   keywords?: Prisma.PageCreatekeywordsInput | string[]
+  compiledContent?: string | null
   isPublished?: boolean
   aiResponseId?: string | null
   hasManualEdits?: boolean
@@ -2191,6 +2258,7 @@ export type PageUpdateWithoutStudentQuestionsInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
   keywords?: Prisma.PageUpdatekeywordsInput | string[]
+  compiledContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
   aiResponseId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   hasManualEdits?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -2218,6 +2286,7 @@ export type PageUncheckedUpdateWithoutStudentQuestionsInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
   keywords?: Prisma.PageUpdatekeywordsInput | string[]
+  compiledContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
   aiResponseId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   hasManualEdits?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -2242,6 +2311,7 @@ export type PageCreateWithoutPodcastsInput = {
   title: string
   orderIndex: number
   keywords?: Prisma.PageCreatekeywordsInput | string[]
+  compiledContent?: string | null
   isPublished?: boolean
   aiResponseId?: string | null
   hasManualEdits?: boolean
@@ -2269,6 +2339,7 @@ export type PageUncheckedCreateWithoutPodcastsInput = {
   title: string
   orderIndex: number
   keywords?: Prisma.PageCreatekeywordsInput | string[]
+  compiledContent?: string | null
   isPublished?: boolean
   aiResponseId?: string | null
   hasManualEdits?: boolean
@@ -2309,6 +2380,7 @@ export type PageUpdateWithoutPodcastsInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
   keywords?: Prisma.PageUpdatekeywordsInput | string[]
+  compiledContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
   aiResponseId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   hasManualEdits?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -2336,6 +2408,7 @@ export type PageUncheckedUpdateWithoutPodcastsInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
   keywords?: Prisma.PageUpdatekeywordsInput | string[]
+  compiledContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
   aiResponseId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   hasManualEdits?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -2360,6 +2433,7 @@ export type PageCreateWithoutMediaResourcesInput = {
   title: string
   orderIndex: number
   keywords?: Prisma.PageCreatekeywordsInput | string[]
+  compiledContent?: string | null
   isPublished?: boolean
   aiResponseId?: string | null
   hasManualEdits?: boolean
@@ -2387,6 +2461,7 @@ export type PageUncheckedCreateWithoutMediaResourcesInput = {
   title: string
   orderIndex: number
   keywords?: Prisma.PageCreatekeywordsInput | string[]
+  compiledContent?: string | null
   isPublished?: boolean
   aiResponseId?: string | null
   hasManualEdits?: boolean
@@ -2427,6 +2502,7 @@ export type PageUpdateWithoutMediaResourcesInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
   keywords?: Prisma.PageUpdatekeywordsInput | string[]
+  compiledContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
   aiResponseId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   hasManualEdits?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -2454,6 +2530,7 @@ export type PageUncheckedUpdateWithoutMediaResourcesInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
   keywords?: Prisma.PageUpdatekeywordsInput | string[]
+  compiledContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
   aiResponseId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   hasManualEdits?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -2479,6 +2556,7 @@ export type PageCreateManyModuleInput = {
   title: string
   orderIndex: number
   keywords?: Prisma.PageCreatekeywordsInput | string[]
+  compiledContent?: string | null
   isPublished?: boolean
   aiResponseId?: string | null
   hasManualEdits?: boolean
@@ -2491,6 +2569,7 @@ export type PageUpdateWithoutModuleInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
   keywords?: Prisma.PageUpdatekeywordsInput | string[]
+  compiledContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
   aiResponseId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   hasManualEdits?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -2517,6 +2596,7 @@ export type PageUncheckedUpdateWithoutModuleInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
   keywords?: Prisma.PageUpdatekeywordsInput | string[]
+  compiledContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
   aiResponseId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   hasManualEdits?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -2543,6 +2623,7 @@ export type PageUncheckedUpdateManyWithoutModuleInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
   keywords?: Prisma.PageUpdatekeywordsInput | string[]
+  compiledContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
   aiResponseId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   hasManualEdits?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -2696,6 +2777,7 @@ export type PageSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   title?: boolean
   orderIndex?: boolean
   keywords?: boolean
+  compiledContent?: boolean
   isPublished?: boolean
   aiResponseId?: boolean
   hasManualEdits?: boolean
@@ -2725,6 +2807,7 @@ export type PageSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   title?: boolean
   orderIndex?: boolean
   keywords?: boolean
+  compiledContent?: boolean
   isPublished?: boolean
   aiResponseId?: boolean
   hasManualEdits?: boolean
@@ -2740,6 +2823,7 @@ export type PageSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   title?: boolean
   orderIndex?: boolean
   keywords?: boolean
+  compiledContent?: boolean
   isPublished?: boolean
   aiResponseId?: boolean
   hasManualEdits?: boolean
@@ -2755,6 +2839,7 @@ export type PageSelectScalar = {
   title?: boolean
   orderIndex?: boolean
   keywords?: boolean
+  compiledContent?: boolean
   isPublished?: boolean
   aiResponseId?: boolean
   hasManualEdits?: boolean
@@ -2763,7 +2848,7 @@ export type PageSelectScalar = {
   updatedAt?: boolean
 }
 
-export type PageOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "moduleId" | "title" | "orderIndex" | "keywords" | "isPublished" | "aiResponseId" | "hasManualEdits" | "conceptsProcessed" | "createdAt" | "updatedAt", ExtArgs["result"]["page"]>
+export type PageOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "moduleId" | "title" | "orderIndex" | "keywords" | "compiledContent" | "isPublished" | "aiResponseId" | "hasManualEdits" | "conceptsProcessed" | "createdAt" | "updatedAt", ExtArgs["result"]["page"]>
 export type PageInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   module?: boolean | Prisma.ModuleDefaultArgs<ExtArgs>
   activities?: boolean | Prisma.Page$activitiesArgs<ExtArgs>
@@ -2812,6 +2897,7 @@ export type $PagePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     title: string
     orderIndex: number
     keywords: string[]
+    compiledContent: string | null
     isPublished: boolean
     aiResponseId: string | null
     hasManualEdits: boolean
@@ -3260,6 +3346,7 @@ export interface PageFieldRefs {
   readonly title: Prisma.FieldRef<"Page", 'String'>
   readonly orderIndex: Prisma.FieldRef<"Page", 'Int'>
   readonly keywords: Prisma.FieldRef<"Page", 'String[]'>
+  readonly compiledContent: Prisma.FieldRef<"Page", 'String'>
   readonly isPublished: Prisma.FieldRef<"Page", 'Boolean'>
   readonly aiResponseId: Prisma.FieldRef<"Page", 'String'>
   readonly hasManualEdits: Prisma.FieldRef<"Page", 'Boolean'>

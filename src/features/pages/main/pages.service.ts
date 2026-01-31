@@ -6,12 +6,13 @@ import {
 import { DBService } from 'src/core/database/database.service'
 import { CreatePageDto } from './dtos/req/create-page.dto'
 import { UpdatePageDto } from './dtos/req/update-page.dto'
+import { UpdatePageContentDto } from './dtos/req/update-page-content.dto'
 import { ReorderPagesDto } from './dtos/req/reorder-pages.dto'
 import { PageDto } from './dtos/res/page.dto'
 import {
   Enrollment,
+  Prisma,
   Role,
-  type Prisma,
   type User,
 } from 'src/core/database/generated/client'
 import { BaseParamsReqDto } from 'src/shared/dtos/req/base-params.dto'
@@ -54,68 +55,14 @@ export class PagesService {
       orderBy: { orderIndex: 'desc' },
     })
 
-    const {
-      audience: defaultAudience,
-      contentLength: defaultContentLength,
-      language: defaultLanguage,
-      learningObjectives: defaultLearningObjectives,
-      targetLevel: defaultTargetLevel,
-      tone: defaultTone,
-    } = module.aiConfiguration!
-
-    // Usar valores del DTO si se proporcionan, sino usar los de la configuración del módulo
-    // const generatedContent =
-    //   await this.contentGenerationService.generatePageContent({
-    //     topic: dto.title,
-    //     instructions: dto.instructions,
-    //     config: {
-    //       audience: dto.audience ?? defaultAudience,
-    //       contentLength: dto.contentLength ?? defaultContentLength,
-    //       language: dto.language ?? defaultLanguage,
-    //       learningObjectives: dto.learningObjectives ?? defaultLearningObjectives,
-    //       targetLevel: dto.targetLevel ?? defaultTargetLevel,
-    //       tone: dto.tone ?? defaultTone,
-    //     },
-    //   })
-
     const page = await this.dbService.page.create({
       data: {
         moduleId: dto.moduleId,
         title: dto.title,
         isPublished: dto.isPublished ?? false,
         orderIndex: lastPage?.orderIndex ? lastPage.orderIndex + 1 : 1,
-        // aiResponseId: generatedContent.responseId,
       },
     })
-
-    // await Promise.all(
-    //   generatedContent.content.blocks.map((block) =>
-    //     this.dbService.block.create({
-    //       data: {
-    //         pageId: page.id,
-    //         type: block.type,
-    //         content: JSON.stringify(block),
-    //       },
-    //     }),
-    //   ),
-    // )
-
-    // await this.conceptsProcessorQueue.add(QUEUE_NAMES.CONCEPTS.JOBS.PROCESS, {
-    //   pageId: page.id,
-    // })
-
-    // await Promise.all(
-    //   conceptsToEmbed.map((concept) =>
-    //     this.dbService.pageConcept.create({
-    //       data: {
-    //         pageId: page.id,
-    //         term: concept.term,
-    //         definition: concept.definition,
-    //         htmlId: concept.htmlId,
-    //       },
-    //     }),
-    //   ),
-    // )
 
     return PagesMapper.mapToDto(page)
   }
@@ -315,6 +262,105 @@ export class PagesService {
     }
 
     return PagesMapper.mapToDto(page)
+  }
+
+  async updateContent(
+    id: number,
+    updatePageContentDto: UpdatePageContentDto,
+    user: User,
+  ): Promise<PageDto> {
+    // Verificar que la página existe
+    const existingPage = await this.dbService.page.findUnique({
+      where: { id },
+      include: {
+        module: true,
+        blocks: true,
+      },
+    })
+
+    if (!existingPage) {
+      throw new NotFoundException(`Página con ID ${id} no encontrada`)
+    }
+
+    // Solo el profesor propietario puede actualizar el contenido
+    if (existingPage.module.teacherId !== user.id) {
+      throw new ForbiddenException(
+        'Solo el profesor propietario puede actualizar el contenido de esta página',
+      )
+    }
+
+    // Ejecutar actualización de bloques en una transacción
+    await this.dbService.$transaction(async (prisma) => {
+      // Obtener los IDs de los bloques que se van a mantener/actualizar
+      const blockIdsToKeep = updatePageContentDto.blocks
+        .filter((block) => block.id !== undefined)
+        .map((block) => block.id!)
+
+      // Eliminar bloques que no están en la lista
+      await prisma.block.deleteMany({
+        where: {
+          pageId: id,
+          id: {
+            notIn: blockIdsToKeep.length > 0 ? blockIdsToKeep : [-1],
+          },
+        },
+      })
+
+      // Actualizar o crear bloques
+      for (const blockDto of updatePageContentDto.blocks) {
+        if (blockDto.id) {
+          // Actualizar bloque existente
+          await prisma.block.update({
+            where: { id: blockDto.id },
+            data: {
+              type: blockDto.type,
+              content: blockDto.content,
+              ...(blockDto.tipTapContent !== undefined && {
+                tipTapContent:
+                  blockDto.tipTapContent === null
+                    ? Prisma.JsonNull
+                    : blockDto.tipTapContent,
+              }),
+            },
+          })
+        } else {
+          // Crear nuevo bloque
+          await prisma.block.create({
+            data: {
+              pageId: id,
+              type: blockDto.type,
+              content: blockDto.content,
+              ...(blockDto.tipTapContent !== undefined && {
+                tipTapContent:
+                  blockDto.tipTapContent === null
+                    ? Prisma.JsonNull
+                    : blockDto.tipTapContent,
+              }),
+            },
+          })
+        }
+      }
+
+      // Marcar la página como editada manualmente
+      await prisma.page.update({
+        where: { id },
+        data: {
+          hasManualEdits: true,
+        },
+      })
+    })
+
+    // Encolar procesamiento de conceptos
+    await this.conceptsProcessorQueue.add(QUEUE_NAMES.CONCEPTS.JOBS.PROCESS, {
+      pageId: id,
+    })
+
+    // Obtener y retornar la página actualizada
+    const updatedPage = await this.dbService.page.findUnique({
+      where: { id },
+    })
+
+    return PagesMapper.mapToDto(updatedPage!)
   }
 
   async reorder(reorderPagesDto: ReorderPagesDto, user: User): Promise<void> {

@@ -160,6 +160,7 @@ export const PageScalarFieldEnum = {
   title: 'title',
   orderIndex: 'orderIndex',
   keywords: 'keywords',
+  compiledContent: 'compiledContent',
   isPublished: 'isPublished',
   aiResponseId: 'aiResponseId',
   hasManualEdits: 'hasManualEdits',
@@ -176,6 +177,7 @@ export const BlockScalarFieldEnum = {
   pageId: 'pageId',
   type: 'type',
   content: 'content',
+  tipTapContent: 'tipTapContent',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const

@@ -57,6 +57,7 @@ export type BlockCountAggregateOutputType = {
   pageId: number
   type: number
   content: number
+  tipTapContent: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -94,6 +95,7 @@ export type BlockCountAggregateInputType = {
   pageId?: true
   type?: true
   content?: true
+  tipTapContent?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -190,6 +192,7 @@ export type BlockGroupByOutputType = {
   pageId: number
   type: $Enums.BlockType
   content: runtime.JsonValue
+  tipTapContent: runtime.JsonValue | null
   createdAt: Date
   updatedAt: Date
   _count: BlockCountAggregateOutputType | null
@@ -222,6 +225,7 @@ export type BlockWhereInput = {
   pageId?: Prisma.IntFilter<"Block"> | number
   type?: Prisma.EnumBlockTypeFilter<"Block"> | $Enums.BlockType
   content?: Prisma.JsonFilter<"Block">
+  tipTapContent?: Prisma.JsonNullableFilter<"Block">
   createdAt?: Prisma.DateTimeFilter<"Block"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Block"> | Date | string
   page?: Prisma.XOR<Prisma.PageScalarRelationFilter, Prisma.PageWhereInput>
@@ -232,6 +236,7 @@ export type BlockOrderByWithRelationInput = {
   pageId?: Prisma.SortOrder
   type?: Prisma.SortOrder
   content?: Prisma.SortOrder
+  tipTapContent?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   page?: Prisma.PageOrderByWithRelationInput
@@ -245,6 +250,7 @@ export type BlockWhereUniqueInput = Prisma.AtLeast<{
   pageId?: Prisma.IntFilter<"Block"> | number
   type?: Prisma.EnumBlockTypeFilter<"Block"> | $Enums.BlockType
   content?: Prisma.JsonFilter<"Block">
+  tipTapContent?: Prisma.JsonNullableFilter<"Block">
   createdAt?: Prisma.DateTimeFilter<"Block"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Block"> | Date | string
   page?: Prisma.XOR<Prisma.PageScalarRelationFilter, Prisma.PageWhereInput>
@@ -255,6 +261,7 @@ export type BlockOrderByWithAggregationInput = {
   pageId?: Prisma.SortOrder
   type?: Prisma.SortOrder
   content?: Prisma.SortOrder
+  tipTapContent?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.BlockCountOrderByAggregateInput
@@ -272,6 +279,7 @@ export type BlockScalarWhereWithAggregatesInput = {
   pageId?: Prisma.IntWithAggregatesFilter<"Block"> | number
   type?: Prisma.EnumBlockTypeWithAggregatesFilter<"Block"> | $Enums.BlockType
   content?: Prisma.JsonWithAggregatesFilter<"Block">
+  tipTapContent?: Prisma.JsonNullableWithAggregatesFilter<"Block">
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Block"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Block"> | Date | string
 }
@@ -279,6 +287,7 @@ export type BlockScalarWhereWithAggregatesInput = {
 export type BlockCreateInput = {
   type: $Enums.BlockType
   content: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  tipTapContent?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
   page: Prisma.PageCreateNestedOneWithoutBlocksInput
@@ -289,6 +298,7 @@ export type BlockUncheckedCreateInput = {
   pageId: number
   type: $Enums.BlockType
   content: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  tipTapContent?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -296,6 +306,7 @@ export type BlockUncheckedCreateInput = {
 export type BlockUpdateInput = {
   type?: Prisma.EnumBlockTypeFieldUpdateOperationsInput | $Enums.BlockType
   content?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  tipTapContent?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   page?: Prisma.PageUpdateOneRequiredWithoutBlocksNestedInput
@@ -306,6 +317,7 @@ export type BlockUncheckedUpdateInput = {
   pageId?: Prisma.IntFieldUpdateOperationsInput | number
   type?: Prisma.EnumBlockTypeFieldUpdateOperationsInput | $Enums.BlockType
   content?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  tipTapContent?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -315,6 +327,7 @@ export type BlockCreateManyInput = {
   pageId: number
   type: $Enums.BlockType
   content: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  tipTapContent?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -322,6 +335,7 @@ export type BlockCreateManyInput = {
 export type BlockUpdateManyMutationInput = {
   type?: Prisma.EnumBlockTypeFieldUpdateOperationsInput | $Enums.BlockType
   content?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  tipTapContent?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -331,6 +345,7 @@ export type BlockUncheckedUpdateManyInput = {
   pageId?: Prisma.IntFieldUpdateOperationsInput | number
   type?: Prisma.EnumBlockTypeFieldUpdateOperationsInput | $Enums.BlockType
   content?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  tipTapContent?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -350,6 +365,7 @@ export type BlockCountOrderByAggregateInput = {
   pageId?: Prisma.SortOrder
   type?: Prisma.SortOrder
   content?: Prisma.SortOrder
+  tipTapContent?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -429,6 +445,7 @@ export type EnumBlockTypeFieldUpdateOperationsInput = {
 export type BlockCreateWithoutPageInput = {
   type: $Enums.BlockType
   content: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  tipTapContent?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -437,6 +454,7 @@ export type BlockUncheckedCreateWithoutPageInput = {
   id?: number
   type: $Enums.BlockType
   content: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  tipTapContent?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -475,6 +493,7 @@ export type BlockScalarWhereInput = {
   pageId?: Prisma.IntFilter<"Block"> | number
   type?: Prisma.EnumBlockTypeFilter<"Block"> | $Enums.BlockType
   content?: Prisma.JsonFilter<"Block">
+  tipTapContent?: Prisma.JsonNullableFilter<"Block">
   createdAt?: Prisma.DateTimeFilter<"Block"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Block"> | Date | string
 }
@@ -483,6 +502,7 @@ export type BlockCreateManyPageInput = {
   id?: number
   type: $Enums.BlockType
   content: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  tipTapContent?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -490,6 +510,7 @@ export type BlockCreateManyPageInput = {
 export type BlockUpdateWithoutPageInput = {
   type?: Prisma.EnumBlockTypeFieldUpdateOperationsInput | $Enums.BlockType
   content?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  tipTapContent?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -498,6 +519,7 @@ export type BlockUncheckedUpdateWithoutPageInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   type?: Prisma.EnumBlockTypeFieldUpdateOperationsInput | $Enums.BlockType
   content?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  tipTapContent?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -506,6 +528,7 @@ export type BlockUncheckedUpdateManyWithoutPageInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   type?: Prisma.EnumBlockTypeFieldUpdateOperationsInput | $Enums.BlockType
   content?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  tipTapContent?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -517,6 +540,7 @@ export type BlockSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   pageId?: boolean
   type?: boolean
   content?: boolean
+  tipTapContent?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   page?: boolean | Prisma.PageDefaultArgs<ExtArgs>
@@ -527,6 +551,7 @@ export type BlockSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   pageId?: boolean
   type?: boolean
   content?: boolean
+  tipTapContent?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   page?: boolean | Prisma.PageDefaultArgs<ExtArgs>
@@ -537,6 +562,7 @@ export type BlockSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   pageId?: boolean
   type?: boolean
   content?: boolean
+  tipTapContent?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   page?: boolean | Prisma.PageDefaultArgs<ExtArgs>
@@ -547,11 +573,12 @@ export type BlockSelectScalar = {
   pageId?: boolean
   type?: boolean
   content?: boolean
+  tipTapContent?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type BlockOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "pageId" | "type" | "content" | "createdAt" | "updatedAt", ExtArgs["result"]["block"]>
+export type BlockOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "pageId" | "type" | "content" | "tipTapContent" | "createdAt" | "updatedAt", ExtArgs["result"]["block"]>
 export type BlockInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   page?: boolean | Prisma.PageDefaultArgs<ExtArgs>
 }
@@ -572,6 +599,7 @@ export type $BlockPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     pageId: number
     type: $Enums.BlockType
     content: runtime.JsonValue
+    tipTapContent: runtime.JsonValue | null
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["block"]>
@@ -1002,6 +1030,7 @@ export interface BlockFieldRefs {
   readonly pageId: Prisma.FieldRef<"Block", 'Int'>
   readonly type: Prisma.FieldRef<"Block", 'BlockType'>
   readonly content: Prisma.FieldRef<"Block", 'Json'>
+  readonly tipTapContent: Prisma.FieldRef<"Block", 'Json'>
   readonly createdAt: Prisma.FieldRef<"Block", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Block", 'DateTime'>
 }

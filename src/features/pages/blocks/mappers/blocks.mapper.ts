@@ -6,8 +6,14 @@ export class BlocksMapper {
     return {
       id: block.id,
       type: block.type,
-      // @ts-expect-error asdsa
-      content: JSON.parse(block.content),
+      content:
+        typeof block.content === 'string'
+          ? JSON.parse(block.content)
+          : block.content,
+      tipTapContent:
+        typeof block.tipTapContent === 'string'
+          ? JSON.parse(block.tipTapContent)
+          : (block.tipTapContent ?? null),
     }
   }
 }

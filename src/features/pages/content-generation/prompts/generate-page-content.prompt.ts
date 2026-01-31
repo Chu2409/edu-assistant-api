@@ -13,7 +13,7 @@ import {
 } from '../helpers/guidances'
 
 export interface GeneratePageContentPrompt {
-  topic: string
+  title: string
   instructions?: string
   config: {
     language: string
@@ -21,7 +21,6 @@ export interface GeneratePageContentPrompt {
     audience: AiAudience
     contentLength: AiLength
     tone: AiTone
-    contextPrompt?: string
     learningObjectives?: string[]
   }
 }
@@ -29,10 +28,10 @@ export interface GeneratePageContentPrompt {
 export const generatePageContentPrompt = (
   input: GeneratePageContentPrompt,
 ): PromptInput[] => {
-  const { topic, instructions, config } = input
+  const { title, instructions, config } = input
 
   const systemPrompt = buildSystemPrompt(config)
-  const userPrompt = buildUserPrompt(topic, instructions, config.contentLength)
+  const userPrompt = buildUserPrompt(title, instructions, config.contentLength)
 
   return [
     { role: 'system', content: systemPrompt },
@@ -93,7 +92,6 @@ Respond ONLY with a valid JSON object. No markdown fences, no explanations befor
 - Target audience: ${audienceDesc}
 - Knowledge level: ${levelDesc}
 - Tone: ${toneDesc}
-${config.contextPrompt ? `- Module context: ${config.contextPrompt}` : ''}
 ${config.learningObjectives?.length ? `- Learning objectives:\n${config.learningObjectives.map((obj) => `  - ${obj}`).join('\n')}` : ''}
 
 # Quality Guidelines
@@ -106,11 +104,11 @@ ${config.learningObjectives?.length ? `- Learning objectives:\n${config.learning
 }
 
 function buildUserPrompt(
-  topic: string,
+  title: string,
   instructions: string | undefined,
   contentLength: AiLength,
 ): string {
-  let prompt = `Generate a lesson about: ${topic}
+  let prompt = `Generate a lesson about: ${title}
 
 Length: ${getLengthGuidance(contentLength)}`
 

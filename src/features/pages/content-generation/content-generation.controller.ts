@@ -40,17 +40,6 @@ export class ContentGenerationController {
   @ApiResponse({ status: 400, description: 'Datos inválidos' })
   @JwtAuth(Role.TEACHER)
   generateContent(@Body() dto: GenerateContentDto) {
-    return this.contentGenerationService.generatePageContent({
-      topic: dto.title,
-      config: {
-        audience: 'UNIVERSITY',
-        contentLength: 'MEDIUM',
-        language: 'en',
-        learningObjectives: ['Entender los conceptos básicos de programación'],
-        targetLevel: 'BASIC',
-        tone: 'EDUCATIONAL',
-      },
-      instructions: dto.instructions,
-    })
+    return this.contentGenerationService.generatePageContent(dto)
   }
 }

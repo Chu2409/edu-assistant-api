@@ -85,6 +85,20 @@ export class FullPageDto {
           markdown:
             '# Introducción\n\nTypeScript es un lenguaje de programación...',
         },
+        tipTapContent: {
+          type: 'doc',
+          content: [
+            {
+              type: 'paragraph',
+              content: [
+                {
+                  type: 'text',
+                  text: 'Este es un párrafo con **texto en negrita**.',
+                },
+              ],
+            },
+          ],
+        },
       },
       {
         id: 2,
@@ -92,6 +106,20 @@ export class FullPageDto {
         content: {
           language: 'typescript',
           code: 'const greeting: string = "Hello, World!"\nconsole.log(greeting)',
+        },
+        tipTapContent: {
+          type: 'doc',
+          content: [
+            {
+              type: 'paragraph',
+              content: [
+                {
+                  type: 'text',
+                  text: 'Este es un párrafo con **texto en negrita**.',
+                },
+              ],
+            },
+          ],
         },
       },
       {
@@ -103,6 +131,7 @@ export class FullPageDto {
           reason:
             'Para ilustrar visualmente la herencia como concepto clave en Java.',
         },
+        tipTapContent: { type: 'doc', content: [] },
       },
     ],
   })
