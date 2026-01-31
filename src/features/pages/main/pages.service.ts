@@ -55,26 +55,28 @@ export class PagesService {
     })
 
     const {
-      audience,
-      contentLength,
-      language,
-      learningObjectives,
-      targetLevel,
-      tone,
-      contextPrompt,
+      audience: defaultAudience,
+      contentLength: defaultContentLength,
+      language: defaultLanguage,
+      learningObjectives: defaultLearningObjectives,
+      targetLevel: defaultTargetLevel,
+      tone: defaultTone,
     } = module.aiConfiguration!
 
-    const generatedContent =
-      await this.contentGenerationService.generatePageContent({
-        title: dto.title,
-        audience,
-        contentLength,
-        language,
-        learningObjectives,
-        targetLevel,
-        tone,
-        contextPrompt: contextPrompt ?? undefined,
-      })
+    // Usar valores del DTO si se proporcionan, sino usar los de la configuración del módulo
+    // const generatedContent =
+    //   await this.contentGenerationService.generatePageContent({
+    //     topic: dto.title,
+    //     instructions: dto.instructions,
+    //     config: {
+    //       audience: dto.audience ?? defaultAudience,
+    //       contentLength: dto.contentLength ?? defaultContentLength,
+    //       language: dto.language ?? defaultLanguage,
+    //       learningObjectives: dto.learningObjectives ?? defaultLearningObjectives,
+    //       targetLevel: dto.targetLevel ?? defaultTargetLevel,
+    //       tone: dto.tone ?? defaultTone,
+    //     },
+    //   })
 
     const page = await this.dbService.page.create({
       data: {
@@ -82,21 +84,21 @@ export class PagesService {
         title: dto.title,
         isPublished: dto.isPublished ?? false,
         orderIndex: lastPage?.orderIndex ? lastPage.orderIndex + 1 : 1,
-        aiResponseId: generatedContent.responseId,
+        // aiResponseId: generatedContent.responseId,
       },
     })
 
-    await Promise.all(
-      generatedContent.content.blocks.map((block) =>
-        this.dbService.block.create({
-          data: {
-            pageId: page.id,
-            type: block.type,
-            content: JSON.stringify(block.content),
-          },
-        }),
-      ),
-    )
+    // await Promise.all(
+    //   generatedContent.content.blocks.map((block) =>
+    //     this.dbService.block.create({
+    //       data: {
+    //         pageId: page.id,
+    //         type: block.type,
+    //         content: JSON.stringify(block),
+    //       },
+    //     }),
+    //   ),
+    // )
 
     // await this.conceptsProcessorQueue.add(QUEUE_NAMES.CONCEPTS.JOBS.PROCESS, {
     //   pageId: page.id,

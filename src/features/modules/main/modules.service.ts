@@ -45,7 +45,6 @@ export class ModulesService {
         aiConfiguration: {
           create: {
             language: createModuleDto.aiConfiguration.language ?? 'es',
-            contextPrompt: createModuleDto.aiConfiguration.contextPrompt,
             targetLevel:
               createModuleDto.aiConfiguration.targetLevel ??
               AiTargetLevel.INTERMEDIATE,
@@ -236,7 +235,6 @@ export class ModulesService {
       aiConfiguration?: {
         update?: {
           language?: string
-          contextPrompt?: string | null
           targetLevel?: AiTargetLevel
           audience?: AiAudience
           learningObjectives?: string[]
@@ -245,7 +243,6 @@ export class ModulesService {
         }
         create?: {
           language: string
-          contextPrompt?: string | null
           targetLevel: AiTargetLevel
           audience: AiAudience
           learningObjectives: string[]
@@ -262,9 +259,6 @@ export class ModulesService {
           update: {
             ...(aiConfiguration.language !== undefined && {
               language: aiConfiguration.language,
-            }),
-            ...(aiConfiguration.contextPrompt !== undefined && {
-              contextPrompt: aiConfiguration.contextPrompt,
             }),
             ...(aiConfiguration.targetLevel !== undefined && {
               targetLevel: aiConfiguration.targetLevel,
@@ -288,7 +282,6 @@ export class ModulesService {
         updateData.aiConfiguration = {
           create: {
             language: aiConfiguration.language ?? 'es',
-            contextPrompt: aiConfiguration.contextPrompt,
             targetLevel:
               aiConfiguration.targetLevel ?? AiTargetLevel.INTERMEDIATE,
             audience: aiConfiguration.audience ?? AiAudience.UNIVERSITY,

@@ -5,36 +5,59 @@ import {
   AiTone,
 } from 'src/core/database/generated/client'
 import { PromptInput } from 'src/features/pages/content-generation/interfaces/prompt-input.interface'
-import { getLengthGuidance } from '../helpers/guidances'
+import {
+  getAudienceGuidance,
+  getLengthGuidance,
+  getTargetLevelGuidance,
+  getToneGuidance,
+} from '../helpers/guidances'
 
 export interface GeneratePageContentPrompt {
-  title: string
-  language: string
-  contextPrompt?: string
-  targetLevel: AiTargetLevel
-  audience: AiAudience
-  learningObjectives: string[]
-  contentLength: AiLength
-  tone: AiTone
+  topic: string
+  instructions?: string
+  config: {
+    language: string
+    targetLevel: AiTargetLevel
+    audience: AiAudience
+    contentLength: AiLength
+    tone: AiTone
+    contextPrompt?: string
+    learningObjectives?: string[]
+  }
 }
 
-export const generatePageContentPrompt = ({
-  language,
-  audience,
-  targetLevel,
-  tone,
-  contentLength,
-  learningObjectives,
-  title,
-  contextPrompt,
-}: GeneratePageContentPrompt): PromptInput[] => [
-  {
-    role: 'system',
-    content: `You are an expert educational content designer.
+export const generatePageContentPrompt = (
+  input: GeneratePageContentPrompt,
+): PromptInput[] => {
+  const { topic, instructions, config } = input
 
-# OUTPUT FORMAT (valid JSON only)
+  const systemPrompt = buildSystemPrompt(config)
+  const userPrompt = buildUserPrompt(topic, instructions, config.contentLength)
+
+  return [
+    { role: 'system', content: systemPrompt },
+    { role: 'user', content: userPrompt },
+  ]
+}
+
+function buildSystemPrompt(
+  config: GeneratePageContentPrompt['config'],
+): string {
+  const audienceDesc = getAudienceGuidance(config.audience)
+
+  const levelDesc = getTargetLevelGuidance(config.targetLevel)
+
+  const toneDesc = getToneGuidance(config.tone)
+
+  return `You are an expert educational content creator. Your task is to generate structured lesson content.
+
+# Output Format
+
+Respond ONLY with a valid JSON object. No markdown fences, no explanations before or after.
+
 {
-  "title": string,
+  "title": "Lesson title",
+  "keywords": ["keyword1", "keyword2", "keyword3"],
   "blocks": [
     {
       "type": "TEXT" | "CODE" | "IMAGE_SUGGESTION",
@@ -47,115 +70,56 @@ export const generatePageContentPrompt = ({
   ]
 }
 
-# BLOCK STRUCTURE RULES (CRITICAL)
+# Block Rules
 
-1. **TEXT BLOCKS MUST NEVER BE CONSECUTIVE**
-   - Consolidate all sequential text into ONE block
-   - Use markdown headers (##, ###, ####) to organize sections within the block
-   - Use \\n\\n to separate topics and paragraphs
-   - TEXT blocks can only be interrupted by CODE or IMAGE_SUGGESTION blocks
-   - Example: Introduction + explanation + theory = ONE TEXT block with headers
+1. TEXT blocks:
+   - Use markdown: ## and ### for headings, **bold**, *italic*, lists (- or 1.), blockquotes (>)
+   - NEVER create consecutive TEXT blocks. Merge all continuous text into one block.
+   - A TEXT block can contain multiple headings, paragraphs, and lists.
 
-2. **CODE and IMAGE_SUGGESTION blocks CAN be consecutive**
-   - Multiple code examples in sequence: ✅ Allowed
-   - Multiple image suggestions in sequence: ✅ Allowed
+2. CODE blocks:
+   - Include ONLY when code genuinely aids understanding
+   - Choose the most appropriate language for the topic
+   - Include helpful comments
 
-# MARKDOWN HIERARCHY IN TEXT BLOCKS
-- ## Main sections (Introduction, Core Concepts, Conclusion)
-- ### Subsections within main sections
-- #### Minor subsections if needed
-- Use bullet points and numbered lists for enumerations
-- Use **bold** for emphasis, *italic* for terms
+3. IMAGE_SUGGESTION blocks:
+   - Include ONLY when a visual significantly enhances comprehension
+   - "prompt": detailed DALL-E prompt in English, specify style (diagram, illustration, etc.)
+   - "description": brief description in ${config.language} for the teacher
 
-# BLOCK TYPES
+# Content Configuration
 
-## TEXT blocks
-- Use for: Explanations, definitions, theory, context, summaries
-- Structure with headers and proper markdown
-- Keep related content together in one block
+- Language: ${config.language}
+- Target audience: ${audienceDesc}
+- Knowledge level: ${levelDesc}
+- Tone: ${toneDesc}
+${config.contextPrompt ? `- Module context: ${config.contextPrompt}` : ''}
+${config.learningObjectives?.length ? `- Learning objectives:\n${config.learningObjectives.map((obj) => `  - ${obj}`).join('\n')}` : ''}
 
-## CODE blocks
-- **No markdown fences** (no \`\`\` in the code field)
-- Always include inline comments explaining key parts
-- Prefer complete, runnable examples
-- Specify the programming language clearly
+# Quality Guidelines
 
-**When to include CODE blocks:**
-- Topic involves programming or technical implementation
-- Code examples clarify concepts better than text alone
-- Demonstrating practical application is essential
-- Target audience expects hands-on examples
-
-**When NOT to include CODE blocks:**
-- Topic is purely theoretical or conceptual
-- Text explanations are sufficient
-- No natural place for code in the subject matter
-- If no code is needed, omit CODE blocks entirely
-
-## IMAGE_SUGGESTION blocks
-- Use 2-4 total for the entire lesson (optional, only if beneficial)
-- Best for: Diagrams, processes, flowcharts, abstract concepts, visual relationships
-- Provide detailed DALL-E prompts including:
-  * Subject matter and key elements
-  * Style (e.g., "educational illustration, flat design, minimalist")
-  * Colors and composition
-  * Perspective or layout
-- Example prompt: "Educational diagram showing the water cycle with labeled arrows, flat design style, blue and green color palette, clear labels in Spanish"
-
-# CONTENT STRUCTURE
-1. **Introduction**: Context and overview
-2. **Main Content**: Progressive complexity, building on previous concepts
-3. **Conclusion**: Summary and key takeaways
-
-# EXAMPLE OUTPUT STRUCTURE
-{
-  "title": "Introduction to Variables",
-  "blocks": [
-    {
-      "type": "TEXT",
-      "content": {
-        "markdown": "## What are Variables?\\n\\nVariables are containers for storing data values...\\n\\n### Types of Variables\\n\\n1. **Numeric variables**: Store numbers\\n2. **Text variables**: Store strings\\n\\n## Why Variables Matter\\n\\nVariables allow programs to..."
-      }
-    },
-    {
-      "type": "CODE",
-      "content": {
-        "language": "python",
-        "code": "# Declaring a numeric variable\\nx = 10\\n\\n# Declaring a text variable\\nname = 'Alice'"
-      }
-    },
-    {
-      "type": "IMAGE_SUGGESTION",
-      "content": {
-        "prompt": "Educational diagram showing variable storage in computer memory, flat design, boxes with labels, blue and purple color scheme",
-        "reason": "Visual representation helps understand how variables are stored in memory"
-      }
-    },
-    {
-      "type": "TEXT",
-      "content": {
-        "markdown": "## Advanced Concepts\\n\\nNow that we understand basic variables..."
-      }
-    }
-  ]
+- Start with a clear introduction that establishes context
+- Use concrete examples to illustrate abstract concepts
+- Progress logically from simple to complex
+- End with a conclusion or summary that reinforces key points
+- Keywords should be 5-10 specific terms that represent the core concepts`
 }
 
-# OUTPUT REQUIREMENTS
-- Valid JSON only
-- No preamble or explanations outside the JSON
-- No markdown fences around the JSON response
-- No HTML tags in content`,
-  },
-  {
-    role: 'user',
-    content: `Title: ${title}
-Language: ${language}
-Audience: ${audience}
-Level: ${targetLevel}
-Tone: ${tone}
-Length: ${contentLength} ${getLengthGuidance(contentLength)}
-Objectives: ${learningObjectives.join('; ')}${contextPrompt ? `\nModule Context: ${contextPrompt}` : ''}
+function buildUserPrompt(
+  topic: string,
+  instructions: string | undefined,
+  contentLength: AiLength,
+): string {
+  let prompt = `Generate a lesson about: ${topic}
 
-Generate the lesson content as a valid JSON object following all block structure rules. Remember: TEXT blocks must never be consecutive - consolidate all sequential text into single blocks using markdown headers.`,
-  },
-]
+Length: ${getLengthGuidance(contentLength)}`
+
+  if (instructions) {
+    prompt += `
+
+Additional instructions from the teacher:
+${instructions}`
+  }
+
+  return prompt
+}

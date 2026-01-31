@@ -1,5 +1,5 @@
-import { ApiProperty } from '@nestjs/swagger'
-import { IsString, MinLength } from 'class-validator'
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger'
+import { IsOptional, IsString, MaxLength, MinLength } from 'class-validator'
 
 export class GenerateContentDto {
   @ApiProperty({
@@ -11,4 +11,16 @@ export class GenerateContentDto {
   @IsString()
   @MinLength(2)
   title: string
+
+  @ApiPropertyOptional({
+    description:
+      'Instrucciones específicas del profesor para la generación del contenido',
+    example:
+      'Enfócate en ejemplos prácticos de programación orientada a objetos',
+    maxLength: 1000,
+  })
+  @IsOptional()
+  @IsString()
+  @MaxLength(1000)
+  instructions?: string
 }

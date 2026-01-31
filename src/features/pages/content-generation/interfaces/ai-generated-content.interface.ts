@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger'
 import { BlockType } from 'src/core/database/generated/enums'
 
-export class TextBlock {
+export class AiTextBlock {
   @ApiProperty({
     description: 'Contenido en formato Markdown',
     example: '# Título\n\nEste es un párrafo con **texto en negrita**.',
@@ -9,7 +9,7 @@ export class TextBlock {
   markdown: string
 }
 
-export class CodeBlock {
+export class AiCodeBlock {
   @ApiProperty({
     description: 'Lenguaje de programación del código',
     example: 'typescript',
@@ -23,7 +23,7 @@ export class CodeBlock {
   code: string
 }
 
-export class ImageSuggestionBlock {
+export class AiImageSuggestionBlock {
   @ApiProperty({
     description: 'Prompt para generar la imagen',
     example: 'Un diagrama que muestra el flujo de datos en una aplicación web',
@@ -37,7 +37,9 @@ export class ImageSuggestionBlock {
   reason: string
 }
 
-export class ContentBlock {
+export type AiContent = AiTextBlock | AiCodeBlock | AiImageSuggestionBlock
+
+export class AiContentBlock {
   @ApiProperty({
     description: 'Tipo de bloque de contenido',
     enum: BlockType,
@@ -52,5 +54,5 @@ export class ContentBlock {
       markdown: '# Título\n\nEste es un párrafo con **texto en negrita**.',
     },
   })
-  content: TextBlock | CodeBlock | ImageSuggestionBlock
+  content: AiContent
 }

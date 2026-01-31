@@ -5,7 +5,8 @@ import { DBService } from 'src/core/database/database.service'
 import { QUEUE_NAMES } from 'src/shared/constants/queues'
 import { BlocksMapper } from '../blocks/mappers/blocks.mapper'
 import { ContentGenerationService } from '../content-generation/content-generation.service'
-import { TextBlock } from '../content-generation/interfaces/content-block.interface'
+import { AiTextBlock } from '../content-generation/interfaces/ai-generated-content.interface'
+import { BlockType } from 'src/core/database/generated/enums'
 
 @Processor(QUEUE_NAMES.CONCEPTS.NAME)
 export class ConceptsWorker extends WorkerHost {
@@ -63,8 +64,8 @@ export class ConceptsWorker extends WorkerHost {
 
     const concepts = await this.contentGenerationService.extractPageConcepts({
       textBlocks: blocks
-        .filter((block) => block.type === 'TEXT')
-        .map((block) => block.content as TextBlock),
+        .filter((block) => block.type === BlockType.TEXT)
+        .map((block) => block.content as AiTextBlock),
       language: page.module.aiConfiguration?.language ?? 'es',
       targetLevel: page.module.aiConfiguration?.targetLevel ?? 'INTERMEDIATE',
       audience: page.module.aiConfiguration?.audience ?? 'UNIVERSITY',

@@ -1,10 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger'
 import { BlockType } from 'src/core/database/generated/enums'
-import {
-  CodeBlock,
-  ImageSuggestionBlock,
-  TextBlock,
-} from 'src/features/pages/content-generation/interfaces/content-block.interface'
+import type { AiContent } from 'src/features/pages/content-generation/interfaces/ai-generated-content.interface'
 
 export class BlockDto {
   @ApiProperty({
@@ -27,5 +23,5 @@ export class BlockDto {
       markdown: '# Título\n\nEste es un párrafo con **texto en negrita**.',
     },
   })
-  content: TextBlock | CodeBlock | ImageSuggestionBlock
+  content: AiContent
 }

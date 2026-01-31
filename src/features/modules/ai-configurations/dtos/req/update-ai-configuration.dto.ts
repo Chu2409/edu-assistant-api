@@ -23,15 +23,6 @@ export class UpdateAiConfigurationDto {
   language?: string
 
   @ApiPropertyOptional({
-    description: 'Prompt de contexto personalizado para el módulo',
-    example: 'Este módulo trata sobre programación avanzada en Python',
-    nullable: true,
-  })
-  @IsOptional()
-  @IsString()
-  contextPrompt?: string
-
-  @ApiPropertyOptional({
     description: 'Nivel objetivo del contenido de IA',
     enum: AiTargetLevel,
     example: AiTargetLevel.ADVANCED,

@@ -11,7 +11,6 @@ const aiConfiguration1 = (
   moduleId: number,
 ): Prisma.AiConfigurationCreateInput => ({
   language: 'es',
-  contextPrompt: 'Este módulo trata sobre programación en Python',
   module: {
     connect: {
       id: moduleId,

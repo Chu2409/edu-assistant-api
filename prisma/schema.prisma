@@ -109,7 +109,6 @@ model AiConfiguration {
   id                 Int           @id @default(autoincrement())
   moduleId           Int           @unique @map("module_id")
   language           String        @default("es") // RF-9: idioma específico
-  contextPrompt      String?       @map("context_prompt") // RF-10: contexto personalizado del módulo
   targetLevel        AiTargetLevel @default(INTERMEDIATE) @map("target_level")
   audience           AiAudience    @default(UNIVERSITY) @map("audience")
   learningObjectives String[]      @map("learning_objectives")
@@ -158,6 +157,7 @@ model Page {
   orderIndex        Int                          @map("order_index")
   embedding         Unsupported("vector(1536)")?
   keywords          String[] // Mantener para búsquedas
+  compiledContent   String?                      @map("compiled_content")
   isPublished       Boolean                      @default(false) @map("is_published")
   aiResponseId      String?                      @map("ai_response_id") // Para continuar conversación
   hasManualEdits    Boolean                      @default(false) @map("has_manual_edits") // Si el profesor editó manualmente
@@ -197,6 +197,7 @@ model Block {
   pageId    Int       @map("page_id")
   type      BlockType @map("type")
   content   Json      @map("content")
+  markdown  String?   @map("markdown")
   createdAt DateTime  @default(now()) @map("created_at")
   updatedAt DateTime  @updatedAt @map("updated_at")
 

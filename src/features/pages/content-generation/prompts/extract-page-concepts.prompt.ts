@@ -1,9 +1,9 @@
 import { AiAudience, AiTargetLevel } from 'src/core/database/generated/enums'
 import { PromptInput } from '../interfaces/prompt-input.interface'
-import { TextBlock } from '../interfaces/content-block.interface'
+import { AiTextBlock } from '../interfaces/ai-generated-content.interface'
 
 export interface ExtractPageConceptsPrompt {
-  textBlocks: TextBlock[]
+  textBlocks: AiTextBlock[]
   language: string
   targetLevel: AiTargetLevel
   audience: AiAudience

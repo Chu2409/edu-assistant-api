@@ -20,13 +20,6 @@ export class AiConfigurationDto {
   language: string
 
   @ApiProperty({
-    description: 'Prompt de contexto personalizado para el módulo',
-    example: 'Este módulo trata sobre programación en Python',
-    nullable: true,
-  })
-  contextPrompt: string | null
-
-  @ApiProperty({
     description: 'Fecha de creación de la configuración',
     example: '2024-01-01T00:00:00.000Z',
   })
