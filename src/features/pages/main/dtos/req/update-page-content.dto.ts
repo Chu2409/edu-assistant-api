@@ -12,7 +12,7 @@ export class UpdatePageContentDto {
         id: 1,
         type: 'TEXT',
         content: { text: 'Contenido actualizado' },
-        tipTapContent: null,
+        tipTapContent: { type: 'doc', content: [] },
       },
       {
         type: 'CODE',
@@ -20,6 +20,7 @@ export class UpdatePageContentDto {
           code: 'console.log("Nuevo bloque")',
           language: 'javascript',
         },
+        tipTapContent: { type: 'doc', content: [] },
       },
     ],
   })

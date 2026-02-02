@@ -5,7 +5,6 @@ import {
   IsObject,
   IsOptional,
   IsInt,
-  ValidateIf,
 } from 'class-validator'
 import { BlockType } from 'src/core/database/generated/client'
 
@@ -36,12 +35,13 @@ export class UpsertBlockDto {
   @IsNotEmpty()
   content: Record<string, any>
 
-  @ApiPropertyOptional({
-    description: 'Contenido TipTap en formato JSON (opcional)',
+  @ApiProperty({
+    description:
+      'Contenido TipTap en formato JSON. Debe enviarse siempre (puede ser null).',
     example: { type: 'doc', content: [] },
+    nullable: true,
   })
-  @IsOptional()
   @IsObject()
-  @ValidateIf((o) => o.tipTapContent !== null)
-  tipTapContent?: Record<string, any> | null
+  @IsNotEmpty()
+  tipTapContent: Record<string, any>
 }

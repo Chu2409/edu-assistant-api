@@ -43,80 +43,80 @@ function buildSystemPrompt(
   config: GeneratePageContentPrompt['config'],
 ): string {
   const audienceDesc = getAudienceGuidance(config.audience)
-
   const levelDesc = getTargetLevelGuidance(config.targetLevel)
-
   const toneDesc = getToneGuidance(config.tone)
 
-  return `You are an expert educational content creator. Your task is to generate structured lesson content.
+  return `You are an expert educational content creator. Generate structured lesson content.
 
 # Output Format
 
-Respond ONLY with a valid JSON object. No markdown fences, no explanations before or after.
+Respond ONLY with valid JSON. No markdown fences, no text before or after.
 
 {
   "title": "Lesson title",
-  "keywords": ["keyword1", "keyword2", "keyword3"],
+  "keywords": ["keyword1", "keyword2", ...],
   "blocks": [
     {
-      "type": "TEXT" | "CODE" | "IMAGE_SUGGESTION",
-      "content": {
-        // TEXT: { "markdown": string }
-        // CODE: { "language": string, "code": string }
-        // IMAGE_SUGGESTION: { "prompt": string, "reason": string }
-      }
+      "type": "TEXT",
+      "content": { "markdown": "## Heading\\n\\nParagraph with **bold**..." }
+    },
+    {
+      "type": "CODE",
+      "content": { "language": "python", "code": "def example():\\n    pass" }
+    },
+    {
+      "type": "IMAGE_SUGGESTION",
+      "content": { "prompt": "DALL-E prompt in English", "reason": "Description in ${config.language}" }
     }
   ]
 }
 
-# Block Rules
+# Block Types
 
-1. TEXT blocks:
-   - Use markdown: ## and ### for headings, **bold**, *italic*, lists (- or 1.), blockquotes (>)
-   - NEVER create consecutive TEXT blocks. Merge all continuous text into one block.
-   - A TEXT block can contain multiple headings, paragraphs, and lists.
+TEXT:
+- Use markdown: ##/### headings, **bold**, *italic*, - lists, > blockquotes
+- Consolidate continuous text. NEVER create consecutive TEXT blocks.
+- One TEXT block can have multiple headings, paragraphs, lists.
 
-2. CODE blocks:
-   - Include ONLY when code genuinely aids understanding
-   - Choose the most appropriate language for the topic
-   - Include helpful comments
+CODE:
+- Include only when code genuinely aids understanding
+- Choose appropriate language, include comments
+- Escape special characters properly in JSON
 
-3. IMAGE_SUGGESTION blocks:
-   - Include ONLY when a visual significantly enhances comprehension
-   - "prompt": detailed DALL-E prompt in English, specify style (diagram, illustration, etc.)
-   - "description": brief description in ${config.language} for the teacher
+IMAGE_SUGGESTION:
+- Include only when visuals significantly enhance comprehension
+- "prompt": detailed DALL-E prompt in English
+- "reason": brief reason in ${config.language}
 
-# Content Configuration
+# Content Settings
 
 - Language: ${config.language}
-- Target audience: ${audienceDesc}
-- Knowledge level: ${levelDesc}
+- Audience: ${audienceDesc}
+- Level: ${levelDesc}
 - Tone: ${toneDesc}
-${config.learningObjectives?.length ? `- Learning objectives:\n${config.learningObjectives.map((obj) => `  - ${obj}`).join('\n')}` : ''}
+${config.learningObjectives?.length ? `- Objectives: ${config.learningObjectives.join('; ')}` : ''}
 
-# Quality Guidelines
+# Quality
 
-- Start with a clear introduction that establishes context
-- Use concrete examples to illustrate abstract concepts
-- Progress logically from simple to complex
-- End with a conclusion or summary that reinforces key points
-- Keywords should be 5-10 specific terms that represent the core concepts`
+- Clear introduction establishing context
+- Concrete examples for abstract concepts
+- Logical progression from simple to complex
+- Conclusion reinforcing key points
+- 5-10 specific keywords`
 }
 
 function buildUserPrompt(
-  title: string,
+  topic: string,
   instructions: string | undefined,
   contentLength: AiLength,
 ): string {
-  let prompt = `Generate a lesson about: ${title}
-
+  let prompt = `Topic: ${topic}
 Length: ${getLengthGuidance(contentLength)}`
 
   if (instructions) {
     prompt += `
 
-Additional instructions from the teacher:
-${instructions}`
+Teacher instructions: ${instructions}`
   }
 
   return prompt

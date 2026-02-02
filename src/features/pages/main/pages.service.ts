@@ -20,17 +20,12 @@ import { PagesMapper } from './mappers/pages.mapper'
 import { ApiPaginatedRes } from 'src/shared/dtos/res/api-response.dto'
 import { FullPageDto } from './dtos/res/full-page.dto'
 import { ContentGenerationService } from '../content-generation/content-generation.service'
-import { QUEUE_NAMES } from 'src/shared/constants/queues'
-import { Queue } from 'bullmq'
-import { InjectQueue } from '@nestjs/bullmq'
 
 @Injectable()
 export class PagesService {
   constructor(
     private readonly dbService: DBService,
     private readonly contentGenerationService: ContentGenerationService,
-    @InjectQueue(QUEUE_NAMES.CONCEPTS.NAME)
-    private readonly conceptsProcessorQueue: Queue,
   ) {}
 
   async create(dto: CreatePageDto, user: User): Promise<PageDto> {
@@ -252,14 +247,12 @@ export class PagesService {
         ...(updatePageDto.isPublished !== undefined && {
           isPublished: updatePageDto.isPublished,
         }),
+        ...(updatePageDto.hasManualEdits !== undefined && {
+          hasManualEdits: updatePageDto.hasManualEdits,
+          conceptsProcessed: updatePageDto.hasManualEdits ? false : undefined,
+        }),
       },
     })
-
-    if (updatePageDto.hasManualEdits) {
-      await this.conceptsProcessorQueue.add(QUEUE_NAMES.CONCEPTS.JOBS.PROCESS, {
-        pageId: page.id,
-      })
-    }
 
     return PagesMapper.mapToDto(page)
   }
@@ -315,12 +308,10 @@ export class PagesService {
             data: {
               type: blockDto.type,
               content: blockDto.content,
-              ...(blockDto.tipTapContent !== undefined && {
-                tipTapContent:
-                  blockDto.tipTapContent === null
-                    ? Prisma.JsonNull
-                    : blockDto.tipTapContent,
-              }),
+              tipTapContent:
+                blockDto.tipTapContent === null
+                  ? Prisma.JsonNull
+                  : blockDto.tipTapContent,
             },
           })
         } else {
@@ -330,12 +321,10 @@ export class PagesService {
               pageId: id,
               type: blockDto.type,
               content: blockDto.content,
-              ...(blockDto.tipTapContent !== undefined && {
-                tipTapContent:
-                  blockDto.tipTapContent === null
-                    ? Prisma.JsonNull
-                    : blockDto.tipTapContent,
-              }),
+              tipTapContent:
+                blockDto.tipTapContent === null
+                  ? Prisma.JsonNull
+                  : blockDto.tipTapContent,
             },
           })
         }
@@ -346,13 +335,9 @@ export class PagesService {
         where: { id },
         data: {
           hasManualEdits: true,
+          conceptsProcessed: false,
         },
       })
-    })
-
-    // Encolar procesamiento de conceptos
-    await this.conceptsProcessorQueue.add(QUEUE_NAMES.CONCEPTS.JOBS.PROCESS, {
-      pageId: id,
     })
 
     // Obtener y retornar la página actualizada

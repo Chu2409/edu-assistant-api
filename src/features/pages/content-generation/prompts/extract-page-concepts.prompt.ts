@@ -1,104 +1,75 @@
-import { AiAudience, AiTargetLevel } from 'src/core/database/generated/enums'
 import { PromptInput } from '../interfaces/prompt-input.interface'
 import { AiTextBlock } from '../interfaces/ai-generated-content.interface'
 
 export interface ExtractPageConceptsPrompt {
-  textBlocks: AiTextBlock[]
-  language: string
-  targetLevel: AiTargetLevel
-  audience: AiAudience
-  moduleContext?: string
-  maxTerms?: number
-  maxDefinitionLength?: number
+  blocks: AiTextBlock[]
+  config: {
+    language: string
+    maxTerms?: number
+    maxDefinitionLength?: number
+  }
 }
 
 export const extractPageConceptsPrompt = ({
-  textBlocks,
-  language,
-  targetLevel,
-  audience,
-  moduleContext,
-  maxTerms = 10,
-  maxDefinitionLength = 120,
-}: ExtractPageConceptsPrompt): PromptInput[] => [
-  {
-    role: 'system',
-    content: `You are an expert educational content analyzer.
+  blocks,
+  config,
+}: ExtractPageConceptsPrompt): PromptInput[] => {
+  const { language = 'es', maxTerms = 8, maxDefinitionLength = 120 } = config
+
+  return [
+    {
+      role: 'system',
+      content: `You are an expert educational content analyzer that extracts key terms for student tooltips.
 
 # OUTPUT FORMAT
-Return ONLY raw JSON (no \`\`\`json fences):
+
+Return ONLY raw JSON (no markdown fences, no explanation):
+
 {
   "terms": [
-    { "term": string, "definition": string }
+    { "term": "exact term", "definition": "brief definition" }
   ]
 }
 
-# TERM EXTRACTION RULES
+# CONSTRAINTS
 
-## Exact Matching (CRITICAL)
-- Terms MUST appear VERBATIM in the text
-- Preserve exact spelling, spacing, hyphens
-- Case-insensitive OK ("Variable" → "variable")
-- Preserve accents exactly ("respiración" not "respiracion")
-- Choose most common form for singular/plural
-- Length: 1-4 words maximum
+1. MAXIMUM ${maxTerms} terms. You may return fewer if the content doesn't have enough valuable terms. NEVER exceed ${maxTerms}.
+2. Each definition MUST be under ${maxDefinitionLength} characters.
+3. Terms MUST appear VERBATIM in the source text.
 
-## Selection Priority
-1. **Educational value**: Core concepts, technical vocabulary, foundational terms
-2. **Student need**: Unfamiliar specialized terms for target level
-3. **Text prominence**: Frequent terms, in headers, central to examples
+# TERM SELECTION
 
-## Include
-- Domain-specific terminology
-- Technical terms needing definition
-- Important processes/methods/principles
-- Abstract concepts requiring explanation
+## Requirements
+- Must appear exactly as written in text (case-insensitive)
+- Preserve accents exactly ("respiración" NOT "respiracion")
+- Length: 1-4 words maximum per term
+
+## Include (prioritize)
+- Core domain concepts and technical vocabulary
+- Terms students likely need clarification on
+- Terms prominent in headers or central to explanations
 
 ## Exclude
 - Common everyday words
 - Proper nouns (names, places, brands)
-- Already extensively explained in text
-- Too basic for target level
-- Paraphrased concepts not verbatim
-- Duplicates/variations (choose one canonical form)
+- Terms already explained in detail in the text
+- Duplicates or variations (pick one canonical form)
 
-# DEFINITIONS
+# DEFINITION RULES
 
-**Constraints:**
-- Max ${maxDefinitionLength} characters (including spaces)
-- Target: 15-25 words
-- Clear, precise, contextual, standalone
-- No circular definitions
+- Maximum ${maxDefinitionLength} characters (STRICT)
+- Clear, standalone, no circular definitions
+- Language: ${language}
 
-**Adapt to level/audience:**
-- BASIC/HIGH_SCHOOL: Simple language, analogies, relatable examples
-- INTERMEDIATE/UNIVERSITY: Balance accuracy with accessibility
-- ADVANCED/PROFESSIONAL: Technical language, assume prior knowledge
+# QUALITY OVER QUANTITY
 
-**Examples:**
-BASIC: "variable" → "Container storing program information, like a labeled box holding data."
-INTERMEDIATE: "variable" → "Named memory location holding a changeable value during execution."
-ADVANCED: "variable" → "Symbolic reference to a memory address with a mutable value in scope."
+Only include terms that genuinely help students. If the text only has 2 valuable terms, return 2. If it has 10 valuable terms, return only the ${maxTerms} most important.`,
+    },
+    {
+      role: 'user',
+      content: `Extract key terms from this content (maximum ${maxTerms}):
 
-# LIMITS
-Extract UP TO ${maxTerms} terms. Quality over quantity - fewer strong terms better than many weak ones.`,
-  },
-  {
-    role: 'user',
-    content: `Extract key terms from this lesson.
-
-# TEXT CONTENT
-${textBlocks
-  .map(
-    (block, index) => `## Block ${index + 1}
-${block.markdown}
-`,
-  )
-  .join('\n')}
-
-# PARAMETERS
-Language: ${language} | Level: ${targetLevel} | Audience: ${audience} | Max: ${maxTerms} terms | Def limit: ${maxDefinitionLength} chars${moduleContext ? ` | Context: ${moduleContext}` : ''}
-
-Return ${maxTerms} most valuable terms appearing VERBATIM in text (case-insensitive, preserve accents). Definitions under ${maxDefinitionLength} chars. JSON only.`,
-  },
-]
+${blocks.map((block, index) => `## Block ${index + 1}\n${block.markdown}`).join('\n\n')}`,
+    },
+  ]
+}
