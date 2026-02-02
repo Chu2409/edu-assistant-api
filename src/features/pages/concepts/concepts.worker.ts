@@ -34,58 +34,58 @@ export class ConceptsWorker extends WorkerHost {
       return
     }
 
-    const { pageId } = job.data
+    // const { pageId } = job.data
 
-    this.logger.log(`Procesando conceptos para la página: ${pageId}...`)
+    // this.logger.log(`Procesando conceptos para la página: ${pageId}...`)
 
-    const page = await this.dbService.page.findUnique({
-      where: { id: pageId },
-      include: {
-        blocks: true,
-        module: {
-          include: {
-            aiConfiguration: true,
-          },
-        },
-      },
-    })
+    // const page = await this.dbService.page.findUnique({
+    //   where: { id: pageId },
+    //   include: {
+    //     blocks: true,
+    //     module: {
+    //       include: {
+    //         aiConfiguration: true,
+    //       },
+    //     },
+    //   },
+    // })
 
-    if (!page) {
-      this.logger.error(`Página con ID ${pageId} no encontrada.`)
-      return
-    }
+    // if (!page) {
+    //   this.logger.error(`Página con ID ${pageId} no encontrada.`)
+    //   return
+    // }
 
-    if (page.blocks.length === 0) {
-      this.logger.error(`Página con ID ${pageId} no tiene bloques.`)
-      return
-    }
+    // if (page.blocks.length === 0) {
+    //   this.logger.error(`Página con ID ${pageId} no tiene bloques.`)
+    //   return
+    // }
 
-    const blocks = page.blocks.map((block) => BlocksMapper.mapToDto(block))
+    // const blocks = page.blocks.map((block) => BlocksMapper.mapToDto(block))
 
-    const concepts = await this.contentGenerationService.extractPageConcepts({
-      textBlocks: blocks
-        .filter((block) => block.type === BlockType.TEXT)
-        .map((block) => block.content as AiTextBlock),
-      language: page.module.aiConfiguration?.language ?? 'es',
-      targetLevel: page.module.aiConfiguration?.targetLevel ?? 'INTERMEDIATE',
-      audience: page.module.aiConfiguration?.audience ?? 'UNIVERSITY',
-      maxTerms: 6,
-    })
+    // const concepts = await this.contentGenerationService.extractPageConcepts({
+    //   textBlocks: blocks
+    //     .filter((block) => block.type === BlockType.TEXT)
+    //     .map((block) => block.content as AiTextBlock),
+    //   language: page.module.aiConfiguration?.language ?? 'es',
+    //   targetLevel: page.module.aiConfiguration?.targetLevel ?? 'INTERMEDIATE',
+    //   audience: page.module.aiConfiguration?.audience ?? 'UNIVERSITY',
+    //   maxTerms: 6,
+    // })
 
-    await Promise.all(
-      concepts.terms.map((concept) =>
-        this.dbService.pageConcept.create({
-          data: { pageId, term: concept.term, definition: concept.definition },
-        }),
-      ),
-    )
+    // await Promise.all(
+    //   concepts.terms.map((concept) =>
+    //     this.dbService.pageConcept.create({
+    //       data: { pageId, term: concept.term, definition: concept.definition },
+    //     }),
+    //   ),
+    // )
 
-    await this.dbService.page.update({
-      where: { id: pageId },
-      data: { conceptsProcessed: true },
-    })
+    // await this.dbService.page.update({
+    //   where: { id: pageId },
+    //   data: { conceptsProcessed: true },
+    // })
 
-    this.logger.log('Conceptos procesados correctamente.')
-    return { sent: true }
+    // this.logger.log('Conceptos procesados correctamente.')
+    // return { sent: true }
   }
 }

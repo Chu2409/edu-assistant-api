@@ -1,5 +1,12 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger'
-import { IsString, IsInt, Min, MaxLength, IsOptional, IsEnum } from 'class-validator'
+import {
+  IsString,
+  IsInt,
+  Min,
+  MaxLength,
+  IsOptional,
+  IsEnum,
+} from 'class-validator'
 import { AiAudience, AiLength, AiTone } from 'src/core/database/generated/enums'
 import { AiTargetLevel } from 'src/core/database/generated/enums'
 

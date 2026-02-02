@@ -8,6 +8,11 @@ import { EnrollmentsModule } from './features/enrollments/enrollments.module'
 import { PagesModule } from './features/pages/main/pages.module'
 import { PageFeedbacksModule } from './features/pages/page-feedbacks/page-feedbacks.module'
 import { PageNotesModule } from './features/pages/notes/page-notes.module'
+import { PageConceptsModule } from './features/pages/page-concepts/page-concepts.module'
+import { ChatModule } from './features/pages/chat/chat.module'
+import { ActivitiesModule } from './features/pages/activities/activities.module'
+import { PageRelationsModule } from './features/pages/page-relations/page-relations.module'
+import { MediaResourcesModule } from './features/pages/media-resources/media-resources.module'
 
 @Module({
   imports: [
@@ -18,6 +23,11 @@ import { PageNotesModule } from './features/pages/notes/page-notes.module'
     PagesModule,
     PageFeedbacksModule,
     PageNotesModule,
+    PageConceptsModule,
+    ChatModule,
+    ActivitiesModule,
+    PageRelationsModule,
+    MediaResourcesModule,
   ],
   controllers: [HealthController],
   providers: [

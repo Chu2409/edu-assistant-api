@@ -1,0 +1,97 @@
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  HttpStatus,
+  Param,
+  ParseIntPipe,
+  Patch,
+  Post,
+} from '@nestjs/common'
+import { ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger'
+import { JwtAuth } from 'src/features/auth/decorators/jwt-auth.decorator'
+import { GetUser } from 'src/features/auth/decorators/get-user.decorator'
+import { Role, type User } from 'src/core/database/generated/client'
+import { ApiStandardResponse } from 'src/shared/decorators/api-standard-response.decorator'
+import { PageConceptsService } from './page-concepts.service'
+import { PageConceptDto } from './dtos/res/page-concept.dto'
+import { CreatePageConceptDto } from './dtos/req/create-page-concept.dto'
+import { UpdatePageConceptDto } from './dtos/req/update-page-concept.dto'
+import { SuggestPageConceptsDto } from './dtos/req/suggest-page-concepts.dto'
+import { PageConceptsSuggestedDto } from './dtos/res/page-concepts-suggested.dto'
+
+@ApiTags('Page Concepts')
+@Controller('pages')
+@JwtAuth()
+export class PageConceptsController {
+  constructor(private readonly pageConceptsService: PageConceptsService) {}
+
+  @Get(':pageId/concepts')
+  @ApiOperation({ summary: 'Listar conceptos de una página' })
+  @ApiParam({ name: 'pageId', type: Number, example: 1 })
+  @ApiStandardResponse([PageConceptDto])
+  list(
+    @Param('pageId', ParseIntPipe) pageId: number,
+    @GetUser() user: User,
+  ): Promise<PageConceptDto[]> {
+    return this.pageConceptsService.list(pageId, user)
+  }
+
+  @Post(':pageId/concepts/suggest')
+  @ApiOperation({ summary: 'Sugerir conceptos (tooltips) con IA' })
+  @ApiParam({ name: 'pageId', type: Number, example: 1 })
+  @ApiStandardResponse(PageConceptsSuggestedDto)
+  @ApiResponse({ status: 401, description: 'No autorizado' })
+  @ApiResponse({ status: 403, description: 'Solo profesores' })
+  @JwtAuth(Role.TEACHER)
+  suggest(
+    @Param('pageId', ParseIntPipe) pageId: number,
+    @Body() dto: SuggestPageConceptsDto,
+    @GetUser() user: User,
+  ): Promise<PageConceptsSuggestedDto> {
+    return this.pageConceptsService.suggest(pageId, dto, user)
+  }
+
+  @Post(':pageId/concepts')
+  @ApiOperation({ summary: 'Crear concepto manualmente' })
+  @ApiParam({ name: 'pageId', type: Number, example: 1 })
+  @ApiStandardResponse(PageConceptDto, HttpStatus.CREATED)
+  @JwtAuth(Role.TEACHER)
+  create(
+    @Param('pageId', ParseIntPipe) pageId: number,
+    @Body() dto: CreatePageConceptDto,
+    @GetUser() user: User,
+  ): Promise<PageConceptDto> {
+    return this.pageConceptsService.create(pageId, dto, user)
+  }
+
+  @Patch(':pageId/concepts/:conceptId')
+  @ApiOperation({ summary: 'Actualizar concepto' })
+  @ApiParam({ name: 'pageId', type: Number, example: 1 })
+  @ApiParam({ name: 'conceptId', type: Number, example: 1 })
+  @ApiStandardResponse(PageConceptDto)
+  @JwtAuth(Role.TEACHER)
+  update(
+    @Param('pageId', ParseIntPipe) pageId: number,
+    @Param('conceptId', ParseIntPipe) conceptId: number,
+    @Body() dto: UpdatePageConceptDto,
+    @GetUser() user: User,
+  ): Promise<PageConceptDto> {
+    return this.pageConceptsService.update(pageId, conceptId, dto, user)
+  }
+
+  @Delete(':pageId/concepts/:conceptId')
+  @ApiOperation({ summary: 'Eliminar concepto' })
+  @ApiParam({ name: 'pageId', type: Number, example: 1 })
+  @ApiParam({ name: 'conceptId', type: Number, example: 1 })
+  @ApiStandardResponse(undefined, HttpStatus.NO_CONTENT)
+  @JwtAuth(Role.TEACHER)
+  async delete(
+    @Param('pageId', ParseIntPipe) pageId: number,
+    @Param('conceptId', ParseIntPipe) conceptId: number,
+    @GetUser() user: User,
+  ): Promise<void> {
+    return this.pageConceptsService.delete(pageId, conceptId, user)
+  }
+}

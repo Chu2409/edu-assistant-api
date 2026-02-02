@@ -32,7 +32,7 @@ import { ApiRes } from 'src/shared/dtos/res/api-response.dto'
 export class ContentGenerationController {
   constructor(
     private readonly contentGenerationService: ContentGenerationService,
-  ) { }
+  ) {}
 
   @Post('generate-content')
   @ApiOperation({
@@ -80,7 +80,10 @@ export class ContentGenerationController {
   })
   @ApiStandardResponse(PageConceptsExtractedDto, HttpStatus.CREATED)
   @ApiResponse({ status: 401, description: 'No autorizado' })
-  @ApiResponse({ status: 403, description: 'Solo profesores pueden extraer conceptos' })
+  @ApiResponse({
+    status: 403,
+    description: 'Solo profesores pueden extraer conceptos',
+  })
   @JwtAuth(Role.TEACHER)
   extractConcepts(@Body() dto: ExtractConceptsDto) {
     return this.contentGenerationService.extractPageConcepts(dto)

@@ -61,10 +61,10 @@ export class OpenaiService implements OnModuleInit {
 
   // 3. IMAGES API (DALL-E 3)
   // Generación de imágenes
-  async generateImage(prompt: string) {
+  async generateImage(prompt: string): Promise<string> {
     try {
       const response = await this.openai.images.generate({
-        model: 'gpt-image-1',
+        model: 'gpt-image-1-mini',
         prompt,
         n: 1,
         size: '1024x1024',
@@ -72,7 +72,11 @@ export class OpenaiService implements OnModuleInit {
       if (!response.data || response.data.length === 0) {
         throw new Error('No image data returned from OpenAI')
       }
-      return response.data[0].url
+      const b64Json = response.data[0].b64_json
+      if (!b64Json) {
+        throw new Error('No base64 JSON data returned from OpenAI')
+      }
+      return b64Json
     } catch (error) {
       this.handleError(error)
     }

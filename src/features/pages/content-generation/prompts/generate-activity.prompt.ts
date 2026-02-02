@@ -1,5 +1,8 @@
 import { PromptInput } from '../interfaces/prompt-input.interface'
-import { AiTextBlock, AiCodeBlock } from '../interfaces/ai-generated-content.interface'
+import {
+  AiTextBlock,
+  AiCodeBlock,
+} from '../interfaces/ai-generated-content.interface'
 import { ActivityType, BlockType } from 'src/core/database/generated/enums'
 
 export interface GenerateActivityPromptInput {

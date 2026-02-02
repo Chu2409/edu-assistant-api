@@ -1,7 +1,22 @@
-import { AiTargetLevel, AiAudience, AiLength, AiTone, BlockType } from 'src/core/database/generated/enums'
+import {
+  AiTargetLevel,
+  AiAudience,
+  AiLength,
+  AiTone,
+  BlockType,
+} from 'src/core/database/generated/enums'
 import type { PromptInput } from '../interfaces/prompt-input.interface'
-import { AiCodeBlock, AiContent, AiImageSuggestionBlock, AiTextBlock } from '../interfaces/ai-generated-content.interface'
-import { getAudienceGuidance, getTargetLevelGuidance, getToneGuidance } from '../helpers/guidances'
+import {
+  AiCodeBlock,
+  AiContent,
+  AiImageSuggestionBlock,
+  AiTextBlock,
+} from '../interfaces/ai-generated-content.interface'
+import {
+  getAudienceGuidance,
+  getTargetLevelGuidance,
+  getToneGuidance,
+} from '../helpers/guidances'
 
 export interface RegeneratePageContentPromptInput {
   title: string

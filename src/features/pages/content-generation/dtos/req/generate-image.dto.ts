@@ -12,5 +12,4 @@ export class GenerateImageDto {
   @MinLength(5)
   @MaxLength(2000)
   prompt: string
-
 }

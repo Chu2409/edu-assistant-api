@@ -1,12 +1,13 @@
-import { BadRequestException, Injectable, Logger, NotFoundException } from '@nestjs/common'
+import {
+  BadRequestException,
+  Injectable,
+  Logger,
+  NotFoundException,
+} from '@nestjs/common'
 import { DBService } from 'src/core/database/database.service'
 import { OpenaiService } from 'src/providers/ai/openai.service'
-import {
-  generatePageContentPrompt,
-} from './prompts/generate-page-content.prompt'
-import {
-  extractPageConceptsPrompt,
-} from './prompts/extract-page-concepts.prompt'
+import { generatePageContentPrompt } from './prompts/generate-page-content.prompt'
+import { extractPageConceptsPrompt } from './prompts/extract-page-concepts.prompt'
 import { PageConceptsExtractedDto } from './dtos/res/page-concepts-extracted.dto'
 import { GeneratedPageContent } from './dtos/res/generated-page-content.dto'
 import { AiResponseDto } from 'src/providers/ai/dtos/ai-response.interface'
@@ -25,7 +26,7 @@ export class ContentGenerationService {
   constructor(
     private readonly dbService: DBService,
     private readonly openAiService: OpenaiService,
-  ) { }
+  ) {}
 
   async generatePageContent(
     data: GenerateContentDto,
@@ -78,7 +79,10 @@ export class ContentGenerationService {
     const prompt = regeneratePageContentPrompt({
       title: page.title,
       instructions: data.instructions,
-      blocks: page.blocks.map((b) => ({ type: b.type, content: JSON.parse(b.content as string) })),
+      blocks: page.blocks.map((b) => ({
+        type: b.type,
+        content: JSON.parse(b.content as string),
+      })),
       config: {
         audience: data.audience ?? page.module.aiConfiguration!.audience,
         contentLength:
@@ -91,9 +95,8 @@ export class ContentGenerationService {
       },
     })
 
-    const aiResponse = await this.openAiService.getResponse<GeneratedPageContent>(
-      prompt,
-    )
+    const aiResponse =
+      await this.openAiService.getResponse<GeneratedPageContent>(prompt)
 
     return aiResponse
   }
@@ -116,7 +119,9 @@ export class ContentGenerationService {
     }
 
     const prompt = extractPageConceptsPrompt({
-      blocks: page.blocks.filter((b) => b.type === BlockType.TEXT).map((b) => ({ markdown: JSON.parse(b.content as string).markdown })),
+      blocks: page.blocks
+        .filter((b) => b.type === BlockType.TEXT)
+        .map((b) => ({ markdown: JSON.parse(b.content as string).markdown })),
       config: {
         language: page.module.aiConfiguration!.language,
       },
@@ -153,8 +158,7 @@ export class ContentGenerationService {
       throw new BadRequestException('Page has no blocks')
     }
 
-    console.log('0');
-
+    console.log('0')
 
     const blocks = page.blocks
       .filter((b) => b.type === BlockType.TEXT || b.type === BlockType.CODE)
@@ -174,7 +178,7 @@ export class ContentGenerationService {
 
     const prompt = generateActivityPrompt({
       type: data.type,
-      blocks: blocks,
+      blocks,
       config: {
         language,
         difficulty: (data.difficulty as any) ?? 3,
