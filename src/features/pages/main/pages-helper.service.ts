@@ -65,7 +65,7 @@ export class PagesHelperService {
 
     if (page.module.teacherId !== user.id) {
       throw new ForbiddenException(
-        'Solo el profesor propietario puede modificar actividades de esta página',
+        'Solo el profesor propietario puede modificar esta página',
       )
     }
 

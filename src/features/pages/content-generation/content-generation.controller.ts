@@ -1,6 +1,5 @@
 import { Controller, HttpStatus, Post, Body } from '@nestjs/common'
 import {
-  ApiExtraModels,
   ApiOperation,
   ApiResponse,
   ApiTags,
@@ -113,13 +112,6 @@ export class ContentGenerationController {
     description:
       'Genera una actividad (reactivo) a partir de los bloques de una página. Solo disponible para profesores.',
   })
-  @ApiExtraModels(
-    ApiRes,
-    AiGeneratedMultipleChoiceActivity,
-    AiGeneratedTrueFalseActivity,
-    AiGeneratedFillBlankActivity,
-    AiGeneratedMatchActivity,
-  )
   @ApiResponse({
     status: HttpStatus.CREATED,
     description: 'Resource created successfully',

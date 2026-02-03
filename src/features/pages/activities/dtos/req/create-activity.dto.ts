@@ -1,4 +1,8 @@
-import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger'
+import {
+  ApiProperty,
+  ApiPropertyOptional,
+  getSchemaPath,
+} from '@nestjs/swagger'
 import { Type } from 'class-transformer'
 import {
   IsBoolean,
@@ -13,7 +17,13 @@ import {
   MinLength,
 } from 'class-validator'
 import { ActivityType } from 'src/core/database/generated/enums'
-import type { AiGeneratedActivity } from 'src/features/pages/content-generation/interfaces/ai-generated-activity.interface'
+import {
+  type AiGeneratedActivity,
+  AiGeneratedFillBlankActivity,
+  AiGeneratedMatchActivity,
+  AiGeneratedMultipleChoiceActivity,
+  AiGeneratedTrueFalseActivity,
+} from 'src/features/pages/content-generation/interfaces/ai-generated-activity.interface'
 
 export class CreateActivityDto {
   @ApiProperty({ enum: ActivityType, example: ActivityType.TRUE_FALSE })
@@ -31,9 +41,15 @@ export class CreateActivityDto {
   @ApiPropertyOptional({
     description:
       'Opciones (depende del tipo). Para MULTIPLE_CHOICE/MATCH normalmente va aquí.',
-    example: { options: [{ id: 'A', text: '...' }] },
+    oneOf: [
+      { $ref: getSchemaPath(AiGeneratedMultipleChoiceActivity) },
+      { $ref: getSchemaPath(AiGeneratedTrueFalseActivity) },
+      { $ref: getSchemaPath(AiGeneratedFillBlankActivity) },
+      { $ref: getSchemaPath(AiGeneratedMatchActivity) },
+    ],
   })
   @IsObject()
+  @IsNotEmpty()
   options: AiGeneratedActivity
 
   @ApiPropertyOptional({

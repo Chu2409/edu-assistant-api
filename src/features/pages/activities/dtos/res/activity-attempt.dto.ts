@@ -1,4 +1,11 @@
-import { ApiProperty } from '@nestjs/swagger'
+import { ApiProperty, getSchemaPath } from '@nestjs/swagger'
+import {
+  FillBlankAttempt,
+  MatchAttempt,
+  MultipleChoiceAttempt,
+  TrueFalseAttempt,
+  type ActivityAttemptAnswer,
+} from '../../interfaces/activity-attempt.interface'
 
 export class ActivityAttemptDto {
   @ApiProperty({ example: 1 })
@@ -9,9 +16,6 @@ export class ActivityAttemptDto {
 
   @ApiProperty({ example: 1 })
   userId: number
-
-  @ApiProperty({ description: 'Respuesta del estudiante (JSON)' })
-  studentAnswer: Record<string, any>
 
   @ApiProperty({ example: true })
   isCorrect: boolean

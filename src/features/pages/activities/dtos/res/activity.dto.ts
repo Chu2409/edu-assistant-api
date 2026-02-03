@@ -1,6 +1,16 @@
-import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger'
+import {
+  ApiProperty,
+  ApiPropertyOptional,
+  getSchemaPath,
+} from '@nestjs/swagger'
 import { ActivityType } from 'src/core/database/generated/enums'
 import type { AiGeneratedActivity } from 'src/features/pages/content-generation/interfaces/ai-generated-activity.interface'
+import {
+  FillBlankAttempt,
+  MatchAttempt,
+  MultipleChoiceAttempt,
+  TrueFalseAttempt,
+} from '../../interfaces/activity-attempt.interface'
 
 export class ActivityDto {
   @ApiProperty({ example: 1 })
@@ -15,7 +25,15 @@ export class ActivityDto {
   @ApiProperty({ example: '¿Cuál es la salida del siguiente código?' })
   question: string
 
-  @ApiPropertyOptional({ description: 'Opciones (JSON)' })
+  @ApiPropertyOptional({
+    description: 'Opciones (JSON)',
+    oneOf: [
+      { $ref: getSchemaPath(MultipleChoiceAttempt) },
+      { $ref: getSchemaPath(TrueFalseAttempt) },
+      { $ref: getSchemaPath(FillBlankAttempt) },
+      { $ref: getSchemaPath(MatchAttempt) },
+    ],
+  })
   options: AiGeneratedActivity
 
   @ApiPropertyOptional({ description: 'Explicación' })

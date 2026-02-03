@@ -18,7 +18,6 @@ import { ActivitiesService } from './activities.service'
 import { ActivityDto } from './dtos/res/activity.dto'
 import { CreateActivityDto } from './dtos/req/create-activity.dto'
 import { UpdateActivityDto } from './dtos/req/update-activity.dto'
-import { GeneratedActivityDto } from './dtos/res/generated-activity.dto'
 
 @ApiTags('Activities')
 @Controller('pages')

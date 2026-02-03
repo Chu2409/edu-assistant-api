@@ -176,10 +176,6 @@ export class ActivitiesService {
       id: created.id,
       activityId: created.activityId,
       userId: created.userId,
-      studentAnswer:
-        typeof created.studentAnswer === 'string'
-          ? JSON.parse(created.studentAnswer)
-          : (created.studentAnswer as any),
       isCorrect: created.isCorrect,
       attemptNumber: created.attemptNumber,
       createdAt: created.createdAt,

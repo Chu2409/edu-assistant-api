@@ -9,6 +9,18 @@ import * as express from 'express'
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger'
 import { ApiPaginatedRes, ApiRes } from './shared/dtos/res/api-response.dto'
 import { BaseParamsReqDto } from './shared/dtos/req/base-params.dto'
+import {
+  FillBlankAttempt,
+  MatchAttempt,
+  MultipleChoiceAttempt,
+  TrueFalseAttempt,
+} from './features/pages/activities/interfaces/activity-attempt.interface'
+import {
+  AiGeneratedFillBlankActivity,
+  AiGeneratedMatchActivity,
+  AiGeneratedTrueFalseActivity,
+  AiGeneratedMultipleChoiceActivity,
+} from './features/pages/content-generation/interfaces/ai-generated-activity.interface'
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, { cors: true })
@@ -58,7 +70,19 @@ async function bootstrap() {
     .build()
 
   const document = SwaggerModule.createDocument(app, config, {
-    extraModels: [ApiRes, ApiPaginatedRes, BaseParamsReqDto],
+    extraModels: [
+      ApiRes,
+      ApiPaginatedRes,
+      BaseParamsReqDto,
+      MultipleChoiceAttempt,
+      TrueFalseAttempt,
+      FillBlankAttempt,
+      MatchAttempt,
+      AiGeneratedMultipleChoiceActivity,
+      AiGeneratedTrueFalseActivity,
+      AiGeneratedFillBlankActivity,
+      AiGeneratedMatchActivity,
+    ],
   })
 
   SwaggerModule.setup('api/docs', app, document, {

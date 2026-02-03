@@ -1,11 +1,23 @@
-import { ApiProperty } from '@nestjs/swagger'
+import { ApiProperty, getSchemaPath } from '@nestjs/swagger'
 import { IsNotEmpty, IsObject } from 'class-validator'
-import type { ActivityAttemptAnswer } from '../../interfaces/activity-attempt.interface'
+import {
+  FillBlankAttempt,
+  MatchAttempt,
+  MultipleChoiceAttempt,
+  TrueFalseAttempt,
+  type ActivityAttemptAnswer,
+} from '../../interfaces/activity-attempt.interface'
 
 export class CreateActivityAttemptDto {
   @ApiProperty({
     description: 'Respuesta del estudiante',
-    example: { value: true },
+    oneOf: [
+      { $ref: getSchemaPath(MultipleChoiceAttempt) },
+      { $ref: getSchemaPath(TrueFalseAttempt) },
+      { $ref: getSchemaPath(FillBlankAttempt) },
+      { $ref: getSchemaPath(MatchAttempt) },
+    ],
+    example: { selectedOption: 2 },
   })
   @IsObject()
   @IsNotEmpty()
