@@ -13,63 +13,14 @@ import {
 import { CreateMediaResourceDto } from './dtos/req/create-media-resource.dto'
 import { UpdateMediaResourceDto } from './dtos/req/update-media-resource.dto'
 import { MediaResourceDto } from './dtos/res/media-resource.dto'
+import { PagesHelperService } from '../main/pages-helper.service'
 
 @Injectable()
 export class MediaResourcesService {
-  constructor(private readonly dbService: DBService) {}
-
-  private async getPageForRead(pageId: number, user: User) {
-    const page = await this.dbService.page.findUnique({
-      where: { id: pageId },
-      include: { module: { include: { enrollments: true } } },
-    })
-    if (!page)
-      throw new NotFoundException(`Página con ID ${pageId} no encontrada`)
-
-    if (user.role === Role.ADMIN) return page
-
-    if (user.role === Role.TEACHER) {
-      if (page.module.teacherId !== user.id) {
-        throw new ForbiddenException(
-          'No tienes permisos para acceder a esta página',
-        )
-      }
-      return page
-    }
-
-    const hasAccess =
-      page.module.isPublic ||
-      page.module.enrollments.some(
-        (enrollment: Enrollment) =>
-          enrollment.userId === user.id && enrollment.isActive,
-      )
-    if (!hasAccess) {
-      throw new ForbiddenException(
-        'No tienes permisos para acceder a esta página',
-      )
-    }
-    if (!page.isPublished) {
-      throw new ForbiddenException('Esta página no está publicada aún')
-    }
-    return page
-  }
-
-  private async getPageForWrite(pageId: number, user: User) {
-    const page = await this.dbService.page.findUnique({
-      where: { id: pageId },
-      include: { module: true },
-    })
-    if (!page)
-      throw new NotFoundException(`Página con ID ${pageId} no encontrada`)
-
-    if (user.role === Role.ADMIN) return page
-    if (page.module.teacherId !== user.id) {
-      throw new ForbiddenException(
-        'Solo el profesor propietario puede modificar recursos de esta página',
-      )
-    }
-    return page
-  }
+  constructor(
+    private readonly dbService: DBService,
+    private readonly pagesHelperService: PagesHelperService,
+  ) {}
 
   private toDto(entity: any): MediaResourceDto {
     return {
@@ -86,7 +37,7 @@ export class MediaResourcesService {
   }
 
   async list(pageId: number, user: User): Promise<MediaResourceDto[]> {
-    await this.getPageForRead(pageId, user)
+    await this.pagesHelperService.getPageForRead(pageId, user)
     const resources = await this.dbService.mediaResource.findMany({
       where: { pageId },
       orderBy: { createdAt: 'desc' },
@@ -99,7 +50,7 @@ export class MediaResourcesService {
     dto: CreateMediaResourceDto,
     user: User,
   ): Promise<MediaResourceDto> {
-    await this.getPageForWrite(pageId, user)
+    await this.pagesHelperService.getPageForWrite(pageId, user)
 
     const created = await this.dbService.mediaResource.create({
       data: {
@@ -122,7 +73,7 @@ export class MediaResourcesService {
     dto: UpdateMediaResourceDto,
     user: User,
   ): Promise<MediaResourceDto> {
-    await this.getPageForWrite(pageId, user)
+    await this.pagesHelperService.getPageForWrite(pageId, user)
 
     const existing = await this.dbService.mediaResource.findUnique({
       where: { id: resourceId },
@@ -149,7 +100,7 @@ export class MediaResourcesService {
   }
 
   async delete(pageId: number, resourceId: number, user: User): Promise<void> {
-    await this.getPageForWrite(pageId, user)
+    await this.pagesHelperService.getPageForWrite(pageId, user)
 
     const existing = await this.dbService.mediaResource.findUnique({
       where: { id: resourceId },

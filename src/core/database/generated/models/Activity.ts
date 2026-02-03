@@ -78,7 +78,6 @@ export type ActivityCountAggregateOutputType = {
   type: number
   question: number
   options: number
-  correctAnswer: number
   explanation: number
   difficulty: number
   orderIndex: number
@@ -143,7 +142,6 @@ export type ActivityCountAggregateInputType = {
   type?: true
   question?: true
   options?: true
-  correctAnswer?: true
   explanation?: true
   difficulty?: true
   orderIndex?: true
@@ -247,7 +245,6 @@ export type ActivityGroupByOutputType = {
   type: $Enums.ActivityType
   question: string
   options: runtime.JsonValue | null
-  correctAnswer: runtime.JsonValue
   explanation: string | null
   difficulty: number
   orderIndex: number
@@ -287,7 +284,6 @@ export type ActivityWhereInput = {
   type?: Prisma.EnumActivityTypeFilter<"Activity"> | $Enums.ActivityType
   question?: Prisma.StringFilter<"Activity"> | string
   options?: Prisma.JsonNullableFilter<"Activity">
-  correctAnswer?: Prisma.JsonFilter<"Activity">
   explanation?: Prisma.StringNullableFilter<"Activity"> | string | null
   difficulty?: Prisma.IntFilter<"Activity"> | number
   orderIndex?: Prisma.IntFilter<"Activity"> | number
@@ -308,7 +304,6 @@ export type ActivityOrderByWithRelationInput = {
   type?: Prisma.SortOrder
   question?: Prisma.SortOrder
   options?: Prisma.SortOrderInput | Prisma.SortOrder
-  correctAnswer?: Prisma.SortOrder
   explanation?: Prisma.SortOrderInput | Prisma.SortOrder
   difficulty?: Prisma.SortOrder
   orderIndex?: Prisma.SortOrder
@@ -332,7 +327,6 @@ export type ActivityWhereUniqueInput = Prisma.AtLeast<{
   type?: Prisma.EnumActivityTypeFilter<"Activity"> | $Enums.ActivityType
   question?: Prisma.StringFilter<"Activity"> | string
   options?: Prisma.JsonNullableFilter<"Activity">
-  correctAnswer?: Prisma.JsonFilter<"Activity">
   explanation?: Prisma.StringNullableFilter<"Activity"> | string | null
   difficulty?: Prisma.IntFilter<"Activity"> | number
   orderIndex?: Prisma.IntFilter<"Activity"> | number
@@ -353,7 +347,6 @@ export type ActivityOrderByWithAggregationInput = {
   type?: Prisma.SortOrder
   question?: Prisma.SortOrder
   options?: Prisma.SortOrderInput | Prisma.SortOrder
-  correctAnswer?: Prisma.SortOrder
   explanation?: Prisma.SortOrderInput | Prisma.SortOrder
   difficulty?: Prisma.SortOrder
   orderIndex?: Prisma.SortOrder
@@ -378,7 +371,6 @@ export type ActivityScalarWhereWithAggregatesInput = {
   type?: Prisma.EnumActivityTypeWithAggregatesFilter<"Activity"> | $Enums.ActivityType
   question?: Prisma.StringWithAggregatesFilter<"Activity"> | string
   options?: Prisma.JsonNullableWithAggregatesFilter<"Activity">
-  correctAnswer?: Prisma.JsonWithAggregatesFilter<"Activity">
   explanation?: Prisma.StringNullableWithAggregatesFilter<"Activity"> | string | null
   difficulty?: Prisma.IntWithAggregatesFilter<"Activity"> | number
   orderIndex?: Prisma.IntWithAggregatesFilter<"Activity"> | number
@@ -393,7 +385,6 @@ export type ActivityCreateInput = {
   type: $Enums.ActivityType
   question: string
   options?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  correctAnswer: Prisma.JsonNullValueInput | runtime.InputJsonValue
   explanation?: string | null
   difficulty?: number
   orderIndex: number
@@ -413,7 +404,6 @@ export type ActivityUncheckedCreateInput = {
   type: $Enums.ActivityType
   question: string
   options?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  correctAnswer: Prisma.JsonNullValueInput | runtime.InputJsonValue
   explanation?: string | null
   difficulty?: number
   orderIndex: number
@@ -430,7 +420,6 @@ export type ActivityUpdateInput = {
   type?: Prisma.EnumActivityTypeFieldUpdateOperationsInput | $Enums.ActivityType
   question?: Prisma.StringFieldUpdateOperationsInput | string
   options?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  correctAnswer?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   explanation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   difficulty?: Prisma.IntFieldUpdateOperationsInput | number
   orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
@@ -450,7 +439,6 @@ export type ActivityUncheckedUpdateInput = {
   type?: Prisma.EnumActivityTypeFieldUpdateOperationsInput | $Enums.ActivityType
   question?: Prisma.StringFieldUpdateOperationsInput | string
   options?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  correctAnswer?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   explanation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   difficulty?: Prisma.IntFieldUpdateOperationsInput | number
   orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
@@ -469,7 +457,6 @@ export type ActivityCreateManyInput = {
   type: $Enums.ActivityType
   question: string
   options?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  correctAnswer: Prisma.JsonNullValueInput | runtime.InputJsonValue
   explanation?: string | null
   difficulty?: number
   orderIndex: number
@@ -484,7 +471,6 @@ export type ActivityUpdateManyMutationInput = {
   type?: Prisma.EnumActivityTypeFieldUpdateOperationsInput | $Enums.ActivityType
   question?: Prisma.StringFieldUpdateOperationsInput | string
   options?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  correctAnswer?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   explanation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   difficulty?: Prisma.IntFieldUpdateOperationsInput | number
   orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
@@ -500,7 +486,6 @@ export type ActivityUncheckedUpdateManyInput = {
   type?: Prisma.EnumActivityTypeFieldUpdateOperationsInput | $Enums.ActivityType
   question?: Prisma.StringFieldUpdateOperationsInput | string
   options?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  correctAnswer?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   explanation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   difficulty?: Prisma.IntFieldUpdateOperationsInput | number
   orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
@@ -532,7 +517,6 @@ export type ActivityCountOrderByAggregateInput = {
   type?: Prisma.SortOrder
   question?: Prisma.SortOrder
   options?: Prisma.SortOrder
-  correctAnswer?: Prisma.SortOrder
   explanation?: Prisma.SortOrder
   difficulty?: Prisma.SortOrder
   orderIndex?: Prisma.SortOrder
@@ -724,7 +708,6 @@ export type ActivityCreateWithoutPageInput = {
   type: $Enums.ActivityType
   question: string
   options?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  correctAnswer: Prisma.JsonNullValueInput | runtime.InputJsonValue
   explanation?: string | null
   difficulty?: number
   orderIndex: number
@@ -742,7 +725,6 @@ export type ActivityUncheckedCreateWithoutPageInput = {
   type: $Enums.ActivityType
   question: string
   options?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  correctAnswer: Prisma.JsonNullValueInput | runtime.InputJsonValue
   explanation?: string | null
   difficulty?: number
   orderIndex: number
@@ -790,7 +772,6 @@ export type ActivityScalarWhereInput = {
   type?: Prisma.EnumActivityTypeFilter<"Activity"> | $Enums.ActivityType
   question?: Prisma.StringFilter<"Activity"> | string
   options?: Prisma.JsonNullableFilter<"Activity">
-  correctAnswer?: Prisma.JsonFilter<"Activity">
   explanation?: Prisma.StringNullableFilter<"Activity"> | string | null
   difficulty?: Prisma.IntFilter<"Activity"> | number
   orderIndex?: Prisma.IntFilter<"Activity"> | number
@@ -805,7 +786,6 @@ export type ActivityCreateWithoutGeneratedActivitiesInput = {
   type: $Enums.ActivityType
   question: string
   options?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  correctAnswer: Prisma.JsonNullValueInput | runtime.InputJsonValue
   explanation?: string | null
   difficulty?: number
   orderIndex: number
@@ -824,7 +804,6 @@ export type ActivityUncheckedCreateWithoutGeneratedActivitiesInput = {
   type: $Enums.ActivityType
   question: string
   options?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  correctAnswer: Prisma.JsonNullValueInput | runtime.InputJsonValue
   explanation?: string | null
   difficulty?: number
   orderIndex: number
@@ -845,7 +824,6 @@ export type ActivityCreateWithoutGeneratedFromInput = {
   type: $Enums.ActivityType
   question: string
   options?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  correctAnswer: Prisma.JsonNullValueInput | runtime.InputJsonValue
   explanation?: string | null
   difficulty?: number
   orderIndex: number
@@ -864,7 +842,6 @@ export type ActivityUncheckedCreateWithoutGeneratedFromInput = {
   type: $Enums.ActivityType
   question: string
   options?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  correctAnswer: Prisma.JsonNullValueInput | runtime.InputJsonValue
   explanation?: string | null
   difficulty?: number
   orderIndex: number
@@ -901,7 +878,6 @@ export type ActivityUpdateWithoutGeneratedActivitiesInput = {
   type?: Prisma.EnumActivityTypeFieldUpdateOperationsInput | $Enums.ActivityType
   question?: Prisma.StringFieldUpdateOperationsInput | string
   options?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  correctAnswer?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   explanation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   difficulty?: Prisma.IntFieldUpdateOperationsInput | number
   orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
@@ -920,7 +896,6 @@ export type ActivityUncheckedUpdateWithoutGeneratedActivitiesInput = {
   type?: Prisma.EnumActivityTypeFieldUpdateOperationsInput | $Enums.ActivityType
   question?: Prisma.StringFieldUpdateOperationsInput | string
   options?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  correctAnswer?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   explanation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   difficulty?: Prisma.IntFieldUpdateOperationsInput | number
   orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
@@ -952,7 +927,6 @@ export type ActivityCreateWithoutAttemptsInput = {
   type: $Enums.ActivityType
   question: string
   options?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  correctAnswer: Prisma.JsonNullValueInput | runtime.InputJsonValue
   explanation?: string | null
   difficulty?: number
   orderIndex: number
@@ -971,7 +945,6 @@ export type ActivityUncheckedCreateWithoutAttemptsInput = {
   type: $Enums.ActivityType
   question: string
   options?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  correctAnswer: Prisma.JsonNullValueInput | runtime.InputJsonValue
   explanation?: string | null
   difficulty?: number
   orderIndex: number
@@ -1003,7 +976,6 @@ export type ActivityUpdateWithoutAttemptsInput = {
   type?: Prisma.EnumActivityTypeFieldUpdateOperationsInput | $Enums.ActivityType
   question?: Prisma.StringFieldUpdateOperationsInput | string
   options?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  correctAnswer?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   explanation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   difficulty?: Prisma.IntFieldUpdateOperationsInput | number
   orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1022,7 +994,6 @@ export type ActivityUncheckedUpdateWithoutAttemptsInput = {
   type?: Prisma.EnumActivityTypeFieldUpdateOperationsInput | $Enums.ActivityType
   question?: Prisma.StringFieldUpdateOperationsInput | string
   options?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  correctAnswer?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   explanation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   difficulty?: Prisma.IntFieldUpdateOperationsInput | number
   orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1039,7 +1010,6 @@ export type ActivityCreateManyPageInput = {
   type: $Enums.ActivityType
   question: string
   options?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  correctAnswer: Prisma.JsonNullValueInput | runtime.InputJsonValue
   explanation?: string | null
   difficulty?: number
   orderIndex: number
@@ -1054,7 +1024,6 @@ export type ActivityUpdateWithoutPageInput = {
   type?: Prisma.EnumActivityTypeFieldUpdateOperationsInput | $Enums.ActivityType
   question?: Prisma.StringFieldUpdateOperationsInput | string
   options?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  correctAnswer?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   explanation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   difficulty?: Prisma.IntFieldUpdateOperationsInput | number
   orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1072,7 +1041,6 @@ export type ActivityUncheckedUpdateWithoutPageInput = {
   type?: Prisma.EnumActivityTypeFieldUpdateOperationsInput | $Enums.ActivityType
   question?: Prisma.StringFieldUpdateOperationsInput | string
   options?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  correctAnswer?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   explanation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   difficulty?: Prisma.IntFieldUpdateOperationsInput | number
   orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1090,7 +1058,6 @@ export type ActivityUncheckedUpdateManyWithoutPageInput = {
   type?: Prisma.EnumActivityTypeFieldUpdateOperationsInput | $Enums.ActivityType
   question?: Prisma.StringFieldUpdateOperationsInput | string
   options?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  correctAnswer?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   explanation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   difficulty?: Prisma.IntFieldUpdateOperationsInput | number
   orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1107,7 +1074,6 @@ export type ActivityCreateManyGeneratedFromInput = {
   type: $Enums.ActivityType
   question: string
   options?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  correctAnswer: Prisma.JsonNullValueInput | runtime.InputJsonValue
   explanation?: string | null
   difficulty?: number
   orderIndex: number
@@ -1121,7 +1087,6 @@ export type ActivityUpdateWithoutGeneratedFromInput = {
   type?: Prisma.EnumActivityTypeFieldUpdateOperationsInput | $Enums.ActivityType
   question?: Prisma.StringFieldUpdateOperationsInput | string
   options?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  correctAnswer?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   explanation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   difficulty?: Prisma.IntFieldUpdateOperationsInput | number
   orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1140,7 +1105,6 @@ export type ActivityUncheckedUpdateWithoutGeneratedFromInput = {
   type?: Prisma.EnumActivityTypeFieldUpdateOperationsInput | $Enums.ActivityType
   question?: Prisma.StringFieldUpdateOperationsInput | string
   options?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  correctAnswer?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   explanation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   difficulty?: Prisma.IntFieldUpdateOperationsInput | number
   orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1158,7 +1122,6 @@ export type ActivityUncheckedUpdateManyWithoutGeneratedFromInput = {
   type?: Prisma.EnumActivityTypeFieldUpdateOperationsInput | $Enums.ActivityType
   question?: Prisma.StringFieldUpdateOperationsInput | string
   options?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  correctAnswer?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   explanation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   difficulty?: Prisma.IntFieldUpdateOperationsInput | number
   orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1214,7 +1177,6 @@ export type ActivitySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   type?: boolean
   question?: boolean
   options?: boolean
-  correctAnswer?: boolean
   explanation?: boolean
   difficulty?: boolean
   orderIndex?: boolean
@@ -1236,7 +1198,6 @@ export type ActivitySelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exte
   type?: boolean
   question?: boolean
   options?: boolean
-  correctAnswer?: boolean
   explanation?: boolean
   difficulty?: boolean
   orderIndex?: boolean
@@ -1255,7 +1216,6 @@ export type ActivitySelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
   type?: boolean
   question?: boolean
   options?: boolean
-  correctAnswer?: boolean
   explanation?: boolean
   difficulty?: boolean
   orderIndex?: boolean
@@ -1274,7 +1234,6 @@ export type ActivitySelectScalar = {
   type?: boolean
   question?: boolean
   options?: boolean
-  correctAnswer?: boolean
   explanation?: boolean
   difficulty?: boolean
   orderIndex?: boolean
@@ -1285,7 +1244,7 @@ export type ActivitySelectScalar = {
   updatedAt?: boolean
 }
 
-export type ActivityOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "pageId" | "type" | "question" | "options" | "correctAnswer" | "explanation" | "difficulty" | "orderIndex" | "isApprovedByTeacher" | "usedAsExample" | "generatedFromId" | "createdAt" | "updatedAt", ExtArgs["result"]["activity"]>
+export type ActivityOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "pageId" | "type" | "question" | "options" | "explanation" | "difficulty" | "orderIndex" | "isApprovedByTeacher" | "usedAsExample" | "generatedFromId" | "createdAt" | "updatedAt", ExtArgs["result"]["activity"]>
 export type ActivityInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   page?: boolean | Prisma.PageDefaultArgs<ExtArgs>
   generatedFrom?: boolean | Prisma.Activity$generatedFromArgs<ExtArgs>
@@ -1316,7 +1275,6 @@ export type $ActivityPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     type: $Enums.ActivityType
     question: string
     options: runtime.JsonValue | null
-    correctAnswer: runtime.JsonValue
     explanation: string | null
     difficulty: number
     orderIndex: number
@@ -1757,7 +1715,6 @@ export interface ActivityFieldRefs {
   readonly type: Prisma.FieldRef<"Activity", 'ActivityType'>
   readonly question: Prisma.FieldRef<"Activity", 'String'>
   readonly options: Prisma.FieldRef<"Activity", 'Json'>
-  readonly correctAnswer: Prisma.FieldRef<"Activity", 'Json'>
   readonly explanation: Prisma.FieldRef<"Activity", 'String'>
   readonly difficulty: Prisma.FieldRef<"Activity", 'Int'>
   readonly orderIndex: Prisma.FieldRef<"Activity", 'Int'>

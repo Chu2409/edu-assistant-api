@@ -1,5 +1,6 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger'
 import { ActivityType } from 'src/core/database/generated/enums'
+import type { AiGeneratedActivity } from 'src/features/pages/content-generation/interfaces/ai-generated-activity.interface'
 
 export class ActivityDto {
   @ApiProperty({ example: 1 })
@@ -15,10 +16,7 @@ export class ActivityDto {
   question: string
 
   @ApiPropertyOptional({ description: 'Opciones (JSON)' })
-  options: Record<string, any> | null
-
-  @ApiProperty({ description: 'Respuesta correcta (JSON)' })
-  correctAnswer: Record<string, any>
+  options: AiGeneratedActivity
 
   @ApiPropertyOptional({ description: 'Explicación' })
   explanation: string | null

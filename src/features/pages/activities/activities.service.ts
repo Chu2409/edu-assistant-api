@@ -12,117 +12,45 @@ import {
   Role,
   type User,
 } from 'src/core/database/generated/client'
-import { BlockType, type ActivityType } from 'src/core/database/generated/enums'
+import { ActivityType, BlockType } from 'src/core/database/generated/enums'
 import { BlocksMapper } from '../blocks/mappers/blocks.mapper'
 import { CreateActivityDto } from './dtos/req/create-activity.dto'
 import { UpdateActivityDto } from './dtos/req/update-activity.dto'
 import { CreateActivityAttemptDto } from './dtos/req/create-activity-attempt.dto'
 import { ActivityDto } from './dtos/res/activity.dto'
 import { ActivityAttemptDto } from './dtos/res/activity-attempt.dto'
+import { PagesHelperService } from '../main/pages-helper.service'
+import { ActivitiesMapper } from './mappers/activities.mapper'
+import {
+  ActivityAttemptAnswer,
+  FillBlankAttempt,
+  MatchAttempt,
+  MultipleChoiceAttempt,
+  TrueFalseAttempt,
+} from './interfaces/activity-attempt.interface'
+import {
+  AiGeneratedActivity,
+  AiGeneratedFillBlankActivity,
+  AiGeneratedMatchActivity,
+  AiGeneratedMultipleChoiceActivity,
+  AiGeneratedTrueFalseActivity,
+} from '../content-generation/interfaces/ai-generated-activity.interface'
 
 @Injectable()
 export class ActivitiesService {
   constructor(
     private readonly dbService: DBService,
     private readonly openAiService: OpenaiService,
+    private readonly pagesHelperService: PagesHelperService,
   ) {}
 
-  private async getPageForRead(pageId: number, user: User) {
-    const page = await this.dbService.page.findUnique({
-      where: { id: pageId },
-      include: {
-        module: { include: { enrollments: true, aiConfiguration: true } },
-      },
-    })
-
-    if (!page) {
-      throw new NotFoundException(`Página con ID ${pageId} no encontrada`)
-    }
-
-    if (user.role === Role.ADMIN) return page
-
-    if (user.role === Role.TEACHER) {
-      if (page.module.teacherId !== user.id) {
-        throw new ForbiddenException(
-          'No tienes permisos para acceder a esta página',
-        )
-      }
-      return page
-    }
-
-    const hasAccess =
-      page.module.isPublic ||
-      page.module.enrollments.some(
-        (enrollment: Enrollment) =>
-          enrollment.userId === user.id && enrollment.isActive,
-      )
-
-    if (!hasAccess) {
-      throw new ForbiddenException(
-        'No tienes permisos para acceder a esta página',
-      )
-    }
-    if (!page.isPublished) {
-      throw new ForbiddenException('Esta página no está publicada aún')
-    }
-    return page
-  }
-
-  private async getPageForWrite(pageId: number, user: User) {
-    const page = await this.dbService.page.findUnique({
-      where: { id: pageId },
-      include: { module: true },
-    })
-
-    if (!page) {
-      throw new NotFoundException(`Página con ID ${pageId} no encontrada`)
-    }
-
-    if (user.role === Role.ADMIN) return page
-
-    if (page.module.teacherId !== user.id) {
-      throw new ForbiddenException(
-        'Solo el profesor propietario puede modificar actividades de esta página',
-      )
-    }
-
-    return page
-  }
-
-  private toDto(activity: Activity): ActivityDto {
-    return {
-      id: activity.id,
-      pageId: activity.pageId,
-      type: activity.type as any,
-      question: activity.question,
-      options:
-        (activity.options as any) === null
-          ? null
-          : typeof activity.options === 'string'
-            ? JSON.parse(activity.options)
-            : (activity.options as any),
-      correctAnswer:
-        typeof activity.correctAnswer === 'string'
-          ? JSON.parse(activity.correctAnswer)
-          : (activity.correctAnswer as any),
-      explanation: activity.explanation ?? null,
-      difficulty: activity.difficulty,
-      orderIndex: activity.orderIndex,
-      isApprovedByTeacher: activity.isApprovedByTeacher,
-      usedAsExample: activity.usedAsExample,
-      generatedFromId: activity.generatedFromId ?? null,
-      createdAt: activity.createdAt,
-      updatedAt: activity.updatedAt,
-    }
-  }
-
   async list(pageId: number, user: User): Promise<ActivityDto[]> {
-    await this.getPageForRead(pageId, user)
+    await this.pagesHelperService.getPageForRead(pageId, user)
     const activities = await this.dbService.activity.findMany({
       where: { pageId },
       orderBy: { orderIndex: 'asc' },
     })
-    return activities.map((a) => this.toDto(a))
+    return activities.map((a) => ActivitiesMapper.mapToDto(a))
   }
 
   async create(
@@ -130,7 +58,7 @@ export class ActivitiesService {
     dto: CreateActivityDto,
     user: User,
   ): Promise<ActivityDto> {
-    await this.getPageForWrite(pageId, user)
+    await this.pagesHelperService.getPageForWrite(pageId, user)
 
     const last = await this.dbService.activity.findFirst({
       where: { pageId },
@@ -142,11 +70,7 @@ export class ActivitiesService {
         pageId,
         type: dto.type,
         question: dto.question,
-        options:
-          dto.options === undefined
-            ? Prisma.JsonNull
-            : (dto.options ?? Prisma.JsonNull),
-        correctAnswer: dto.correctAnswer,
+        options: JSON.stringify(dto.options),
         explanation: dto.explanation ?? null,
         difficulty: dto.difficulty ?? 1,
         orderIndex: last?.orderIndex ? last.orderIndex + 1 : 1,
@@ -154,7 +78,7 @@ export class ActivitiesService {
       },
     })
 
-    return this.toDto(created)
+    return ActivitiesMapper.mapToDto(created)
   }
 
   async update(
@@ -163,7 +87,7 @@ export class ActivitiesService {
     dto: UpdateActivityDto,
     user: User,
   ): Promise<ActivityDto> {
-    await this.getPageForWrite(pageId, user)
+    await this.pagesHelperService.getPageForWrite(pageId, user)
 
     const existing = await this.dbService.activity.findUnique({
       where: { id: activityId },
@@ -194,11 +118,11 @@ export class ActivitiesService {
       },
     })
 
-    return this.toDto(updated)
+    return ActivitiesMapper.mapToDto(updated)
   }
 
   async delete(pageId: number, activityId: number, user: User): Promise<void> {
-    await this.getPageForWrite(pageId, user)
+    await this.pagesHelperService.getPageForWrite(pageId, user)
 
     const existing = await this.dbService.activity.findUnique({
       where: { id: activityId },
@@ -209,40 +133,6 @@ export class ActivitiesService {
 
     await this.dbService.activity.delete({ where: { id: activityId } })
   }
-
-  // async generate(
-  //   pageId: number,
-  //   dto: GenerateActivityDto,
-  //   user: User,
-  // ): Promise<GeneratedActivityDto> {
-  //   const page = await this.getPageForRead(pageId, user)
-
-  //   const blocks = await this.dbService.block.findMany({
-  //     where: {
-  //       pageId,
-  //     },
-  //     orderBy: { id: 'asc' },
-  //   })
-
-  //   const lessonContext = this.buildLessonContext(blocks)
-
-  //   const language = page.module.aiConfiguration?.language ?? 'es'
-  //   const difficulty = dto.difficulty ?? 2
-
-  //   const prompt = generateActivityPrompt({
-  //     type: dto.type,
-  //     language,
-  //     difficulty,
-  //     lessonTitle: page.title,
-  //     lessonContext,
-  //     instructions: dto.instructions,
-  //   })
-
-  //   const ai =
-  //     await this.openAiService.getResponse<GeneratedActivityDto>(prompt)
-
-  //   return ai.content
-  // }
 
   async createAttempt(
     activityId: number,
@@ -261,7 +151,7 @@ export class ActivitiesService {
     }
 
     // student access check
-    await this.getPageForRead(activity.pageId, user)
+    await this.pagesHelperService.getPageForRead(activity.pageId, user)
 
     const lastAttempt = await this.dbService.activityAttempt.findFirst({
       where: { activityId, userId: user.id },
@@ -276,7 +166,7 @@ export class ActivitiesService {
       data: {
         activityId,
         userId: user.id,
-        studentAnswer: dto.studentAnswer,
+        studentAnswer: JSON.stringify(dto.studentAnswer),
         isCorrect,
         attemptNumber,
       },
@@ -298,49 +188,40 @@ export class ActivitiesService {
 
   private evaluateAttempt(
     activity: Activity,
-    studentAnswer: Record<string, any>,
+    studentAnswer: ActivityAttemptAnswer,
   ): boolean {
-    const type = activity.type as unknown as ActivityType
-    const correct =
-      typeof activity.correctAnswer === 'string'
-        ? JSON.parse(activity.correctAnswer)
-        : (activity.correctAnswer as any)
+    const type = activity.type
+    const options = JSON.parse(
+      activity.options as string,
+    ) as AiGeneratedActivity
 
     try {
       switch (type) {
-        case 'MULTIPLE_CHOICE':
+        case ActivityType.MULTIPLE_CHOICE:
           return (
-            String((studentAnswer as any).optionId) === String(correct.optionId)
+            (studentAnswer as MultipleChoiceAttempt).selectedOption ===
+            (options as AiGeneratedMultipleChoiceActivity).correctAnswer
           )
-        case 'TRUE_FALSE':
+        case ActivityType.TRUE_FALSE:
           return (
-            Boolean((studentAnswer as any).value) === Boolean(correct.value)
+            Boolean((studentAnswer as TrueFalseAttempt).answer) ===
+            Boolean((options as AiGeneratedTrueFalseActivity).correctAnswer)
           )
-        case 'FILL_BLANK': {
-          const sRaw = (studentAnswer as any).answers
-          const s = Array.isArray(sRaw)
-            ? sRaw
-            : (studentAnswer as any).answer !== undefined
-              ? [(studentAnswer as any).answer]
-              : []
+        case ActivityType.FILL_BLANK: {
+          const answer = (studentAnswer as FillBlankAttempt).answer
 
-          const cRaw = correct.answers
-          const c = Array.isArray(cRaw)
-            ? cRaw
-            : correct.answer !== undefined
-              ? [correct.answer]
-              : []
-          if (s.length !== c.length) return false
-          return s.every(
-            (ans: any, i: number) =>
-              String(ans).trim().toLocaleLowerCase() ===
-              String(c[i]).trim().toLocaleLowerCase(),
+          const correctAnswers = (options as AiGeneratedFillBlankActivity)
+            .acceptableAnswers
+          return correctAnswers.some(
+            (correctAnswer) =>
+              String(answer).trim().toLocaleLowerCase() ===
+              String(correctAnswer).trim().toLocaleLowerCase(),
           )
         }
-        case 'MATCH': {
-          const sPairsRaw = (studentAnswer as any).pairs
+        case ActivityType.MATCH: {
+          const sPairsRaw = (studentAnswer as MatchAttempt).matches
           const sPairs = Array.isArray(sPairsRaw) ? sPairsRaw : []
-          const cPairsRaw = correct.pairs
+          const cPairsRaw = (options as AiGeneratedMatchActivity).pairs
           const cPairs = Array.isArray(cPairsRaw) ? cPairsRaw : []
           if (sPairs.length !== cPairs.length) return false
           const norm = (pairs: any[]) =>
@@ -358,24 +239,5 @@ export class ActivitiesService {
     } catch {
       return false
     }
-  }
-
-  private buildLessonContext(blocks: any[]): string {
-    const mapped = blocks.map((b) => BlocksMapper.mapToDto(b))
-    const parts: string[] = []
-
-    for (const block of mapped) {
-      if (block.type === BlockType.TEXT) {
-        const markdown = String((block.content as any).markdown || '')
-        if (markdown.trim()) parts.push(markdown.trim())
-      } else if (block.type === BlockType.CODE) {
-        const lang = String((block.content as any).language ?? '')
-        const code = String((block.content as any).code ?? '')
-        const codeTrim = String(code).trim()
-        if (codeTrim) parts.push(`Código (${lang || 'code'}):\n${codeTrim}`)
-      }
-    }
-
-    return parts.join('\n\n---\n\n')
   }
 }

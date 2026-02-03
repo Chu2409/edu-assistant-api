@@ -37,19 +37,6 @@ export class PagesActivitiesController {
     return this.activitiesService.list(pageId, user)
   }
 
-  // @Post(':pageId/activities/generate')
-  // @ApiOperation({ summary: 'Generar una actividad con IA (no persiste)' })
-  // @ApiParam({ name: 'pageId', type: Number, example: 1 })
-  // @ApiStandardResponse(GeneratedActivityDto, HttpStatus.CREATED)
-  // @ApiResponse({ status: 401, description: 'No autorizado' })
-  // generate(
-  //   @Param('pageId', ParseIntPipe) pageId: number,
-  //   @Body() dto: GenerateActivityDto,
-  //   @GetUser() user: User,
-  // ): Promise<GeneratedActivityDto> {
-  //   return this.activitiesService.generate(pageId, dto, user)
-  // }
-
   @Post(':pageId/activities')
   @ApiOperation({ summary: 'Crear actividad' })
   @ApiParam({ name: 'pageId', type: Number, example: 1 })

@@ -13,6 +13,7 @@ import {
   MinLength,
 } from 'class-validator'
 import { ActivityType } from 'src/core/database/generated/enums'
+import type { AiGeneratedActivity } from 'src/features/pages/content-generation/interfaces/ai-generated-activity.interface'
 
 export class CreateActivityDto {
   @ApiProperty({ enum: ActivityType, example: ActivityType.TRUE_FALSE })
@@ -32,17 +33,8 @@ export class CreateActivityDto {
       'Opciones (depende del tipo). Para MULTIPLE_CHOICE/MATCH normalmente va aquí.',
     example: { options: [{ id: 'A', text: '...' }] },
   })
-  @IsOptional()
   @IsObject()
-  options?: Record<string, any> | null
-
-  @ApiProperty({
-    description: 'Respuesta correcta (JSON)',
-    example: { value: true },
-  })
-  @IsObject()
-  @IsNotEmpty()
-  correctAnswer: Record<string, any>
+  options: AiGeneratedActivity
 
   @ApiPropertyOptional({
     description: 'Explicación de la respuesta',

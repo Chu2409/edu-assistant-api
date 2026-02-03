@@ -22,6 +22,7 @@ import { UpdatePageRelationDto } from './dtos/req/update-page-relation.dto'
 import { PageRelationDto } from './dtos/res/page-relation.dto'
 import { RefreshPageEmbeddingDto } from './dtos/req/refresh-page-embedding.dto'
 import { PageEmbeddingRefreshedDto } from './dtos/res/page-embedding-refreshed.dto'
+import { PagesHelperService } from '../main/pages-helper.service'
 
 type SimilarRow = { id: number; title: string; similarity: number }
 
@@ -30,66 +31,11 @@ export class PageRelationsService {
   constructor(
     private readonly dbService: DBService,
     private readonly openAiService: OpenaiService,
+    private readonly pagesHelperService: PagesHelperService,
   ) {}
 
-  private async getPageForRead(pageId: number, user: User) {
-    const page = await this.dbService.page.findUnique({
-      where: { id: pageId },
-      include: {
-        module: { include: { enrollments: true, aiConfiguration: true } },
-      },
-    })
-    if (!page)
-      throw new NotFoundException(`Página con ID ${pageId} no encontrada`)
-
-    if (user.role === Role.ADMIN) return page
-
-    if (user.role === Role.TEACHER) {
-      if (page.module.teacherId !== user.id) {
-        throw new ForbiddenException(
-          'No tienes permisos para acceder a esta página',
-        )
-      }
-      return page
-    }
-
-    const hasAccess =
-      page.module.isPublic ||
-      page.module.enrollments.some(
-        (enrollment: Enrollment) =>
-          enrollment.userId === user.id && enrollment.isActive,
-      )
-
-    if (!hasAccess) {
-      throw new ForbiddenException(
-        'No tienes permisos para acceder a esta página',
-      )
-    }
-    if (!page.isPublished) {
-      throw new ForbiddenException('Esta página no está publicada aún')
-    }
-    return page
-  }
-
-  private async getPageForWrite(pageId: number, user: User) {
-    const page = await this.dbService.page.findUnique({
-      where: { id: pageId },
-      include: { module: true },
-    })
-    if (!page)
-      throw new NotFoundException(`Página con ID ${pageId} no encontrada`)
-
-    if (user.role === Role.ADMIN) return page
-    if (page.module.teacherId !== user.id) {
-      throw new ForbiddenException(
-        'Solo el profesor propietario puede modificar relaciones de esta página',
-      )
-    }
-    return page
-  }
-
   async list(pageId: number, user: User): Promise<PageRelationDto[]> {
-    await this.getPageForRead(pageId, user)
+    await this.pagesHelperService.getPageForRead(pageId, user)
     const relations = await this.dbService.pageRelation.findMany({
       where: { originPageId: pageId },
       orderBy: [{ similarityScore: 'desc' }, { createdAt: 'desc' }],
@@ -117,7 +63,7 @@ export class PageRelationsService {
     dto: CreatePageRelationDto,
     user: User,
   ): Promise<PageRelationDto> {
-    await this.getPageForWrite(pageId, user)
+    await this.pagesHelperService.getPageForWrite(pageId, user)
 
     const related = await this.dbService.page.findUnique({
       where: { id: dto.relatedPageId },
@@ -188,7 +134,7 @@ export class PageRelationsService {
     dto: UpdatePageRelationDto,
     user: User,
   ): Promise<PageRelationDto> {
-    await this.getPageForWrite(pageId, user)
+    await this.pagesHelperService.getPageForWrite(pageId, user)
 
     const existing = await this.dbService.pageRelation.findUnique({
       where: { id: relationId },
@@ -237,7 +183,7 @@ export class PageRelationsService {
   }
 
   async delete(pageId: number, relationId: number, user: User): Promise<void> {
-    await this.getPageForWrite(pageId, user)
+    await this.pagesHelperService.getPageForWrite(pageId, user)
 
     const existing = await this.dbService.pageRelation.findUnique({
       where: { id: relationId },
@@ -254,7 +200,7 @@ export class PageRelationsService {
     dto: SuggestPageRelationsDto,
     user: User,
   ): Promise<PageRelationsSuggestedDto> {
-    const page = await this.getPageForWrite(pageId, user)
+    const page = await this.pagesHelperService.getPageForWrite(pageId, user)
 
     // 1) Obtener/crear embedding de la página origen (y compiledContent)
     const { embeddingLiteral } = await this.ensurePageEmbedding(pageId)
@@ -350,7 +296,7 @@ export class PageRelationsService {
     dto: RefreshPageEmbeddingDto,
     user: User,
   ): Promise<PageEmbeddingRefreshedDto> {
-    await this.getPageForWrite(pageId, user)
+    await this.pagesHelperService.getPageForWrite(pageId, user)
 
     const force = dto.force ?? true
 

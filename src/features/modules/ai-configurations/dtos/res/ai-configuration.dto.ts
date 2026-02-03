@@ -1,4 +1,10 @@
 import { ApiProperty } from '@nestjs/swagger'
+import {
+  AiAudience,
+  AiLength,
+  AiTargetLevel,
+  AiTone,
+} from 'src/core/database/generated/enums'
 
 export class AiConfigurationDto {
   @ApiProperty({
@@ -18,6 +24,36 @@ export class AiConfigurationDto {
     example: 'es',
   })
   language: string
+
+  @ApiProperty({
+    description: 'Nivel de target para la configuración de IA',
+    example: AiTargetLevel.INTERMEDIATE,
+  })
+  targetLevel: AiTargetLevel
+
+  @ApiProperty({
+    description: 'Audiencia para la configuración de IA',
+    example: AiAudience.UNIVERSITY,
+  })
+  audience: AiAudience
+
+  @ApiProperty({
+    description: 'Objetivos de aprendizaje para la configuración de IA',
+    example: ['Comprender los conceptos básicos de programación'],
+  })
+  learningObjectives: string[]
+
+  @ApiProperty({
+    description: 'Longitud del contenido para la configuración de IA',
+    example: AiLength.MEDIUM,
+  })
+  contentLength: AiLength
+
+  @ApiProperty({
+    description: 'Tono para la configuración de IA',
+    example: AiTone.EDUCATIONAL,
+  })
+  tone: AiTone
 
   @ApiProperty({
     description: 'Fecha de creación de la configuración',

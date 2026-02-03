@@ -261,7 +261,6 @@ export const ActivityScalarFieldEnum = {
   type: 'type',
   question: 'question',
   options: 'options',
-  correctAnswer: 'correctAnswer',
   explanation: 'explanation',
   difficulty: 'difficulty',
   orderIndex: 'orderIndex',

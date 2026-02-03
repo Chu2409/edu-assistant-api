@@ -342,7 +342,6 @@ model Activity {
   type                ActivityType
   question            String       @db.Text
   options             Json? // para multiple choice, matching, etc.
-  correctAnswer       Json         @map("correct_answer")
   explanation         String?      @db.Text
   difficulty          Int          @default(1) // 1-5
   orderIndex          Int          @map("order_index")

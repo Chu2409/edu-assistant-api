@@ -1,12 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger'
 
-/**
- * Clases que tipan EXACTAMENTE el JSON que exige el prompt
- * `src/features/pages/content-generation/prompts/generate-activity.prompt.ts`
- *
- * Nota: el formato cambia por tipo (no hay "type" en el JSON).
- */
-
 export class AiGeneratedMultipleChoiceActivity {
   @ApiProperty({ example: '¿Cuál es la mejor definición de X?' })
   question: string
