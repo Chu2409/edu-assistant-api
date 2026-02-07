@@ -19,6 +19,12 @@ import { PageRelationsController } from '../page-relations/page-relations.contro
 import { PageRelationsService } from '../page-relations/page-relations.service'
 import { MediaResourcesController } from '../media-resources/media-resources.controller'
 import { MediaResourcesService } from '../media-resources/media-resources.service'
+import { StudentQuestionsController } from '../student-questions/student-questions.controller'
+import { StudentQuestionsService } from '../student-questions/student-questions.service'
+import { PageNotesController } from '../notes/page-notes.controller'
+import { PageNotesService } from '../notes/page-notes.service'
+import { QuestionRepliesController } from '../question-replies/question-replies.controller'
+import { QuestionRepliesService } from '../question-replies/question-replies.service'
 
 @Module({
   imports: [
@@ -37,6 +43,9 @@ import { MediaResourcesService } from '../media-resources/media-resources.servic
     SessionMessagesController,
     PageRelationsController,
     MediaResourcesController,
+    StudentQuestionsController,
+    PageNotesController,
+    QuestionRepliesController,
   ],
   providers: [
     PagesService,
@@ -47,6 +56,9 @@ import { MediaResourcesService } from '../media-resources/media-resources.servic
     ChatService,
     PageRelationsService,
     MediaResourcesService,
+    StudentQuestionsService,
+    PageNotesService,
+    QuestionRepliesService,
   ],
   exports: [PagesService, ContentGenerationService],
 })
