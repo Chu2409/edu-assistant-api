@@ -18,7 +18,6 @@ const aiConfiguration1 = (
   },
   audience: AiAudience.UNIVERSITY,
   contentLength: AiLength.MEDIUM,
-  learningObjectives: ['Entender los conceptos básicos de programación'],
   targetLevel: AiTargetLevel.BASIC,
   tone: AiTone.EDUCATIONAL,
 })

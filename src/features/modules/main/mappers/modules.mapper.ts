@@ -38,7 +38,6 @@ export class ModulesMapper {
       language: aiConfig.language,
       targetLevel: aiConfig.targetLevel,
       audience: aiConfig.audience,
-      learningObjectives: aiConfig.learningObjectives,
       contentLength: aiConfig.contentLength,
       tone: aiConfig.tone,
       createdAt: aiConfig.createdAt,

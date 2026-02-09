@@ -53,7 +53,6 @@ export class ContentGenerationService {
         targetLevel:
           data.targetLevel ?? page.module.aiConfiguration!.targetLevel,
         tone: data.tone ?? page.module.aiConfiguration!.tone,
-        learningObjectives: page.module.aiConfiguration!.learningObjectives,
       },
     })
     const aiResponse =
@@ -91,7 +90,6 @@ export class ContentGenerationService {
         targetLevel:
           data.targetLevel ?? page.module.aiConfiguration!.targetLevel,
         tone: data.tone ?? page.module.aiConfiguration!.tone,
-        learningObjectives: page.module.aiConfiguration!.learningObjectives,
       },
     })
 

@@ -50,8 +50,6 @@ export class ModulesService {
               AiTargetLevel.INTERMEDIATE,
             audience:
               createModuleDto.aiConfiguration.audience ?? AiAudience.UNIVERSITY,
-            learningObjectives:
-              createModuleDto.aiConfiguration.learningObjectives ?? [],
             contentLength:
               createModuleDto.aiConfiguration.contentLength ?? AiLength.MEDIUM,
             tone: createModuleDto.aiConfiguration.tone ?? AiTone.EDUCATIONAL,
@@ -237,7 +235,6 @@ export class ModulesService {
           language?: string
           targetLevel?: AiTargetLevel
           audience?: AiAudience
-          learningObjectives?: string[]
           contentLength?: AiLength
           tone?: AiTone
         }
@@ -245,7 +242,6 @@ export class ModulesService {
           language: string
           targetLevel: AiTargetLevel
           audience: AiAudience
-          learningObjectives: string[]
           contentLength: AiLength
           tone: AiTone
         }
@@ -266,9 +262,6 @@ export class ModulesService {
             ...(aiConfiguration.audience !== undefined && {
               audience: aiConfiguration.audience,
             }),
-            ...(aiConfiguration.learningObjectives !== undefined && {
-              learningObjectives: aiConfiguration.learningObjectives,
-            }),
             ...(aiConfiguration.contentLength !== undefined && {
               contentLength: aiConfiguration.contentLength,
             }),
@@ -285,7 +278,6 @@ export class ModulesService {
             targetLevel:
               aiConfiguration.targetLevel ?? AiTargetLevel.INTERMEDIATE,
             audience: aiConfiguration.audience ?? AiAudience.UNIVERSITY,
-            learningObjectives: aiConfiguration.learningObjectives ?? [],
             contentLength: aiConfiguration.contentLength ?? AiLength.MEDIUM,
             tone: aiConfiguration.tone ?? AiTone.EDUCATIONAL,
           },

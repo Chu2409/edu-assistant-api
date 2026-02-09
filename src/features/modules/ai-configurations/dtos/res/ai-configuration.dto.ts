@@ -38,12 +38,6 @@ export class AiConfigurationDto {
   audience: AiAudience
 
   @ApiProperty({
-    description: 'Objetivos de aprendizaje para la configuración de IA',
-    example: ['Comprender los conceptos básicos de programación'],
-  })
-  learningObjectives: string[]
-
-  @ApiProperty({
     description: 'Longitud del contenido para la configuración de IA',
     example: AiLength.MEDIUM,
   })

@@ -132,7 +132,6 @@ export const AiConfigurationScalarFieldEnum = {
   language: 'language',
   targetLevel: 'targetLevel',
   audience: 'audience',
-  learningObjectives: 'learningObjectives',
   contentLength: 'contentLength',
   tone: 'tone',
   createdAt: 'createdAt',

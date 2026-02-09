@@ -42,7 +42,7 @@ import { QuestionRepliesService } from '../question-replies/question-replies.ser
     PageSessionsController,
     SessionMessagesController,
     PageRelationsController,
-    MediaResourcesController,
+    // MediaResourcesController,
     StudentQuestionsController,
     PageNotesController,
     QuestionRepliesController,

@@ -31,7 +31,6 @@ export interface RegeneratePageContentPromptInput {
     audience: AiAudience
     contentLength: AiLength
     tone: AiTone
-    learningObjectives?: string[]
   }
 }
 
@@ -119,8 +118,7 @@ IMAGE_SUGGESTION:
 - Language: ${config.language}
 - Audience: ${audienceDesc}
 - Level: ${levelDesc}
-- Tone: ${toneDesc}
-${config.learningObjectives?.length ? `- Objectives: ${config.learningObjectives.join('; ')}` : ''}`
+- Tone: ${toneDesc}`
 }
 
 function buildRegenerationUserPrompt(

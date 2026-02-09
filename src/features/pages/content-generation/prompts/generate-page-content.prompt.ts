@@ -21,7 +21,6 @@ export interface GeneratePageContentPrompt {
     audience: AiAudience
     contentLength: AiLength
     tone: AiTone
-    learningObjectives?: string[]
   }
 }
 
@@ -94,7 +93,6 @@ IMAGE_SUGGESTION:
 - Audience: ${audienceDesc}
 - Level: ${levelDesc}
 - Tone: ${toneDesc}
-${config.learningObjectives?.length ? `- Objectives: ${config.learningObjectives.join('; ')}` : ''}
 
 # Quality
 

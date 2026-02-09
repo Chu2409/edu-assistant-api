@@ -106,14 +106,13 @@ enum AiTone {
 }
 
 model AiConfiguration {
-  id                 Int           @id @default(autoincrement())
-  moduleId           Int           @unique @map("module_id")
-  language           String        @default("es") // RF-9: idioma específico
-  targetLevel        AiTargetLevel @default(INTERMEDIATE) @map("target_level")
-  audience           AiAudience    @default(UNIVERSITY) @map("audience")
-  learningObjectives String[]      @map("learning_objectives")
-  contentLength      AiLength      @default(MEDIUM) @map("content_length")
-  tone               AiTone        @default(EDUCATIONAL) @map("tone")
+  id            Int           @id @default(autoincrement())
+  moduleId      Int           @unique @map("module_id")
+  language      String        @default("es") // RF-9: idioma específico
+  targetLevel   AiTargetLevel @default(INTERMEDIATE) @map("target_level")
+  audience      AiAudience    @default(UNIVERSITY) @map("audience")
+  contentLength AiLength      @default(MEDIUM) @map("content_length")
+  tone          AiTone        @default(EDUCATIONAL) @map("tone")
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")

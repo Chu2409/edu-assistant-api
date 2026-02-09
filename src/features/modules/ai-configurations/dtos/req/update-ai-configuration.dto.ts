@@ -41,22 +41,6 @@ export class UpdateAiConfigurationDto {
   audience?: AiAudience
 
   @ApiPropertyOptional({
-    description: 'Objetivos de aprendizaje del módulo',
-    example: [
-      'Comprender los conceptos avanzados de programación',
-      'Aplicar patrones de diseño',
-      'Desarrollar aplicaciones complejas',
-    ],
-    type: [String],
-    isArray: true,
-  })
-  @IsOptional()
-  @IsArray()
-  @ArrayMinSize(1)
-  @IsString({ each: true })
-  learningObjectives?: string[]
-
-  @ApiPropertyOptional({
     description: 'Longitud del contenido generado por IA',
     enum: AiLength,
     example: AiLength.LONG,
