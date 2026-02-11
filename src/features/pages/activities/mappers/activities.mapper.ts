@@ -6,14 +6,14 @@ export class ActivitiesMapper {
     return {
       id: activity.id,
       pageId: activity.pageId,
-      type: activity.type as any,
+      type: activity.type,
       question: activity.question,
       options:
-        (activity.options as any) === null
+        activity.options === null
           ? null
           : typeof activity.options === 'string'
             ? JSON.parse(activity.options)
-            : (activity.options as any),
+            : activity.options,
       explanation: activity.explanation ?? null,
       difficulty: activity.difficulty,
       orderIndex: activity.orderIndex,

@@ -130,26 +130,29 @@ function formatBlocksForPrompt(
       const blockNumber = index + 1
 
       switch (block.type) {
-        case BlockType.TEXT:
+        case BlockType.TEXT: {
           const textContent = block.content as AiTextBlock
           return `## Block ${blockNumber}: TEXT
 
 ${textContent.markdown}`
+        }
 
-        case BlockType.CODE:
+        case BlockType.CODE: {
           const codeContent = block.content as AiCodeBlock
           return `## Block ${blockNumber}: CODE
 
 \`\`\`${codeContent.language}
 ${codeContent.code}
 \`\`\``
+        }
 
-        case BlockType.IMAGE_SUGGESTION:
+        case BlockType.IMAGE_SUGGESTION: {
           const suggestionContent = block.content as AiImageSuggestionBlock
           return `## Block ${blockNumber}: IMAGE_SUGGESTION
 
 Prompt: ${suggestionContent.prompt}
 Reason: ${suggestionContent.reason}`
+        }
 
         default:
           return ''

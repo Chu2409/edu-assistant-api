@@ -17,8 +17,6 @@ import { SessionMessagesController } from '../chat/sessions-messages.controller'
 import { ChatService } from '../chat/chat.service'
 import { PageRelationsController } from '../page-relations/page-relations.controller'
 import { PageRelationsService } from '../page-relations/page-relations.service'
-import { MediaResourcesController } from '../media-resources/media-resources.controller'
-import { MediaResourcesService } from '../media-resources/media-resources.service'
 import { StudentQuestionsController } from '../student-questions/student-questions.controller'
 import { StudentQuestionsService } from '../student-questions/student-questions.service'
 import { PageNotesController } from '../notes/page-notes.controller'
@@ -30,7 +28,7 @@ import { QuestionRepliesService } from '../question-replies/question-replies.ser
   imports: [
     AIModule,
     BullModule.registerQueue({
-      name: QUEUE_NAMES.CONCEPTS.NAME,
+      name: QUEUE_NAMES.EMBEDDINGS.NAME,
     }),
   ],
   controllers: [
@@ -55,11 +53,10 @@ import { QuestionRepliesService } from '../question-replies/question-replies.ser
     PageConceptsService,
     ChatService,
     PageRelationsService,
-    MediaResourcesService,
     StudentQuestionsService,
     PageNotesService,
     QuestionRepliesService,
   ],
-  exports: [PagesService, ContentGenerationService],
+  exports: [PagesService, ContentGenerationService, PageRelationsService],
 })
 export class PagesModule {}

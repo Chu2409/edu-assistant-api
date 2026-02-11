@@ -24,11 +24,18 @@ import { ExpandContentDto } from './dtos/req/expand-content.dto'
 import { ExpandedContentDto } from './dtos/res/expanded-content.dto'
 import { regenerateBlockPrompt } from './prompts/regenerate-block-prompt'
 import { expandContentPrompt } from './prompts/expand-content.prompt'
+import {
+  generatePageRelationsPrompt,
+  type GeneratePageRelationsPromptInput,
+} from './prompts/generate-relations.prompt'
 import type {
   AiContent,
   AiTextBlock,
   AiCodeBlock,
 } from './interfaces/ai-generated-content.interface'
+import { PageRelationsService } from '../page-relations/page-relations.service'
+import { GenerateRelationsDto } from './dtos/req/generate-relations.dto'
+import { GeneratedRelationsDto } from './dtos/res/generated-relations.dto'
 
 @Injectable()
 export class ContentGenerationService {
@@ -43,6 +50,7 @@ export class ContentGenerationService {
   constructor(
     private readonly dbService: DBService,
     private readonly openAiService: OpenaiService,
+    private readonly pageRelationsService: PageRelationsService,
   ) {}
 
   async generatePageContent(
@@ -343,6 +351,7 @@ export class ContentGenerationService {
       blocks,
       config: {
         language,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         difficulty: (data.difficulty as any) ?? 3,
       },
       instructions: data.instructions,
@@ -350,6 +359,89 @@ export class ContentGenerationService {
 
     const aiResponse =
       await this.openAiService.getResponse<AiGeneratedActivity>(prompt)
+
+    return aiResponse.content
+  }
+
+  async generatePageRelations(
+    data: GenerateRelationsDto,
+  ): Promise<GeneratedRelationsDto> {
+    this.logger.log('Generating page relations')
+
+    const page = await this.dbService.page.findUnique({
+      where: { id: data.pageId },
+      include: {
+        blocks: { orderBy: { orderIndex: 'asc' } },
+      },
+    })
+
+    if (!page) {
+      throw new NotFoundException(`Page with id ${data.pageId} not found`)
+    }
+
+    if (page.blocks.length === 0) {
+      throw new BadRequestException('Page has no blocks')
+    }
+
+    // 1. Procesar embedding de la página para poder buscar similares
+    const embeddingLiteral =
+      await this.pageRelationsService.ensurePageEmbedding(data.pageId)
+
+    // 2. Obtener páginas similares por embedding
+    const topK = data.topK ?? 10
+    const minSimilarity = data.minSimilarity ?? 0.5
+    const similarRows = await this.pageRelationsService.findSimilarPages({
+      embeddingLiteral,
+      moduleId: page.moduleId,
+      originPageId: data.pageId,
+      topK,
+      onlyPublished: false,
+      minSimilarity,
+    })
+
+    if (similarRows.length === 0) {
+      return { relations: [] }
+    }
+
+    // 3. Obtener datos de las páginas candidatas (title, summary, keywords)
+    const candidateIds = similarRows.map((r) => r.id)
+    const candidatePages = await this.dbService.page.findMany({
+      where: { id: { in: candidateIds } },
+      include: {
+        blocks: true,
+      },
+    })
+
+    const candidatePagesForPrompt: GeneratePageRelationsPromptInput['candidatePages'] =
+      candidatePages.map((p) => ({
+        id: p.id,
+        title: p.title,
+        summary: (p.compiledContent ?? '').slice(0, 200).trim() || p.title,
+        keywords: p.keywords,
+      }))
+
+    // 4. Construir bloques de la página actual para el prompt
+    const currentPageBlocks = page.blocks.map((b) => ({
+      type: b.type,
+      content: this.parseJsonField<AiContent>(b.content),
+    }))
+
+    const maxRelationsPerPage = data.maxRelationsPerPage ?? 5
+
+    const prompt = generatePageRelationsPrompt({
+      currentPage: {
+        id: page.id,
+        title: page.title,
+        blocks: currentPageBlocks,
+      },
+      candidatePages: candidatePagesForPrompt,
+      config: {
+        maxRelationsPerPage,
+      },
+    })
+
+    const aiResponse =
+      await this.openAiService.getResponse<GeneratedRelationsDto>(prompt)
 
     return aiResponse.content
   }

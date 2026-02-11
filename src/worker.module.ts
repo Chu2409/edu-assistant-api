@@ -1,10 +1,10 @@
 import { CoreModule } from './core/core.module'
 import { PagesModule } from './features/pages/main/pages.module'
 import { Module } from '@nestjs/common'
-import { ConceptsWorker } from './features/pages/concepts/concepts.worker'
+import { EmbeddingsWorker } from './features/pages/content-generation/workers/embeddinggs.worker'
 
 @Module({
   imports: [CoreModule, PagesModule],
-  providers: [ConceptsWorker],
+  providers: [EmbeddingsWorker],
 })
 export class WorkerModule {}

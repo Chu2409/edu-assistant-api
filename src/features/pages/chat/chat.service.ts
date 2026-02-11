@@ -6,6 +6,7 @@ import {
 import { DBService } from 'src/core/database/database.service'
 import { OpenaiService } from 'src/providers/ai/openai.service'
 import {
+  Block,
   Enrollment,
   MessageRole,
   Role,
@@ -15,13 +16,16 @@ import {
 } from 'src/core/database/generated/client'
 import { BlocksMapper } from '../blocks/mappers/blocks.mapper'
 import { BlockType } from 'src/core/database/generated/enums'
-import type { AiTextBlock } from '../content-generation/interfaces/ai-generated-content.interface'
 import type { PromptInput } from '../content-generation/interfaces/prompt-input.interface'
 import { CreateOrGetSessionDto } from './dtos/req/create-or-get-session.dto'
 import { SendMessageDto } from './dtos/req/send-message.dto'
 import { SessionDto } from './dtos/res/session.dto'
 import { MessageDto } from './dtos/res/message.dto'
 import { ChatMessageCreatedDto } from './dtos/res/chat-message-created.dto'
+import {
+  AiCodeBlock,
+  AiTextBlock,
+} from '../content-generation/interfaces/ai-generated-content.interface'
 
 type StoredAiMetadata = {
   responseId?: string
@@ -203,8 +207,8 @@ export class ChatService {
     const previousResponseId = this.getPreviousResponseId(session.messages)
 
     const lessonContext = this.buildLessonContext(session.page.blocks)
-    // @ts-ignore
-    const language = page?.module.aiConfiguration?.language ?? 'es'
+    // @ts-expect-error el lenguaje debería venir de la configuración de la lección, pero por ahora lo dejamos fijo
+    const language = page.module.aiConfiguration?.language ?? 'es'
 
     const prompt = this.buildChatPrompt({
       language,
@@ -275,20 +279,20 @@ export class ChatService {
     }
   }
 
-  private buildLessonContext(blocks: any[]): string {
+  private buildLessonContext(blocks: Block[]): string {
     const mapped = blocks.map((b) => BlocksMapper.mapToDto(b))
 
     const parts: string[] = []
 
     for (const block of mapped) {
       if (block.type === BlockType.TEXT) {
-        const markdown = String((block.content as any).markdown || '')
+        const markdown = String((block.content as AiTextBlock).markdown || '')
         if (markdown.trim()) {
           parts.push(markdown.trim())
         }
       } else if (block.type === BlockType.CODE) {
-        const lang = String((block.content as any).language ?? '')
-        const code = String((block.content as any).code ?? '')
+        const lang = String((block.content as AiCodeBlock).language)
+        const code = String((block.content as AiCodeBlock).code)
         const codeTrim = String(code).trim()
         if (codeTrim) {
           parts.push(`Código (${lang || 'code'}):\n${codeTrim}`)

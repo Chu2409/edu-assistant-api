@@ -3,7 +3,10 @@ import {
   NotFoundException,
   ForbiddenException,
 } from '@nestjs/common'
+import { InjectQueue } from '@nestjs/bullmq'
+import { Queue } from 'bullmq'
 import { DBService } from 'src/core/database/database.service'
+import { QUEUE_NAMES } from 'src/shared/constants/queues'
 import { CreatePageDto } from './dtos/req/create-page.dto'
 import { UpdatePageDto } from './dtos/req/update-page.dto'
 import { UpdatePageContentDto } from './dtos/req/update-page-content.dto'
@@ -26,6 +29,8 @@ export class PagesService {
   constructor(
     private readonly dbService: DBService,
     private readonly contentGenerationService: ContentGenerationService,
+    @InjectQueue(QUEUE_NAMES.EMBEDDINGS.NAME)
+    private readonly embeddingsQueue: Queue,
   ) {}
 
   async create(dto: CreatePageDto, user: User): Promise<PageDto> {
@@ -261,6 +266,15 @@ export class PagesService {
       },
     })
 
+    // Al publicar la página, encolar procesamiento de embeddings
+    if (updatePageDto.isPublished === true) {
+      await this.embeddingsQueue.add(
+        QUEUE_NAMES.EMBEDDINGS.JOBS.PROCESS_PAGE,
+        { pageId: id },
+        { removeOnComplete: true },
+      )
+    }
+
     return PagesMapper.mapToDto(page)
   }
 
@@ -319,10 +333,7 @@ export class PagesService {
             data: {
               type: blockDto.type,
               content: blockDto.content,
-              tipTapContent:
-                blockDto.tipTapContent === null
-                  ? Prisma.JsonNull
-                  : blockDto.tipTapContent,
+              tipTapContent: blockDto.tipTapContent,
               orderIndex,
             },
           })
@@ -333,10 +344,7 @@ export class PagesService {
               pageId: id,
               type: blockDto.type,
               content: blockDto.content,
-              tipTapContent:
-                blockDto.tipTapContent === null
-                  ? Prisma.JsonNull
-                  : blockDto.tipTapContent,
+              tipTapContent: blockDto.tipTapContent,
               orderIndex,
             },
           })

@@ -2,14 +2,13 @@ import {
   Body,
   Controller,
   Delete,
-  Get,
   HttpStatus,
   Param,
   ParseIntPipe,
   Patch,
   Post,
 } from '@nestjs/common'
-import { ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger'
+import { ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger'
 import { JwtAuth } from 'src/features/auth/decorators/jwt-auth.decorator'
 import { GetUser } from 'src/features/auth/decorators/get-user.decorator'
 import { Role, type User } from 'src/core/database/generated/client'
@@ -18,40 +17,12 @@ import { PageConceptsService } from './page-concepts.service'
 import { PageConceptDto } from './dtos/res/page-concept.dto'
 import { CreatePageConceptDto } from './dtos/req/create-page-concept.dto'
 import { UpdatePageConceptDto } from './dtos/req/update-page-concept.dto'
-import { SuggestPageConceptsDto } from './dtos/req/suggest-page-concepts.dto'
-import { PageConceptsSuggestedDto } from './dtos/res/page-concepts-suggested.dto'
 
 @ApiTags('Page Concepts')
 @Controller('pages')
 @JwtAuth()
 export class PageConceptsController {
   constructor(private readonly pageConceptsService: PageConceptsService) {}
-
-  @Get(':pageId/concepts')
-  @ApiOperation({ summary: 'Listar conceptos de una página' })
-  @ApiParam({ name: 'pageId', type: Number, example: 1 })
-  @ApiStandardResponse([PageConceptDto])
-  list(
-    @Param('pageId', ParseIntPipe) pageId: number,
-    @GetUser() user: User,
-  ): Promise<PageConceptDto[]> {
-    return this.pageConceptsService.list(pageId, user)
-  }
-
-  @Post(':pageId/concepts/suggest')
-  @ApiOperation({ summary: 'Sugerir conceptos (tooltips) con IA' })
-  @ApiParam({ name: 'pageId', type: Number, example: 1 })
-  @ApiStandardResponse(PageConceptsSuggestedDto)
-  @ApiResponse({ status: 401, description: 'No autorizado' })
-  @ApiResponse({ status: 403, description: 'Solo profesores' })
-  @JwtAuth(Role.TEACHER)
-  suggest(
-    @Param('pageId', ParseIntPipe) pageId: number,
-    @Body() dto: SuggestPageConceptsDto,
-    @GetUser() user: User,
-  ): Promise<PageConceptsSuggestedDto> {
-    return this.pageConceptsService.suggest(pageId, dto, user)
-  }
 
   @Post(':pageId/concepts')
   @ApiOperation({ summary: 'Crear concepto manualmente' })

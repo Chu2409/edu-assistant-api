@@ -28,11 +28,13 @@ export class UpdateActivityDto {
   @ApiPropertyOptional({ description: 'Opciones (JSON)' })
   @IsOptional()
   @IsObject()
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   options?: Record<string, any> | null
 
   @ApiPropertyOptional({ description: 'Respuesta correcta (JSON)' })
   @IsOptional()
   @IsObject()
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   correctAnswer?: Record<string, any>
 
   @ApiPropertyOptional({ description: 'Explicación' })

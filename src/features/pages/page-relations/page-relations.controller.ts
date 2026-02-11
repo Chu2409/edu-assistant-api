@@ -2,7 +2,6 @@ import {
   Body,
   Controller,
   Delete,
-  Get,
   HttpStatus,
   Param,
   ParseIntPipe,
@@ -18,57 +17,12 @@ import { PageRelationsService } from './page-relations.service'
 import { PageRelationDto } from './dtos/res/page-relation.dto'
 import { CreatePageRelationDto } from './dtos/req/create-page-relation.dto'
 import { UpdatePageRelationDto } from './dtos/req/update-page-relation.dto'
-import { SuggestPageRelationsDto } from './dtos/req/suggest-page-relations.dto'
-import { PageRelationsSuggestedDto } from './dtos/res/page-relations-suggested.dto'
-import { RefreshPageEmbeddingDto } from './dtos/req/refresh-page-embedding.dto'
-import { PageEmbeddingRefreshedDto } from './dtos/res/page-embedding-refreshed.dto'
 
 @ApiTags('Page Relations')
 @Controller('pages')
 @JwtAuth()
 export class PageRelationsController {
   constructor(private readonly pageRelationsService: PageRelationsService) {}
-
-  @Get(':pageId/relations')
-  @ApiOperation({ summary: 'Listar relaciones de una página' })
-  @ApiParam({ name: 'pageId', type: Number, example: 1 })
-  @ApiStandardResponse([PageRelationDto])
-  list(
-    @Param('pageId', ParseIntPipe) pageId: number,
-    @GetUser() user: User,
-  ): Promise<PageRelationDto[]> {
-    return this.pageRelationsService.list(pageId, user)
-  }
-
-  @Post(':pageId/relations/suggest')
-  @ApiOperation({ summary: 'Sugerir páginas relacionadas (embeddings + IA)' })
-  @ApiParam({ name: 'pageId', type: Number, example: 1 })
-  @ApiStandardResponse(PageRelationsSuggestedDto)
-  @ApiResponse({ status: 401, description: 'No autorizado' })
-  @ApiResponse({ status: 403, description: 'Solo profesores' })
-  @JwtAuth(Role.TEACHER)
-  suggest(
-    @Param('pageId', ParseIntPipe) pageId: number,
-    @Body() dto: SuggestPageRelationsDto,
-    @GetUser() user: User,
-  ): Promise<PageRelationsSuggestedDto> {
-    return this.pageRelationsService.suggest(pageId, dto, user)
-  }
-
-  @Post(':pageId/embedding/refresh')
-  @ApiOperation({ summary: 'Recalcular compiledContent + embedding (manual)' })
-  @ApiParam({ name: 'pageId', type: Number, example: 1 })
-  @ApiStandardResponse(PageEmbeddingRefreshedDto, HttpStatus.CREATED)
-  @ApiResponse({ status: 401, description: 'No autorizado' })
-  @ApiResponse({ status: 403, description: 'Solo profesores' })
-  @JwtAuth(Role.TEACHER)
-  refreshEmbedding(
-    @Param('pageId', ParseIntPipe) pageId: number,
-    @Body() dto: RefreshPageEmbeddingDto,
-    @GetUser() user: User,
-  ): Promise<PageEmbeddingRefreshedDto> {
-    return this.pageRelationsService.refreshEmbedding(pageId, dto, user)
-  }
 
   @Post(':pageId/relations')
   @ApiOperation({ summary: 'Crear relación manualmente' })

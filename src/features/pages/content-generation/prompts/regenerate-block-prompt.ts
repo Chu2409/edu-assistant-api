@@ -197,26 +197,29 @@ function formatSingleBlock(block: {
   content: AiContent
 }): string {
   switch (block.type) {
-    case BlockType.TEXT:
+    case BlockType.TEXT: {
       const textContent = block.content as AiTextBlock
       return `Type: TEXT
 
 ${textContent.markdown}`
+    }
 
-    case BlockType.CODE:
+    case BlockType.CODE: {
       const codeContent = block.content as AiCodeBlock
       return `Type: CODE
 
 \`\`\`${codeContent.language}
 ${codeContent.code}
 \`\`\``
+    }
 
-    case BlockType.IMAGE_SUGGESTION:
+    case BlockType.IMAGE_SUGGESTION: {
       const suggestionContent = block.content as AiImageSuggestionBlock
       return `Type: IMAGE_SUGGESTION
 
 Prompt: ${suggestionContent.prompt}
 Reason: ${suggestionContent.reason}`
+    }
 
     default:
       return ''

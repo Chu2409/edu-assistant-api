@@ -35,5 +35,6 @@ export class BlockDto {
     description: 'Contenido TipTap en formato JSON',
     example: { type: 'doc', content: [] },
   })
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   tipTapContent: Record<string, any> | null
 }

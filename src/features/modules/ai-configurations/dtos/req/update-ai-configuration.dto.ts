@@ -1,11 +1,5 @@
 import { ApiPropertyOptional } from '@nestjs/swagger'
-import {
-  IsString,
-  IsOptional,
-  IsEnum,
-  IsArray,
-  ArrayMinSize,
-} from 'class-validator'
+import { IsString, IsOptional, IsEnum } from 'class-validator'
 import {
   AiTargetLevel,
   AiAudience,

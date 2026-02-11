@@ -1,19 +1,8 @@
-import {
-  ForbiddenException,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common'
+import { Injectable, NotFoundException } from '@nestjs/common'
 import { DBService } from 'src/core/database/database.service'
 import { OpenaiService } from 'src/providers/ai/openai.service'
-import {
-  Activity,
-  Enrollment,
-  Prisma,
-  Role,
-  type User,
-} from 'src/core/database/generated/client'
-import { ActivityType, BlockType } from 'src/core/database/generated/enums'
-import { BlocksMapper } from '../blocks/mappers/blocks.mapper'
+import { Activity, Prisma, type User } from 'src/core/database/generated/client'
+import { ActivityType } from 'src/core/database/generated/enums'
 import { CreateActivityDto } from './dtos/req/create-activity.dto'
 import { UpdateActivityDto } from './dtos/req/update-activity.dto'
 import { CreateActivityAttemptDto } from './dtos/req/create-activity-attempt.dto'
@@ -220,6 +209,7 @@ export class ActivitiesService {
           const cPairsRaw = (options as AiGeneratedMatchActivity).pairs
           const cPairs = Array.isArray(cPairsRaw) ? cPairsRaw : []
           if (sPairs.length !== cPairs.length) return false
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           const norm = (pairs: any[]) =>
             pairs
               .map((p) => ({

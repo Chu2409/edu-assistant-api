@@ -21,6 +21,7 @@ import { PageConceptsExtractedDto } from './dtos/res/page-concepts-extracted.dto
 import { RegeneratedBlockDto } from './dtos/res/regenerated-block.dto'
 import { ExpandedContentDto } from './dtos/res/expanded-content.dto'
 import { GenerateActivityDto } from './dtos/req/generate-activity.dto'
+import { GenerateRelationsDto } from './dtos/req/generate-relations.dto'
 import {
   AiGeneratedFillBlankActivity,
   AiGeneratedMatchActivity,
@@ -28,6 +29,7 @@ import {
   AiGeneratedTrueFalseActivity,
 } from './interfaces/ai-generated-activity.interface'
 import { ApiRes } from 'src/shared/dtos/res/api-response.dto'
+import { GeneratedRelationsDto } from './dtos/res/generated-relations.dto'
 
 @ApiTags('Content Generation')
 @Controller('content')
@@ -152,6 +154,25 @@ export class ContentGenerationController {
   async generateImage(@Body() dto: GenerateImageDto) {
     const base64 = await this.contentGenerationService.generateImage(dto.prompt)
     return { base64 }
+  }
+
+  @Post('generate-relations')
+  @ApiOperation({
+    summary: 'Generar relaciones entre páginas con IA',
+    description:
+      'Identifica frases en la página actual que enlazan naturalmente a otras páginas del módulo. Primero procesa el embedding de la página y busca similares por similitud semántica.',
+  })
+  @ApiStandardResponse(GeneratedRelationsDto, HttpStatus.CREATED)
+  @ApiResponse({ status: 401, description: 'No autorizado' })
+  @ApiResponse({
+    status: 403,
+    description: 'Solo profesores pueden generar relaciones',
+  })
+  @ApiResponse({ status: 404, description: 'Página no encontrada' })
+  @ApiResponse({ status: 400, description: 'Datos inválidos o sin bloques' })
+  @JwtAuth(Role.TEACHER)
+  generateRelations(@Body() dto: GenerateRelationsDto) {
+    return this.contentGenerationService.generatePageRelations(dto)
   }
 
   @Post('generate-activity')

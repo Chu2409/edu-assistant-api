@@ -41,6 +41,7 @@ export class UpsertBlockDto {
   })
   @IsObject()
   @IsNotEmpty()
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   content: Record<string, any>
 
   @ApiProperty({
@@ -51,5 +52,6 @@ export class UpsertBlockDto {
   })
   @IsObject()
   @IsNotEmpty()
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   tipTapContent: Record<string, any>
 }
