@@ -29,16 +29,19 @@ export type AggregateBlock = {
 export type BlockAvgAggregateOutputType = {
   id: number | null
   pageId: number | null
+  orderIndex: number | null
 }
 
 export type BlockSumAggregateOutputType = {
   id: number | null
   pageId: number | null
+  orderIndex: number | null
 }
 
 export type BlockMinAggregateOutputType = {
   id: number | null
   pageId: number | null
+  orderIndex: number | null
   type: $Enums.BlockType | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -47,6 +50,7 @@ export type BlockMinAggregateOutputType = {
 export type BlockMaxAggregateOutputType = {
   id: number | null
   pageId: number | null
+  orderIndex: number | null
   type: $Enums.BlockType | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -55,6 +59,7 @@ export type BlockMaxAggregateOutputType = {
 export type BlockCountAggregateOutputType = {
   id: number
   pageId: number
+  orderIndex: number
   type: number
   content: number
   tipTapContent: number
@@ -67,16 +72,19 @@ export type BlockCountAggregateOutputType = {
 export type BlockAvgAggregateInputType = {
   id?: true
   pageId?: true
+  orderIndex?: true
 }
 
 export type BlockSumAggregateInputType = {
   id?: true
   pageId?: true
+  orderIndex?: true
 }
 
 export type BlockMinAggregateInputType = {
   id?: true
   pageId?: true
+  orderIndex?: true
   type?: true
   createdAt?: true
   updatedAt?: true
@@ -85,6 +93,7 @@ export type BlockMinAggregateInputType = {
 export type BlockMaxAggregateInputType = {
   id?: true
   pageId?: true
+  orderIndex?: true
   type?: true
   createdAt?: true
   updatedAt?: true
@@ -93,6 +102,7 @@ export type BlockMaxAggregateInputType = {
 export type BlockCountAggregateInputType = {
   id?: true
   pageId?: true
+  orderIndex?: true
   type?: true
   content?: true
   tipTapContent?: true
@@ -190,6 +200,7 @@ export type BlockGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalAr
 export type BlockGroupByOutputType = {
   id: number
   pageId: number
+  orderIndex: number
   type: $Enums.BlockType
   content: runtime.JsonValue
   tipTapContent: runtime.JsonValue | null
@@ -223,6 +234,7 @@ export type BlockWhereInput = {
   NOT?: Prisma.BlockWhereInput | Prisma.BlockWhereInput[]
   id?: Prisma.IntFilter<"Block"> | number
   pageId?: Prisma.IntFilter<"Block"> | number
+  orderIndex?: Prisma.IntFilter<"Block"> | number
   type?: Prisma.EnumBlockTypeFilter<"Block"> | $Enums.BlockType
   content?: Prisma.JsonFilter<"Block">
   tipTapContent?: Prisma.JsonNullableFilter<"Block">
@@ -234,6 +246,7 @@ export type BlockWhereInput = {
 export type BlockOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   pageId?: Prisma.SortOrder
+  orderIndex?: Prisma.SortOrder
   type?: Prisma.SortOrder
   content?: Prisma.SortOrder
   tipTapContent?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -244,21 +257,24 @@ export type BlockOrderByWithRelationInput = {
 
 export type BlockWhereUniqueInput = Prisma.AtLeast<{
   id?: number
+  pageId_orderIndex?: Prisma.BlockPageIdOrderIndexCompoundUniqueInput
   AND?: Prisma.BlockWhereInput | Prisma.BlockWhereInput[]
   OR?: Prisma.BlockWhereInput[]
   NOT?: Prisma.BlockWhereInput | Prisma.BlockWhereInput[]
   pageId?: Prisma.IntFilter<"Block"> | number
+  orderIndex?: Prisma.IntFilter<"Block"> | number
   type?: Prisma.EnumBlockTypeFilter<"Block"> | $Enums.BlockType
   content?: Prisma.JsonFilter<"Block">
   tipTapContent?: Prisma.JsonNullableFilter<"Block">
   createdAt?: Prisma.DateTimeFilter<"Block"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Block"> | Date | string
   page?: Prisma.XOR<Prisma.PageScalarRelationFilter, Prisma.PageWhereInput>
-}, "id">
+}, "id" | "pageId_orderIndex">
 
 export type BlockOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   pageId?: Prisma.SortOrder
+  orderIndex?: Prisma.SortOrder
   type?: Prisma.SortOrder
   content?: Prisma.SortOrder
   tipTapContent?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -277,6 +293,7 @@ export type BlockScalarWhereWithAggregatesInput = {
   NOT?: Prisma.BlockScalarWhereWithAggregatesInput | Prisma.BlockScalarWhereWithAggregatesInput[]
   id?: Prisma.IntWithAggregatesFilter<"Block"> | number
   pageId?: Prisma.IntWithAggregatesFilter<"Block"> | number
+  orderIndex?: Prisma.IntWithAggregatesFilter<"Block"> | number
   type?: Prisma.EnumBlockTypeWithAggregatesFilter<"Block"> | $Enums.BlockType
   content?: Prisma.JsonWithAggregatesFilter<"Block">
   tipTapContent?: Prisma.JsonNullableWithAggregatesFilter<"Block">
@@ -285,6 +302,7 @@ export type BlockScalarWhereWithAggregatesInput = {
 }
 
 export type BlockCreateInput = {
+  orderIndex: number
   type: $Enums.BlockType
   content: Prisma.JsonNullValueInput | runtime.InputJsonValue
   tipTapContent?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -296,6 +314,7 @@ export type BlockCreateInput = {
 export type BlockUncheckedCreateInput = {
   id?: number
   pageId: number
+  orderIndex: number
   type: $Enums.BlockType
   content: Prisma.JsonNullValueInput | runtime.InputJsonValue
   tipTapContent?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -304,6 +323,7 @@ export type BlockUncheckedCreateInput = {
 }
 
 export type BlockUpdateInput = {
+  orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
   type?: Prisma.EnumBlockTypeFieldUpdateOperationsInput | $Enums.BlockType
   content?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   tipTapContent?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -315,6 +335,7 @@ export type BlockUpdateInput = {
 export type BlockUncheckedUpdateInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   pageId?: Prisma.IntFieldUpdateOperationsInput | number
+  orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
   type?: Prisma.EnumBlockTypeFieldUpdateOperationsInput | $Enums.BlockType
   content?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   tipTapContent?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -325,6 +346,7 @@ export type BlockUncheckedUpdateInput = {
 export type BlockCreateManyInput = {
   id?: number
   pageId: number
+  orderIndex: number
   type: $Enums.BlockType
   content: Prisma.JsonNullValueInput | runtime.InputJsonValue
   tipTapContent?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -333,6 +355,7 @@ export type BlockCreateManyInput = {
 }
 
 export type BlockUpdateManyMutationInput = {
+  orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
   type?: Prisma.EnumBlockTypeFieldUpdateOperationsInput | $Enums.BlockType
   content?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   tipTapContent?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -343,6 +366,7 @@ export type BlockUpdateManyMutationInput = {
 export type BlockUncheckedUpdateManyInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   pageId?: Prisma.IntFieldUpdateOperationsInput | number
+  orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
   type?: Prisma.EnumBlockTypeFieldUpdateOperationsInput | $Enums.BlockType
   content?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   tipTapContent?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -360,9 +384,15 @@ export type BlockOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
 }
 
+export type BlockPageIdOrderIndexCompoundUniqueInput = {
+  pageId: number
+  orderIndex: number
+}
+
 export type BlockCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   pageId?: Prisma.SortOrder
+  orderIndex?: Prisma.SortOrder
   type?: Prisma.SortOrder
   content?: Prisma.SortOrder
   tipTapContent?: Prisma.SortOrder
@@ -373,11 +403,13 @@ export type BlockCountOrderByAggregateInput = {
 export type BlockAvgOrderByAggregateInput = {
   id?: Prisma.SortOrder
   pageId?: Prisma.SortOrder
+  orderIndex?: Prisma.SortOrder
 }
 
 export type BlockMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   pageId?: Prisma.SortOrder
+  orderIndex?: Prisma.SortOrder
   type?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -386,6 +418,7 @@ export type BlockMaxOrderByAggregateInput = {
 export type BlockMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   pageId?: Prisma.SortOrder
+  orderIndex?: Prisma.SortOrder
   type?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -394,6 +427,7 @@ export type BlockMinOrderByAggregateInput = {
 export type BlockSumOrderByAggregateInput = {
   id?: Prisma.SortOrder
   pageId?: Prisma.SortOrder
+  orderIndex?: Prisma.SortOrder
 }
 
 export type BlockCreateNestedManyWithoutPageInput = {
@@ -443,6 +477,7 @@ export type EnumBlockTypeFieldUpdateOperationsInput = {
 }
 
 export type BlockCreateWithoutPageInput = {
+  orderIndex: number
   type: $Enums.BlockType
   content: Prisma.JsonNullValueInput | runtime.InputJsonValue
   tipTapContent?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -452,6 +487,7 @@ export type BlockCreateWithoutPageInput = {
 
 export type BlockUncheckedCreateWithoutPageInput = {
   id?: number
+  orderIndex: number
   type: $Enums.BlockType
   content: Prisma.JsonNullValueInput | runtime.InputJsonValue
   tipTapContent?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -491,6 +527,7 @@ export type BlockScalarWhereInput = {
   NOT?: Prisma.BlockScalarWhereInput | Prisma.BlockScalarWhereInput[]
   id?: Prisma.IntFilter<"Block"> | number
   pageId?: Prisma.IntFilter<"Block"> | number
+  orderIndex?: Prisma.IntFilter<"Block"> | number
   type?: Prisma.EnumBlockTypeFilter<"Block"> | $Enums.BlockType
   content?: Prisma.JsonFilter<"Block">
   tipTapContent?: Prisma.JsonNullableFilter<"Block">
@@ -500,6 +537,7 @@ export type BlockScalarWhereInput = {
 
 export type BlockCreateManyPageInput = {
   id?: number
+  orderIndex: number
   type: $Enums.BlockType
   content: Prisma.JsonNullValueInput | runtime.InputJsonValue
   tipTapContent?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -508,6 +546,7 @@ export type BlockCreateManyPageInput = {
 }
 
 export type BlockUpdateWithoutPageInput = {
+  orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
   type?: Prisma.EnumBlockTypeFieldUpdateOperationsInput | $Enums.BlockType
   content?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   tipTapContent?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -517,6 +556,7 @@ export type BlockUpdateWithoutPageInput = {
 
 export type BlockUncheckedUpdateWithoutPageInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
+  orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
   type?: Prisma.EnumBlockTypeFieldUpdateOperationsInput | $Enums.BlockType
   content?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   tipTapContent?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -526,6 +566,7 @@ export type BlockUncheckedUpdateWithoutPageInput = {
 
 export type BlockUncheckedUpdateManyWithoutPageInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
+  orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
   type?: Prisma.EnumBlockTypeFieldUpdateOperationsInput | $Enums.BlockType
   content?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   tipTapContent?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -538,6 +579,7 @@ export type BlockUncheckedUpdateManyWithoutPageInput = {
 export type BlockSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   pageId?: boolean
+  orderIndex?: boolean
   type?: boolean
   content?: boolean
   tipTapContent?: boolean
@@ -549,6 +591,7 @@ export type BlockSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
 export type BlockSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   pageId?: boolean
+  orderIndex?: boolean
   type?: boolean
   content?: boolean
   tipTapContent?: boolean
@@ -560,6 +603,7 @@ export type BlockSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensi
 export type BlockSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   pageId?: boolean
+  orderIndex?: boolean
   type?: boolean
   content?: boolean
   tipTapContent?: boolean
@@ -571,6 +615,7 @@ export type BlockSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensi
 export type BlockSelectScalar = {
   id?: boolean
   pageId?: boolean
+  orderIndex?: boolean
   type?: boolean
   content?: boolean
   tipTapContent?: boolean
@@ -578,7 +623,7 @@ export type BlockSelectScalar = {
   updatedAt?: boolean
 }
 
-export type BlockOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "pageId" | "type" | "content" | "tipTapContent" | "createdAt" | "updatedAt", ExtArgs["result"]["block"]>
+export type BlockOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "pageId" | "orderIndex" | "type" | "content" | "tipTapContent" | "createdAt" | "updatedAt", ExtArgs["result"]["block"]>
 export type BlockInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   page?: boolean | Prisma.PageDefaultArgs<ExtArgs>
 }
@@ -597,6 +642,7 @@ export type $BlockPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
     pageId: number
+    orderIndex: number
     type: $Enums.BlockType
     content: runtime.JsonValue
     tipTapContent: runtime.JsonValue | null
@@ -1028,6 +1074,7 @@ export interface Prisma__BlockClient<T, Null = never, ExtArgs extends runtime.Ty
 export interface BlockFieldRefs {
   readonly id: Prisma.FieldRef<"Block", 'Int'>
   readonly pageId: Prisma.FieldRef<"Block", 'Int'>
+  readonly orderIndex: Prisma.FieldRef<"Block", 'Int'>
   readonly type: Prisma.FieldRef<"Block", 'BlockType'>
   readonly content: Prisma.FieldRef<"Block", 'Json'>
   readonly tipTapContent: Prisma.FieldRef<"Block", 'Json'>

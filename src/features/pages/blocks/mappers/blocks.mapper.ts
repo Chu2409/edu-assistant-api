@@ -5,6 +5,7 @@ export class BlocksMapper {
   static mapToDto(block: Block): BlockDto {
     return {
       id: block.id,
+      orderIndex: block.orderIndex,
       type: block.type,
       content:
         typeof block.content === 'string'

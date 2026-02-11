@@ -18,6 +18,14 @@ export class UpsertBlockDto {
   @IsInt()
   id?: number
 
+  @ApiPropertyOptional({
+    description: 'Índice del bloque (0-based)',
+    example: 0,
+  })
+  @IsOptional()
+  @IsInt()
+  orderIndex?: number
+
   @ApiProperty({
     description: 'Tipo de bloque',
     enum: BlockType,

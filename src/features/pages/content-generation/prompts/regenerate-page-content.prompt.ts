@@ -13,6 +13,9 @@ import {
   AiTextBlock,
 } from '../interfaces/ai-generated-content.interface'
 import {
+  BLOCK_OUTPUT_FORMAT,
+  BLOCK_TYPE_RULES,
+  SPECIAL_MARKERS_RULES,
   getAudienceGuidance,
   getTargetLevelGuidance,
   getToneGuidance,
@@ -65,20 +68,11 @@ Respond ONLY with valid JSON. No markdown fences, no text before or after.
   "title": "Updated or original title",
   "keywords": ["keyword1", "keyword2", ...],
   "blocks": [
-    {
-      "type": "TEXT",
-      "content": { "markdown": "## Heading\\n\\nParagraph..." }
-    },
-    {
-      "type": "CODE",
-      "content": { "language": "python", "code": "def example():\\n    pass" }
-    },
-    {
-      "type": "IMAGE_SUGGESTION",
-      "content": { "prompt": "DALL-E prompt in English", "reason": "Why this image helps" }
-    }
+${BLOCK_OUTPUT_FORMAT}
   ]
 }
+
+${SPECIAL_MARKERS_RULES}
 
 # Editing Rules
 
@@ -87,31 +81,20 @@ Respond ONLY with valid JSON. No markdown fences, no text before or after.
 2. You MAY:
    - Modify content of any block
    - Add new blocks where appropriate
-   - Remove blocks if instructed or if they become redundant
+   - Remove blocks if instructed or redundant
    - Reorder blocks for better flow
    - Split one TEXT block into multiple (with other block types between them)
    - Merge multiple TEXT blocks into one
 
 3. You must NOT:
-   - Create consecutive TEXT blocks (always consolidate or separate with CODE/IMAGE_SUGGESTION)
+   - Create consecutive TEXT blocks
    - Ignore the teacher's instructions
-   - Drastically change content that wasn't mentioned in the instructions
+   - Drastically change content not mentioned in instructions
+   - Break or remove special markers unless content is deleted
 
-4. Preserve content that is NOT related to the edit instructions unless changes are necessary for coherence.
+4. Preserve content NOT related to edit instructions unless changes are necessary for coherence.
 
-# Block Types
-
-TEXT:
-- Use markdown: ##/### headings, **bold**, *italic*, - lists, > blockquotes
-- Consolidate continuous text into single blocks
-
-CODE:
-- Include language and properly escaped code
-- Add helpful comments
-
-IMAGE_SUGGESTION:
-- "prompt": detailed DALL-E prompt in English
-- "reason": explanation in ${config.language} of why this image helps
+${BLOCK_TYPE_RULES}
 
 # Content Settings
 

@@ -5,6 +5,7 @@ import {
   IsBoolean,
   MinLength,
   MaxLength,
+  IsArray,
 } from 'class-validator'
 
 export class UpdatePageDto {
@@ -19,6 +20,16 @@ export class UpdatePageDto {
   @MinLength(3)
   @MaxLength(200)
   title?: string
+
+  @ApiPropertyOptional({
+    description: 'Palabras clave para búsquedas',
+    example: ['programación', 'introducción', 'básicos'],
+    type: [String],
+  })
+  @IsOptional()
+  @IsArray()
+  @IsString({ each: true })
+  keywords?: string[]
 
   @ApiPropertyOptional({
     description: 'Indica si la página está publicada',

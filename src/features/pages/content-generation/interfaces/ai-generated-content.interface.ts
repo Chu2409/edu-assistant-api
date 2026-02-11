@@ -1,4 +1,4 @@
-import { ApiProperty } from '@nestjs/swagger'
+import { ApiProperty, getSchemaPath } from '@nestjs/swagger'
 import { BlockType } from 'src/core/database/generated/enums'
 
 export class AiTextBlock {
@@ -53,6 +53,11 @@ export class AiContentBlock {
     example: {
       markdown: '# Título\n\nEste es un párrafo con **texto en negrita**.',
     },
+    oneOf: [
+      { $ref: getSchemaPath(AiTextBlock) },
+      { $ref: getSchemaPath(AiCodeBlock) },
+      { $ref: getSchemaPath(AiImageSuggestionBlock) },
+    ],
   })
   content: AiContent
 }

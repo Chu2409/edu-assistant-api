@@ -142,7 +142,9 @@ export class PagesService {
             user: true,
           },
         },
-        blocks: true,
+        blocks: {
+          orderBy: { orderIndex: 'asc' },
+        },
       },
     })
 
@@ -179,7 +181,9 @@ export class PagesService {
             userId: user.id,
           },
         },
-        blocks: true,
+        blocks: {
+          orderBy: { orderIndex: 'asc' },
+        },
       },
     })
 
@@ -251,6 +255,9 @@ export class PagesService {
           hasManualEdits: updatePageDto.hasManualEdits,
           conceptsProcessed: updatePageDto.hasManualEdits ? false : undefined,
         }),
+        ...(updatePageDto.keywords !== undefined && {
+          keywords: updatePageDto.keywords,
+        }),
       },
     })
 
@@ -300,7 +307,11 @@ export class PagesService {
       })
 
       // Actualizar o crear bloques
-      for (const blockDto of updatePageContentDto.blocks) {
+      for (let index = 0; index < updatePageContentDto.blocks.length; index++) {
+        const blockDto = updatePageContentDto.blocks[index]
+        // El orden del array es la fuente de verdad; orderIndex es 0-based
+        const orderIndex = index
+
         if (blockDto.id) {
           // Actualizar bloque existente
           await prisma.block.update({
@@ -312,6 +323,7 @@ export class PagesService {
                 blockDto.tipTapContent === null
                   ? Prisma.JsonNull
                   : blockDto.tipTapContent,
+              orderIndex,
             },
           })
         } else {
@@ -325,6 +337,7 @@ export class PagesService {
                 blockDto.tipTapContent === null
                   ? Prisma.JsonNull
                   : blockDto.tipTapContent,
+              orderIndex,
             },
           })
         }

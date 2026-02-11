@@ -14,8 +14,12 @@ import { GeneratedPageContent } from './dtos/res/generated-page-content.dto'
 import { GenerateImageDto } from './dtos/req/generate-image.dto'
 import { GeneratedImageDto } from './dtos/res/generated-image.dto'
 import { RegenerateContentDto } from './dtos/req/regenarte-content.dto'
+import { RegenerateBlockDto } from './dtos/req/regenerate-block.dto'
+import { ExpandContentDto } from './dtos/req/expand-content.dto'
 import { ExtractConceptsDto } from './dtos/req/extract-concepts.dto'
 import { PageConceptsExtractedDto } from './dtos/res/page-concepts-extracted.dto'
+import { RegeneratedBlockDto } from './dtos/res/regenerated-block.dto'
+import { ExpandedContentDto } from './dtos/res/expanded-content.dto'
 import { GenerateActivityDto } from './dtos/req/generate-activity.dto'
 import {
   AiGeneratedFillBlankActivity,
@@ -70,6 +74,50 @@ export class ContentGenerationController {
   @JwtAuth(Role.TEACHER)
   regenerateContent(@Body() dto: RegenerateContentDto) {
     return this.contentGenerationService.regeneratePageContent(dto)
+  }
+
+  @Post('regenerate-block')
+  @ApiOperation({
+    summary: 'Regenerar bloque con IA',
+    description:
+      'Modifica un bloque específico de la página según las instrucciones del profesor. Devuelve el bloque sugerido (no persiste). Solo disponible para profesores.',
+  })
+  @ApiStandardResponse(RegeneratedBlockDto, HttpStatus.CREATED)
+  @ApiResponse({ status: 401, description: 'No autorizado' })
+  @ApiResponse({
+    status: 403,
+    description: 'Solo profesores pueden regenerar bloques',
+  })
+  @ApiResponse({ status: 404, description: 'Página no encontrada' })
+  @ApiResponse({
+    status: 400,
+    description: 'Datos inválidos o índice de bloque fuera de rango',
+  })
+  @JwtAuth(Role.TEACHER)
+  regenerateBlock(@Body() dto: RegenerateBlockDto) {
+    return this.contentGenerationService.regenerateBlock(dto)
+  }
+
+  @Post('expand-content')
+  @ApiOperation({
+    summary: 'Expandir contenido con IA',
+    description:
+      'Genera nuevos bloques de contenido para expandir la lección según instrucciones. Se especifica la posición (antes/después/reemplazar) respecto a un bloque. Devuelve los bloques sugeridos (no persiste). Solo disponible para profesores.',
+  })
+  @ApiStandardResponse(ExpandedContentDto, HttpStatus.CREATED)
+  @ApiResponse({ status: 401, description: 'No autorizado' })
+  @ApiResponse({
+    status: 403,
+    description: 'Solo profesores pueden expandir contenido',
+  })
+  @ApiResponse({ status: 404, description: 'Página no encontrada' })
+  @ApiResponse({
+    status: 400,
+    description: 'Datos inválidos o índice de bloque fuera de rango',
+  })
+  @JwtAuth(Role.TEACHER)
+  expandContent(@Body() dto: ExpandContentDto) {
+    return this.contentGenerationService.expandContent(dto)
   }
 
   @Post('extract-concepts')

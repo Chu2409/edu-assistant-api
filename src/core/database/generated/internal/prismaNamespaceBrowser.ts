@@ -174,6 +174,7 @@ export type PageScalarFieldEnum = (typeof PageScalarFieldEnum)[keyof typeof Page
 export const BlockScalarFieldEnum = {
   id: 'id',
   pageId: 'pageId',
+  orderIndex: 'orderIndex',
   type: 'type',
   content: 'content',
   tipTapContent: 'tipTapContent',

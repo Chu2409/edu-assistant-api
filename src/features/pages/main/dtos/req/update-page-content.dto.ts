@@ -10,15 +10,17 @@ export class UpdatePageContentDto {
     example: [
       {
         id: 1,
+        orderIndex: 0,
         type: 'TEXT',
-        content: { text: 'Contenido actualizado' },
+        content: { markdown: 'Contenido actualizado' },
         tipTapContent: { type: 'doc', content: [] },
       },
       {
+        orderIndex: 1,
         type: 'CODE',
         content: {
-          code: 'console.log("Nuevo bloque")',
           language: 'javascript',
+          code: 'console.log("Nuevo bloque")',
         },
         tipTapContent: { type: 'doc', content: [] },
       },

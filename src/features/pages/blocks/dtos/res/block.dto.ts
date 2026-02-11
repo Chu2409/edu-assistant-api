@@ -4,10 +4,16 @@ import type { AiContent } from 'src/features/pages/content-generation/interfaces
 
 export class BlockDto {
   @ApiProperty({
-    description: 'ID de la página',
+    description: 'ID del bloque',
     example: 1,
   })
   id: number
+
+  @ApiProperty({
+    description: 'Índice del bloque (0-based) para el orden de visualización',
+    example: 0,
+  })
+  orderIndex: number
 
   @ApiProperty({
     description: 'Tipo de bloque de contenido',

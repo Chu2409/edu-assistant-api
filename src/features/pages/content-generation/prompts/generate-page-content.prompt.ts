@@ -6,6 +6,8 @@ import {
 } from 'src/core/database/generated/client'
 import { PromptInput } from 'src/features/pages/content-generation/interfaces/prompt-input.interface'
 import {
+  BLOCK_OUTPUT_FORMAT,
+  BLOCK_TYPE_RULES,
   getAudienceGuidance,
   getLengthGuidance,
   getTargetLevelGuidance,

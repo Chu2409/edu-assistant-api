@@ -194,6 +194,7 @@ enum BlockType {
 model Block {
   id            Int       @id @default(autoincrement())
   pageId        Int       @map("page_id")
+  orderIndex    Int       @map("order_index")
   type          BlockType @map("type")
   content       Json      @map("content")
   tipTapContent Json?     @map("tip_tap_content")
@@ -202,6 +203,7 @@ model Block {
 
   page Page @relation(fields: [pageId], references: [id], onDelete: Cascade)
 
+  @@unique([pageId, orderIndex])
   @@map("blocks")
 }
 

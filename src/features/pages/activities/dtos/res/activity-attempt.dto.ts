@@ -1,11 +1,4 @@
 import { ApiProperty, getSchemaPath } from '@nestjs/swagger'
-import {
-  FillBlankAttempt,
-  MatchAttempt,
-  MultipleChoiceAttempt,
-  TrueFalseAttempt,
-  type ActivityAttemptAnswer,
-} from '../../interfaces/activity-attempt.interface'
 
 export class ActivityAttemptDto {
   @ApiProperty({ example: 1 })

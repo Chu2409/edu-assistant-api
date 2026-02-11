@@ -21,6 +21,13 @@ import {
   AiGeneratedTrueFalseActivity,
   AiGeneratedMultipleChoiceActivity,
 } from './features/pages/content-generation/interfaces/ai-generated-activity.interface'
+import {
+  AiCodeBlock,
+  AiContentBlock,
+  AiImageSuggestionBlock,
+  AiTextBlock,
+} from './features/pages/content-generation/interfaces/ai-generated-content.interface'
+import { AiResponseDto } from './providers/ai/dtos/ai-response.interface'
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, { cors: true })
@@ -82,6 +89,11 @@ async function bootstrap() {
       AiGeneratedTrueFalseActivity,
       AiGeneratedFillBlankActivity,
       AiGeneratedMatchActivity,
+      AiContentBlock,
+      AiResponseDto,
+      AiTextBlock,
+      AiCodeBlock,
+      AiImageSuggestionBlock,
     ],
   })
 
