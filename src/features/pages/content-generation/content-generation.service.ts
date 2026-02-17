@@ -36,6 +36,9 @@ import type {
 import { PageRelationsService } from '../page-relations/page-relations.service'
 import { GenerateRelationsDto } from './dtos/req/generate-relations.dto'
 import { GeneratedRelationsDto } from './dtos/res/generated-relations.dto'
+import { GenerateConceptDto } from './dtos/req/generate-concept.dto'
+import { GeneratedConceptDto } from './dtos/res/generated-concept.dto'
+import { generateConceptDefinitionPrompt } from './prompts/generate-concept.prompt'
 
 @Injectable()
 export class ContentGenerationService {
@@ -388,13 +391,11 @@ export class ContentGenerationService {
       await this.pageRelationsService.ensurePageEmbedding(data.pageId)
 
     // 2. Obtener páginas similares por embedding
-    const topK = data.topK ?? 10
     const minSimilarity = data.minSimilarity ?? 0.5
     const similarRows = await this.pageRelationsService.findSimilarPages({
       embeddingLiteral,
       moduleId: page.moduleId,
       originPageId: data.pageId,
-      topK,
       onlyPublished: false,
       minSimilarity,
     })
@@ -444,5 +445,47 @@ export class ContentGenerationService {
       await this.openAiService.getResponse<GeneratedRelationsDto>(prompt)
 
     return aiResponse.content
+  }
+
+  async generateConcept(
+    data: GenerateConceptDto,
+  ): Promise<GeneratedConceptDto> {
+    this.logger.log('Generating concept definition')
+
+    const block = await this.dbService.block.findUnique({
+      where: { id: data.blockId },
+      include: { page: true },
+    })
+
+    if (!block) {
+      throw new NotFoundException(`Block with id ${data.blockId} not found`)
+    }
+
+    const prompt = generateConceptDefinitionPrompt({
+      selectedText: data.selectedText,
+      context: {
+        surroundingText: this.parseJsonField<{ markdown: string }>(
+          block.content,
+        ).markdown,
+        pageTitle: block.page.title,
+      },
+      config: {
+        language: data.language ?? 'es',
+        maxDefinitionLength: 120,
+      },
+    })
+
+    const aiResponse = await this.openAiService.getResponse<{
+      terms: GeneratedConceptDto[]
+    }>(prompt)
+
+    const terms = aiResponse.content.terms
+    if (!terms?.length) {
+      throw new BadRequestException(
+        'La IA no devolvió una definición válida para el término',
+      )
+    }
+
+    return terms[0]
   }
 }

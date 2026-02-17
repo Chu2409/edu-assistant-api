@@ -22,6 +22,8 @@ import { RegeneratedBlockDto } from './dtos/res/regenerated-block.dto'
 import { ExpandedContentDto } from './dtos/res/expanded-content.dto'
 import { GenerateActivityDto } from './dtos/req/generate-activity.dto'
 import { GenerateRelationsDto } from './dtos/req/generate-relations.dto'
+import { GenerateConceptDto } from './dtos/req/generate-concept.dto'
+import { GeneratedConceptDto } from './dtos/res/generated-concept.dto'
 import {
   AiGeneratedFillBlankActivity,
   AiGeneratedMatchActivity,
@@ -154,6 +156,24 @@ export class ContentGenerationController {
   async generateImage(@Body() dto: GenerateImageDto) {
     const base64 = await this.contentGenerationService.generateImage(dto.prompt)
     return { base64 }
+  }
+
+  @Post('generate-concept')
+  @ApiOperation({
+    summary: 'Generar definición de concepto con IA',
+    description:
+      'Genera una definición educativa para un término seleccionado, usando el contexto de la página donde aparece.',
+  })
+  @ApiStandardResponse(GeneratedConceptDto, HttpStatus.CREATED)
+  @ApiResponse({ status: 401, description: 'No autorizado' })
+  @ApiResponse({
+    status: 403,
+    description: 'Solo profesores pueden generar definiciones de conceptos',
+  })
+  @ApiResponse({ status: 400, description: 'Datos inválidos' })
+  @JwtAuth(Role.TEACHER)
+  generateConcept(@Body() dto: GenerateConceptDto) {
+    return this.contentGenerationService.generateConcept(dto)
   }
 
   @Post('generate-relations')

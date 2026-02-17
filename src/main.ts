@@ -59,7 +59,7 @@ async function bootstrap() {
   app.setGlobalPrefix('api')
 
   const config = new DocumentBuilder()
-    .setTitle('Nest Prisma Base API')
+    .setTitle('Edu Assistant API')
     .setDescription(
       'Complete API documentation for Nest Prisma Base. This API is designed to provide a seamless experience for developers and users alike. It includes endpoints for authentication, user management and more.',
     )
@@ -111,7 +111,7 @@ async function bootstrap() {
         theme: 'agate',
       },
     },
-    customSiteTitle: 'EcuaTickets API Documentation',
+    customSiteTitle: 'Edu Assistant API Documentation',
     // customfavIcon: 'https://nestjs.com/favicon.ico',
     customCss: `
         .swagger-ui .information-container { padding: 20px 0 }

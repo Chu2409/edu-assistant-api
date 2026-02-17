@@ -242,7 +242,6 @@ export class PageRelationsService {
     embeddingLiteral: string
     moduleId: number
     originPageId: number
-    topK: number
     onlyPublished: boolean
     minSimilarity?: number
   }): Promise<SimilarRow[]> {
@@ -250,7 +249,6 @@ export class PageRelationsService {
       embeddingLiteral,
       moduleId,
       originPageId,
-      topK,
       onlyPublished,
       minSimilarity = 0.5,
     } = params
@@ -269,7 +267,6 @@ export class PageRelationsService {
           AND (1 - (embedding <=> ${embeddingLiteral}::vector)) >= ${minSimilarity}
           ${onlyPublished ? Prisma.sql`AND is_published = true` : Prisma.sql``}
         ORDER BY (embedding <=> ${embeddingLiteral}::vector) ASC
-        LIMIT ${topK}
       `,
     )
 

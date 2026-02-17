@@ -13,20 +13,6 @@ export class GenerateRelationsDto {
   pageId: number
 
   @ApiPropertyOptional({
-    description: 'Cantidad máxima de páginas candidatas similares a considerar',
-    example: 10,
-    default: 10,
-    minimum: 1,
-    maximum: 20,
-  })
-  @IsOptional()
-  @Type(() => Number)
-  @IsInt()
-  @Min(1)
-  @Max(20)
-  topK?: number
-
-  @ApiPropertyOptional({
     description:
       'Similitud mínima (0-1) para considerar una página candidata. 1 = idéntica, 0.5 = moderada.',
     example: 0.5,
