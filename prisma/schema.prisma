@@ -1,11 +1,13 @@
 generator client {
-  provider     = "prisma-client"
-  output       = "../src/core/database/generated"
-  moduleFormat = "cjs"
+  provider        = "prisma-client"
+  output          = "../src/core/database/generated"
+  moduleFormat    = "cjs"
+  previewFeatures = ["postgresqlExtensions"]
 }
 
 datasource db {
-  provider = "postgresql"
+  provider   = "postgresql"
+  extensions = [vector]
 }
 
 // ============================================

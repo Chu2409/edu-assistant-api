@@ -3,11 +3,27 @@ import OpenAI from 'openai'
 import { CustomConfigService } from 'src/core/config/config.service'
 import { PromptInput } from '../../features/pages/content-generation/interfaces/prompt-input.interface'
 import { AiResponseDto } from './dtos/ai-response.interface'
+import type { ResponsesModel, EmbeddingsModel, ImagesModel } from './interfaces/models'
+
+export interface AiModelConfig {
+  responses: ResponsesModel
+  embeddings: EmbeddingsModel
+  images: ImagesModel
+}
+
+const DEFAULT_MODELS: AiModelConfig = {
+  responses: 'gpt-5-mini',
+  embeddings: 'text-embedding-3-small',
+  images: 'gpt-image-1-mini',
+}
 
 @Injectable()
 export class OpenaiService implements OnModuleInit {
   private openai: OpenAI
   private readonly logger = new Logger(OpenaiService.name)
+
+  /** Configuración de modelos en memoria (se pierde al reiniciar el servidor) */
+  private modelConfig: AiModelConfig = { ...DEFAULT_MODELS }
 
   constructor(private customConfigService: CustomConfigService) {}
 
@@ -18,6 +34,15 @@ export class OpenaiService implements OnModuleInit {
     })
   }
 
+  getModelConfig(): AiModelConfig {
+    return { ...this.modelConfig }
+  }
+
+  setModelConfig(config: Partial<AiModelConfig>): AiModelConfig {
+    this.modelConfig = { ...this.modelConfig, ...config }
+    return this.getModelConfig()
+  }
+
   // 1. RESPONSES API (La nueva forma de Chat)
   // Maneja estado, multimodalidad y herramientas nativas.
   async getResponse<T>(
@@ -26,7 +51,7 @@ export class OpenaiService implements OnModuleInit {
   ): Promise<AiResponseDto<T>> {
     try {
       const response = await this.openai.responses.create({
-        model: 'gpt-5-mini',
+        model: this.modelConfig.responses,
         // En Responses API, usamos 'input' en lugar de 'messages'
         input,
         // CLAVE: Si pasas el ID anterior, OpenAI recuerda el contexto automáticamente.
@@ -50,7 +75,7 @@ export class OpenaiService implements OnModuleInit {
   async getEmbedding(text: string) {
     try {
       const response = await this.openai.embeddings.create({
-        model: 'text-embedding-3-small',
+        model: this.modelConfig.embeddings,
         input: text,
       })
       return response.data[0].embedding
@@ -64,7 +89,7 @@ export class OpenaiService implements OnModuleInit {
   async generateImage(prompt: string): Promise<string> {
     try {
       const response = await this.openai.images.generate({
-        model: 'gpt-image-1-mini',
+        model: this.modelConfig.images,
         prompt,
         n: 1,
         size: '1024x1024',

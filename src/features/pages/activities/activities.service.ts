@@ -1,6 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common'
 import { DBService } from 'src/core/database/database.service'
-import { OpenaiService } from 'src/providers/ai/openai.service'
 import { Activity, Prisma, type User } from 'src/core/database/generated/client'
 import { ActivityType } from 'src/core/database/generated/enums'
 import { CreateActivityDto } from './dtos/req/create-activity.dto'
@@ -29,7 +28,6 @@ import {
 export class ActivitiesService {
   constructor(
     private readonly dbService: DBService,
-    private readonly openAiService: OpenaiService,
     private readonly pagesHelperService: PagesHelperService,
   ) {}
 
