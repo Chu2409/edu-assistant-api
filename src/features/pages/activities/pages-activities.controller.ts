@@ -21,7 +21,6 @@ import { UpdateActivityDto } from './dtos/req/update-activity.dto'
 
 @ApiTags('Activities')
 @Controller('pages')
-@JwtAuth()
 export class PagesActivitiesController {
   constructor(private readonly activitiesService: ActivitiesService) {}
 

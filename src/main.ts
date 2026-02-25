@@ -74,6 +74,7 @@ async function bootstrap() {
       description: 'Enter your JWT token',
       in: 'header',
     })
+    .addSecurityRequirements('bearer')
     .build()
 
   const document = SwaggerModule.createDocument(app, config, {

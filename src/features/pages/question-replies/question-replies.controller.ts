@@ -6,16 +6,13 @@ import {
   ParseIntPipe,
   Patch,
   Post,
-  UseGuards,
 } from '@nestjs/common'
-import { JwtAuthGuard } from 'src/features/auth/guards/jwt-auth.guard'
 import { GetUser } from 'src/features/auth/decorators/get-user.decorator'
 import { QuestionRepliesService } from './question-replies.service'
 import { CreateQuestionReplyDto } from './dtos/req/create-question-reply.dto'
 import { UpdateQuestionReplyDto } from './dtos/req/update-question-reply.dto'
 import { QuestionReplyDto } from './dtos/res/question-reply.dto'
 import {
-  ApiBearerAuth,
   ApiForbiddenResponse,
   ApiNotFoundResponse,
   ApiOperation,
@@ -24,9 +21,7 @@ import {
 } from '@nestjs/swagger'
 
 @ApiTags('Question Replies')
-@ApiBearerAuth()
 @Controller('pages/question-replies')
-@UseGuards(JwtAuthGuard)
 export class QuestionRepliesController {
   constructor(
     private readonly questionRepliesService: QuestionRepliesService,

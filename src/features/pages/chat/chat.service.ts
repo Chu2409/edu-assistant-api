@@ -26,6 +26,7 @@ import {
   AiCodeBlock,
   AiTextBlock,
 } from '../content-generation/interfaces/ai-generated-content.interface'
+import { parseJsonField } from 'src/providers/ai/helpers/utils'
 
 type StoredAiMetadata = {
   responseId?: string
@@ -272,7 +273,7 @@ export class ChatService {
     if (!assistant?.metadata) return undefined
 
     try {
-      const parsed = JSON.parse(assistant.metadata) as StoredAiMetadata
+      const parsed = parseJsonField<StoredAiMetadata>(assistant.metadata)
       return parsed.responseId
     } catch {
       return undefined

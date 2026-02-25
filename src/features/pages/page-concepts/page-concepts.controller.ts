@@ -20,7 +20,7 @@ import { UpdatePageConceptDto } from './dtos/req/update-page-concept.dto'
 
 @ApiTags('Page Concepts')
 @Controller('pages')
-@JwtAuth()
+@JwtAuth(Role.TEACHER)
 export class PageConceptsController {
   constructor(private readonly pageConceptsService: PageConceptsService) {}
 
@@ -28,7 +28,6 @@ export class PageConceptsController {
   @ApiOperation({ summary: 'Crear concepto manualmente' })
   @ApiParam({ name: 'pageId', type: Number, example: 1 })
   @ApiStandardResponse(PageConceptDto, HttpStatus.CREATED)
-  @JwtAuth(Role.TEACHER)
   create(
     @Param('pageId', ParseIntPipe) pageId: number,
     @Body() dto: CreatePageConceptDto,
@@ -42,7 +41,6 @@ export class PageConceptsController {
   @ApiParam({ name: 'pageId', type: Number, example: 1 })
   @ApiParam({ name: 'conceptId', type: Number, example: 1 })
   @ApiStandardResponse(PageConceptDto)
-  @JwtAuth(Role.TEACHER)
   update(
     @Param('pageId', ParseIntPipe) pageId: number,
     @Param('conceptId', ParseIntPipe) conceptId: number,
@@ -57,7 +55,6 @@ export class PageConceptsController {
   @ApiParam({ name: 'pageId', type: Number, example: 1 })
   @ApiParam({ name: 'conceptId', type: Number, example: 1 })
   @ApiStandardResponse(undefined, HttpStatus.NO_CONTENT)
-  @JwtAuth(Role.TEACHER)
   async delete(
     @Param('pageId', ParseIntPipe) pageId: number,
     @Param('conceptId', ParseIntPipe) conceptId: number,

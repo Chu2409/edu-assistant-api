@@ -20,7 +20,7 @@ import { UpdatePageRelationDto } from './dtos/req/update-page-relation.dto'
 
 @ApiTags('Page Relations')
 @Controller('pages')
-@JwtAuth()
+@JwtAuth(Role.TEACHER)
 export class PageRelationsController {
   constructor(private readonly pageRelationsService: PageRelationsService) {}
 
@@ -29,7 +29,6 @@ export class PageRelationsController {
   @ApiParam({ name: 'pageId', type: Number, example: 1 })
   @ApiStandardResponse(PageRelationDto, HttpStatus.CREATED)
   @ApiResponse({ status: 403, description: 'Solo profesores' })
-  @JwtAuth(Role.TEACHER)
   create(
     @Param('pageId', ParseIntPipe) pageId: number,
     @Body() dto: CreatePageRelationDto,
@@ -44,7 +43,6 @@ export class PageRelationsController {
   @ApiParam({ name: 'relationId', type: Number, example: 1 })
   @ApiStandardResponse(PageRelationDto)
   @ApiResponse({ status: 403, description: 'Solo profesores' })
-  @JwtAuth(Role.TEACHER)
   update(
     @Param('pageId', ParseIntPipe) pageId: number,
     @Param('relationId', ParseIntPipe) relationId: number,
@@ -60,7 +58,6 @@ export class PageRelationsController {
   @ApiParam({ name: 'relationId', type: Number, example: 1 })
   @ApiStandardResponse(undefined, HttpStatus.NO_CONTENT)
   @ApiResponse({ status: 403, description: 'Solo profesores' })
-  @JwtAuth(Role.TEACHER)
   delete(
     @Param('pageId', ParseIntPipe) pageId: number,
     @Param('relationId', ParseIntPipe) relationId: number,

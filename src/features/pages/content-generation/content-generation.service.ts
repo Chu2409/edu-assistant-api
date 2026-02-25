@@ -39,16 +39,11 @@ import { GeneratedRelationsDto } from './dtos/res/generated-relations.dto'
 import { GenerateConceptDto } from './dtos/req/generate-concept.dto'
 import { GeneratedConceptDto } from './dtos/res/generated-concept.dto'
 import { generateConceptDefinitionPrompt } from './prompts/generate-concept.prompt'
+import { parseJsonField } from 'src/providers/ai/helpers/utils'
 
 @Injectable()
 export class ContentGenerationService {
   private readonly logger = new Logger(ContentGenerationService.name)
-
-  /** Prisma devuelve Json como objeto en PostgreSQL; maneja string u objeto */
-  private parseJsonField<T = Record<string, unknown>>(value: unknown): T {
-    if (typeof value === 'string') return JSON.parse(value) as T
-    return value as T
-  }
 
   constructor(
     private readonly dbService: DBService,
@@ -112,7 +107,7 @@ export class ContentGenerationService {
 
     const blocks = page.blocks.map((b) => ({
       type: b.type,
-      content: this.parseJsonField<AiContent>(b.content),
+      content: parseJsonField<AiContent>(b.content),
     }))
 
     const prompt = regeneratePageContentPrompt({
@@ -182,7 +177,7 @@ export class ContentGenerationService {
       blockIndex: data.blockIndex,
       block: {
         type: block.type,
-        content: this.parseJsonField(block.content),
+        content: parseJsonField(block.content),
       },
       instruction: data.instruction,
       context: {
@@ -190,13 +185,13 @@ export class ContentGenerationService {
         previousBlock: previousBlock
           ? {
               type: previousBlock.type,
-              content: this.parseJsonField(previousBlock.content),
+              content: parseJsonField(previousBlock.content),
             }
           : undefined,
         nextBlock: nextBlock
           ? {
               type: nextBlock.type,
-              content: this.parseJsonField(nextBlock.content),
+              content: parseJsonField(nextBlock.content),
             }
           : undefined,
       },
@@ -244,7 +239,7 @@ export class ContentGenerationService {
 
     const existingBlocks = page.blocks.map((b) => ({
       type: b.type,
-      content: this.parseJsonField<AiContent>(b.content),
+      content: parseJsonField<AiContent>(b.content),
     }))
 
     const config = {
@@ -294,8 +289,7 @@ export class ContentGenerationService {
       blocks: page.blocks
         .filter((b) => b.type === BlockType.TEXT)
         .map((b) => ({
-          markdown: this.parseJsonField<{ markdown: string }>(b.content)
-            .markdown,
+          markdown: parseJsonField<{ markdown: string }>(b.content).markdown,
         })),
       config: {
         language: page.module.aiConfiguration!.language,
@@ -337,7 +331,7 @@ export class ContentGenerationService {
       .filter((b) => b.type === BlockType.TEXT || b.type === BlockType.CODE)
       .map((b) => ({
         type: b.type,
-        content: this.parseJsonField<AiTextBlock | AiCodeBlock>(b.content),
+        content: parseJsonField<AiTextBlock | AiCodeBlock>(b.content),
       }))
 
     if (blocks.length === 0) {
@@ -424,7 +418,7 @@ export class ContentGenerationService {
     // 4. Construir bloques de la página actual para el prompt
     const currentPageBlocks = page.blocks.map((b) => ({
       type: b.type,
-      content: this.parseJsonField<AiContent>(b.content),
+      content: parseJsonField<AiContent>(b.content),
     }))
 
     const maxRelationsPerPage = data.maxRelationsPerPage ?? 5
@@ -464,9 +458,8 @@ export class ContentGenerationService {
     const prompt = generateConceptDefinitionPrompt({
       selectedText: data.selectedText,
       context: {
-        surroundingText: this.parseJsonField<{ markdown: string }>(
-          block.content,
-        ).markdown,
+        surroundingText: parseJsonField<{ markdown: string }>(block.content)
+          .markdown,
         pageTitle: block.page.title,
       },
       config: {

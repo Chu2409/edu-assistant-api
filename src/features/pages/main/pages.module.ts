@@ -12,8 +12,6 @@ import { PagesActivitiesController } from '../activities/pages-activities.contro
 import { ActivitiesService } from '../activities/activities.service'
 import { PageConceptsController } from '../page-concepts/page-concepts.controller'
 import { PageConceptsService } from '../page-concepts/page-concepts.service'
-import { PageSessionsController } from '../chat/pages-sessions.controller'
-import { SessionMessagesController } from '../chat/sessions-messages.controller'
 import { ChatService } from '../chat/chat.service'
 import { PageRelationsController } from '../page-relations/page-relations.controller'
 import { PageRelationsService } from '../page-relations/page-relations.service'
@@ -37,8 +35,8 @@ import { QuestionRepliesService } from '../question-replies/question-replies.ser
     PagesActivitiesController,
     ActivityAttemptsController,
     PageConceptsController,
-    PageSessionsController,
-    SessionMessagesController,
+    // PageSessionsController,
+    // SessionMessagesController,
     PageRelationsController,
     // MediaResourcesController,
     StudentQuestionsController,

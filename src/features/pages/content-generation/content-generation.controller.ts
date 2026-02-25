@@ -35,7 +35,7 @@ import { GeneratedRelationsDto } from './dtos/res/generated-relations.dto'
 
 @ApiTags('Content Generation')
 @Controller('content')
-@JwtAuth()
+@JwtAuth(Role.TEACHER)
 export class ContentGenerationController {
   constructor(
     private readonly contentGenerationService: ContentGenerationService,
@@ -58,7 +58,6 @@ export class ContentGenerationController {
     description: 'Módulo o configuración de IA no encontrada',
   })
   @ApiResponse({ status: 400, description: 'Datos inválidos' })
-  @JwtAuth(Role.TEACHER)
   generateContent(@Body() dto: GenerateContentDto) {
     return this.contentGenerationService.generatePageContent(dto)
   }
@@ -75,7 +74,6 @@ export class ContentGenerationController {
     status: 403,
     description: 'Solo profesores pueden regenerar contenido',
   })
-  @JwtAuth(Role.TEACHER)
   regenerateContent(@Body() dto: RegenerateContentDto) {
     return this.contentGenerationService.regeneratePageContent(dto)
   }
@@ -97,7 +95,6 @@ export class ContentGenerationController {
     status: 400,
     description: 'Datos inválidos o índice de bloque fuera de rango',
   })
-  @JwtAuth(Role.TEACHER)
   regenerateBlock(@Body() dto: RegenerateBlockDto) {
     return this.contentGenerationService.regenerateBlock(dto)
   }
@@ -119,7 +116,6 @@ export class ContentGenerationController {
     status: 400,
     description: 'Datos inválidos o índice de bloque fuera de rango',
   })
-  @JwtAuth(Role.TEACHER)
   expandContent(@Body() dto: ExpandContentDto) {
     return this.contentGenerationService.expandContent(dto)
   }
@@ -135,7 +131,6 @@ export class ContentGenerationController {
     status: 403,
     description: 'Solo profesores pueden extraer conceptos',
   })
-  @JwtAuth(Role.TEACHER)
   extractConcepts(@Body() dto: ExtractConceptsDto) {
     return this.contentGenerationService.extractPageConcepts(dto)
   }
@@ -152,7 +147,6 @@ export class ContentGenerationController {
     status: 403,
     description: 'Solo profesores pueden generar imágenes',
   })
-  @JwtAuth(Role.TEACHER)
   async generateImage(@Body() dto: GenerateImageDto) {
     const base64 = await this.contentGenerationService.generateImage(dto.prompt)
     return { base64 }
@@ -171,7 +165,6 @@ export class ContentGenerationController {
     description: 'Solo profesores pueden generar definiciones de conceptos',
   })
   @ApiResponse({ status: 400, description: 'Datos inválidos' })
-  @JwtAuth(Role.TEACHER)
   generateConcept(@Body() dto: GenerateConceptDto) {
     return this.contentGenerationService.generateConcept(dto)
   }
@@ -190,7 +183,6 @@ export class ContentGenerationController {
   })
   @ApiResponse({ status: 404, description: 'Página no encontrada' })
   @ApiResponse({ status: 400, description: 'Datos inválidos o sin bloques' })
-  @JwtAuth(Role.TEACHER)
   generateRelations(@Body() dto: GenerateRelationsDto) {
     return this.contentGenerationService.generatePageRelations(dto)
   }
@@ -229,7 +221,6 @@ export class ContentGenerationController {
   })
   @ApiResponse({ status: 404, description: 'Página no encontrada' })
   @ApiResponse({ status: 400, description: 'Datos inválidos' })
-  @JwtAuth(Role.TEACHER)
   generateActivity(@Body() dto: GenerateActivityDto) {
     return this.contentGenerationService.generateActivity(dto)
   }

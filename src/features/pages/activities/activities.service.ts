@@ -23,6 +23,7 @@ import {
   AiGeneratedMultipleChoiceActivity,
   AiGeneratedTrueFalseActivity,
 } from '../content-generation/interfaces/ai-generated-activity.interface'
+import { parseJsonField } from 'src/providers/ai/helpers/utils'
 
 @Injectable()
 export class ActivitiesService {
@@ -174,9 +175,7 @@ export class ActivitiesService {
     studentAnswer: ActivityAttemptAnswer,
   ): boolean {
     const type = activity.type
-    const options = JSON.parse(
-      activity.options as string,
-    ) as AiGeneratedActivity
+    const options = parseJsonField<AiGeneratedActivity>(activity.options)
 
     try {
       switch (type) {

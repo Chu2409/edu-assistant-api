@@ -1,5 +1,7 @@
 import { Activity } from 'src/core/database/generated/client'
 import { ActivityDto } from '../dtos/res/activity.dto'
+import { parseJsonField } from 'src/providers/ai/helpers/utils'
+import { AiGeneratedActivity } from '../../content-generation/interfaces/ai-generated-activity.interface'
 
 export class ActivitiesMapper {
   static mapToDto(activity: Activity): ActivityDto {
@@ -8,12 +10,7 @@ export class ActivitiesMapper {
       pageId: activity.pageId,
       type: activity.type,
       question: activity.question,
-      options:
-        activity.options === null
-          ? null
-          : typeof activity.options === 'string'
-            ? JSON.parse(activity.options)
-            : activity.options,
+      options: parseJsonField<AiGeneratedActivity>(activity.options),
       explanation: activity.explanation ?? null,
       difficulty: activity.difficulty,
       orderIndex: activity.orderIndex,

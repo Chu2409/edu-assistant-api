@@ -35,7 +35,6 @@ import { FullPageDto } from './dtos/res/full-page.dto'
 
 @ApiTags('Pages')
 @Controller('pages')
-@JwtAuth()
 export class PagesController {
   constructor(private readonly pagesService: PagesService) {}
 

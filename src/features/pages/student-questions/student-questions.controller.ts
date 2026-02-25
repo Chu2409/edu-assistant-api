@@ -6,27 +6,25 @@ import {
   ParseIntPipe,
   Patch,
   Post,
-  UseGuards,
 } from '@nestjs/common'
-import { JwtAuthGuard } from 'src/features/auth/guards/jwt-auth.guard'
 import { GetUser } from 'src/features/auth/decorators/get-user.decorator'
 import { StudentQuestionsService } from './student-questions.service'
 import { CreateStudentQuestionDto } from './dtos/req/create-student-question.dto'
 import { UpdateStudentQuestionDto } from './dtos/req/update-student-question.dto'
 import { StudentQuestionDto } from './dtos/res/student-question.dto'
 import {
-  ApiBearerAuth,
   ApiForbiddenResponse,
   ApiNotFoundResponse,
   ApiOperation,
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger'
+import { JwtAuth } from 'src/features/auth/decorators/jwt-auth.decorator'
+import { Role } from 'src/core/database/generated/enums'
 
 @ApiTags('Student Questions')
-@ApiBearerAuth()
 @Controller('pages/student-questions')
-@UseGuards(JwtAuthGuard)
+@JwtAuth(Role.STUDENT)
 export class StudentQuestionsController {
   constructor(
     private readonly studentQuestionsService: StudentQuestionsService,

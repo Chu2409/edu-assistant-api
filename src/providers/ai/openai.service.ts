@@ -3,7 +3,12 @@ import OpenAI from 'openai'
 import { CustomConfigService } from 'src/core/config/config.service'
 import { PromptInput } from '../../features/pages/content-generation/interfaces/prompt-input.interface'
 import { AiResponseDto } from './dtos/ai-response.interface'
-import type { ResponsesModel, EmbeddingsModel, ImagesModel } from './interfaces/models'
+import type {
+  ResponsesModel,
+  EmbeddingsModel,
+  ImagesModel,
+} from './interfaces/models'
+import { parseJsonField } from './helpers/utils'
 
 export interface AiModelConfig {
   responses: ResponsesModel
@@ -59,7 +64,7 @@ export class OpenaiService implements OnModuleInit {
         // temperature: 0.8,
       })
 
-      const content = JSON.parse(response.output_text)
+      const content = parseJsonField<T>(response.output_text)
 
       return {
         content,

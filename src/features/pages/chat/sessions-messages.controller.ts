@@ -8,7 +8,6 @@ import {
   Post,
 } from '@nestjs/common'
 import { ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger'
-import { JwtAuth } from 'src/features/auth/decorators/jwt-auth.decorator'
 import { GetUser } from 'src/features/auth/decorators/get-user.decorator'
 import type { User } from 'src/core/database/generated/client'
 import { ApiStandardResponse } from 'src/shared/decorators/api-standard-response.decorator'
@@ -19,7 +18,6 @@ import { ChatMessageCreatedDto } from './dtos/res/chat-message-created.dto'
 
 @ApiTags('Page Chat')
 @Controller('sessions')
-@JwtAuth()
 export class SessionMessagesController {
   constructor(private readonly chatService: ChatService) {}
 

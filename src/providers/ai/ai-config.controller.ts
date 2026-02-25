@@ -17,7 +17,7 @@ import {
 
 @ApiTags('AI Config')
 @Controller('ai/config')
-@JwtAuth(Role.TEACHER)
+@JwtAuth(Role.ADMIN)
 export class AiConfigController {
   constructor(private readonly openaiService: OpenaiService) {}
 
@@ -73,8 +73,10 @@ export class AiConfigController {
   @ApiStandardResponse(AiModelConfigResponseDto, HttpStatus.OK)
   updateConfig(@Body() dto: UpdateAiModelConfigDto) {
     const config: Partial<AiModelConfig> = {}
-    if (dto.responses) config.responses = dto.responses as AiModelConfig['responses']
-    if (dto.embeddings) config.embeddings = dto.embeddings as AiModelConfig['embeddings']
+    if (dto.responses)
+      config.responses = dto.responses as AiModelConfig['responses']
+    if (dto.embeddings)
+      config.embeddings = dto.embeddings as AiModelConfig['embeddings']
     if (dto.images) config.images = dto.images as AiModelConfig['images']
     return this.openaiService.setModelConfig(config)
   }
