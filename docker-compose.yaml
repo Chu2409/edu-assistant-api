@@ -4,23 +4,80 @@ services:
     image: pgvector/pgvector:pg17
     restart: always
     ports:
-      - ${DB_PORT}:5432
+      - ${DB_PORT:-5440}:5432
     environment:
-      POSTGRES_USER: ${DB_USER}
-      POSTGRES_PASSWORD: ${DB_PASSWORD}
-      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER:-postgres}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-postgres}
+      POSTGRES_DB: ${DB_NAME:-edu_assistant}
     volumes:
       - postgres-data:/var/lib/postgresql/data
-      - ./init-db:/docker-entrypoint-initdb.d
+    networks:
+      - edu-assistant-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-postgres} -d ${DB_NAME:-edu_assistant}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
   redis:
     container_name: edu-assistant-redis
     image: redis:alpine
     restart: always
     ports:
-      - ${REDIS_PORT}:6379
+      - ${REDIS_PORT:-6379}:6379
     volumes:
       - redis-data:/data
+    networks:
+      - edu-assistant-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  api:
+    container_name: edu-assistant-api
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - ${PORT:-3000}:3000
+    env_file:
+      - .env
+      - .env.production
+    entrypoint: ["docker-entrypoint.sh"]
+    command: ["node", "dist/src/main.js"]
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - edu-assistant-network
+
+  worker:
+    container_name: edu-assistant-worker
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: always
+    env_file:
+      - .env
+      - .env.production
+    command: ["node", "dist/src/worker.js"]
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - edu-assistant-network
+
 volumes:
   postgres-data:
   redis-data:
+
+networks:
+  edu-assistant-network:
+    driver: bridge
