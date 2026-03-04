@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common'
 import { JwtService } from '@nestjs/jwt'
-import { ConfigService } from '@nestjs/config'
 import { JwtPayload } from './interfaces/jwt-payload.interface'
 import { DBService } from 'src/core/database/database.service'
 import { Role, User } from 'src/core/database/generated/client'
@@ -10,9 +9,10 @@ import { ValidateMicrosoftUserDto } from './dtos/req/validate-microsoft-user.dto
 export class AuthService {
   constructor(
     private jwtService: JwtService,
-    private configService: ConfigService,
     private dbService: DBService,
   ) {}
+
+  private teacherEmails: string[] = []
 
   generateJwt(user: User) {
     const payload: JwtPayload = {
@@ -63,14 +63,25 @@ export class AuthService {
   }
 
   private determineUserRole(email: string): Role {
-    if (email.includes('profesor') || email.includes('docente')) {
+    const normalizedEmail = email.toLowerCase().trim()
+
+    if (this.teacherEmails.includes(normalizedEmail)) {
       return Role.TEACHER
     }
 
-    if (email.includes('admin')) {
-      return Role.ADMIN
-    }
-
     return Role.STUDENT
+  }
+
+  getTeacherEmails(): string[] {
+    return [...this.teacherEmails]
+  }
+
+  setTeacherEmails(emails: string[]): string[] {
+    const normalized = (emails || [])
+      .map((e) => e.toLowerCase().trim())
+      .filter((e) => !!e)
+
+    this.teacherEmails = Array.from(new Set(normalized))
+    return this.getTeacherEmails()
   }
 }
