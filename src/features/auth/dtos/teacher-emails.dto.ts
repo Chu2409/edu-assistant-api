@@ -11,4 +11,3 @@ export class TeacherEmailsDto {
   @IsEmail({}, { each: true })
   emails: string[]
 }
-
