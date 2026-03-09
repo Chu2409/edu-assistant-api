@@ -1,6 +1,5 @@
 import { Body, Controller, Delete, Param, Patch, Post } from '@nestjs/common'
 import {
-  ApiBearerAuth,
   ApiForbiddenResponse,
   ApiNotFoundResponse,
   ApiOperation,
@@ -16,11 +15,10 @@ import { PageFeedbackDto } from './dtos/res/page-feedback.dto'
 import { Role } from 'src/core/database/generated/enums'
 
 @ApiTags('Page Feedbacks')
-@ApiBearerAuth()
 @Controller('page-feedbacks')
 @JwtAuth(Role.STUDENT)
 export class PageFeedbacksController {
-  constructor(private readonly pageFeedbacksService: PageFeedbacksService) { }
+  constructor(private readonly pageFeedbacksService: PageFeedbacksService) {}
 
   @Post()
   @ApiOperation({ summary: 'Crear un nuevo feedback para una página' })

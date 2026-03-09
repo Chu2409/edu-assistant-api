@@ -20,6 +20,8 @@ export const config = (): { APP: IConfig } => ({
     REDIS_PORT: process.env.REDIS_PORT
       ? parseInt(process.env.REDIS_PORT, 10)
       : 6379,
+
+    OPENAI_API_KEY: process.env.OPENAI_API_KEY!,
   },
 })
 
@@ -48,4 +50,6 @@ export const configValidationSchema = Joi.object<IConfig>({
 
   REDIS_HOST: Joi.string().hostname().required(),
   REDIS_PORT: Joi.number().default(6379),
+
+  OPENAI_API_KEY: Joi.string(),
 })

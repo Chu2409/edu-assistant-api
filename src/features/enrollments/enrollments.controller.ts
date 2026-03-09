@@ -23,7 +23,7 @@ import { EnrollmentStudentsDto } from './dtos/res/enrollment-student.dto'
 
 @ApiTags('Enrollments')
 @Controller('enrollments')
-@JwtAuth()
+@JwtAuth(Role.TEACHER)
 export class EnrollmentsController {
   constructor(private readonly enrollmentsService: EnrollmentsService) {}
 
@@ -49,7 +49,6 @@ export class EnrollmentsController {
   }
 
   @Post('bulk')
-  @JwtAuth(Role.TEACHER)
   @ApiOperation({
     summary: 'Inscribir múltiples estudiantes a un módulo (solo profesores)',
     description: 'El profesor inscribe a múltiples estudiantes en un módulo',
@@ -72,7 +71,6 @@ export class EnrollmentsController {
   }
 
   @Get('module/:moduleId')
-  @JwtAuth(Role.TEACHER)
   @ApiOperation({
     summary: 'Listar estudiantes inscritos en un módulo (solo profesores)',
     description: 'El profesor puede ver los estudiantes inscritos en un módulo',
@@ -97,7 +95,6 @@ export class EnrollmentsController {
   }
 
   @Patch(':id')
-  @JwtAuth(Role.TEACHER)
   @ApiOperation({
     summary: 'Actualizar una inscripción (solo profesores)',
     description: 'El profesor puede actualizar una inscripción de un módulo',
@@ -144,7 +141,6 @@ export class EnrollmentsController {
   }
 
   @Delete(':id')
-  @JwtAuth(Role.TEACHER)
   @ApiOperation({
     summary: 'Eliminar una inscripción (solo profesores)',
     description: 'El profesor elimina una inscripción de un módulo',

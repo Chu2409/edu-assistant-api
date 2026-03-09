@@ -6,27 +6,25 @@ import {
   ParseIntPipe,
   Patch,
   Post,
-  UseGuards,
 } from '@nestjs/common'
-import { JwtAuthGuard } from 'src/features/auth/guards/jwt-auth.guard'
 import { GetUser } from 'src/features/auth/decorators/get-user.decorator'
 import { PageNotesService } from './page-notes.service'
 import { CreatePageNoteDto } from './dtos/req/create-page-note.dto'
 import { UpdatePageNoteDto } from './dtos/req/update-page-note.dto'
 import { NoteDto } from './dtos/res/note.dto'
 import {
-  ApiBearerAuth,
   ApiForbiddenResponse,
   ApiNotFoundResponse,
   ApiOperation,
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger'
+import { JwtAuth } from 'src/features/auth/decorators/jwt-auth.decorator'
+import { Role } from 'src/core/database/generated/enums'
 
 @ApiTags('Page Notes')
-@ApiBearerAuth()
 @Controller('pages/notes')
-@UseGuards(JwtAuthGuard)
+@JwtAuth(Role.STUDENT)
 export class PageNotesController {
   constructor(private readonly pageNotesService: PageNotesService) {}
 

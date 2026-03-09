@@ -40,7 +40,10 @@ export type AiConfigurationMinAggregateOutputType = {
   id: number | null
   moduleId: number | null
   language: string | null
-  contextPrompt: string | null
+  targetLevel: $Enums.AiTargetLevel | null
+  audience: $Enums.AiAudience | null
+  contentLength: $Enums.AiLength | null
+  tone: $Enums.AiTone | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -49,7 +52,10 @@ export type AiConfigurationMaxAggregateOutputType = {
   id: number | null
   moduleId: number | null
   language: string | null
-  contextPrompt: string | null
+  targetLevel: $Enums.AiTargetLevel | null
+  audience: $Enums.AiAudience | null
+  contentLength: $Enums.AiLength | null
+  tone: $Enums.AiTone | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -58,7 +64,10 @@ export type AiConfigurationCountAggregateOutputType = {
   id: number
   moduleId: number
   language: number
-  contextPrompt: number
+  targetLevel: number
+  audience: number
+  contentLength: number
+  tone: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -79,7 +88,10 @@ export type AiConfigurationMinAggregateInputType = {
   id?: true
   moduleId?: true
   language?: true
-  contextPrompt?: true
+  targetLevel?: true
+  audience?: true
+  contentLength?: true
+  tone?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -88,7 +100,10 @@ export type AiConfigurationMaxAggregateInputType = {
   id?: true
   moduleId?: true
   language?: true
-  contextPrompt?: true
+  targetLevel?: true
+  audience?: true
+  contentLength?: true
+  tone?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -97,7 +112,10 @@ export type AiConfigurationCountAggregateInputType = {
   id?: true
   moduleId?: true
   language?: true
-  contextPrompt?: true
+  targetLevel?: true
+  audience?: true
+  contentLength?: true
+  tone?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -193,7 +211,10 @@ export type AiConfigurationGroupByOutputType = {
   id: number
   moduleId: number
   language: string
-  contextPrompt: string | null
+  targetLevel: $Enums.AiTargetLevel
+  audience: $Enums.AiAudience
+  contentLength: $Enums.AiLength
+  tone: $Enums.AiTone
   createdAt: Date
   updatedAt: Date
   _count: AiConfigurationCountAggregateOutputType | null
@@ -225,7 +246,10 @@ export type AiConfigurationWhereInput = {
   id?: Prisma.IntFilter<"AiConfiguration"> | number
   moduleId?: Prisma.IntFilter<"AiConfiguration"> | number
   language?: Prisma.StringFilter<"AiConfiguration"> | string
-  contextPrompt?: Prisma.StringNullableFilter<"AiConfiguration"> | string | null
+  targetLevel?: Prisma.EnumAiTargetLevelFilter<"AiConfiguration"> | $Enums.AiTargetLevel
+  audience?: Prisma.EnumAiAudienceFilter<"AiConfiguration"> | $Enums.AiAudience
+  contentLength?: Prisma.EnumAiLengthFilter<"AiConfiguration"> | $Enums.AiLength
+  tone?: Prisma.EnumAiToneFilter<"AiConfiguration"> | $Enums.AiTone
   createdAt?: Prisma.DateTimeFilter<"AiConfiguration"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"AiConfiguration"> | Date | string
   module?: Prisma.XOR<Prisma.ModuleScalarRelationFilter, Prisma.ModuleWhereInput>
@@ -235,7 +259,10 @@ export type AiConfigurationOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   moduleId?: Prisma.SortOrder
   language?: Prisma.SortOrder
-  contextPrompt?: Prisma.SortOrderInput | Prisma.SortOrder
+  targetLevel?: Prisma.SortOrder
+  audience?: Prisma.SortOrder
+  contentLength?: Prisma.SortOrder
+  tone?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   module?: Prisma.ModuleOrderByWithRelationInput
@@ -248,7 +275,10 @@ export type AiConfigurationWhereUniqueInput = Prisma.AtLeast<{
   OR?: Prisma.AiConfigurationWhereInput[]
   NOT?: Prisma.AiConfigurationWhereInput | Prisma.AiConfigurationWhereInput[]
   language?: Prisma.StringFilter<"AiConfiguration"> | string
-  contextPrompt?: Prisma.StringNullableFilter<"AiConfiguration"> | string | null
+  targetLevel?: Prisma.EnumAiTargetLevelFilter<"AiConfiguration"> | $Enums.AiTargetLevel
+  audience?: Prisma.EnumAiAudienceFilter<"AiConfiguration"> | $Enums.AiAudience
+  contentLength?: Prisma.EnumAiLengthFilter<"AiConfiguration"> | $Enums.AiLength
+  tone?: Prisma.EnumAiToneFilter<"AiConfiguration"> | $Enums.AiTone
   createdAt?: Prisma.DateTimeFilter<"AiConfiguration"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"AiConfiguration"> | Date | string
   module?: Prisma.XOR<Prisma.ModuleScalarRelationFilter, Prisma.ModuleWhereInput>
@@ -258,7 +288,10 @@ export type AiConfigurationOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   moduleId?: Prisma.SortOrder
   language?: Prisma.SortOrder
-  contextPrompt?: Prisma.SortOrderInput | Prisma.SortOrder
+  targetLevel?: Prisma.SortOrder
+  audience?: Prisma.SortOrder
+  contentLength?: Prisma.SortOrder
+  tone?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.AiConfigurationCountOrderByAggregateInput
@@ -275,14 +308,20 @@ export type AiConfigurationScalarWhereWithAggregatesInput = {
   id?: Prisma.IntWithAggregatesFilter<"AiConfiguration"> | number
   moduleId?: Prisma.IntWithAggregatesFilter<"AiConfiguration"> | number
   language?: Prisma.StringWithAggregatesFilter<"AiConfiguration"> | string
-  contextPrompt?: Prisma.StringNullableWithAggregatesFilter<"AiConfiguration"> | string | null
+  targetLevel?: Prisma.EnumAiTargetLevelWithAggregatesFilter<"AiConfiguration"> | $Enums.AiTargetLevel
+  audience?: Prisma.EnumAiAudienceWithAggregatesFilter<"AiConfiguration"> | $Enums.AiAudience
+  contentLength?: Prisma.EnumAiLengthWithAggregatesFilter<"AiConfiguration"> | $Enums.AiLength
+  tone?: Prisma.EnumAiToneWithAggregatesFilter<"AiConfiguration"> | $Enums.AiTone
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"AiConfiguration"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"AiConfiguration"> | Date | string
 }
 
 export type AiConfigurationCreateInput = {
   language?: string
-  contextPrompt?: string | null
+  targetLevel?: $Enums.AiTargetLevel
+  audience?: $Enums.AiAudience
+  contentLength?: $Enums.AiLength
+  tone?: $Enums.AiTone
   createdAt?: Date | string
   updatedAt?: Date | string
   module: Prisma.ModuleCreateNestedOneWithoutAiConfigurationInput
@@ -292,14 +331,20 @@ export type AiConfigurationUncheckedCreateInput = {
   id?: number
   moduleId: number
   language?: string
-  contextPrompt?: string | null
+  targetLevel?: $Enums.AiTargetLevel
+  audience?: $Enums.AiAudience
+  contentLength?: $Enums.AiLength
+  tone?: $Enums.AiTone
   createdAt?: Date | string
   updatedAt?: Date | string
 }
 
 export type AiConfigurationUpdateInput = {
   language?: Prisma.StringFieldUpdateOperationsInput | string
-  contextPrompt?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  targetLevel?: Prisma.EnumAiTargetLevelFieldUpdateOperationsInput | $Enums.AiTargetLevel
+  audience?: Prisma.EnumAiAudienceFieldUpdateOperationsInput | $Enums.AiAudience
+  contentLength?: Prisma.EnumAiLengthFieldUpdateOperationsInput | $Enums.AiLength
+  tone?: Prisma.EnumAiToneFieldUpdateOperationsInput | $Enums.AiTone
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   module?: Prisma.ModuleUpdateOneRequiredWithoutAiConfigurationNestedInput
@@ -309,7 +354,10 @@ export type AiConfigurationUncheckedUpdateInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   moduleId?: Prisma.IntFieldUpdateOperationsInput | number
   language?: Prisma.StringFieldUpdateOperationsInput | string
-  contextPrompt?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  targetLevel?: Prisma.EnumAiTargetLevelFieldUpdateOperationsInput | $Enums.AiTargetLevel
+  audience?: Prisma.EnumAiAudienceFieldUpdateOperationsInput | $Enums.AiAudience
+  contentLength?: Prisma.EnumAiLengthFieldUpdateOperationsInput | $Enums.AiLength
+  tone?: Prisma.EnumAiToneFieldUpdateOperationsInput | $Enums.AiTone
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -318,14 +366,20 @@ export type AiConfigurationCreateManyInput = {
   id?: number
   moduleId: number
   language?: string
-  contextPrompt?: string | null
+  targetLevel?: $Enums.AiTargetLevel
+  audience?: $Enums.AiAudience
+  contentLength?: $Enums.AiLength
+  tone?: $Enums.AiTone
   createdAt?: Date | string
   updatedAt?: Date | string
 }
 
 export type AiConfigurationUpdateManyMutationInput = {
   language?: Prisma.StringFieldUpdateOperationsInput | string
-  contextPrompt?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  targetLevel?: Prisma.EnumAiTargetLevelFieldUpdateOperationsInput | $Enums.AiTargetLevel
+  audience?: Prisma.EnumAiAudienceFieldUpdateOperationsInput | $Enums.AiAudience
+  contentLength?: Prisma.EnumAiLengthFieldUpdateOperationsInput | $Enums.AiLength
+  tone?: Prisma.EnumAiToneFieldUpdateOperationsInput | $Enums.AiTone
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -334,7 +388,10 @@ export type AiConfigurationUncheckedUpdateManyInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   moduleId?: Prisma.IntFieldUpdateOperationsInput | number
   language?: Prisma.StringFieldUpdateOperationsInput | string
-  contextPrompt?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  targetLevel?: Prisma.EnumAiTargetLevelFieldUpdateOperationsInput | $Enums.AiTargetLevel
+  audience?: Prisma.EnumAiAudienceFieldUpdateOperationsInput | $Enums.AiAudience
+  contentLength?: Prisma.EnumAiLengthFieldUpdateOperationsInput | $Enums.AiLength
+  tone?: Prisma.EnumAiToneFieldUpdateOperationsInput | $Enums.AiTone
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -348,7 +405,10 @@ export type AiConfigurationCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   moduleId?: Prisma.SortOrder
   language?: Prisma.SortOrder
-  contextPrompt?: Prisma.SortOrder
+  targetLevel?: Prisma.SortOrder
+  audience?: Prisma.SortOrder
+  contentLength?: Prisma.SortOrder
+  tone?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -362,7 +422,10 @@ export type AiConfigurationMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   moduleId?: Prisma.SortOrder
   language?: Prisma.SortOrder
-  contextPrompt?: Prisma.SortOrder
+  targetLevel?: Prisma.SortOrder
+  audience?: Prisma.SortOrder
+  contentLength?: Prisma.SortOrder
+  tone?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -371,7 +434,10 @@ export type AiConfigurationMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   moduleId?: Prisma.SortOrder
   language?: Prisma.SortOrder
-  contextPrompt?: Prisma.SortOrder
+  targetLevel?: Prisma.SortOrder
+  audience?: Prisma.SortOrder
+  contentLength?: Prisma.SortOrder
+  tone?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -413,9 +479,28 @@ export type AiConfigurationUncheckedUpdateOneWithoutModuleNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.AiConfigurationUpdateToOneWithWhereWithoutModuleInput, Prisma.AiConfigurationUpdateWithoutModuleInput>, Prisma.AiConfigurationUncheckedUpdateWithoutModuleInput>
 }
 
+export type EnumAiTargetLevelFieldUpdateOperationsInput = {
+  set?: $Enums.AiTargetLevel
+}
+
+export type EnumAiAudienceFieldUpdateOperationsInput = {
+  set?: $Enums.AiAudience
+}
+
+export type EnumAiLengthFieldUpdateOperationsInput = {
+  set?: $Enums.AiLength
+}
+
+export type EnumAiToneFieldUpdateOperationsInput = {
+  set?: $Enums.AiTone
+}
+
 export type AiConfigurationCreateWithoutModuleInput = {
   language?: string
-  contextPrompt?: string | null
+  targetLevel?: $Enums.AiTargetLevel
+  audience?: $Enums.AiAudience
+  contentLength?: $Enums.AiLength
+  tone?: $Enums.AiTone
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -423,7 +508,10 @@ export type AiConfigurationCreateWithoutModuleInput = {
 export type AiConfigurationUncheckedCreateWithoutModuleInput = {
   id?: number
   language?: string
-  contextPrompt?: string | null
+  targetLevel?: $Enums.AiTargetLevel
+  audience?: $Enums.AiAudience
+  contentLength?: $Enums.AiLength
+  tone?: $Enums.AiTone
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -446,7 +534,10 @@ export type AiConfigurationUpdateToOneWithWhereWithoutModuleInput = {
 
 export type AiConfigurationUpdateWithoutModuleInput = {
   language?: Prisma.StringFieldUpdateOperationsInput | string
-  contextPrompt?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  targetLevel?: Prisma.EnumAiTargetLevelFieldUpdateOperationsInput | $Enums.AiTargetLevel
+  audience?: Prisma.EnumAiAudienceFieldUpdateOperationsInput | $Enums.AiAudience
+  contentLength?: Prisma.EnumAiLengthFieldUpdateOperationsInput | $Enums.AiLength
+  tone?: Prisma.EnumAiToneFieldUpdateOperationsInput | $Enums.AiTone
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -454,7 +545,10 @@ export type AiConfigurationUpdateWithoutModuleInput = {
 export type AiConfigurationUncheckedUpdateWithoutModuleInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   language?: Prisma.StringFieldUpdateOperationsInput | string
-  contextPrompt?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  targetLevel?: Prisma.EnumAiTargetLevelFieldUpdateOperationsInput | $Enums.AiTargetLevel
+  audience?: Prisma.EnumAiAudienceFieldUpdateOperationsInput | $Enums.AiAudience
+  contentLength?: Prisma.EnumAiLengthFieldUpdateOperationsInput | $Enums.AiLength
+  tone?: Prisma.EnumAiToneFieldUpdateOperationsInput | $Enums.AiTone
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -465,7 +559,10 @@ export type AiConfigurationSelect<ExtArgs extends runtime.Types.Extensions.Inter
   id?: boolean
   moduleId?: boolean
   language?: boolean
-  contextPrompt?: boolean
+  targetLevel?: boolean
+  audience?: boolean
+  contentLength?: boolean
+  tone?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   module?: boolean | Prisma.ModuleDefaultArgs<ExtArgs>
@@ -475,7 +572,10 @@ export type AiConfigurationSelectCreateManyAndReturn<ExtArgs extends runtime.Typ
   id?: boolean
   moduleId?: boolean
   language?: boolean
-  contextPrompt?: boolean
+  targetLevel?: boolean
+  audience?: boolean
+  contentLength?: boolean
+  tone?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   module?: boolean | Prisma.ModuleDefaultArgs<ExtArgs>
@@ -485,7 +585,10 @@ export type AiConfigurationSelectUpdateManyAndReturn<ExtArgs extends runtime.Typ
   id?: boolean
   moduleId?: boolean
   language?: boolean
-  contextPrompt?: boolean
+  targetLevel?: boolean
+  audience?: boolean
+  contentLength?: boolean
+  tone?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   module?: boolean | Prisma.ModuleDefaultArgs<ExtArgs>
@@ -495,12 +598,15 @@ export type AiConfigurationSelectScalar = {
   id?: boolean
   moduleId?: boolean
   language?: boolean
-  contextPrompt?: boolean
+  targetLevel?: boolean
+  audience?: boolean
+  contentLength?: boolean
+  tone?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type AiConfigurationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "moduleId" | "language" | "contextPrompt" | "createdAt" | "updatedAt", ExtArgs["result"]["aiConfiguration"]>
+export type AiConfigurationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "moduleId" | "language" | "targetLevel" | "audience" | "contentLength" | "tone" | "createdAt" | "updatedAt", ExtArgs["result"]["aiConfiguration"]>
 export type AiConfigurationInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   module?: boolean | Prisma.ModuleDefaultArgs<ExtArgs>
 }
@@ -520,7 +626,10 @@ export type $AiConfigurationPayload<ExtArgs extends runtime.Types.Extensions.Int
     id: number
     moduleId: number
     language: string
-    contextPrompt: string | null
+    targetLevel: $Enums.AiTargetLevel
+    audience: $Enums.AiAudience
+    contentLength: $Enums.AiLength
+    tone: $Enums.AiTone
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["aiConfiguration"]>
@@ -950,7 +1059,10 @@ export interface AiConfigurationFieldRefs {
   readonly id: Prisma.FieldRef<"AiConfiguration", 'Int'>
   readonly moduleId: Prisma.FieldRef<"AiConfiguration", 'Int'>
   readonly language: Prisma.FieldRef<"AiConfiguration", 'String'>
-  readonly contextPrompt: Prisma.FieldRef<"AiConfiguration", 'String'>
+  readonly targetLevel: Prisma.FieldRef<"AiConfiguration", 'AiTargetLevel'>
+  readonly audience: Prisma.FieldRef<"AiConfiguration", 'AiAudience'>
+  readonly contentLength: Prisma.FieldRef<"AiConfiguration", 'AiLength'>
+  readonly tone: Prisma.FieldRef<"AiConfiguration", 'AiTone'>
   readonly createdAt: Prisma.FieldRef<"AiConfiguration", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"AiConfiguration", 'DateTime'>
 }

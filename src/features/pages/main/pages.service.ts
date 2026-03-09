@@ -3,36 +3,41 @@ import {
   NotFoundException,
   ForbiddenException,
 } from '@nestjs/common'
+import { InjectQueue } from '@nestjs/bullmq'
+import { Queue } from 'bullmq'
 import { DBService } from 'src/core/database/database.service'
+import { QUEUE_NAMES } from 'src/shared/constants/queues'
 import { CreatePageDto } from './dtos/req/create-page.dto'
 import { UpdatePageDto } from './dtos/req/update-page.dto'
+import { UpdatePageContentDto } from './dtos/req/update-page-content.dto'
 import { ReorderPagesDto } from './dtos/req/reorder-pages.dto'
 import { PageDto } from './dtos/res/page.dto'
 import {
   Enrollment,
+  Prisma,
   Role,
-  type Prisma,
   type User,
 } from 'src/core/database/generated/client'
 import { BaseParamsReqDto } from 'src/shared/dtos/req/base-params.dto'
 import { PagesMapper } from './mappers/pages.mapper'
 import { ApiPaginatedRes } from 'src/shared/dtos/res/api-response.dto'
 import { FullPageDto } from './dtos/res/full-page.dto'
-import { AIService } from 'src/providers/ai/ai.service'
-import { HtmlProcessorService } from '../content-generation/html-processor.service'
+import { ContentGenerationService } from '../content-generation/content-generation.service'
 
 @Injectable()
 export class PagesService {
   constructor(
     private readonly dbService: DBService,
-    private readonly aiService: AIService,
-    private readonly htmlProcessor: HtmlProcessorService,
-  ) { }
+    private readonly contentGenerationService: ContentGenerationService,
+    @InjectQueue(QUEUE_NAMES.EMBEDDINGS.NAME)
+    private readonly embeddingsQueue: Queue,
+  ) {}
 
   async create(dto: CreatePageDto, user: User): Promise<PageDto> {
     // Verificar que el módulo existe
     const module = await this.dbService.module.findUnique({
       where: { id: dto.moduleId },
+      include: { aiConfiguration: true },
     })
 
     if (!module) {
@@ -50,42 +55,14 @@ export class PagesService {
       orderBy: { orderIndex: 'desc' },
     })
 
-    const concepts = await this.aiService.extractConcepts(dto.content)
-
-    const conceptsToEmbed = concepts.map((concept, index) => ({
-      term: concept.term,
-      definition: concept.definition,
-      htmlId: `concept-c${Date.now()}-${index}`,
-    }))
-
-    const processedHtml = this.htmlProcessor.embedConcepts(
-      dto.content,
-      conceptsToEmbed,
-    )
-
     const page = await this.dbService.page.create({
       data: {
         moduleId: dto.moduleId,
         title: dto.title,
-        content: processedHtml,
-        keywords: dto.keywords ?? [],
         isPublished: dto.isPublished ?? false,
         orderIndex: lastPage?.orderIndex ? lastPage.orderIndex + 1 : 1,
       },
     })
-
-    await Promise.all(
-      conceptsToEmbed.map((concept) =>
-        this.dbService.pageConcept.create({
-          data: {
-            pageId: page.id,
-            term: concept.term,
-            definition: concept.definition,
-            htmlId: concept.htmlId,
-          },
-        }),
-      ),
-    )
 
     return PagesMapper.mapToDto(page)
   }
@@ -124,10 +101,7 @@ export class PagesService {
     }
 
     if (params.search) {
-      where.OR = [
-        { title: { contains: params.search, mode: 'insensitive' } },
-        { content: { contains: params.search, mode: 'insensitive' } },
-      ]
+      where.OR = [{ title: { contains: params.search, mode: 'insensitive' } }]
     }
 
     // Si es estudiante, solo mostrar páginas publicadas
@@ -173,6 +147,9 @@ export class PagesService {
             user: true,
           },
         },
+        blocks: {
+          orderBy: { orderIndex: 'asc' },
+        },
       },
     })
 
@@ -208,6 +185,9 @@ export class PagesService {
           where: {
             userId: user.id,
           },
+        },
+        blocks: {
+          orderBy: { orderIndex: 'asc' },
         },
       },
     })
@@ -273,20 +253,120 @@ export class PagesService {
         ...(updatePageDto.title !== undefined && {
           title: updatePageDto.title,
         }),
-        ...(updatePageDto.content !== undefined && {
-          content: updatePageDto.content,
-        }),
-
-        ...(updatePageDto.keywords !== undefined && {
-          keywords: updatePageDto.keywords,
-        }),
         ...(updatePageDto.isPublished !== undefined && {
           isPublished: updatePageDto.isPublished,
+        }),
+        ...(updatePageDto.hasManualEdits !== undefined && {
+          hasManualEdits: updatePageDto.hasManualEdits,
+          conceptsProcessed: updatePageDto.hasManualEdits ? false : undefined,
+        }),
+        ...(updatePageDto.keywords !== undefined && {
+          keywords: updatePageDto.keywords,
         }),
       },
     })
 
+    // Al publicar la página, encolar procesamiento de embeddings
+    if (updatePageDto.isPublished === true) {
+      await this.embeddingsQueue.add(
+        QUEUE_NAMES.EMBEDDINGS.JOBS.PROCESS_PAGE,
+        { pageId: id },
+        { removeOnComplete: true },
+      )
+    }
+
     return PagesMapper.mapToDto(page)
+  }
+
+  async updateContent(
+    id: number,
+    updatePageContentDto: UpdatePageContentDto,
+    user: User,
+  ): Promise<PageDto> {
+    // Verificar que la página existe
+    const existingPage = await this.dbService.page.findUnique({
+      where: { id },
+      include: {
+        module: true,
+        blocks: true,
+      },
+    })
+
+    if (!existingPage) {
+      throw new NotFoundException(`Página con ID ${id} no encontrada`)
+    }
+
+    // Solo el profesor propietario puede actualizar el contenido
+    if (existingPage.module.teacherId !== user.id) {
+      throw new ForbiddenException(
+        'Solo el profesor propietario puede actualizar el contenido de esta página',
+      )
+    }
+
+    // Ejecutar actualización de bloques en una transacción
+    await this.dbService.$transaction(async (prisma) => {
+      // Obtener los IDs de los bloques que se van a mantener/actualizar
+      const blockIdsToKeep = updatePageContentDto.blocks
+        .filter((block) => block.id !== undefined)
+        .map((block) => block.id!)
+
+      // Eliminar bloques que no están en la lista
+      await prisma.block.deleteMany({
+        where: {
+          pageId: id,
+          id: {
+            notIn: blockIdsToKeep.length > 0 ? blockIdsToKeep : [-1],
+          },
+        },
+      })
+
+      // Actualizar o crear bloques
+      for (let index = 0; index < updatePageContentDto.blocks.length; index++) {
+        const blockDto = updatePageContentDto.blocks[index]
+        // El orden del array es la fuente de verdad; orderIndex es 0-based
+        const orderIndex = index
+
+        if (blockDto.id) {
+          // Actualizar bloque existente
+          await prisma.block.update({
+            where: { id: blockDto.id },
+            data: {
+              type: blockDto.type,
+              content: blockDto.content,
+              tipTapContent: blockDto.tipTapContent,
+              orderIndex,
+            },
+          })
+        } else {
+          // Crear nuevo bloque
+          await prisma.block.create({
+            data: {
+              pageId: id,
+              type: blockDto.type,
+              content: blockDto.content,
+              tipTapContent: blockDto.tipTapContent,
+              orderIndex,
+            },
+          })
+        }
+      }
+
+      // Marcar la página como editada manualmente
+      await prisma.page.update({
+        where: { id },
+        data: {
+          hasManualEdits: true,
+          conceptsProcessed: false,
+        },
+      })
+    })
+
+    // Obtener y retornar la página actualizada
+    const updatedPage = await this.dbService.page.findUnique({
+      where: { id },
+    })
+
+    return PagesMapper.mapToDto(updatedPage!)
   }
 
   async reorder(reorderPagesDto: ReorderPagesDto, user: User): Promise<void> {

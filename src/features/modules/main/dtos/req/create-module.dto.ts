@@ -72,8 +72,7 @@ export class CreateModuleDto {
     description: 'Configuración de IA para el módulo',
     type: CreateAiConfigurationDto,
   })
-  @IsOptional()
   @ValidateNested()
   @Type(() => CreateAiConfigurationDto)
-  aiConfiguration?: CreateAiConfigurationDto
+  aiConfiguration: CreateAiConfigurationDto
 }

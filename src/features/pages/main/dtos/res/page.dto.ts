@@ -19,12 +19,6 @@ export class PageDto {
   })
   title: string
 
-  @ApiProperty({
-    description: 'Contenido HTML procesado con conceptos y enlaces incrustados',
-    example: '<p>Este es el contenido HTML procesado...</p>',
-  })
-  content: string
-
   @ApiPropertyOptional({
     description: 'Índice de orden de la página dentro del módulo',
     example: 1,
@@ -43,20 +37,6 @@ export class PageDto {
     example: false,
   })
   isPublished: boolean
-
-  @ApiPropertyOptional({
-    description: 'Fecha de último procesamiento del HTML',
-    example: '2024-01-01T00:00:00.000Z',
-    nullable: true,
-  })
-  lastProcessedAt: Date | null
-
-  @ApiProperty({
-    description:
-      'Versión de procesamiento para re-procesar si cambia la lógica',
-    example: 1,
-  })
-  processingVersion: number
 
   @ApiProperty({
     description: 'Fecha de creación de la página',

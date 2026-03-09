@@ -6,6 +6,7 @@ import 'dotenv/config'
 import { createUser1, createUser2 } from './data/users'
 import { createModule1 } from './data/modules'
 import { createEnrollment1 } from './data/enrollments'
+import { createAiConfiguration1 } from './data/ai-configuration'
 
 const adapter = new PrismaPg({
   connectionString: process.env.DB_URL,
@@ -18,6 +19,8 @@ const main = async () => {
 
   const module = await createModule1(prisma, teacher.id)
   await createEnrollment1(prisma, student.id, module.id)
+
+  await createAiConfiguration1(prisma, module.id)
   Logger.log('Seed data created successfully')
 }
 

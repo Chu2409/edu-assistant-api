@@ -36,7 +36,10 @@ export class ModulesMapper {
       id: aiConfig.id,
       moduleId: aiConfig.moduleId,
       language: aiConfig.language,
-      contextPrompt: aiConfig.contextPrompt,
+      targetLevel: aiConfig.targetLevel,
+      audience: aiConfig.audience,
+      contentLength: aiConfig.contentLength,
+      tone: aiConfig.tone,
       createdAt: aiConfig.createdAt,
       updatedAt: aiConfig.updatedAt,
     }

@@ -14,4 +14,6 @@ export interface IConfig {
 
   REDIS_HOST: string
   REDIS_PORT: number
+
+  OPENAI_API_KEY: string
 }

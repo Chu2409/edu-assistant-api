@@ -29,7 +29,6 @@ import { ApiPaginatedRes } from 'src/shared/dtos/res/api-response.dto'
 
 @ApiTags('Modules')
 @Controller('modules')
-@JwtAuth()
 export class ModulesController {
   constructor(private readonly modulesService: ModulesService) {}
 

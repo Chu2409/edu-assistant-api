@@ -13,6 +13,12 @@ import {
   type User,
 } from 'src/core/database/generated/client'
 import {
+  AiTargetLevel,
+  AiAudience,
+  AiLength,
+  AiTone,
+} from 'src/core/database/generated/enums'
+import {
   ModulesAllFiltersDto,
   ModulesAvailableFiltersDto,
 } from './dtos/req/module-filters.dto'
@@ -36,14 +42,19 @@ export class ModulesService {
         isPublic: createModuleDto.isPublic ?? false,
         allowSelfEnroll: createModuleDto.allowSelfEnroll ?? true,
         logoUrl: createModuleDto.logoUrl,
-        aiConfiguration: createModuleDto.aiConfiguration
-          ? {
-              create: {
-                language: createModuleDto.aiConfiguration.language ?? 'es',
-                contextPrompt: createModuleDto.aiConfiguration.contextPrompt,
-              },
-            }
-          : undefined,
+        aiConfiguration: {
+          create: {
+            language: createModuleDto.aiConfiguration.language ?? 'es',
+            targetLevel:
+              createModuleDto.aiConfiguration.targetLevel ??
+              AiTargetLevel.INTERMEDIATE,
+            audience:
+              createModuleDto.aiConfiguration.audience ?? AiAudience.UNIVERSITY,
+            contentLength:
+              createModuleDto.aiConfiguration.contentLength ?? AiLength.MEDIUM,
+            tone: createModuleDto.aiConfiguration.tone ?? AiTone.EDUCATIONAL,
+          },
+        },
       },
       include: {
         aiConfiguration: true,
@@ -222,11 +233,17 @@ export class ModulesService {
       aiConfiguration?: {
         update?: {
           language?: string
-          contextPrompt?: string | null
+          targetLevel?: AiTargetLevel
+          audience?: AiAudience
+          contentLength?: AiLength
+          tone?: AiTone
         }
         create?: {
           language: string
-          contextPrompt?: string | null
+          targetLevel: AiTargetLevel
+          audience: AiAudience
+          contentLength: AiLength
+          tone: AiTone
         }
       }
     } = { ...moduleData }
@@ -239,8 +256,17 @@ export class ModulesService {
             ...(aiConfiguration.language !== undefined && {
               language: aiConfiguration.language,
             }),
-            ...(aiConfiguration.contextPrompt !== undefined && {
-              contextPrompt: aiConfiguration.contextPrompt,
+            ...(aiConfiguration.targetLevel !== undefined && {
+              targetLevel: aiConfiguration.targetLevel,
+            }),
+            ...(aiConfiguration.audience !== undefined && {
+              audience: aiConfiguration.audience,
+            }),
+            ...(aiConfiguration.contentLength !== undefined && {
+              contentLength: aiConfiguration.contentLength,
+            }),
+            ...(aiConfiguration.tone !== undefined && {
+              tone: aiConfiguration.tone,
             }),
           },
         }
@@ -249,7 +275,11 @@ export class ModulesService {
         updateData.aiConfiguration = {
           create: {
             language: aiConfiguration.language ?? 'es',
-            contextPrompt: aiConfiguration.contextPrompt,
+            targetLevel:
+              aiConfiguration.targetLevel ?? AiTargetLevel.INTERMEDIATE,
+            audience: aiConfiguration.audience ?? AiAudience.UNIVERSITY,
+            contentLength: aiConfiguration.contentLength ?? AiLength.MEDIUM,
+            tone: aiConfiguration.tone ?? AiTone.EDUCATIONAL,
           },
         }
       }

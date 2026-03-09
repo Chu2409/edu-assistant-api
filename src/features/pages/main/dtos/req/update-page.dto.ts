@@ -3,9 +3,9 @@ import {
   IsString,
   IsOptional,
   IsBoolean,
-  IsArray,
   MinLength,
   MaxLength,
+  IsArray,
 } from 'class-validator'
 
 export class UpdatePageDto {
@@ -22,16 +22,8 @@ export class UpdatePageDto {
   title?: string
 
   @ApiPropertyOptional({
-    description: 'Contenido HTML procesado con conceptos y enlaces incrustados',
-    example: '<p>Este es el contenido HTML procesado actualizado...</p>',
-  })
-  @IsOptional()
-  @IsString()
-  content?: string
-
-  @ApiPropertyOptional({
     description: 'Palabras clave para búsquedas',
-    example: ['programación', 'avanzado', 'conceptos'],
+    example: ['programación', 'introducción', 'básicos'],
     type: [String],
   })
   @IsOptional()
@@ -46,4 +38,12 @@ export class UpdatePageDto {
   @IsOptional()
   @IsBoolean()
   isPublished?: boolean
+
+  @ApiPropertyOptional({
+    description: 'Indica si la página tiene ediciones manuales',
+    example: true,
+  })
+  @IsOptional()
+  @IsBoolean()
+  hasManualEdits?: boolean
 }

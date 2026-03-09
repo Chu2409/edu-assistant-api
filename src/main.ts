@@ -9,6 +9,25 @@ import * as express from 'express'
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger'
 import { ApiPaginatedRes, ApiRes } from './shared/dtos/res/api-response.dto'
 import { BaseParamsReqDto } from './shared/dtos/req/base-params.dto'
+import {
+  FillBlankAttempt,
+  MatchAttempt,
+  MultipleChoiceAttempt,
+  TrueFalseAttempt,
+} from './features/pages/activities/interfaces/activity-attempt.interface'
+import {
+  AiGeneratedFillBlankActivity,
+  AiGeneratedMatchActivity,
+  AiGeneratedTrueFalseActivity,
+  AiGeneratedMultipleChoiceActivity,
+} from './features/pages/content-generation/interfaces/ai-generated-activity.interface'
+import {
+  AiCodeBlock,
+  AiContentBlock,
+  AiImageSuggestionBlock,
+  AiTextBlock,
+} from './features/pages/content-generation/interfaces/ai-generated-content.interface'
+import { AiResponseDto } from './providers/ai/dtos/ai-response.interface'
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, { cors: true })
@@ -40,7 +59,7 @@ async function bootstrap() {
   app.setGlobalPrefix('api')
 
   const config = new DocumentBuilder()
-    .setTitle('Nest Prisma Base API')
+    .setTitle('Edu Assistant API')
     .setDescription(
       'Complete API documentation for Nest Prisma Base. This API is designed to provide a seamless experience for developers and users alike. It includes endpoints for authentication, user management and more.',
     )
@@ -55,10 +74,28 @@ async function bootstrap() {
       description: 'Enter your JWT token',
       in: 'header',
     })
+    .addSecurityRequirements('bearer')
     .build()
 
   const document = SwaggerModule.createDocument(app, config, {
-    extraModels: [ApiRes, ApiPaginatedRes, BaseParamsReqDto],
+    extraModels: [
+      ApiRes,
+      ApiPaginatedRes,
+      BaseParamsReqDto,
+      MultipleChoiceAttempt,
+      TrueFalseAttempt,
+      FillBlankAttempt,
+      MatchAttempt,
+      AiGeneratedMultipleChoiceActivity,
+      AiGeneratedTrueFalseActivity,
+      AiGeneratedFillBlankActivity,
+      AiGeneratedMatchActivity,
+      AiContentBlock,
+      AiResponseDto,
+      AiTextBlock,
+      AiCodeBlock,
+      AiImageSuggestionBlock,
+    ],
   })
 
   SwaggerModule.setup('api/docs', app, document, {
@@ -75,7 +112,7 @@ async function bootstrap() {
         theme: 'agate',
       },
     },
-    customSiteTitle: 'EcuaTickets API Documentation',
+    customSiteTitle: 'Edu Assistant API Documentation',
     // customfavIcon: 'https://nestjs.com/favicon.ico',
     customCss: `
         .swagger-ui .information-container { padding: 20px 0 }

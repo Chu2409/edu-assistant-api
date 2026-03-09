@@ -43,6 +43,21 @@ export type Enrollment = Prisma.EnrollmentModel
  */
 export type Page = Prisma.PageModel
 /**
+ * Model Block
+ * 
+ */
+export type Block = Prisma.BlockModel
+/**
+ * Model Session
+ * 
+ */
+export type Session = Prisma.SessionModel
+/**
+ * Model Message
+ * 
+ */
+export type Message = Prisma.MessageModel
+/**
  * Model PageView
  * 
  */
