@@ -1,0 +1,51 @@
+# docker compose --env-file .env.production -f docker-compose-prod.yaml up -d
+services:
+  redis:
+    container_name: edu-assistant-redis
+    image: redis:alpine
+    restart: always
+    volumes:
+      - redis-data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - proxy-network
+
+  api:
+    container_name: edu-assistant-api
+    image: ghcr.io/chu2409/edu-assistant-api:latest
+    command: sh -c "npx prisma migrate deploy && node dist/src/main"
+    restart: unless-stopped
+    ports:
+      - ${PORT:-3010}:${PORT:-3010}
+    env_file:
+      - .env.production
+    depends_on:
+      redis:
+        condition: service_healthy
+    networks:
+      - proxy-network
+
+  worker:
+    container_name: edu-assistant-worker
+    image: ghcr.io/chu2409/edu-assistant-api:latest
+    command: sh -c "npx prisma migrate deploy && node dist/src/worker"
+    restart: unless-stopped
+    env_file:
+      - .env.production
+    depends_on:
+      redis:
+        condition: service_healthy
+    networks:
+      - proxy-network
+
+networks:
+  proxy-network:
+    name: proxy-network
+    driver: bridge
+
+volumes:
+  redis-data:

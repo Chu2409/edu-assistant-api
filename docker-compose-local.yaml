@@ -1,3 +1,4 @@
+# docker compose --env-file .env.local -f docker-compose-local.yaml up -d
 services:
   db:
     container_name: edu-assistant-db
