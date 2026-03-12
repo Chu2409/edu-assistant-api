@@ -10,6 +10,7 @@ import { PageFeedbacksModule } from './features/pages/page-feedbacks/page-feedba
 import { UsersModule } from './features/users/users.module'
 import { APP_GUARD } from '@nestjs/core'
 import { JwtAuthGuard } from './features/auth/guards/jwt-auth.guard'
+import { FilesModule } from './providers/files/files.module'
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { JwtAuthGuard } from './features/auth/guards/jwt-auth.guard'
     PagesModule,
     PageFeedbacksModule,
     UsersModule,
+    FilesModule,
   ],
   controllers: [HealthController],
   providers: [

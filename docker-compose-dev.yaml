@@ -1,4 +1,4 @@
-# docker compose --env-file .env -f docker-compose-dev.yaml up -d
+# docker compose -f docker-compose-dev.yaml up -d
 services:
   db:
     container_name: edu-assistant-db
