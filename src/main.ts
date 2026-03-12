@@ -1,4 +1,6 @@
 import { NestFactory } from '@nestjs/core'
+import { NestExpressApplication } from '@nestjs/platform-express'
+import { join } from 'path'
 import { AppModule } from './app.module'
 import { Logger, ValidationPipe } from '@nestjs/common'
 import { useContainer } from 'class-validator'
@@ -30,7 +32,14 @@ import {
 import { AiResponseDto } from './providers/ai/dtos/ai-response.interface'
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule, { cors: true })
+  const app = await NestFactory.create<NestExpressApplication>(AppModule, {
+    cors: true,
+  })
+
+  // Serve static files from the uploads directory
+  app.useStaticAssets(join(process.cwd(), 'uploads'), {
+    prefix: '/uploads/',
+  })
   const configService = app.get(CustomConfigService)
   const port = configService.env.PORT
 
@@ -39,7 +48,7 @@ async function bootstrap() {
   app.use(express.urlencoded({ limit: '50mb', extended: true }))
   app.use(express.text({ limit: '50mb' }))
 
-  app.enableCors('*')
+  app.enableCors()
 
   app.useGlobalPipes(
     new ValidationPipe({
