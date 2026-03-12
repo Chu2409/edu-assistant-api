@@ -43,28 +43,28 @@ jobs:
           push: true
           tags: ghcr.io/chu2409/edu-assistant-api:${{ steps.vars.outputs.IMAGE_TAG }}
 
-  deploy-production:
-    needs: build-and-push
-    runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'
-    environment: production # 🎯 Usa el environment de GitHub
+  # deploy-production:
+  #   needs: build-and-push
+  #   runs-on: ubuntu-latest
+  #   if: github.ref == 'refs/heads/main'
+  #   environment: production # 🎯 Usa el environment de GitHub
 
-    steps:
-      - name: Trigger Portainer Webhook (API Service - Production)
-        run: curl -s -X POST ${{ secrets.PORTAINER_WEBHOOK_API }}
+  #   steps:
+  #     - name: Trigger Portainer Webhook (API Service - Production)
+  #       run: curl -s -X POST ${{ secrets.PORTAINER_WEBHOOK_API }}
 
-      - name: Trigger Portainer Webhook (Worker Service - Production)
-        run: curl -s -X POST ${{ secrets.PORTAINER_WEBHOOK_WORKER }}
+  #     - name: Trigger Portainer Webhook (Worker Service - Production)
+  #       run: curl -s -X POST ${{ secrets.PORTAINER_WEBHOOK_WORKER }}
 
-  deploy-development:
-    needs: build-and-push
-    runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/develop'
-    environment: development # 🎯 Usa el environment de GitHub
+  # deploy-development:
+  #   needs: build-and-push
+  #   runs-on: ubuntu-latest
+  #   if: github.ref == 'refs/heads/develop'
+  #   environment: development # 🎯 Usa el environment de GitHub
 
-    steps:
-      - name: Trigger Portainer Webhook (API Service - Development)
-        run: curl -s -X POST ${{ secrets.PORTAINER_WEBHOOK_API }}
+  #   steps:
+  #     - name: Trigger Portainer Webhook (API Service - Development)
+  #       run: curl -s -X POST ${{ secrets.PORTAINER_WEBHOOK_API }}
 
-      - name: Trigger Portainer Webhook (Worker Service - Development)
-        run: curl -s -X POST ${{ secrets.PORTAINER_WEBHOOK_WORKER }}
+  #     - name: Trigger Portainer Webhook (Worker Service - Development)
+  #       run: curl -s -X POST ${{ secrets.PORTAINER_WEBHOOK_WORKER }}
