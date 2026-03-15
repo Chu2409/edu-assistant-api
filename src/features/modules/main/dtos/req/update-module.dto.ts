@@ -3,7 +3,6 @@ import {
   IsString,
   IsOptional,
   IsBoolean,
-  IsUrl,
   MinLength,
   MaxLength,
   ValidateNested,
@@ -60,11 +59,11 @@ export class UpdateModuleDto {
 
   @ApiPropertyOptional({
     description: 'URL del logo del módulo',
-    example: 'https://example.com/new-logo.png',
+    example: '/uploads/new-logo.png',
     nullable: true,
   })
   @IsOptional()
-  @IsUrl()
+  @IsString()
   logoUrl?: string
 
   @ApiPropertyOptional({
