@@ -137,6 +137,8 @@ function getBlockTypeRules(blockType: BlockType): string {
 
     case BlockType.CODE:
       return `CODE Block:
+- Generate ONLY for programming or technical topics where code examples are essential.
+- Do NOT generate for general subjects (history, literature, etc.) unless specifically requested.
 - Include language identifier
 - Properly escape special characters in JSON
 - Add helpful comments

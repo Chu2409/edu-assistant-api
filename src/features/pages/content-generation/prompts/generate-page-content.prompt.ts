@@ -78,7 +78,8 @@ TEXT:
 - One TEXT block can have multiple headings, paragraphs, lists.
 
 CODE:
-- Include only when code genuinely aids understanding
+- Generate ONLY for programming or technical topics where code examples are essential.
+- Do NOT generate for general subjects (history, literature, etc.) unless specifically requested.
 - Choose appropriate language, include comments
 - Escape special characters properly in JSON
 

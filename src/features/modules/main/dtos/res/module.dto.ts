@@ -41,7 +41,7 @@ export class ModuleDto {
 
   @ApiProperty({
     description: 'URL del logo del módulo',
-    example: 'https://example.com/logo.png',
+    example: '/uploads/new-logo.png',
     nullable: true,
   })
   logoUrl: string | null

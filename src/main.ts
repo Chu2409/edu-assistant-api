@@ -38,7 +38,7 @@ async function bootstrap() {
 
   // Serve static files from the uploads directory
   app.useStaticAssets(join(process.cwd(), 'uploads'), {
-    prefix: '/uploads/',
+    prefix: '/api/uploads/',
   })
   const configService = app.get(CustomConfigService)
   const port = configService.env.PORT
