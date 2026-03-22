@@ -64,7 +64,9 @@ export class AuthController {
       'Reemplaza la lista global de correos electrónicos que se tratarán como profesores. La configuración persiste en base de datos.',
   })
   @ApiStandardResponse(TeacherEmailsDto)
-  async updateTeacherEmails(@Body() dto: TeacherEmailsDto): Promise<TeacherEmailsDto> {
+  async updateTeacherEmails(
+    @Body() dto: TeacherEmailsDto,
+  ): Promise<TeacherEmailsDto> {
     const emails = await this.authService.setTeacherEmails(dto.emails)
     return { emails }
   }

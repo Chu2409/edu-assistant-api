@@ -11,12 +11,10 @@ import {
   MessageRole,
   Role,
   type Page,
-  type Session,
   type User,
 } from 'src/core/database/generated/client'
 import { BlocksMapper } from '../blocks/mappers/blocks.mapper'
 import { BlockType } from 'src/core/database/generated/enums'
-import type { PromptInput } from '../content-generation/interfaces/prompt-input.interface'
 import { CreateOrGetSessionDto } from './dtos/req/create-or-get-session.dto'
 import { SendMessageDto } from './dtos/req/send-message.dto'
 import { SessionDto } from './dtos/res/session.dto'
@@ -27,6 +25,8 @@ import {
   AiTextBlock,
 } from '../content-generation/interfaces/ai-generated-content.interface'
 import { parseJsonField } from 'src/providers/ai/helpers/utils'
+import { chatSessionPrompt } from '../content-generation/prompts/chat-session.prompt'
+import { ChatMapper } from './mappers/chat.mapper'
 
 type StoredAiMetadata = {
   responseId?: string
@@ -83,36 +83,6 @@ export class ChatService {
     return page
   }
 
-  private toSessionDto(session: Session): SessionDto {
-    return {
-      id: session.id,
-      pageId: session.pageId,
-      userId: session.userId,
-      title: session.title,
-      startedAt: session.startedAt,
-      createdAt: session.createdAt,
-      updatedAt: session.updatedAt,
-    }
-  }
-
-  private toMessageDto(message: {
-    id: number
-    sessionId: number
-    role: MessageRole
-    content: string
-    metadata: string | null
-    createdAt: Date
-  }): MessageDto {
-    return {
-      id: message.id,
-      sessionId: message.sessionId,
-      role: message.role,
-      content: message.content,
-      metadata: message.metadata ?? null,
-      createdAt: message.createdAt,
-    }
-  }
-
   async createOrGetSession(
     pageId: number,
     dto: CreateOrGetSessionDto,
@@ -124,7 +94,7 @@ export class ChatService {
       where: { userId_pageId: { userId: user.id, pageId } },
     })
     if (existing) {
-      return this.toSessionDto(existing)
+      return ChatMapper.toSessionDto(existing)
     }
 
     const created = await this.dbService.session.create({
@@ -135,7 +105,7 @@ export class ChatService {
       },
     })
 
-    return this.toSessionDto(created)
+    return ChatMapper.toSessionDto(created)
   }
 
   async listMessages(sessionId: number, user: User): Promise<MessageDto[]> {
@@ -163,7 +133,7 @@ export class ChatService {
     })
 
     return messages.map((m) =>
-      this.toMessageDto({
+      ChatMapper.toMessageDto({
         id: m.id,
         sessionId: m.sessionId,
         role: m.role,
@@ -207,24 +177,29 @@ export class ChatService {
 
     const previousResponseId = this.getPreviousResponseId(session.messages)
 
-    const lessonContext = this.buildLessonContext(session.page.blocks)
+    const isFirstMessage = !previousResponseId
+    const lessonContext = isFirstMessage
+      ? this.buildLessonContext(session.page.blocks)
+      : undefined
+
     // @ts-expect-error el lenguaje debería venir de la configuración de la lección, pero por ahora lo dejamos fijo
     const language = page.module.aiConfiguration?.language ?? 'es'
 
-    const prompt = this.buildChatPrompt({
+    const prompt = chatSessionPrompt({
       language,
       lessonTitle: page.title,
       lessonContext,
       userMessage: dto.message,
+      isFirstMessage,
     })
 
-    const ai = await this.openAiService.getResponse<{ answer: string }>(
+    const ai = await this.openAiService.getMarkdownResponse(
       prompt,
       previousResponseId,
     )
 
     const responseId = ai.responseId
-    const assistantAnswer = ai.content.answer
+    const assistantAnswer = ai.content
 
     const assistantMetadata: StoredAiMetadata = { responseId }
 
@@ -252,7 +227,7 @@ export class ChatService {
     )
 
     return {
-      assistantMessage: this.toMessageDto({
+      assistantMessage: ChatMapper.toMessageDto({
         id: assistantMessage.id,
         sessionId: assistantMessage.sessionId,
         role: assistantMessage.role,
@@ -302,40 +277,5 @@ export class ChatService {
     }
 
     return parts.join('\n\n---\n\n')
-  }
-
-  private buildChatPrompt(input: {
-    language: string
-    lessonTitle: string
-    lessonContext: string
-    userMessage: string
-  }): PromptInput[] {
-    const { language, lessonTitle, lessonContext, userMessage } = input
-
-    const system = `Eres un asistente educativo. Tu objetivo es ayudar al estudiante usando EXCLUSIVAMENTE el contenido de la lección y conocimiento general básico para explicar, pero sin inventar detalles específicos que no estén en la lección.
-
-Responde en el idioma: ${language}.
-
-# FORMATO DE SALIDA (OBLIGATORIO)
-Devuelve SOLO JSON válido (sin fences, sin texto extra):
-{ "answer": string }
-
-# REGLAS
-- Si el usuario pide algo que NO está en la lección y no puede inferirse, dilo claramente y sugiere qué parte falta.
-- Respuestas claras, paso a paso si aplica.
-- Si hay código, explica qué hace y muestra un ejemplo corto si ayuda.`
-
-    const user = `Lección: ${lessonTitle}
-
-# CONTEXTO DE LA LECCIÓN
-${lessonContext || '(sin contenido disponible)'}
-
-# PREGUNTA DEL USUARIO
-${userMessage}`
-
-    return [
-      { role: 'system', content: system },
-      { role: 'user', content: user },
-    ]
   }
 }

@@ -69,7 +69,7 @@ export class OpenaiService implements OnModuleInit {
 
   async setModelConfig(config: Partial<AiModelConfig>): Promise<AiModelConfig> {
     this.modelConfig = { ...this.modelConfig, ...config }
-    
+
     await this.dbService.systemSetting.upsert({
       where: { key: SYSTEM_CONFIG_KEYS.AI_MODELS },
       update: { value: this.modelConfig as any },
@@ -79,7 +79,7 @@ export class OpenaiService implements OnModuleInit {
         description: 'Modelos de OpenAI configurados globalmente',
       },
     })
-    
+
     return this.getModelConfig()
   }
 
@@ -103,6 +103,26 @@ export class OpenaiService implements OnModuleInit {
 
       return {
         content,
+        responseId: response.id,
+      }
+    } catch (error) {
+      this.handleError(error)
+    }
+  }
+
+  async getMarkdownResponse(
+    input: PromptInput[],
+    previousResponseId?: string,
+  ): Promise<{ content: string; responseId: string }> {
+    try {
+      const response = await this.openai.responses.create({
+        model: this.modelConfig.responses,
+        input,
+        previous_response_id: previousResponseId,
+      })
+
+      return {
+        content: response.output_text,
         responseId: response.id,
       }
     } catch (error) {

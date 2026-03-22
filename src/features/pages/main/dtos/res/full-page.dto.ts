@@ -136,4 +136,12 @@ export class FullPageDto {
     ],
   })
   blocks: BlockDto[]
+
+  @ApiPropertyOptional({
+    description:
+      'ID de la sesión de chat con IA asociada a esta página y usuario actual',
+    example: 1,
+    nullable: true,
+  })
+  chatSessionId?: number | null
 }

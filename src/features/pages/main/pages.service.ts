@@ -189,6 +189,10 @@ export class PagesService {
         blocks: {
           orderBy: { orderIndex: 'asc' },
         },
+        sessions: {
+          where: { userId: user.id },
+          take: 1,
+        },
       },
     })
 

@@ -1,4 +1,4 @@
 export const SYSTEM_CONFIG_KEYS = {
   AI_MODELS: 'AI_MODELS',
   TEACHER_EMAILS: 'TEACHER_EMAILS',
-} as const;
+} as const

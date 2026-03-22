@@ -21,6 +21,8 @@ import { PageNotesController } from '../notes/page-notes.controller'
 import { PageNotesService } from '../notes/page-notes.service'
 import { QuestionRepliesController } from '../question-replies/question-replies.controller'
 import { QuestionRepliesService } from '../question-replies/question-replies.service'
+import { PageSessionsController } from '../chat/pages-sessions.controller'
+import { SessionMessagesController } from '../chat/sessions-messages.controller'
 
 @Module({
   imports: [
@@ -35,8 +37,8 @@ import { QuestionRepliesService } from '../question-replies/question-replies.ser
     PagesActivitiesController,
     ActivityAttemptsController,
     PageConceptsController,
-    // PageSessionsController,
-    // SessionMessagesController,
+    PageSessionsController,
+    SessionMessagesController,
     PageRelationsController,
     // MediaResourcesController,
     StudentQuestionsController,

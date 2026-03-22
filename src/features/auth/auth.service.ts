@@ -106,7 +106,7 @@ export class AuthService implements OnModuleInit {
       .filter((e) => !!e)
 
     this.teacherEmails = Array.from(new Set(normalized))
-    
+
     await this.dbService.systemSetting.upsert({
       where: { key: SYSTEM_CONFIG_KEYS.TEACHER_EMAILS },
       update: { value: this.teacherEmails as any },
@@ -116,7 +116,7 @@ export class AuthService implements OnModuleInit {
         description: 'Lista global de correos de profesores',
       },
     })
-    
+
     return this.getTeacherEmails()
   }
 }
