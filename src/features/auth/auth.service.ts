@@ -1,18 +1,42 @@
-import { Injectable } from '@nestjs/common'
+import { Injectable, OnModuleInit, Logger } from '@nestjs/common'
 import { JwtService } from '@nestjs/jwt'
 import { JwtPayload } from './interfaces/jwt-payload.interface'
 import { DBService } from 'src/core/database/database.service'
+import { SYSTEM_CONFIG_KEYS } from 'src/shared/constants/configurations'
 import { Role, User } from 'src/core/database/generated/client'
 import { ValidateMicrosoftUserDto } from './dtos/req/validate-microsoft-user.dto'
 
 @Injectable()
-export class AuthService {
+export class AuthService implements OnModuleInit {
+  private readonly logger = new Logger(AuthService.name)
+
   constructor(
     private jwtService: JwtService,
     private dbService: DBService,
   ) {}
 
   private teacherEmails: string[] = []
+
+  async onModuleInit() {
+    try {
+      const setting = await this.dbService.systemSetting.findUnique({
+        where: { key: SYSTEM_CONFIG_KEYS.TEACHER_EMAILS },
+      })
+      if (setting && setting.value) {
+        this.teacherEmails = setting.value as string[]
+      } else {
+        await this.dbService.systemSetting.create({
+          data: {
+            key: SYSTEM_CONFIG_KEYS.TEACHER_EMAILS,
+            value: [] as any,
+            description: 'Lista global de correos de profesores',
+          },
+        })
+      }
+    } catch (e) {
+      this.logger.error('Error loading TEACHER_EMAILS config from DB', e)
+    }
+  }
 
   generateJwt(user: User) {
     const payload: JwtPayload = {
@@ -76,12 +100,23 @@ export class AuthService {
     return [...this.teacherEmails]
   }
 
-  setTeacherEmails(emails: string[]): string[] {
+  async setTeacherEmails(emails: string[]): Promise<string[]> {
     const normalized = (emails || [])
       .map((e) => e.toLowerCase().trim())
       .filter((e) => !!e)
 
     this.teacherEmails = Array.from(new Set(normalized))
+    
+    await this.dbService.systemSetting.upsert({
+      where: { key: SYSTEM_CONFIG_KEYS.TEACHER_EMAILS },
+      update: { value: this.teacherEmails as any },
+      create: {
+        key: SYSTEM_CONFIG_KEYS.TEACHER_EMAILS,
+        value: this.teacherEmails as any,
+        description: 'Lista global de correos de profesores',
+      },
+    })
+    
     return this.getTeacherEmails()
   }
 }

@@ -1348,6 +1348,11 @@ export type PodcastFindManyArgs<ExtArgs extends runtime.Types.Extensions.Interna
    * Skip the first `n` Podcasts.
    */
   skip?: number
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+   * 
+   * Filter by unique combinations of Podcasts.
+   */
   distinct?: Prisma.PodcastScalarFieldEnum | Prisma.PodcastScalarFieldEnum[]
 }
 

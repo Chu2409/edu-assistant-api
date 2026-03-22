@@ -9,6 +9,8 @@ import type {
   ImagesModel,
 } from './interfaces/models'
 import { parseJsonField } from './helpers/utils'
+import { DBService } from 'src/core/database/database.service'
+import { SYSTEM_CONFIG_KEYS } from 'src/shared/constants/configurations'
 
 export interface AiModelConfig {
   responses: ResponsesModel
@@ -30,21 +32,54 @@ export class OpenaiService implements OnModuleInit {
   /** Configuración de modelos en memoria (se pierde al reiniciar el servidor) */
   private modelConfig: AiModelConfig = { ...DEFAULT_MODELS }
 
-  constructor(private customConfigService: CustomConfigService) {}
+  constructor(
+    private customConfigService: CustomConfigService,
+    private dbService: DBService,
+  ) {}
 
-  onModuleInit() {
+  async onModuleInit() {
     // Inicializamos el cliente con la API Key
     this.openai = new OpenAI({
       apiKey: this.customConfigService.env.OPENAI_API_KEY,
     })
+
+    try {
+      const setting = await this.dbService.systemSetting.findUnique({
+        where: { key: SYSTEM_CONFIG_KEYS.AI_MODELS },
+      })
+      if (setting && setting.value) {
+        this.modelConfig = { ...this.modelConfig, ...(setting.value as any) }
+      } else {
+        await this.dbService.systemSetting.create({
+          data: {
+            key: SYSTEM_CONFIG_KEYS.AI_MODELS,
+            value: this.modelConfig as any,
+            description: 'Modelos de OpenAI configurados globalmente',
+          },
+        })
+      }
+    } catch (e) {
+      this.logger.error('Error loading AI_MODELS config from DB', e)
+    }
   }
 
   getModelConfig(): AiModelConfig {
     return { ...this.modelConfig }
   }
 
-  setModelConfig(config: Partial<AiModelConfig>): AiModelConfig {
+  async setModelConfig(config: Partial<AiModelConfig>): Promise<AiModelConfig> {
     this.modelConfig = { ...this.modelConfig, ...config }
+    
+    await this.dbService.systemSetting.upsert({
+      where: { key: SYSTEM_CONFIG_KEYS.AI_MODELS },
+      update: { value: this.modelConfig as any },
+      create: {
+        key: SYSTEM_CONFIG_KEYS.AI_MODELS,
+        value: this.modelConfig as any,
+        description: 'Modelos de OpenAI configurados globalmente',
+      },
+    })
+    
     return this.getModelConfig()
   }
 

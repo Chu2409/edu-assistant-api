@@ -25,7 +25,7 @@ export class AiConfigController {
   @ApiOperation({
     summary: 'Obtener configuración actual de modelos',
     description:
-      'Devuelve los modelos configurados para Responses, Embeddings e Imágenes. La configuración se mantiene en memoria (se pierde al reiniciar).',
+      'Devuelve los modelos configurados para Responses, Embeddings e Imágenes. Se respalda en base de datos de manera persistente.',
   })
   @ApiStandardResponse(AiModelConfigResponseDto)
   getConfig() {
@@ -68,16 +68,16 @@ export class AiConfigController {
   @ApiOperation({
     summary: 'Configurar modelos de IA',
     description:
-      'Actualiza los modelos usados para generación de contenido. Solo se envían los campos que se desean cambiar. La configuración se mantiene en memoria (se pierde al reiniciar).',
+      'Actualiza los modelos usados para generación de contenido. Solo se envían los campos que se desean cambiar. La configuración persiste en base de datos.',
   })
   @ApiStandardResponse(AiModelConfigResponseDto, HttpStatus.OK)
-  updateConfig(@Body() dto: UpdateAiModelConfigDto) {
+  async updateConfig(@Body() dto: UpdateAiModelConfigDto) {
     const config: Partial<AiModelConfig> = {}
     if (dto.responses)
       config.responses = dto.responses as AiModelConfig['responses']
     if (dto.embeddings)
       config.embeddings = dto.embeddings as AiModelConfig['embeddings']
     if (dto.images) config.images = dto.images as AiModelConfig['images']
-    return this.openaiService.setModelConfig(config)
+    return await this.openaiService.setModelConfig(config)
   }
 }

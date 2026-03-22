@@ -1317,6 +1317,11 @@ export type MediaResourceFindManyArgs<ExtArgs extends runtime.Types.Extensions.I
    * Skip the first `n` MediaResources.
    */
   skip?: number
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+   * 
+   * Filter by unique combinations of MediaResources.
+   */
   distinct?: Prisma.MediaResourceScalarFieldEnum | Prisma.MediaResourceScalarFieldEnum[]
 }
 

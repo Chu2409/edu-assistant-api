@@ -61,11 +61,11 @@ export class AuthController {
   @ApiOperation({
     summary: 'Configurar lista de correos de profesores',
     description:
-      'Reemplaza la lista en memoria de correos electrónicos que se tratarán como profesores. La configuración se pierde al reiniciar el servidor.',
+      'Reemplaza la lista global de correos electrónicos que se tratarán como profesores. La configuración persiste en base de datos.',
   })
   @ApiStandardResponse(TeacherEmailsDto)
-  updateTeacherEmails(@Body() dto: TeacherEmailsDto): TeacherEmailsDto {
-    const emails = this.authService.setTeacherEmails(dto.emails)
+  async updateTeacherEmails(@Body() dto: TeacherEmailsDto): Promise<TeacherEmailsDto> {
+    const emails = await this.authService.setTeacherEmails(dto.emails)
     return { emails }
   }
 }

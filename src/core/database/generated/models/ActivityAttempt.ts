@@ -1373,6 +1373,11 @@ export type ActivityAttemptFindManyArgs<ExtArgs extends runtime.Types.Extensions
    * Skip the first `n` ActivityAttempts.
    */
   skip?: number
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+   * 
+   * Filter by unique combinations of ActivityAttempts.
+   */
   distinct?: Prisma.ActivityAttemptScalarFieldEnum | Prisma.ActivityAttemptScalarFieldEnum[]
 }
 
