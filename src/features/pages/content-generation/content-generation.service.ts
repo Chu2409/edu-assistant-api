@@ -148,22 +148,22 @@ export class ContentGenerationService {
       throw new NotFoundException(`Page with id ${data.pageId} not found`)
     }
 
-    if (page.blocks.length === 0) {
-      throw new BadRequestException('Page has no blocks')
-    }
+    const blockIndex = page.blocks.findIndex(
+      (b) => b.orderIndex === data.orderIndex,
+    )
 
-    if (data.blockIndex >= page.blocks.length) {
-      throw new BadRequestException(
-        `Block index ${data.blockIndex} is out of range (page has ${page.blocks.length} blocks)`,
+    if (blockIndex === -1) {
+      throw new NotFoundException(
+        `Block with orderIndex ${data.orderIndex} not found in page ${data.pageId}`,
       )
     }
 
-    const block = page.blocks[data.blockIndex]
+    const block = page.blocks[blockIndex]
     const previousBlock =
-      data.blockIndex > 0 ? page.blocks[data.blockIndex - 1] : undefined
+      blockIndex > 0 ? page.blocks[blockIndex - 1] : undefined
     const nextBlock =
-      data.blockIndex < page.blocks.length - 1
-        ? page.blocks[data.blockIndex + 1]
+      blockIndex < page.blocks.length - 1
+        ? page.blocks[blockIndex + 1]
         : undefined
 
     const config = {
@@ -174,7 +174,7 @@ export class ContentGenerationService {
     }
 
     const prompt = regenerateBlockPrompt({
-      blockIndex: data.blockIndex,
+      blockIndex,
       block: {
         type: block.type,
         content: parseJsonField(block.content),
@@ -224,17 +224,16 @@ export class ContentGenerationService {
       throw new NotFoundException(`Page with id ${data.pageId} not found`)
     }
 
-    if (page.blocks.length === 0) {
-      throw new BadRequestException('Page has no blocks')
-    }
-
-    if (
-      data.targetBlockIndex !== undefined &&
-      data.targetBlockIndex >= page.blocks.length
-    ) {
-      throw new BadRequestException(
-        `Target block index ${data.targetBlockIndex} is out of range (page has ${page.blocks.length} blocks)`,
+    let targetBlockIndex: number | undefined = undefined
+    if (data.targetOrderIndex !== undefined) {
+      targetBlockIndex = page.blocks.findIndex(
+        (b) => b.orderIndex === data.targetOrderIndex,
       )
+      if (targetBlockIndex === -1) {
+        throw new NotFoundException(
+          `Target block with orderIndex ${data.targetOrderIndex} not found`,
+        )
+      }
     }
 
     const existingBlocks = page.blocks.map((b) => ({
@@ -253,7 +252,7 @@ export class ContentGenerationService {
       existingBlocks,
       instruction: data.instruction,
       insertPosition: data.insertPosition as 'before' | 'after' | 'replace',
-      targetBlockIndex: data.targetBlockIndex,
+      targetBlockIndex,
       config: {
         language: config.language,
         targetLevel: config.targetLevel,

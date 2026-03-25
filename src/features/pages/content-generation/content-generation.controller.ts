@@ -93,7 +93,7 @@ export class ContentGenerationController {
   @ApiResponse({ status: 404, description: 'Página no encontrada' })
   @ApiResponse({
     status: 400,
-    description: 'Datos inválidos o índice de bloque fuera de rango',
+    description: 'Datos inválidos o bloque no encontrado por su orden',
   })
   regenerateBlock(@Body() dto: RegenerateBlockDto) {
     return this.contentGenerationService.regenerateBlock(dto)
@@ -114,7 +114,7 @@ export class ContentGenerationController {
   @ApiResponse({ status: 404, description: 'Página no encontrada' })
   @ApiResponse({
     status: 400,
-    description: 'Datos inválidos o índice de bloque fuera de rango',
+    description: 'Datos inválidos o bloque no encontrado por su orden',
   })
   expandContent(@Body() dto: ExpandContentDto) {
     return this.contentGenerationService.expandContent(dto)

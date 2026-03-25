@@ -23,12 +23,12 @@ export class RegenerateBlockDto {
   pageId: number
 
   @ApiProperty({
-    description: 'Índice del bloque a regenerar (0-based)',
+    description: 'Orden del bloque a regenerar (orderIndex)',
     example: 0,
   })
   @IsInt()
   @Min(0)
-  blockIndex: number
+  orderIndex: number
 
   @ApiProperty({
     description: 'Instrucciones para modificar el bloque',

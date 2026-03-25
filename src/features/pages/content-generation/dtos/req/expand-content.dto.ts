@@ -42,11 +42,11 @@ export class ExpandContentDto {
 
   @ApiPropertyOptional({
     description:
-      'Índice del bloque de referencia (0-based). Si no se especifica, se agrega al final',
+      'Orden del bloque de referencia (orderIndex). Si no se especifica, se agrega al final',
     example: 2,
   })
   @IsOptional()
   @IsInt()
   @Min(0)
-  targetBlockIndex?: number
+  targetOrderIndex?: number
 }
