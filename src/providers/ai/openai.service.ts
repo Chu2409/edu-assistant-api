@@ -2,27 +2,12 @@ import { Injectable, Logger, OnModuleInit } from '@nestjs/common'
 import OpenAI from 'openai'
 import { CustomConfigService } from 'src/core/config/config.service'
 import { PromptInput } from '../../features/pages/content-generation/interfaces/prompt-input.interface'
-import { AiResponseDto } from './dtos/ai-response.interface'
-import type {
-  ResponsesModel,
-  EmbeddingsModel,
-  ImagesModel,
-} from './interfaces/models'
+import { AiResponseDto } from './dtos/res/ai-response.dto'
 import { parseJsonField } from './helpers/utils'
 import { DBService } from 'src/core/database/database.service'
 import { SYSTEM_CONFIG_KEYS } from 'src/shared/constants/configurations'
-
-export interface AiModelConfig {
-  responses: ResponsesModel
-  embeddings: EmbeddingsModel
-  images: ImagesModel
-}
-
-const DEFAULT_MODELS: AiModelConfig = {
-  responses: 'gpt-5-mini',
-  embeddings: 'text-embedding-3-small',
-  images: 'gpt-image-1-mini',
-}
+import { AiModelConfig } from './interfaces/ai-model-config'
+import { DEFAULT_MODELS } from './constants/models'
 
 @Injectable()
 export class OpenaiService implements OnModuleInit {

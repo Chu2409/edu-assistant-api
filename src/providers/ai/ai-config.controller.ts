@@ -1,19 +1,18 @@
 import { Body, Controller, Get, HttpStatus, Patch } from '@nestjs/common'
 import { ApiOperation, ApiTags } from '@nestjs/swagger'
-import { OpenaiService, type AiModelConfig } from './openai.service'
-import {
-  UpdateAiModelConfigDto,
-  AiModelConfigResponseDto,
-  AvailableModelsResponseDto,
-} from './dtos/ai-model-config.dto'
+import { OpenaiService } from './openai.service'
 import { ApiStandardResponse } from 'src/shared/decorators/api-standard-response.decorator'
 import { JwtAuth } from 'src/features/auth/decorators/jwt-auth.decorator'
 import { Role } from 'src/core/database/generated/client'
+import { AiModelConfigResponseDto } from './dtos/res/ai-model-config.dto'
+import { AvailableModelsResponseDto } from './dtos/res/available-models.dto'
+import { UpdateAiModelConfigDto } from './dtos/req/update-ai-model-config.dto'
 import {
-  VALID_RESPONSES_MODELS,
   VALID_EMBEDDINGS_MODELS,
   VALID_IMAGES_MODELS,
-} from './interfaces/models'
+  VALID_RESPONSES_MODELS,
+} from './constants/models'
+import { AiModelConfig } from './interfaces/ai-model-config'
 
 @ApiTags('AI Config')
 @Controller('ai/config')

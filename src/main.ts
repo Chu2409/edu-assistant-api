@@ -29,7 +29,7 @@ import {
   AiImageSuggestionBlock,
   AiTextBlock,
 } from './features/pages/content-generation/interfaces/ai-generated-content.interface'
-import { AiResponseDto } from './providers/ai/dtos/ai-response.interface'
+import { AiResponseDto } from './providers/ai/dtos/res/ai-response.dto'
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule, {
