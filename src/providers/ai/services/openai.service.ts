@@ -1,71 +1,26 @@
 import { Injectable, Logger, OnModuleInit } from '@nestjs/common'
 import OpenAI from 'openai'
 import { CustomConfigService } from 'src/core/config/config.service'
-import { PromptInput } from '../../features/pages/content-generation/interfaces/prompt-input.interface'
-import { AiResponseDto } from './dtos/res/ai-response.dto'
-import { parseJsonField } from './helpers/utils'
-import { DBService } from 'src/core/database/database.service'
-import { SYSTEM_CONFIG_KEYS } from 'src/shared/constants/configurations'
-import { AiModelConfig } from './interfaces/ai-model-config'
-import { DEFAULT_MODELS } from './constants/models'
+import { PromptInput } from '../../../features/pages/content-generation/interfaces/prompt-input.interface'
+import { AiResponseDto } from '../dtos/res/ai-response.dto'
+import { parseJsonField } from '../helpers/utils'
+import { AiConfigService } from './ai-config.service'
 
 @Injectable()
 export class OpenaiService implements OnModuleInit {
   private openai: OpenAI
   private readonly logger = new Logger(OpenaiService.name)
 
-  /** Configuración de modelos en memoria (se pierde al reiniciar el servidor) */
-  private modelConfig: AiModelConfig = { ...DEFAULT_MODELS }
-
   constructor(
     private customConfigService: CustomConfigService,
-    private dbService: DBService,
+    private aiConfigurationService: AiConfigService,
   ) {}
 
-  async onModuleInit() {
+  onModuleInit() {
     // Inicializamos el cliente con la API Key
     this.openai = new OpenAI({
       apiKey: this.customConfigService.env.OPENAI_API_KEY,
     })
-
-    try {
-      const setting = await this.dbService.systemSetting.findUnique({
-        where: { key: SYSTEM_CONFIG_KEYS.AI_MODELS },
-      })
-      if (setting && setting.value) {
-        this.modelConfig = { ...this.modelConfig, ...(setting.value as any) }
-      } else {
-        await this.dbService.systemSetting.create({
-          data: {
-            key: SYSTEM_CONFIG_KEYS.AI_MODELS,
-            value: this.modelConfig as any,
-            description: 'Modelos de OpenAI configurados globalmente',
-          },
-        })
-      }
-    } catch (e) {
-      this.logger.error('Error loading AI_MODELS config from DB', e)
-    }
-  }
-
-  getModelConfig(): AiModelConfig {
-    return { ...this.modelConfig }
-  }
-
-  async setModelConfig(config: Partial<AiModelConfig>): Promise<AiModelConfig> {
-    this.modelConfig = { ...this.modelConfig, ...config }
-
-    await this.dbService.systemSetting.upsert({
-      where: { key: SYSTEM_CONFIG_KEYS.AI_MODELS },
-      update: { value: this.modelConfig as any },
-      create: {
-        key: SYSTEM_CONFIG_KEYS.AI_MODELS,
-        value: this.modelConfig as any,
-        description: 'Modelos de OpenAI configurados globalmente',
-      },
-    })
-
-    return this.getModelConfig()
   }
 
   // 1. RESPONSES API (La nueva forma de Chat)
@@ -75,8 +30,9 @@ export class OpenaiService implements OnModuleInit {
     previousResponseId?: string,
   ): Promise<AiResponseDto<T>> {
     try {
+      const config = this.aiConfigurationService.getModelConfig()
       const response = await this.openai.responses.create({
-        model: this.modelConfig.responses,
+        model: config.responses,
         // En Responses API, usamos 'input' en lugar de 'messages'
         input,
         // CLAVE: Si pasas el ID anterior, OpenAI recuerda el contexto automáticamente.
@@ -100,8 +56,9 @@ export class OpenaiService implements OnModuleInit {
     previousResponseId?: string,
   ): Promise<{ content: string; responseId: string }> {
     try {
+      const config = this.aiConfigurationService.getModelConfig()
       const response = await this.openai.responses.create({
-        model: this.modelConfig.responses,
+        model: config.responses,
         input,
         previous_response_id: previousResponseId,
       })
@@ -119,8 +76,9 @@ export class OpenaiService implements OnModuleInit {
   // Se mantiene igual, ideal para RAG (búsqueda semántica)
   async getEmbedding(text: string) {
     try {
+      const config = this.aiConfigurationService.getModelConfig()
       const response = await this.openai.embeddings.create({
-        model: this.modelConfig.embeddings,
+        model: config.embeddings,
         input: text,
       })
       return response.data[0].embedding
@@ -133,8 +91,9 @@ export class OpenaiService implements OnModuleInit {
   // Generación de imágenes
   async generateImage(prompt: string): Promise<string> {
     try {
+      const config = this.aiConfigurationService.getModelConfig()
       const response = await this.openai.images.generate({
-        model: this.modelConfig.images,
+        model: config.images,
         prompt,
         n: 1,
         size: 'auto',

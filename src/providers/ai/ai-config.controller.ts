@@ -1,6 +1,5 @@
 import { Body, Controller, Get, HttpStatus, Patch } from '@nestjs/common'
 import { ApiOperation, ApiTags } from '@nestjs/swagger'
-import { OpenaiService } from './openai.service'
 import { ApiStandardResponse } from 'src/shared/decorators/api-standard-response.decorator'
 import { JwtAuth } from 'src/features/auth/decorators/jwt-auth.decorator'
 import { Role } from 'src/core/database/generated/client'
@@ -13,12 +12,13 @@ import {
   VALID_RESPONSES_MODELS,
 } from './constants/models'
 import { AiModelConfig } from './interfaces/ai-model-config'
+import { AiConfigService } from './services/ai-config.service'
 
 @ApiTags('AI Config')
 @Controller('ai/config')
 @JwtAuth(Role.ADMIN)
 export class AiConfigController {
-  constructor(private readonly openaiService: OpenaiService) {}
+  constructor(private readonly aiConfigurationService: AiConfigService) {}
 
   @Get()
   @ApiOperation({
@@ -28,7 +28,7 @@ export class AiConfigController {
   })
   @ApiStandardResponse(AiModelConfigResponseDto)
   getConfig() {
-    return this.openaiService.getModelConfig()
+    return this.aiConfigurationService.getModelConfig()
   }
 
   @Get('models/responses')
@@ -77,6 +77,6 @@ export class AiConfigController {
     if (dto.embeddings)
       config.embeddings = dto.embeddings as AiModelConfig['embeddings']
     if (dto.images) config.images = dto.images as AiModelConfig['images']
-    return await this.openaiService.setModelConfig(config)
+    return await this.aiConfigurationService.setModelConfig(config)
   }
 }

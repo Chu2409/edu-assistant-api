@@ -4,7 +4,7 @@ import {
   NotFoundException,
 } from '@nestjs/common'
 import { DBService } from 'src/core/database/database.service'
-import { OpenaiService } from 'src/providers/ai/openai.service'
+import { OpenaiService } from 'src/providers/ai/services/openai.service'
 import { Block, Prisma, type User } from 'src/core/database/generated/client'
 import { BlockType } from 'src/core/database/generated/enums'
 import { BlocksMapper } from '../blocks/mappers/blocks.mapper'

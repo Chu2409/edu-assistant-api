@@ -5,7 +5,7 @@ import {
   NotFoundException,
 } from '@nestjs/common'
 import { DBService } from 'src/core/database/database.service'
-import { OpenaiService } from 'src/providers/ai/openai.service'
+import { OpenaiService } from 'src/providers/ai/services/openai.service'
 import { generatePageContentPrompt } from './prompts/generate-page-content.prompt'
 import { extractPageConceptsPrompt } from './prompts/extract-page-concepts.prompt'
 import { PageConceptsExtractedDto } from './dtos/res/page-concepts-extracted.dto'
