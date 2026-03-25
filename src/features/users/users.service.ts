@@ -27,17 +27,14 @@ export class UsersService {
       }
     }
 
-    const [entities, total] = await Promise.all([
-      this.dbService.user.findMany({
-        where,
-        skip: (params.page - 1) * take,
-        take: take,
-        orderBy: {
-          createdAt: 'desc',
-        },
-      }),
-      this.dbService.user.count({ where }),
-    ])
+    const entities = await this.dbService.user.findMany({
+      where,
+      skip: (params.page - 1) * take,
+      take,
+      orderBy: {
+        createdAt: 'desc',
+      },
+    })
 
     return entities.map((entity) => UsersMapper.mapToDto(entity))
   }
