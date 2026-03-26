@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger'
 import { BlockType } from 'src/core/database/generated/enums'
-import type { AiContent } from 'src/features/pages/content-generation/interfaces/ai-generated-content.interface'
+import type { AiContent } from 'src/features/content-generation/interfaces/ai-generated-content.interface'
 
 export class BlockDto {
   @ApiProperty({

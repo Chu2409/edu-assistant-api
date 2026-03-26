@@ -22,13 +22,13 @@ import {
   AiGeneratedMatchActivity,
   AiGeneratedTrueFalseActivity,
   AiGeneratedMultipleChoiceActivity,
-} from './features/pages/content-generation/interfaces/ai-generated-activity.interface'
+} from './features/content-generation/interfaces/ai-generated-activity.interface'
 import {
   AiCodeBlock,
   AiContentBlock,
   AiImageSuggestionBlock,
   AiTextBlock,
-} from './features/pages/content-generation/interfaces/ai-generated-content.interface'
+} from './features/content-generation/interfaces/ai-generated-content.interface'
 import { AiResponseDto } from './providers/ai/dtos/res/ai-response.dto'
 
 async function bootstrap() {

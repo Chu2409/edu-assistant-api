@@ -23,7 +23,7 @@ import {
   AiGeneratedMatchActivity,
   AiGeneratedMultipleChoiceActivity,
   AiGeneratedTrueFalseActivity,
-} from 'src/features/pages/content-generation/interfaces/ai-generated-activity.interface'
+} from 'src/features/content-generation/interfaces/ai-generated-activity.interface'
 
 export class CreateActivityDto {
   @ApiProperty({ enum: ActivityType, example: ActivityType.TRUE_FALSE })

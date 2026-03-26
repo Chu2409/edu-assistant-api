@@ -10,9 +10,10 @@ import { StudentQuestionsController } from './student-questions/student-question
 import { StudentQuestionsService } from './student-questions/student-questions.service'
 import { PageNotesController } from './notes/page-notes.controller'
 import { PageNotesService } from './notes/page-notes.service'
+import { PagesModule } from '../pages/pages.module'
 
 @Module({
-  imports: [],
+  imports: [PagesModule],
   controllers: [
     PagesActivitiesController,
     ActivityAttemptsController,

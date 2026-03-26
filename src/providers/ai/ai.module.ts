@@ -6,6 +6,6 @@ import { AiConfigService } from './services/ai-config.service'
 @Module({
   controllers: [AiConfigController],
   providers: [OpenaiService, AiConfigService],
-  exports: [OpenaiService, AiConfigService],
+  exports: [OpenaiService],
 })
 export class AIModule {}

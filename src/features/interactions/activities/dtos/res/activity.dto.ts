@@ -4,7 +4,7 @@ import {
   getSchemaPath,
 } from '@nestjs/swagger'
 import { ActivityType } from 'src/core/database/generated/enums'
-import type { AiGeneratedActivity } from 'src/features/pages/content-generation/interfaces/ai-generated-activity.interface'
+import type { AiGeneratedActivity } from 'src/features/content-generation/interfaces/ai-generated-activity.interface'
 import {
   FillBlankAttempt,
   MatchAttempt,

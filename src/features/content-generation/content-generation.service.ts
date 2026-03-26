@@ -33,7 +33,7 @@ import type {
   AiTextBlock,
   AiCodeBlock,
 } from './interfaces/ai-generated-content.interface'
-import { PageRelationsService } from '../page-relations/page-relations.service'
+import { PageRelationsService } from '../pages/page-relations/page-relations.service'
 import { GenerateRelationsDto } from './dtos/req/generate-relations.dto'
 import { GeneratedRelationsDto } from './dtos/res/generated-relations.dto'
 import { GenerateConceptDto } from './dtos/req/generate-concept.dto'
@@ -472,7 +472,7 @@ export class ContentGenerationService {
     }>(prompt)
 
     const terms = aiResponse.content.terms
-    if (!terms?.length) {
+    if (!terms.length) {
       throw new BadRequestException(
         'La IA no devolvió una definición válida para el término',
       )

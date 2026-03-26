@@ -1,7 +1,7 @@
 import { CoreModule } from './core/core.module'
-import { PagesModule } from './features/pages/main/pages.module'
+import { PagesModule } from './features/pages/pages.module'
 import { Module } from '@nestjs/common'
-import { EmbeddingsWorker } from './features/pages/content-generation/workers/embeddinggs.worker'
+import { EmbeddingsWorker } from './features/pages/main/workers/embeddinggs.worker'
 
 @Module({
   imports: [CoreModule, PagesModule],

@@ -23,7 +23,7 @@ import {
   AiGeneratedMatchActivity,
   AiGeneratedMultipleChoiceActivity,
   AiGeneratedTrueFalseActivity,
-} from 'src/features/pages/content-generation/interfaces/ai-generated-activity.interface'
+} from 'src/features/content-generation/interfaces/ai-generated-activity.interface'
 import { PagesHelperService } from 'src/features/pages/main/pages-helper.service'
 
 @Injectable()

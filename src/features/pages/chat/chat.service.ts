@@ -23,9 +23,9 @@ import { ChatMessageCreatedDto } from './dtos/res/chat-message-created.dto'
 import {
   AiCodeBlock,
   AiTextBlock,
-} from '../content-generation/interfaces/ai-generated-content.interface'
+} from '../../content-generation/interfaces/ai-generated-content.interface'
 import { parseJsonField } from 'src/providers/ai/helpers/utils'
-import { chatSessionPrompt } from '../content-generation/prompts/chat-session.prompt'
+import { chatSessionPrompt } from '../../content-generation/prompts/chat-session.prompt'
 import { ChatMapper } from './mappers/chat.mapper'
 
 type StoredAiMetadata = {

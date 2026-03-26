@@ -4,7 +4,7 @@ import {
   AiTargetLevel,
   AiTone,
 } from 'src/core/database/generated/client'
-import { PromptInput } from 'src/features/pages/content-generation/interfaces/prompt-input.interface'
+import { PromptInput } from 'src/features/content-generation/interfaces/prompt-input.interface'
 import {
   getAudienceGuidance,
   getLengthGuidance,
