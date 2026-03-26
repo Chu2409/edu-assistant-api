@@ -7,7 +7,6 @@ import { UpdateActivityDto } from './dtos/req/update-activity.dto'
 import { CreateActivityAttemptDto } from './dtos/req/create-activity-attempt.dto'
 import { ActivityDto } from './dtos/res/activity.dto'
 import { ActivityAttemptDto } from './dtos/res/activity-attempt.dto'
-import { PagesHelperService } from '../main/pages-helper.service'
 import { ActivitiesMapper } from './mappers/activities.mapper'
 import {
   ActivityAttemptAnswer,
@@ -16,14 +15,16 @@ import {
   MultipleChoiceAttempt,
   TrueFalseAttempt,
 } from './interfaces/activity-attempt.interface'
+
+import { parseJsonField } from 'src/providers/ai/helpers/utils'
 import {
   AiGeneratedActivity,
   AiGeneratedFillBlankActivity,
   AiGeneratedMatchActivity,
   AiGeneratedMultipleChoiceActivity,
   AiGeneratedTrueFalseActivity,
-} from '../content-generation/interfaces/ai-generated-activity.interface'
-import { parseJsonField } from 'src/providers/ai/helpers/utils'
+} from 'src/features/pages/content-generation/interfaces/ai-generated-activity.interface'
+import { PagesHelperService } from 'src/features/pages/main/pages-helper.service'
 
 @Injectable()
 export class ActivitiesService {

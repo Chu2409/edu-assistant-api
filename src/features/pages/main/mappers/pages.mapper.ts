@@ -9,9 +9,9 @@ import {
 } from 'src/core/database/generated/client'
 import { PageDto } from '../dtos/res/page.dto'
 import { FullPageDto } from '../dtos/res/full-page.dto'
-import { StudentQuestionsMapper } from '../../student-questions/mappers/student-questions.mapper'
-import { PageFeedbacksMapper } from '../../page-feedbacks/mappers/page-feedbacks.mapper'
-import { NotesMapper } from '../../notes/mappers/notes.mapper'
+import { StudentQuestionsMapper } from '../../../interactions/student-questions/mappers/student-questions.mapper'
+import { PageFeedbacksMapper } from '../../../interactions/page-feedbacks/mappers/page-feedbacks.mapper'
+import { NotesMapper } from '../../../interactions/notes/mappers/notes.mapper'
 import { BlocksMapper } from '../../blocks/mappers/blocks.mapper'
 
 export class PagesMapper {

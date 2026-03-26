@@ -16,7 +16,7 @@ import {
   MatchAttempt,
   MultipleChoiceAttempt,
   TrueFalseAttempt,
-} from './features/pages/activities/interfaces/activity-attempt.interface'
+} from './features/interactions/activities/interfaces/activity-attempt.interface'
 import {
   AiGeneratedFillBlankActivity,
   AiGeneratedMatchActivity,

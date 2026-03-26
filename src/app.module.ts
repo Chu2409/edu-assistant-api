@@ -5,11 +5,11 @@ import { ResponseInterceptor } from './shared/interceptors/response.interceptor'
 import { AuthModule } from './features/auth/auth.module'
 import { ModulesModule } from './features/modules/main/modules.module'
 import { PagesModule } from './features/pages/main/pages.module'
-import { PageFeedbacksModule } from './features/pages/page-feedbacks/page-feedbacks.module'
 import { UsersModule } from './features/users/users.module'
 import { APP_GUARD } from '@nestjs/core'
 import { JwtAuthGuard } from './features/auth/guards/jwt-auth.guard'
 import { FilesModule } from './providers/files/files.module'
+import { InteractionsModule } from './features/interactions/interactions.module'
 
 @Module({
   imports: [
@@ -17,9 +17,9 @@ import { FilesModule } from './providers/files/files.module'
     AuthModule,
     ModulesModule,
     PagesModule,
-    PageFeedbacksModule,
     UsersModule,
     FilesModule,
+    InteractionsModule,
   ],
   controllers: [HealthController],
   providers: [
