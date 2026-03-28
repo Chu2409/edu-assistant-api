@@ -24,6 +24,6 @@ import { AuthConfigController } from './auth-config.controller'
   ],
   controllers: [AuthController, AuthConfigController],
   providers: [AuthService, AuthConfigService, MicrosoftStrategy, JwtStrategy],
-  exports: [AuthService, AuthConfigService, JwtModule],
+  exports: [],
 })
 export class AuthModule {}

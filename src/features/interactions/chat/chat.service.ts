@@ -13,7 +13,6 @@ import {
   type Page,
   type User,
 } from 'src/core/database/generated/client'
-import { BlocksMapper } from '../blocks/mappers/blocks.mapper'
 import { BlockType } from 'src/core/database/generated/enums'
 import { CreateOrGetSessionDto } from './dtos/req/create-or-get-session.dto'
 import { SendMessageDto } from './dtos/req/send-message.dto'
@@ -27,6 +26,7 @@ import {
 import { parseJsonField } from 'src/providers/ai/helpers/utils'
 import { chatSessionPrompt } from '../../content-generation/prompts/chat-session.prompt'
 import { ChatMapper } from './mappers/chat.mapper'
+import { BlocksMapper } from 'src/features/pages/blocks/mappers/blocks.mapper'
 
 type StoredAiMetadata = {
   responseId?: string

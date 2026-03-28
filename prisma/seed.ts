@@ -17,10 +17,10 @@ const main = async () => {
   const teacher = await createUser1(prisma)
   const student = await createUser2(prisma)
 
-  const module = await createModule1(prisma, teacher.id)
-  await createEnrollment1(prisma, student.id, module.id)
+  // const module = await createModule1(prisma, teacher.id)
+  // await createEnrollment1(prisma, student.id, module.id)
 
-  await createAiConfiguration1(prisma, module.id)
+  // await createAiConfiguration1(prisma, module.id)
   Logger.log('Seed data created successfully')
 }
 
