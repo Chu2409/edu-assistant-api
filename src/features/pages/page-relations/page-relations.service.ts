@@ -15,7 +15,7 @@ import { PagesHelperService } from '../main/pages-helper.service'
 import {
   AiCodeBlock,
   AiTextBlock,
-} from '../../content-generation/interfaces/ai-generated-content.interface'
+} from '../../content-generation/shared/interfaces/ai-generated-content.interface'
 
 type SimilarRow = { id: number; similarity: number }
 

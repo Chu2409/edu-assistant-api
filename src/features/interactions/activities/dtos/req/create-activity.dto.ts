@@ -19,11 +19,11 @@ import {
 import { ActivityType } from 'src/core/database/generated/enums'
 import {
   type AiGeneratedActivity,
-  AiGeneratedFillBlankActivity,
+  AiFillBlankActivity,
   AiGeneratedMatchActivity,
-  AiGeneratedMultipleChoiceActivity,
-  AiGeneratedTrueFalseActivity,
-} from 'src/features/content-generation/interfaces/ai-generated-activity.interface'
+  AiMultipleChoiceActivity,
+  AiTrueFalseActivity,
+} from 'src/features/content-generation/activities/interfaces/ai-generated-activity.interface'
 
 export class CreateActivityDto {
   @ApiProperty({ enum: ActivityType, example: ActivityType.TRUE_FALSE })
@@ -42,9 +42,9 @@ export class CreateActivityDto {
     description:
       'Opciones (depende del tipo). Para MULTIPLE_CHOICE/MATCH normalmente va aquí.',
     oneOf: [
-      { $ref: getSchemaPath(AiGeneratedMultipleChoiceActivity) },
-      { $ref: getSchemaPath(AiGeneratedTrueFalseActivity) },
-      { $ref: getSchemaPath(AiGeneratedFillBlankActivity) },
+      { $ref: getSchemaPath(AiMultipleChoiceActivity) },
+      { $ref: getSchemaPath(AiTrueFalseActivity) },
+      { $ref: getSchemaPath(AiFillBlankActivity) },
       { $ref: getSchemaPath(AiGeneratedMatchActivity) },
     ],
   })

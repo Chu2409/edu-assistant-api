@@ -19,11 +19,11 @@ import {
 import { parseJsonField } from 'src/providers/ai/helpers/utils'
 import {
   AiGeneratedActivity,
-  AiGeneratedFillBlankActivity,
+  AiFillBlankActivity,
   AiGeneratedMatchActivity,
-  AiGeneratedMultipleChoiceActivity,
-  AiGeneratedTrueFalseActivity,
-} from 'src/features/content-generation/interfaces/ai-generated-activity.interface'
+  AiMultipleChoiceActivity,
+  AiTrueFalseActivity,
+} from 'src/features/content-generation/activities/interfaces/ai-generated-activity.interface'
 import { PagesHelperService } from 'src/features/pages/main/pages-helper.service'
 
 @Injectable()
@@ -183,17 +183,17 @@ export class ActivitiesService {
         case ActivityType.MULTIPLE_CHOICE:
           return (
             (studentAnswer as MultipleChoiceAttempt).selectedOption ===
-            (options as AiGeneratedMultipleChoiceActivity).correctAnswer
+            (options as AiMultipleChoiceActivity).correctAnswer
           )
         case ActivityType.TRUE_FALSE:
           return (
             Boolean((studentAnswer as TrueFalseAttempt).answer) ===
-            Boolean((options as AiGeneratedTrueFalseActivity).correctAnswer)
+            Boolean((options as AiTrueFalseActivity).correctAnswer)
           )
         case ActivityType.FILL_BLANK: {
           const answer = (studentAnswer as FillBlankAttempt).answer
 
-          const correctAnswers = (options as AiGeneratedFillBlankActivity)
+          const correctAnswers = (options as AiFillBlankActivity)
             .acceptableAnswers
           return correctAnswers.some(
             (correctAnswer) =>

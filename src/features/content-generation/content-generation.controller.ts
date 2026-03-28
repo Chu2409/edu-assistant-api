@@ -5,40 +5,54 @@ import {
   ApiTags,
   getSchemaPath,
 } from '@nestjs/swagger'
-import { ContentGenerationService } from './content-generation.service'
 import { JwtAuth } from 'src/features/auth/decorators/jwt-auth.decorator'
 import { Role } from 'src/core/database/generated/client'
 import { ApiStandardResponse } from 'src/shared/decorators/api-standard-response.decorator'
-import { GenerateContentDto } from './dtos/req/generate-content.dto'
-import { GeneratedPageContent } from './dtos/res/generated-page-content.dto'
-import { GenerateImageDto } from './dtos/req/generate-image.dto'
-import { GeneratedImageDto } from './dtos/res/generated-image.dto'
-import { RegenerateContentDto } from './dtos/req/regenarte-content.dto'
-import { RegenerateBlockDto } from './dtos/req/regenerate-block.dto'
-import { ExpandContentDto } from './dtos/req/expand-content.dto'
-import { ExtractConceptsDto } from './dtos/req/extract-concepts.dto'
-import { PageConceptsExtractedDto } from './dtos/res/page-concepts-extracted.dto'
-import { RegeneratedBlockDto } from './dtos/res/regenerated-block.dto'
-import { ExpandedContentDto } from './dtos/res/expanded-content.dto'
-import { GenerateActivityDto } from './dtos/req/generate-activity.dto'
-import { GenerateRelationsDto } from './dtos/req/generate-relations.dto'
-import { GenerateConceptDto } from './dtos/req/generate-concept.dto'
-import { GeneratedConceptDto } from './dtos/res/generated-concept.dto'
-import {
-  AiGeneratedFillBlankActivity,
-  AiGeneratedMatchActivity,
-  AiGeneratedMultipleChoiceActivity,
-  AiGeneratedTrueFalseActivity,
-} from './interfaces/ai-generated-activity.interface'
 import { ApiRes } from 'src/shared/dtos/res/api-response.dto'
-import { GeneratedRelationsDto } from './dtos/res/generated-relations.dto'
+
+// Page Content
+import { PageContentService } from './page-content/page-content.service'
+import { GenerateContentDto } from './page-content/dtos/req/generate-content.dto'
+import { RegenerateContentDto } from './page-content/dtos/req/regenerate-content.dto'
+import { RegenerateBlockDto } from './page-content/dtos/req/regenerate-block.dto'
+import { ExpandContentDto } from './page-content/dtos/req/expand-content.dto'
+import { GenerateImageDto } from './page-content/dtos/req/generate-image.dto'
+import { GeneratedPageContent } from './page-content/dtos/res/generated-page-content.dto'
+import { RegeneratedBlockDto } from './page-content/dtos/res/regenerated-block.dto'
+import { ExpandedContentDto } from './page-content/dtos/res/expanded-content.dto'
+import { GeneratedImageDto } from './page-content/dtos/res/generated-image.dto'
+
+// Concepts
+import { ConceptsService } from './concepts/concepts.service'
+import { ExtractConceptsDto } from './concepts/dtos/req/extract-concepts.dto'
+import { GenerateConceptDto } from './concepts/dtos/req/generate-concept.dto'
+import { PageConceptsExtractedDto } from './concepts/dtos/res/generated-concept.dto'
+import { GeneratedConceptDto } from './concepts/dtos/res/generated-concept.dto'
+
+// Relations
+import { RelationsService } from './relations/relations.service'
+import { GenerateRelationsDto } from './relations/dtos/req/generate-relations.dto'
+import { GeneratedRelationsDto } from './relations/dtos/res/generated-relations.dto'
+
+// Activities
+import { ActivitiesService } from './activities/activities.service'
+import { GenerateActivityDto } from './activities/dtos/req/generate-activity.dto'
+import {
+  AiFillBlankActivity,
+  AiGeneratedMatchActivity,
+  AiMultipleChoiceActivity,
+  AiTrueFalseActivity,
+} from './activities/interfaces/ai-generated-activity.interface'
 
 @ApiTags('Content Generation')
 @Controller('content')
 @JwtAuth(Role.TEACHER)
 export class ContentGenerationController {
   constructor(
-    private readonly contentGenerationService: ContentGenerationService,
+    private readonly pageContentService: PageContentService,
+    private readonly conceptsService: ConceptsService,
+    private readonly relationsService: RelationsService,
+    private readonly activitiesService: ActivitiesService,
   ) {}
 
   @Post('generate-content')
@@ -59,7 +73,7 @@ export class ContentGenerationController {
   })
   @ApiResponse({ status: 400, description: 'Datos inválidos' })
   generateContent(@Body() dto: GenerateContentDto) {
-    return this.contentGenerationService.generatePageContent(dto)
+    return this.pageContentService.generatePageContent(dto)
   }
 
   @Post('regenerate-content')
@@ -75,7 +89,7 @@ export class ContentGenerationController {
     description: 'Solo profesores pueden regenerar contenido',
   })
   regenerateContent(@Body() dto: RegenerateContentDto) {
-    return this.contentGenerationService.regeneratePageContent(dto)
+    return this.pageContentService.regeneratePageContent(dto)
   }
 
   @Post('regenerate-block')
@@ -96,7 +110,7 @@ export class ContentGenerationController {
     description: 'Datos inválidos o bloque no encontrado por su orden',
   })
   regenerateBlock(@Body() dto: RegenerateBlockDto) {
-    return this.contentGenerationService.regenerateBlock(dto)
+    return this.pageContentService.regenerateBlock(dto)
   }
 
   @Post('expand-content')
@@ -117,7 +131,7 @@ export class ContentGenerationController {
     description: 'Datos inválidos o bloque no encontrado por su orden',
   })
   expandContent(@Body() dto: ExpandContentDto) {
-    return this.contentGenerationService.expandContent(dto)
+    return this.pageContentService.expandContent(dto)
   }
 
   @Post('extract-concepts')
@@ -132,7 +146,7 @@ export class ContentGenerationController {
     description: 'Solo profesores pueden extraer conceptos',
   })
   extractConcepts(@Body() dto: ExtractConceptsDto) {
-    return this.contentGenerationService.extractPageConcepts(dto)
+    return this.conceptsService.extractPageConcepts(dto)
   }
 
   @Post('generate-image')
@@ -148,7 +162,7 @@ export class ContentGenerationController {
     description: 'Solo profesores pueden generar imágenes',
   })
   async generateImage(@Body() dto: GenerateImageDto) {
-    const base64 = await this.contentGenerationService.generateImage(dto.prompt)
+    const base64 = await this.pageContentService.generateImage(dto.prompt)
     return { base64 }
   }
 
@@ -166,7 +180,7 @@ export class ContentGenerationController {
   })
   @ApiResponse({ status: 400, description: 'Datos inválidos' })
   generateConcept(@Body() dto: GenerateConceptDto) {
-    return this.contentGenerationService.generateConcept(dto)
+    return this.conceptsService.generateConcept(dto)
   }
 
   @Post('generate-relations')
@@ -184,7 +198,7 @@ export class ContentGenerationController {
   @ApiResponse({ status: 404, description: 'Página no encontrada' })
   @ApiResponse({ status: 400, description: 'Datos inválidos o sin bloques' })
   generateRelations(@Body() dto: GenerateRelationsDto) {
-    return this.contentGenerationService.generatePageRelations(dto)
+    return this.relationsService.generatePageRelations(dto)
   }
 
   @Post('generate-activity')
@@ -203,9 +217,9 @@ export class ContentGenerationController {
           properties: {
             data: {
               oneOf: [
-                { $ref: getSchemaPath(AiGeneratedMultipleChoiceActivity) },
-                { $ref: getSchemaPath(AiGeneratedTrueFalseActivity) },
-                { $ref: getSchemaPath(AiGeneratedFillBlankActivity) },
+                { $ref: getSchemaPath(AiMultipleChoiceActivity) },
+                { $ref: getSchemaPath(AiTrueFalseActivity) },
+                { $ref: getSchemaPath(AiFillBlankActivity) },
                 { $ref: getSchemaPath(AiGeneratedMatchActivity) },
               ],
             },
@@ -222,6 +236,6 @@ export class ContentGenerationController {
   @ApiResponse({ status: 404, description: 'Página no encontrada' })
   @ApiResponse({ status: 400, description: 'Datos inválidos' })
   generateActivity(@Body() dto: GenerateActivityDto) {
-    return this.contentGenerationService.generateActivity(dto)
+    return this.activitiesService.generateActivity(dto)
   }
 }

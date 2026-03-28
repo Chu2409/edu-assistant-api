@@ -1,7 +1,7 @@
 import { Injectable, Logger, OnModuleInit } from '@nestjs/common'
 import OpenAI from 'openai'
 import { CustomConfigService } from 'src/core/config/config.service'
-import { PromptInput } from '../../../features/content-generation/interfaces/prompt-input.interface'
+import { PromptInput } from '../interfaces/prompt-input.interface'
 import { AiResponseDto } from '../dtos/res/ai-response.dto'
 import { parseJsonField } from '../helpers/utils'
 import { AiConfigService } from './ai-config.service'
