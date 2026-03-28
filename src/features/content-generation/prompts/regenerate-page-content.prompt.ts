@@ -6,19 +6,14 @@ import {
   BlockType,
 } from 'src/core/database/generated/enums'
 import type { PromptInput } from '../interfaces/prompt-input.interface'
-import {
-  AiCodeBlock,
-  AiContent,
-  AiImageSuggestionBlock,
-  AiTextBlock,
-} from '../interfaces/ai-generated-content.interface'
+import { AiContent } from '../interfaces/ai-generated-content.interface'
 import {
   BLOCK_OUTPUT_FORMAT,
   BLOCK_TYPE_RULES,
+  JSON_ONLY_INSTRUCTION,
   SPECIAL_MARKERS_RULES,
-  getAudienceGuidance,
-  getTargetLevelGuidance,
-  getToneGuidance,
+  formatBlocksForPrompt,
+  getContentSettingsBlock,
 } from '../helpers/guidances'
 
 export interface RegeneratePageContentPromptInput {
@@ -54,15 +49,11 @@ export const regeneratePageContentPrompt = (
 function buildRegenerationSystemPrompt(
   config: RegeneratePageContentPromptInput['config'],
 ): string {
-  const audienceDesc = getAudienceGuidance(config.audience)
-  const levelDesc = getTargetLevelGuidance(config.targetLevel)
-  const toneDesc = getToneGuidance(config.tone)
-
   return `You are an expert educational content editor. Modify existing lesson content based on teacher instructions.
 
 # Output Format
 
-Respond ONLY with valid JSON. No markdown fences, no text before or after.
+${JSON_ONLY_INSTRUCTION}
 
 {
   "title": "Updated or original title",
@@ -96,12 +87,7 @@ ${SPECIAL_MARKERS_RULES}
 
 ${BLOCK_TYPE_RULES}
 
-# Content Settings
-
-- Language: ${config.language}
-- Audience: ${audienceDesc}
-- Level: ${levelDesc}
-- Tone: ${toneDesc}`
+${getContentSettingsBlock(config)}`
 }
 
 function buildRegenerationUserPrompt(
@@ -120,44 +106,4 @@ ${blocksRepresentation}
 # Edit Instructions
 
 ${instruction}`
-}
-
-function formatBlocksForPrompt(
-  blocks: RegeneratePageContentPromptInput['blocks'],
-): string {
-  return blocks
-    .map((block, index) => {
-      const blockNumber = index + 1
-
-      switch (block.type) {
-        case BlockType.TEXT: {
-          const textContent = block.content as AiTextBlock
-          return `## Block ${blockNumber}: TEXT
-
-${textContent.markdown}`
-        }
-
-        case BlockType.CODE: {
-          const codeContent = block.content as AiCodeBlock
-          return `## Block ${blockNumber}: CODE
-
-\`\`\`${codeContent.language}
-${codeContent.code}
-\`\`\``
-        }
-
-        case BlockType.IMAGE_SUGGESTION: {
-          const suggestionContent = block.content as AiImageSuggestionBlock
-          return `## Block ${blockNumber}: IMAGE_SUGGESTION
-
-Prompt: ${suggestionContent.prompt}
-Reason: ${suggestionContent.reason}`
-        }
-
-        default:
-          return ''
-      }
-    })
-    .filter(Boolean)
-    .join('\n\n---\n\n')
 }

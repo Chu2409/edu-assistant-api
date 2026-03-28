@@ -4,6 +4,7 @@ import {
   AiCodeBlock,
 } from '../interfaces/ai-generated-content.interface'
 import { ActivityType, BlockType } from 'src/core/database/generated/enums'
+import { JSON_ONLY_INSTRUCTION } from '../helpers/guidances'
 
 export interface GenerateActivityPromptInput {
   type: ActivityType
@@ -47,7 +48,7 @@ function buildActivitySystemPrompt(
 
 # OUTPUT FORMAT
 
-Return ONLY raw JSON (no markdown fences, no explanation):
+${JSON_ONLY_INSTRUCTION}
 
 ${getActivityStructure(type)}
 

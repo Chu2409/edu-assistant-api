@@ -1,5 +1,6 @@
 import { PromptInput } from '../interfaces/prompt-input.interface'
 import { AiTextBlock } from '../interfaces/ai-generated-content.interface'
+import { JSON_ONLY_INSTRUCTION } from '../helpers/guidances'
 
 export interface ExtractPageConceptsPrompt {
   blocks: AiTextBlock[]
@@ -23,7 +24,7 @@ export const extractPageConceptsPrompt = ({
 
 # OUTPUT FORMAT
 
-Return ONLY raw JSON (no markdown fences, no explanation):
+${JSON_ONLY_INSTRUCTION}
 
 {
   "terms": [

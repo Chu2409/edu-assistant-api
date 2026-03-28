@@ -5,6 +5,7 @@ import {
   AiTextBlock,
 } from '../interfaces/ai-generated-content.interface'
 import { PromptInput } from '../interfaces/prompt-input.interface'
+import { JSON_ONLY_INSTRUCTION } from '../helpers/guidances'
 
 export interface GeneratePageRelationsPromptInput {
   currentPage: {
@@ -49,7 +50,7 @@ function buildRelationsSystemPrompt(maxRelations: number): string {
 
 # Output Format
 
-Respond ONLY with valid JSON. No markdown fences, no text before or after.
+${JSON_ONLY_INSTRUCTION}
 
 {
   "relations": [

@@ -4,19 +4,14 @@ import {
   AiTone,
   BlockType,
 } from 'src/core/database/generated/enums'
-import {
-  AiCodeBlock,
-  AiContent,
-  AiImageSuggestionBlock,
-  AiTextBlock,
-} from '../interfaces/ai-generated-content.interface'
+import { AiContent } from '../interfaces/ai-generated-content.interface'
 import { PromptInput } from '../interfaces/prompt-input.interface'
 import {
   BLOCK_OUTPUT_FORMAT,
   BLOCK_TYPE_RULES,
-  getAudienceGuidance,
-  getTargetLevelGuidance,
-  getToneGuidance,
+  JSON_ONLY_INSTRUCTION,
+  formatBlocksForPrompt,
+  getContentSettingsBlock,
 } from '../helpers/guidances'
 
 export interface ExpandContentPromptInput {
@@ -63,15 +58,11 @@ export const expandContentPrompt = (
 function buildExpandSystemPrompt(
   config: ExpandContentPromptInput['config'],
 ): string {
-  const audienceDesc = getAudienceGuidance(config.audience)
-  const levelDesc = getTargetLevelGuidance(config.targetLevel)
-  const toneDesc = getToneGuidance(config.tone)
-
   return `You are an expert educational content creator. Generate additional content to expand an existing lesson.
 
 # Output Format
 
-Respond ONLY with valid JSON. No markdown fences, no text before or after.
+${JSON_ONLY_INSTRUCTION}
 
 {
   "blocks": [
@@ -81,12 +72,7 @@ ${BLOCK_OUTPUT_FORMAT}
 
 ${BLOCK_TYPE_RULES}
 
-# Content Settings
-
-- Language: ${config.language}
-- Audience: ${audienceDesc}
-- Level: ${levelDesc}
-- Tone: ${toneDesc}
+${getContentSettingsBlock(config)}
 
 # Guidelines
 
@@ -126,44 +112,4 @@ ${instruction}
 ${positionContext}
 
 Generate new blocks that integrate smoothly with the existing content.`
-}
-
-function formatBlocksForPrompt(
-  blocks: Array<{ type: BlockType; content: AiContent }>,
-): string {
-  return blocks
-    .map((block, index) => {
-      const blockNumber = index + 1
-
-      switch (block.type) {
-        case BlockType.TEXT: {
-          const textContent = block.content as AiTextBlock
-          return `## Block ${blockNumber}: TEXT
-
-${textContent.markdown}`
-        }
-
-        case BlockType.CODE: {
-          const codeContent = block.content as AiCodeBlock
-          return `## Block ${blockNumber}: CODE
-
-\`\`\`${codeContent.language}
-${codeContent.code}
-\`\`\``
-        }
-
-        case BlockType.IMAGE_SUGGESTION: {
-          const suggestionContent = block.content as AiImageSuggestionBlock
-          return `## Block ${blockNumber}: IMAGE_SUGGESTION
-
-Prompt: ${suggestionContent.prompt}
-Reason: ${suggestionContent.reason}`
-        }
-
-        default:
-          return ''
-      }
-    })
-    .filter(Boolean)
-    .join('\n\n---\n\n')
 }

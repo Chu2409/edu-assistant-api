@@ -1,9 +1,4 @@
-import {
-  AiTone,
-  AiAudience,
-  AiTargetLevel,
-  BlockType,
-} from 'src/core/database/generated/enums'
+import { BlockType } from 'src/core/database/generated/enums'
 import {
   AiCodeBlock,
   AiContent,
@@ -12,10 +7,16 @@ import {
 } from '../interfaces/ai-generated-content.interface'
 import { PromptInput } from '../interfaces/prompt-input.interface'
 import {
+  AiTone,
+  AiAudience,
+  AiTargetLevel,
+} from 'src/core/database/generated/enums'
+import {
+  BLOCK_TYPE_RULES,
+  JSON_ONLY_INSTRUCTION,
   SPECIAL_MARKERS_RULES,
-  getAudienceGuidance,
-  getTargetLevelGuidance,
-  getToneGuidance,
+  getBlockOutputFormatByType,
+  getContentSettingsBlock,
 } from '../helpers/guidances'
 
 export interface RegenerateBlockPromptInput {
@@ -65,93 +66,25 @@ function buildBlockRegenerationSystemPrompt(
   blockType: BlockType,
   config: RegenerateBlockPromptInput['config'],
 ): string {
-  const audienceDesc = getAudienceGuidance(config.audience)
-  const levelDesc = getTargetLevelGuidance(config.targetLevel)
-  const toneDesc = getToneGuidance(config.tone)
-
-  const outputFormat = getBlockOutputFormat(blockType)
-
   return `You are an expert educational content editor. Modify a single content block based on teacher instructions.
 
 # Output Format
 
-Respond ONLY with valid JSON. No markdown fences, no text before or after.
+${JSON_ONLY_INSTRUCTION}
 
-${outputFormat}
+${getBlockOutputFormatByType(blockType)}
 
 ${SPECIAL_MARKERS_RULES}
 
-# Block Rules
+${BLOCK_TYPE_RULES}
 
-${getBlockTypeRules(blockType)}
-
-# Content Settings
-
-- Language: ${config.language}
-- Audience: ${audienceDesc}
-- Level: ${levelDesc}
-- Tone: ${toneDesc}
+${getContentSettingsBlock(config)}
 
 # Guidelines
 
 - Maintain coherence with surrounding content
 - Apply only the requested changes
 - Preserve the block type unless explicitly instructed to change it`
-}
-
-function getBlockOutputFormat(blockType: BlockType): string {
-  switch (blockType) {
-    case BlockType.TEXT:
-      return `{
-  "type": "TEXT",
-  "content": { "markdown": "## Heading\\n\\nParagraph with **bold**..." }
-}`
-
-    case BlockType.CODE:
-      return `{
-  "type": "CODE",
-  "content": { "language": "python", "code": "def example():\\n    pass" }
-}`
-
-    case BlockType.IMAGE_SUGGESTION:
-      return `{
-  "type": "IMAGE_SUGGESTION",
-  "content": { "prompt": "DALL-E prompt in English", "reason": "Why this helps" }
-}`
-
-    default:
-      return `{
-  "type": "TEXT",
-  "content": { "markdown": "..." }
-}`
-  }
-}
-
-function getBlockTypeRules(blockType: BlockType): string {
-  switch (blockType) {
-    case BlockType.TEXT:
-      return `TEXT Block:
-- Use markdown: ##/### headings, **bold**, *italic*, - lists, > blockquotes
-- Can contain multiple paragraphs, headings, lists
-- Preserve all special markers [[concept:ID|text]] and [[page:ID|text]]`
-
-    case BlockType.CODE:
-      return `CODE Block:
-- Generate ONLY for programming or technical topics where code examples are essential.
-- Do NOT generate for general subjects (history, literature, etc.) unless specifically requested.
-- Include language identifier
-- Properly escape special characters in JSON
-- Add helpful comments
-- Ensure code is syntactically correct`
-
-    case BlockType.IMAGE_SUGGESTION:
-      return `IMAGE_SUGGESTION Block:
-- "prompt": detailed DALL-E prompt in English, specify style
-- "reason": brief explanation of why this image aids understanding`
-
-    default:
-      return ''
-  }
 }
 
 function buildBlockRegenerationUserPrompt(

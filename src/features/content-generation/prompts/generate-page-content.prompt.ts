@@ -6,10 +6,11 @@ import {
 } from 'src/core/database/generated/client'
 import { PromptInput } from 'src/features/content-generation/interfaces/prompt-input.interface'
 import {
-  getAudienceGuidance,
+  BLOCK_OUTPUT_FORMAT,
+  BLOCK_TYPE_RULES,
+  JSON_ONLY_INSTRUCTION,
+  getContentSettingsBlock,
   getLengthGuidance,
-  getTargetLevelGuidance,
-  getToneGuidance,
 } from '../helpers/guidances'
 
 export interface GeneratePageContentPrompt {
@@ -41,59 +42,23 @@ export const generatePageContentPrompt = (
 function buildSystemPrompt(
   config: GeneratePageContentPrompt['config'],
 ): string {
-  const audienceDesc = getAudienceGuidance(config.audience)
-  const levelDesc = getTargetLevelGuidance(config.targetLevel)
-  const toneDesc = getToneGuidance(config.tone)
-
   return `You are an expert educational content creator. Generate structured lesson content.
 
 # Output Format
 
-Respond ONLY with valid JSON. No markdown fences, no text before or after.
+${JSON_ONLY_INSTRUCTION}
 
 {
   "title": "Lesson title",
   "keywords": ["keyword1", "keyword2", ...],
   "blocks": [
-    {
-      "type": "TEXT",
-      "content": { "markdown": "## Heading\\n\\nParagraph with **bold**..." }
-    },
-    {
-      "type": "CODE",
-      "content": { "language": "python", "code": "def example():\\n    pass" }
-    },
-    {
-      "type": "IMAGE_SUGGESTION",
-      "content": { "prompt": "DALL-E prompt in English", "reason": "Description in ${config.language}" }
-    }
-  ] 
+${BLOCK_OUTPUT_FORMAT}
+  ]
 }
 
-# Block Types
+${BLOCK_TYPE_RULES}
 
-TEXT:
-- Use markdown: ##/### headings, **bold**, *italic*, - lists, > blockquotes
-- Consolidate continuous text. NEVER create consecutive TEXT blocks.
-- One TEXT block can have multiple headings, paragraphs, lists.
-
-CODE:
-- Generate ONLY for programming or technical topics where code examples are essential.
-- Do NOT generate for general subjects (history, literature, etc.) unless specifically requested.
-- Choose appropriate language, include comments
-- Escape special characters properly in JSON
-
-IMAGE_SUGGESTION:
-- Include only when visuals significantly enhance comprehension
-- "prompt": detailed DALL-E prompt in English
-- "reason": brief reason in ${config.language}
-
-# Content Settings
-
-- Language: ${config.language}
-- Audience: ${audienceDesc}
-- Level: ${levelDesc}
-- Tone: ${toneDesc}
+${getContentSettingsBlock(config)}
 
 # Quality
 

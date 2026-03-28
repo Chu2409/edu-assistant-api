@@ -1,4 +1,5 @@
 import { PromptInput } from '../interfaces/prompt-input.interface'
+import { JSON_ONLY_INSTRUCTION } from '../helpers/guidances'
 
 export interface GenerateConceptDefinitionPromptInput {
   selectedText: string
@@ -26,7 +27,7 @@ export const generateConceptDefinitionPrompt = ({
 
 # OUTPUT FORMAT
 
-Return ONLY raw JSON (no markdown fences, no explanation):
+${JSON_ONLY_INSTRUCTION}
 
 {
   "terms": [
