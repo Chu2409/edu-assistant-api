@@ -1,8 +1,8 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger'
 import { BlockDto } from 'src/features/pages/blocks/dtos/res/block.dto'
-import { NoteDto } from 'src/features/pages/notes/dtos/res/note.dto'
-import { PageFeedbackDto } from 'src/features/pages/page-feedbacks/dtos/res/page-feedback.dto'
-import { StudentQuestionDto } from 'src/features/pages/student-questions/dtos/res/student-question.dto'
+import { NoteDto } from 'src/features/interactions/notes/dtos/res/note.dto'
+import { PageFeedbackDto } from 'src/features/interactions/page-feedbacks/dtos/res/page-feedback.dto'
+import { StudentQuestionDto } from 'src/features/interactions/student-questions/dtos/res/student-question.dto'
 
 export class FullPageDto {
   @ApiProperty({
@@ -136,4 +136,12 @@ export class FullPageDto {
     ],
   })
   blocks: BlockDto[]
+
+  @ApiPropertyOptional({
+    description:
+      'ID de la sesión de chat con IA asociada a esta página y usuario actual',
+    example: 1,
+    nullable: true,
+  })
+  chatSessionId?: number | null
 }

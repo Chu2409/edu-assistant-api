@@ -5,7 +5,6 @@ import {
 } from '@nestjs/common'
 import { DBService } from 'src/core/database/database.service'
 import { Prisma, type User } from 'src/core/database/generated/client'
-import { ContentGenerationService } from '../content-generation/content-generation.service'
 import { CreatePageConceptDto } from './dtos/req/create-page-concept.dto'
 import { UpdatePageConceptDto } from './dtos/req/update-page-concept.dto'
 import { PageConceptDto } from './dtos/res/page-concept.dto'
@@ -16,7 +15,6 @@ import { PagesHelperService } from '../main/pages-helper.service'
 export class PageConceptsService {
   constructor(
     private readonly dbService: DBService,
-    private readonly contentGenerationService: ContentGenerationService,
     private readonly pagesHelperService: PagesHelperService,
   ) {}
 

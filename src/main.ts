@@ -16,20 +16,20 @@ import {
   MatchAttempt,
   MultipleChoiceAttempt,
   TrueFalseAttempt,
-} from './features/pages/activities/interfaces/activity-attempt.interface'
+} from './features/interactions/activities/interfaces/activity-attempt.interface'
 import {
-  AiGeneratedFillBlankActivity,
+  AiFillBlankActivity,
   AiGeneratedMatchActivity,
-  AiGeneratedTrueFalseActivity,
-  AiGeneratedMultipleChoiceActivity,
-} from './features/pages/content-generation/interfaces/ai-generated-activity.interface'
+  AiTrueFalseActivity,
+  AiMultipleChoiceActivity,
+} from './features/content-generation/activities/interfaces/ai-generated-activity.interface'
 import {
   AiCodeBlock,
   AiContentBlock,
   AiImageSuggestionBlock,
   AiTextBlock,
-} from './features/pages/content-generation/interfaces/ai-generated-content.interface'
-import { AiResponseDto } from './providers/ai/dtos/ai-response.interface'
+} from './features/content-generation/shared/interfaces/ai-generated-content.interface'
+import { AiResponseDto } from './providers/ai/dtos/res/ai-response.dto'
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule, {
@@ -95,9 +95,9 @@ async function bootstrap() {
       TrueFalseAttempt,
       FillBlankAttempt,
       MatchAttempt,
-      AiGeneratedMultipleChoiceActivity,
-      AiGeneratedTrueFalseActivity,
-      AiGeneratedFillBlankActivity,
+      AiMultipleChoiceActivity,
+      AiTrueFalseActivity,
+      AiFillBlankActivity,
       AiGeneratedMatchActivity,
       AiContentBlock,
       AiResponseDto,

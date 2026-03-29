@@ -1332,6 +1332,11 @@ export type QuestionReplyFindManyArgs<ExtArgs extends runtime.Types.Extensions.I
    * Skip the first `n` QuestionReplies.
    */
   skip?: number
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+   * 
+   * Filter by unique combinations of QuestionReplies.
+   */
   distinct?: Prisma.QuestionReplyScalarFieldEnum | Prisma.QuestionReplyScalarFieldEnum[]
 }
 

@@ -5,12 +5,13 @@ import {
   PageFeedback,
   StudentQuestion,
   User,
+  Session,
 } from 'src/core/database/generated/client'
 import { PageDto } from '../dtos/res/page.dto'
 import { FullPageDto } from '../dtos/res/full-page.dto'
-import { StudentQuestionsMapper } from '../../student-questions/mappers/student-questions.mapper'
-import { PageFeedbacksMapper } from '../../page-feedbacks/mappers/page-feedbacks.mapper'
-import { NotesMapper } from '../../notes/mappers/notes.mapper'
+import { StudentQuestionsMapper } from '../../../interactions/student-questions/mappers/student-questions.mapper'
+import { PageFeedbacksMapper } from '../../../interactions/page-feedbacks/mappers/page-feedbacks.mapper'
+import { NotesMapper } from '../../../interactions/notes/mappers/notes.mapper'
 import { BlocksMapper } from '../../blocks/mappers/blocks.mapper'
 
 export class PagesMapper {
@@ -33,6 +34,7 @@ export class PagesMapper {
       studentQuestions: (StudentQuestion & { user: User })[]
       pageFeedbacks?: (PageFeedback & { user: User })[]
       blocks: Block[]
+      sessions?: Session[]
     },
   ): FullPageDto {
     return {
@@ -55,6 +57,7 @@ export class PagesMapper {
       notes: page.notes
         ? page.notes.map((note) => NotesMapper.mapToDto(note))
         : null,
+      chatSessionId: page.sessions?.[0]?.id ?? null,
       blocks: page.blocks.map((block) => BlocksMapper.mapToDto(block)),
     }
   }

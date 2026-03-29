@@ -22,13 +22,11 @@ import { BaseParamsReqDto } from 'src/shared/dtos/req/base-params.dto'
 import { PagesMapper } from './mappers/pages.mapper'
 import { ApiPaginatedRes } from 'src/shared/dtos/res/api-response.dto'
 import { FullPageDto } from './dtos/res/full-page.dto'
-import { ContentGenerationService } from '../content-generation/content-generation.service'
 
 @Injectable()
 export class PagesService {
   constructor(
     private readonly dbService: DBService,
-    private readonly contentGenerationService: ContentGenerationService,
     @InjectQueue(QUEUE_NAMES.EMBEDDINGS.NAME)
     private readonly embeddingsQueue: Queue,
   ) {}
@@ -188,6 +186,10 @@ export class PagesService {
         },
         blocks: {
           orderBy: { orderIndex: 'asc' },
+        },
+        sessions: {
+          where: { userId: user.id },
+          take: 1,
         },
       },
     })

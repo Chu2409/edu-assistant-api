@@ -31,7 +31,6 @@ export class BaseParamsReqDto {
   @IsString()
   @ApiPropertyOptional({
     description: 'Search query',
-    example: 'search query',
     required: false,
   })
   search?: string

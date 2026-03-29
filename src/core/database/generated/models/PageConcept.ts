@@ -1208,6 +1208,11 @@ export type PageConceptFindManyArgs<ExtArgs extends runtime.Types.Extensions.Int
    * Skip the first `n` PageConcepts.
    */
   skip?: number
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+   * 
+   * Filter by unique combinations of PageConcepts.
+   */
   distinct?: Prisma.PageConceptScalarFieldEnum | Prisma.PageConceptScalarFieldEnum[]
 }
 

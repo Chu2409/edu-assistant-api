@@ -602,3 +602,16 @@ model ModuleMetrics {
 
   @@map("module_metrics")
 }
+
+// ============================================
+// SYSTEM SETTINGS (Key-Value)
+// ============================================
+
+model SystemSetting {
+  key         String   @id // Ej: "AI_MODELS", "TEACHER_EMAILS"
+  value       Json     // Valor en formato JSON (soporta arrays, objetos, strings)
+  description String?  @db.Text // (Opcional) Descripción interna
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@map("system_settings")
+}

@@ -1205,6 +1205,11 @@ export type ModuleMetricsFindManyArgs<ExtArgs extends runtime.Types.Extensions.I
    * Skip the first `n` ModuleMetrics.
    */
   skip?: number
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+   * 
+   * Filter by unique combinations of ModuleMetrics.
+   */
   distinct?: Prisma.ModuleMetricsScalarFieldEnum | Prisma.ModuleMetricsScalarFieldEnum[]
 }
 

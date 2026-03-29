@@ -80,8 +80,7 @@ export class GlobalExceptionFilter implements ExceptionFilter {
     // Handle other types of errors
     else if (exception instanceof Error) {
       errorResponse.message.displayable = false
-
-      errorResponse.message.content = [exception.message]
+      errorResponse.message.content = ['Error interno del servidor']
     }
 
     response.status(status).json(errorResponse)
