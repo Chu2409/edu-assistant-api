@@ -15,6 +15,8 @@ import { PageSessionsController } from './chat/pages-sessions.controller'
 import { SessionMessagesController } from './chat/sessions-messages.controller'
 import { ChatService } from './chat/chat.service'
 import { AIModule } from 'src/providers/ai/ai.module'
+import { ChatRateLimitService } from './chat/services/chat-rate-limit.service'
+import { ChatRateLimitGuard } from './chat/guards/chat-rate-limit.guard'
 
 @Module({
   imports: [PagesModule, AIModule],
@@ -35,6 +37,8 @@ import { AIModule } from 'src/providers/ai/ai.module'
     StudentQuestionsService,
     PageNotesService,
     ChatService,
+    ChatRateLimitService,
+    ChatRateLimitGuard,
   ],
   exports: [],
 })

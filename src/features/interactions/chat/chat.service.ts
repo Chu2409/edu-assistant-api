@@ -5,12 +5,10 @@ import {
 } from '@nestjs/common'
 import { DBService } from 'src/core/database/database.service'
 import { OpenaiService } from 'src/providers/ai/services/openai.service'
+import { PagesHelperService } from 'src/features/pages/main/pages-helper.service'
 import {
   Block,
-  Enrollment,
   MessageRole,
-  Role,
-  type Page,
   type User,
 } from 'src/core/database/generated/client'
 import { BlockType } from 'src/core/database/generated/enums'
@@ -37,58 +35,15 @@ export class ChatService {
   constructor(
     private readonly dbService: DBService,
     private readonly openAiService: OpenaiService,
+    private readonly pagesHelperService: PagesHelperService,
   ) {}
-
-  private async getPageForAccess(pageId: number, user: User): Promise<Page> {
-    const page = await this.dbService.page.findUnique({
-      where: { id: pageId },
-      include: {
-        module: { include: { enrollments: true, aiConfiguration: true } },
-      },
-    })
-
-    if (!page) {
-      throw new NotFoundException(`Página con ID ${pageId} no encontrada`)
-    }
-
-    if (user.role === Role.ADMIN) {
-      return page
-    }
-
-    if (user.role === Role.TEACHER) {
-      if (page.module.teacherId !== user.id) {
-        throw new ForbiddenException(
-          'No tienes permisos para acceder a esta página',
-        )
-      }
-      return page
-    }
-
-    const hasAccess =
-      page.module.isPublic ||
-      page.module.enrollments.some(
-        (enrollment: Enrollment) =>
-          enrollment.userId === user.id && enrollment.isActive,
-      )
-
-    if (!hasAccess) {
-      throw new ForbiddenException(
-        'No tienes permisos para acceder a esta página',
-      )
-    }
-    if (!page.isPublished) {
-      throw new ForbiddenException('Esta página no está publicada aún')
-    }
-
-    return page
-  }
 
   async createOrGetSession(
     pageId: number,
     dto: CreateOrGetSessionDto,
     user: User,
   ): Promise<SessionDto> {
-    const page = await this.getPageForAccess(pageId, user)
+    const page = await this.pagesHelperService.getPageForRead(pageId, user)
 
     const existing = await this.dbService.session.findUnique({
       where: { userId_pageId: { userId: user.id, pageId } },
@@ -125,7 +80,7 @@ export class ChatService {
     }
 
     // valida acceso a la página (por si cambió publicación/matrícula)
-    await this.getPageForAccess(session.pageId, user)
+    await this.pagesHelperService.getPageForRead(session.pageId, user)
 
     const messages = await this.dbService.message.findMany({
       where: { sessionId },
@@ -173,7 +128,10 @@ export class ChatService {
       throw new ForbiddenException('No tienes permisos para usar esta sesión')
     }
 
-    const page = await this.getPageForAccess(session.pageId, user)
+    const page = await this.pagesHelperService.getPageForRead(
+      session.pageId,
+      user,
+    )
 
     const previousResponseId = this.getPreviousResponseId(session.messages)
 
@@ -182,7 +140,6 @@ export class ChatService {
       ? this.buildLessonContext(session.page.blocks)
       : undefined
 
-    // @ts-expect-error el lenguaje debería venir de la configuración de la lección, pero por ahora lo dejamos fijo
     const language = page.module.aiConfiguration?.language ?? 'es'
 
     const prompt = chatSessionPrompt({

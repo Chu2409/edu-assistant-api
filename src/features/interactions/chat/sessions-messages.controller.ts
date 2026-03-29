@@ -6,6 +6,7 @@ import {
   Param,
   ParseIntPipe,
   Post,
+  UseGuards,
 } from '@nestjs/common'
 import { ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger'
 import { GetUser } from 'src/features/auth/decorators/get-user.decorator'
@@ -15,6 +16,7 @@ import { ChatService } from './chat.service'
 import { SendMessageDto } from './dtos/req/send-message.dto'
 import { MessageDto } from './dtos/res/message.dto'
 import { ChatMessageCreatedDto } from './dtos/res/chat-message-created.dto'
+import { ChatRateLimitGuard } from './guards/chat-rate-limit.guard'
 
 @ApiTags('Page Chat')
 @Controller('sessions')
@@ -33,10 +35,12 @@ export class SessionMessagesController {
   }
 
   @Post(':sessionId/messages')
+  @UseGuards(ChatRateLimitGuard)
   @ApiOperation({ summary: 'Enviar mensaje y obtener respuesta del asistente' })
   @ApiParam({ name: 'sessionId', type: Number, example: 1 })
   @ApiStandardResponse(ChatMessageCreatedDto, HttpStatus.CREATED)
   @ApiResponse({ status: 401, description: 'No autorizado' })
+  @ApiResponse({ status: 429, description: 'Límite de mensajes excedido' })
   send(
     @Param('sessionId', ParseIntPipe) sessionId: number,
     @Body() dto: SendMessageDto,
