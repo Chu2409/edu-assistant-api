@@ -1,4 +1,4 @@
-import type { PromptInput } from '../../../../providers/ai/interfaces/prompt-input.interface'
+import type { PromptInput } from 'src/providers/ai/interfaces/prompt-input.interface'
 
 export interface ChatSessionPromptInput {
   language: string

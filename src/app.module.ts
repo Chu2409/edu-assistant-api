@@ -10,7 +10,7 @@ import { APP_GUARD } from '@nestjs/core'
 import { JwtAuthGuard } from './features/auth/guards/jwt-auth.guard'
 import { FilesModule } from './providers/files/files.module'
 import { InteractionsModule } from './features/interactions/interactions.module'
-import { ChatModule } from './features/interactions/chat/chat.module'
+import { ChatModule } from './features/chat/chat.module'
 import { ContentGenerationModule } from './features/content-generation/content-generation.module'
 
 @Module({
