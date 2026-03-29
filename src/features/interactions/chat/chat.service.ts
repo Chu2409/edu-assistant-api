@@ -6,25 +6,18 @@ import {
 import { DBService } from 'src/core/database/database.service'
 import { OpenaiService } from 'src/providers/ai/services/openai.service'
 import { PagesHelperService } from 'src/features/pages/main/pages-helper.service'
-import {
-  Block,
-  MessageRole,
-  type User,
-} from 'src/core/database/generated/client'
-import { BlockType } from 'src/core/database/generated/enums'
+import { MessageRole, type User } from 'src/core/database/generated/client'
 import { CreateOrGetSessionDto } from './dtos/req/create-or-get-session.dto'
 import { SendMessageDto } from './dtos/req/send-message.dto'
 import { SessionDto } from './dtos/res/session.dto'
 import { MessageDto } from './dtos/res/message.dto'
+import { ApiPaginatedRes } from 'src/shared/dtos/res/api-response.dto'
 import { ChatMessageCreatedDto } from './dtos/res/chat-message-created.dto'
-import {
-  AiCodeBlock,
-  AiTextBlock,
-} from '../../content-generation/shared/interfaces/ai-generated-content.interface'
 import { parseJsonField } from 'src/providers/ai/helpers/utils'
 import { chatSessionPrompt } from './prompts/chat-session.prompt'
 import { ChatMapper } from './mappers/chat.mapper'
-import { BlocksMapper } from 'src/features/pages/blocks/mappers/blocks.mapper'
+import { compileBlocksToText } from 'src/features/pages/blocks/helpers/compile-blocks'
+import { BaseParamsReqDto } from 'src/shared/dtos/req/base-params.dto'
 
 type StoredAiMetadata = {
   responseId?: string
@@ -63,7 +56,11 @@ export class ChatService {
     return ChatMapper.toSessionDto(created)
   }
 
-  async listMessages(sessionId: number, user: User): Promise<MessageDto[]> {
+  async listMessages(
+    sessionId: number,
+    query: BaseParamsReqDto,
+    user: User,
+  ): Promise<ApiPaginatedRes<MessageDto>> {
     const session = await this.dbService.session.findUnique({
       where: { id: sessionId },
       include: {
@@ -82,12 +79,22 @@ export class ChatService {
     // valida acceso a la página (por si cambió publicación/matrícula)
     await this.pagesHelperService.getPageForRead(session.pageId, user)
 
-    const messages = await this.dbService.message.findMany({
-      where: { sessionId },
-      orderBy: { createdAt: 'asc' },
-    })
+    const skip = (query.page - 1) * query.limit
 
-    return messages.map((m) =>
+    const [total, messages] = await Promise.all([
+      this.dbService.message.count({ where: { sessionId } }),
+      this.dbService.message.findMany({
+        where: { sessionId },
+        orderBy: { createdAt: 'desc' }, // Traemos los más recientes primero
+        skip,
+        take: query.limit,
+      }),
+    ])
+
+    // Invertimos el arreglo de mensajes para que quede en orden cronológico (asc) para el frontend
+    const sortedMessages = messages.reverse()
+
+    const records = sortedMessages.map((m) =>
       ChatMapper.toMessageDto({
         id: m.id,
         sessionId: m.sessionId,
@@ -97,6 +104,14 @@ export class ChatService {
         createdAt: m.createdAt,
       }),
     )
+
+    return {
+      records,
+      total,
+      limit: query.limit,
+      page: query.page,
+      pages: Math.ceil(total / query.limit),
+    }
   }
 
   async sendMessage(
@@ -137,7 +152,7 @@ export class ChatService {
 
     const isFirstMessage = !previousResponseId
     const lessonContext = isFirstMessage
-      ? this.buildLessonContext(session.page.blocks)
+      ? compileBlocksToText(session.page.blocks)
       : undefined
 
     const language = page.module.aiConfiguration?.language ?? 'es'
@@ -210,29 +225,5 @@ export class ChatService {
     } catch {
       return undefined
     }
-  }
-
-  private buildLessonContext(blocks: Block[]): string {
-    const mapped = blocks.map((b) => BlocksMapper.mapToDto(b))
-
-    const parts: string[] = []
-
-    for (const block of mapped) {
-      if (block.type === BlockType.TEXT) {
-        const markdown = String((block.content as AiTextBlock).markdown || '')
-        if (markdown.trim()) {
-          parts.push(markdown.trim())
-        }
-      } else if (block.type === BlockType.CODE) {
-        const lang = String((block.content as AiCodeBlock).language)
-        const code = String((block.content as AiCodeBlock).code)
-        const codeTrim = String(code).trim()
-        if (codeTrim) {
-          parts.push(`Código (${lang || 'code'}):\n${codeTrim}`)
-        }
-      }
-    }
-
-    return parts.join('\n\n---\n\n')
   }
 }

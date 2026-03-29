@@ -53,10 +53,14 @@ export class AuthService {
         },
       })
     } else {
+      const expectedRole = this.determineUserRole(dto.email)
+      const roleChanged = user.role !== Role.ADMIN && user.role !== expectedRole
+
       user = await this.dbService.user.update({
         where: { id: user.id },
         data: {
           lastLoginAt: new Date(),
+          ...(roleChanged && { role: expectedRole }),
         },
       })
     }

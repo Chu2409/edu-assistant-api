@@ -5,17 +5,12 @@ import {
 } from '@nestjs/common'
 import { DBService } from 'src/core/database/database.service'
 import { OpenaiService } from 'src/providers/ai/services/openai.service'
-import { Block, Prisma, type User } from 'src/core/database/generated/client'
-import { BlockType } from 'src/core/database/generated/enums'
-import { BlocksMapper } from '../blocks/mappers/blocks.mapper'
+import { Prisma, type User } from 'src/core/database/generated/client'
 import { CreatePageRelationDto } from './dtos/req/create-page-relation.dto'
 import { UpdatePageRelationDto } from './dtos/req/update-page-relation.dto'
 import { PageRelationDto } from './dtos/res/page-relation.dto'
 import { PagesHelperService } from '../main/pages-helper.service'
-import {
-  AiCodeBlock,
-  AiTextBlock,
-} from '../../content-generation/shared/interfaces/ai-generated-content.interface'
+import { compileBlocksToText } from '../blocks/helpers/compile-blocks'
 
 type SimilarRow = { id: number; similarity: number }
 
@@ -177,7 +172,7 @@ export class PageRelationsService {
     if (!page)
       throw new NotFoundException(`Página con ID ${pageId} no encontrada`)
 
-    const compiledContent = this.compileFromBlocks(page.blocks)
+    const compiledContent = compileBlocksToText(page.blocks)
     if (!compiledContent.trim()) return null
 
     const embedding = await this.openAiService.getEmbedding(compiledContent)
@@ -216,26 +211,6 @@ export class PageRelationsService {
       )
     }
     return result
-  }
-
-  private compileFromBlocks(blocks: Block[]): string {
-    const mapped = blocks.map((b) => BlocksMapper.mapToDto(b))
-    const parts: string[] = []
-
-    for (const b of mapped) {
-      if (b.type === BlockType.TEXT) {
-        const markdown = String(
-          (b.content as AiTextBlock).markdown || '',
-        ).trim()
-        if (markdown) parts.push(markdown)
-      } else if (b.type === BlockType.CODE) {
-        const lang = String((b.content as AiCodeBlock).language).trim()
-        const code = String((b.content as AiCodeBlock).code).trim()
-        if (code) parts.push(`Código (${lang || 'code'}):\n${code}`)
-      }
-    }
-
-    return parts.join('\n\n---\n\n')
   }
 
   async findSimilarPages(params: {

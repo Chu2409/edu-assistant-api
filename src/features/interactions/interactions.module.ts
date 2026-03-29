@@ -11,15 +11,9 @@ import { StudentQuestionsService } from './student-questions/student-questions.s
 import { PageNotesController } from './notes/page-notes.controller'
 import { PageNotesService } from './notes/page-notes.service'
 import { PagesModule } from '../pages/pages.module'
-import { PageSessionsController } from './chat/pages-sessions.controller'
-import { SessionMessagesController } from './chat/sessions-messages.controller'
-import { ChatService } from './chat/chat.service'
-import { AIModule } from 'src/providers/ai/ai.module'
-import { ChatRateLimitService } from './chat/services/chat-rate-limit.service'
-import { ChatRateLimitGuard } from './chat/guards/chat-rate-limit.guard'
 
 @Module({
-  imports: [PagesModule, AIModule],
+  imports: [PagesModule],
   controllers: [
     PagesActivitiesController,
     ActivityAttemptsController,
@@ -27,8 +21,6 @@ import { ChatRateLimitGuard } from './chat/guards/chat-rate-limit.guard'
     QuestionRepliesController,
     StudentQuestionsController,
     PageNotesController,
-    PageSessionsController,
-    SessionMessagesController,
   ],
   providers: [
     ActivitiesService,
@@ -36,9 +28,6 @@ import { ChatRateLimitGuard } from './chat/guards/chat-rate-limit.guard'
     QuestionRepliesService,
     StudentQuestionsService,
     PageNotesService,
-    ChatService,
-    ChatRateLimitService,
-    ChatRateLimitGuard,
   ],
   exports: [],
 })

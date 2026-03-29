@@ -15,6 +15,8 @@ import { GeneratedRelationsDto } from './dtos/res/generated-relations.dto'
 import { PageRelationsService } from '../../pages/page-relations/page-relations.service'
 import type { AiContent } from '../shared/interfaces/ai-generated-content.interface'
 import { parseJsonField } from 'src/providers/ai/helpers/utils'
+import { validateAiResponse } from 'src/providers/ai/helpers/ai-response-validator'
+import { generatedRelationsSchema } from '../shared/schemas/ai-content.schema'
 
 @Injectable()
 export class RelationsService {
@@ -104,6 +106,9 @@ export class RelationsService {
     const aiResponse =
       await this.openAiService.getResponse<GeneratedRelationsDto>(prompt)
 
-    return aiResponse.content
+    return validateAiResponse(
+      aiResponse.content,
+      generatedRelationsSchema,
+    ) as unknown as GeneratedRelationsDto
   }
 }

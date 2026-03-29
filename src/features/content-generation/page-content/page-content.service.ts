@@ -14,6 +14,12 @@ import { RegeneratedBlockDto } from './dtos/res/regenerated-block.dto'
 import { ExpandedContentDto } from './dtos/res/expanded-content.dto'
 import type { AiContent } from '../shared/interfaces/ai-generated-content.interface'
 import { parseJsonField } from 'src/providers/ai/helpers/utils'
+import { validateAiResponse } from 'src/providers/ai/helpers/ai-response-validator'
+import {
+  generatedPageContentSchema,
+  regeneratedBlockSchema,
+  expandedContentSchema,
+} from '../shared/schemas/ai-content.schema'
 
 @Injectable()
 export class PageContentService {
@@ -54,7 +60,10 @@ export class PageContentService {
     const aiResponse =
       await this.openAiService.getResponse<GeneratedPageContent>(prompt)
 
-    return aiResponse.content
+    return validateAiResponse(
+      aiResponse.content,
+      generatedPageContentSchema,
+    ) as unknown as GeneratedPageContent
   }
 
   async regeneratePageContent(
@@ -101,7 +110,10 @@ export class PageContentService {
     const aiResponse =
       await this.openAiService.getResponse<GeneratedPageContent>(prompt)
 
-    return aiResponse.content
+    return validateAiResponse(
+      aiResponse.content,
+      generatedPageContentSchema,
+    ) as unknown as GeneratedPageContent
   }
 
   async regenerateBlock(
@@ -179,7 +191,10 @@ export class PageContentService {
     const aiResponse =
       await this.openAiService.getResponse<RegeneratedBlockDto>(prompt)
 
-    return aiResponse.content
+    return validateAiResponse(
+      aiResponse.content,
+      regeneratedBlockSchema,
+    ) as unknown as RegeneratedBlockDto
   }
 
   async expandContent(data: ExpandContentDto): Promise<ExpandedContentDto> {
@@ -237,7 +252,10 @@ export class PageContentService {
     const aiResponse =
       await this.openAiService.getResponse<ExpandedContentDto>(prompt)
 
-    return aiResponse.content
+    return validateAiResponse(
+      aiResponse.content,
+      expandedContentSchema,
+    ) as unknown as ExpandedContentDto
   }
 
   async generateImage(prompt: string) {

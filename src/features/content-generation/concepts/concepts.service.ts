@@ -14,6 +14,8 @@ import { PageConceptsExtractedDto } from './dtos/res/generated-concept.dto'
 import { GeneratedConceptDto } from './dtos/res/generated-concept.dto'
 import { BlockType } from 'src/core/database/generated/enums'
 import { parseJsonField } from 'src/providers/ai/helpers/utils'
+import { validateAiResponse } from 'src/providers/ai/helpers/ai-response-validator'
+import { pageConceptsExtractedSchema } from '../shared/schemas/ai-content.schema'
 
 @Injectable()
 export class ConceptsService {
@@ -55,7 +57,10 @@ export class ConceptsService {
     const aiResponse =
       await this.openAiService.getResponse<PageConceptsExtractedDto>(prompt)
 
-    return aiResponse.content
+    return validateAiResponse(
+      aiResponse.content,
+      pageConceptsExtractedSchema,
+    ) as unknown as PageConceptsExtractedDto
   }
 
   async generateConcept(

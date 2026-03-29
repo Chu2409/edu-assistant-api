@@ -6,17 +6,23 @@ import {
   Param,
   ParseIntPipe,
   Post,
+  Query,
   UseGuards,
 } from '@nestjs/common'
 import { ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger'
 import { GetUser } from 'src/features/auth/decorators/get-user.decorator'
 import type { User } from 'src/core/database/generated/client'
-import { ApiStandardResponse } from 'src/shared/decorators/api-standard-response.decorator'
+import {
+  ApiStandardResponse,
+  ApiPaginatedResponse,
+} from 'src/shared/decorators/api-standard-response.decorator'
 import { ChatService } from './chat.service'
 import { SendMessageDto } from './dtos/req/send-message.dto'
 import { MessageDto } from './dtos/res/message.dto'
+import { ApiPaginatedRes } from 'src/shared/dtos/res/api-response.dto'
 import { ChatMessageCreatedDto } from './dtos/res/chat-message-created.dto'
 import { ChatRateLimitGuard } from './guards/chat-rate-limit.guard'
+import { BaseParamsReqDto } from 'src/shared/dtos/req/base-params.dto'
 
 @ApiTags('Page Chat')
 @Controller('sessions')
@@ -26,12 +32,13 @@ export class SessionMessagesController {
   @Get(':sessionId/messages')
   @ApiOperation({ summary: 'Listar mensajes de una sesión' })
   @ApiParam({ name: 'sessionId', type: Number, example: 1 })
-  @ApiStandardResponse([MessageDto])
+  @ApiPaginatedResponse(MessageDto)
   list(
     @Param('sessionId', ParseIntPipe) sessionId: number,
+    @Query() query: BaseParamsReqDto,
     @GetUser() user: User,
-  ): Promise<MessageDto[]> {
-    return this.chatService.listMessages(sessionId, user)
+  ): Promise<ApiPaginatedRes<MessageDto>> {
+    return this.chatService.listMessages(sessionId, query, user)
   }
 
   @Post(':sessionId/messages')
