@@ -23,6 +23,26 @@ export class AiCodeBlock {
   code: string
 }
 
+export class AiImageBlock {
+  @ApiProperty({
+    description: 'URL de la imagen generada',
+    example: 'https://example.com/image.png',
+  })
+  url?: string
+
+  @ApiProperty({
+    description: 'Texto alternativo para accesibilidad',
+    example: 'Un diagrama de flujo',
+  })
+  alt: string
+
+  @ApiProperty({
+    description: 'Leyenda de la imagen',
+    example: 'Figura 1: Flujo de datos',
+  })
+  caption?: string
+}
+
 export class AiImageSuggestionBlock {
   @ApiProperty({
     description: 'Prompt para generar la imagen',
@@ -37,7 +57,11 @@ export class AiImageSuggestionBlock {
   reason: string
 }
 
-export type AiContent = AiTextBlock | AiCodeBlock | AiImageSuggestionBlock
+export type AiContent =
+  | AiTextBlock
+  | AiCodeBlock
+  | AiImageBlock
+  | AiImageSuggestionBlock
 
 export class AiContentBlock {
   @ApiProperty({
@@ -49,13 +73,14 @@ export class AiContentBlock {
 
   @ApiProperty({
     description:
-      'Contenido del bloque. Si type es TEXT, contiene { markdown: string }. Si type es CODE, contiene { language: string, code: string }. Si type es IMAGE_SUGGESTION, contiene { prompt: string, reason: string }',
+      'Contenido del bloque. Si type es TEXT, contiene { markdown: string }. Si type es CODE, contiene { language: string, code: string }. Si type es IMAGE contiene { url?: string, alt: string, caption?: string }. Si type es IMAGE_SUGGESTION, contiene { prompt: string, reason: string }',
     example: {
       markdown: '# Título\n\nEste es un párrafo con **texto en negrita**.',
     },
     oneOf: [
       { $ref: getSchemaPath(AiTextBlock) },
       { $ref: getSchemaPath(AiCodeBlock) },
+      { $ref: getSchemaPath(AiImageBlock) },
       { $ref: getSchemaPath(AiImageSuggestionBlock) },
     ],
   })

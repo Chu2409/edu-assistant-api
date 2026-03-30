@@ -15,6 +15,8 @@ import type {
   AiCodeBlock,
 } from '../shared/interfaces/ai-generated-content.interface'
 import { parseJsonField } from 'src/providers/ai/helpers/utils'
+import { validateAiResponse } from 'src/providers/ai/helpers/ai-response-validator'
+import { aiGeneratedActivitySchema } from '../shared/schemas/ai-content.schema'
 
 @Injectable()
 export class ActivitiesService {
@@ -64,8 +66,7 @@ export class ActivitiesService {
       blocks,
       config: {
         language,
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        difficulty: (data.difficulty as any) ?? 3,
+        difficulty: (data.difficulty as 1 | 2 | 3 | 4 | 5) ?? 3,
       },
       instructions: data.instructions,
     })
@@ -73,6 +74,9 @@ export class ActivitiesService {
     const aiResponse =
       await this.openAiService.getResponse<AiGeneratedActivity>(prompt)
 
-    return aiResponse.content
+    return validateAiResponse(
+      aiResponse.content,
+      aiGeneratedActivitySchema,
+    ) as AiGeneratedActivity
   }
 }

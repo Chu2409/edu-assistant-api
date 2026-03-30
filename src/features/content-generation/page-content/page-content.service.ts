@@ -60,10 +60,7 @@ export class PageContentService {
     const aiResponse =
       await this.openAiService.getResponse<GeneratedPageContent>(prompt)
 
-    return validateAiResponse(
-      aiResponse.content,
-      generatedPageContentSchema,
-    ) as unknown as GeneratedPageContent
+    return validateAiResponse(aiResponse.content, generatedPageContentSchema)
   }
 
   async regeneratePageContent(
@@ -110,10 +107,7 @@ export class PageContentService {
     const aiResponse =
       await this.openAiService.getResponse<GeneratedPageContent>(prompt)
 
-    return validateAiResponse(
-      aiResponse.content,
-      generatedPageContentSchema,
-    ) as unknown as GeneratedPageContent
+    return validateAiResponse(aiResponse.content, generatedPageContentSchema)
   }
 
   async regenerateBlock(
@@ -191,10 +185,7 @@ export class PageContentService {
     const aiResponse =
       await this.openAiService.getResponse<RegeneratedBlockDto>(prompt)
 
-    return validateAiResponse(
-      aiResponse.content,
-      regeneratedBlockSchema,
-    ) as unknown as RegeneratedBlockDto
+    return validateAiResponse(aiResponse.content, regeneratedBlockSchema)
   }
 
   async expandContent(data: ExpandContentDto): Promise<ExpandedContentDto> {
@@ -252,10 +243,7 @@ export class PageContentService {
     const aiResponse =
       await this.openAiService.getResponse<ExpandedContentDto>(prompt)
 
-    return validateAiResponse(
-      aiResponse.content,
-      expandedContentSchema,
-    ) as unknown as ExpandedContentDto
+    return validateAiResponse(aiResponse.content, expandedContentSchema)
   }
 
   async generateImage(prompt: string, language?: string) {

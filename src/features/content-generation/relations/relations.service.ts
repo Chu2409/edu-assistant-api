@@ -109,6 +109,6 @@ export class RelationsService {
     return validateAiResponse(
       aiResponse.content,
       generatedRelationsSchema,
-    ) as unknown as GeneratedRelationsDto
+    ) as GeneratedRelationsDto
   }
 }

@@ -60,7 +60,7 @@ export class ConceptsService {
     return validateAiResponse(
       aiResponse.content,
       pageConceptsExtractedSchema,
-    ) as unknown as PageConceptsExtractedDto
+    ) as PageConceptsExtractedDto
   }
 
   async generateConcept(
@@ -90,11 +90,15 @@ export class ConceptsService {
       },
     })
 
-    const aiResponse = await this.openAiService.getResponse<{
-      terms: GeneratedConceptDto[]
-    }>(prompt)
+    const aiResponse =
+      await this.openAiService.getResponse<PageConceptsExtractedDto>(prompt)
 
-    const terms = aiResponse.content.terms
+    const validated = validateAiResponse(
+      aiResponse.content,
+      pageConceptsExtractedSchema,
+    )
+
+    const terms = validated.terms
     if (!terms.length) {
       throw new BadRequestException(
         'La IA no devolvió una definición válida para el término',
