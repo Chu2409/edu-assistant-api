@@ -89,6 +89,7 @@ export class OpenaiService implements OnModuleInit {
         prompt,
         n: 1,
         size: 'auto',
+        quality: 'auto',
       })
       if (!response.data || response.data.length === 0) {
         throw new Error('No image data returned from OpenAI')

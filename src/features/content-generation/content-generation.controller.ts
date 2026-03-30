@@ -162,7 +162,10 @@ export class ContentGenerationController {
     description: 'Solo profesores pueden generar imágenes',
   })
   async generateImage(@Body() dto: GenerateImageDto) {
-    const base64 = await this.pageContentService.generateImage(dto.prompt)
+    const base64 = await this.pageContentService.generateImage(
+      dto.prompt,
+      dto.language,
+    )
     return { base64 }
   }
 

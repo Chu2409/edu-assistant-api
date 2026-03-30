@@ -258,9 +258,13 @@ export class PageContentService {
     ) as unknown as ExpandedContentDto
   }
 
-  async generateImage(prompt: string) {
+  async generateImage(prompt: string, language?: string) {
     this.logger.log('Generating image')
-    const image = await this.openAiService.generateImage(prompt)
+    const finalPrompt = language
+      ? `${prompt}. Any text or labels within the image MUST be explicitly written in ${language} language.`
+      : prompt
+
+    const image = await this.openAiService.generateImage(finalPrompt)
 
     return image
   }

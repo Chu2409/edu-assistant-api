@@ -1,5 +1,5 @@
-import { ApiProperty } from '@nestjs/swagger'
-import { IsString, MaxLength, MinLength } from 'class-validator'
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger'
+import { IsOptional, IsString, MaxLength, MinLength } from 'class-validator'
 
 export class GenerateImageDto {
   @ApiProperty({
@@ -12,4 +12,12 @@ export class GenerateImageDto {
   @MinLength(5)
   @MaxLength(2000)
   prompt: string
+
+  @ApiPropertyOptional({
+    description: 'Idioma solicitado para el texto dentro de la imagen',
+    example: 'Español',
+  })
+  @IsOptional()
+  @IsString()
+  language?: string
 }
