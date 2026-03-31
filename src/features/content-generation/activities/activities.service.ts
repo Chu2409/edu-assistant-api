@@ -66,7 +66,7 @@ export class ActivitiesService {
       blocks,
       config: {
         language,
-        difficulty: (data.difficulty as 1 | 2 | 3 | 4 | 5) ?? 3,
+        difficulty: (data.difficulty ?? 3) as 1 | 2 | 3 | 4 | 5,
       },
       instructions: data.instructions,
     })
