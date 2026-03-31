@@ -1547,6 +1547,11 @@ export type StudentQuestionFindManyArgs<ExtArgs extends runtime.Types.Extensions
    * Skip the first `n` StudentQuestions.
    */
   skip?: number
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+   * 
+   * Filter by unique combinations of StudentQuestions.
+   */
   distinct?: Prisma.StudentQuestionScalarFieldEnum | Prisma.StudentQuestionScalarFieldEnum[]
 }
 

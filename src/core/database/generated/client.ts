@@ -149,3 +149,8 @@ export type MediaResource = Prisma.MediaResourceModel
  * 
  */
 export type ModuleMetrics = Prisma.ModuleMetricsModel
+/**
+ * Model SystemSetting
+ * 
+ */
+export type SystemSetting = Prisma.SystemSettingModel

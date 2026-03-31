@@ -4,7 +4,7 @@ import { Strategy } from 'passport-microsoft'
 import { CustomConfigService } from 'src/core/config/config.service'
 import { DBService } from 'src/core/database/database.service'
 import { User } from 'src/core/database/generated/client'
-import { AuthService } from '../auth.service'
+import { AuthService } from '../services/auth.service'
 
 interface MicrosoftProfileName {
   familyName: string

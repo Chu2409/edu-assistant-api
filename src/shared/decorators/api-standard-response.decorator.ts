@@ -76,6 +76,7 @@ export function ApiPaginatedResponse<T>(
     }),
   )
 }
+
 // Función auxiliar para descripciones de estado
 function getStatusDescription(status: HttpStatus): string {
   const descriptions = {

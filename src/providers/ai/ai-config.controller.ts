@@ -1,35 +1,34 @@
 import { Body, Controller, Get, HttpStatus, Patch } from '@nestjs/common'
 import { ApiOperation, ApiTags } from '@nestjs/swagger'
-import { OpenaiService, type AiModelConfig } from './openai.service'
-import {
-  UpdateAiModelConfigDto,
-  AiModelConfigResponseDto,
-  AvailableModelsResponseDto,
-} from './dtos/ai-model-config.dto'
 import { ApiStandardResponse } from 'src/shared/decorators/api-standard-response.decorator'
 import { JwtAuth } from 'src/features/auth/decorators/jwt-auth.decorator'
 import { Role } from 'src/core/database/generated/client'
+import { AiModelConfigResponseDto } from './dtos/res/ai-model-config.dto'
+import { AvailableModelsResponseDto } from './dtos/res/available-models.dto'
+import { UpdateAiModelConfigDto } from './dtos/req/update-ai-model-config.dto'
 import {
-  VALID_RESPONSES_MODELS,
   VALID_EMBEDDINGS_MODELS,
   VALID_IMAGES_MODELS,
-} from './interfaces/models'
+  VALID_RESPONSES_MODELS,
+} from './constants/models'
+import { AiModelConfig } from './interfaces/ai-model-config'
+import { AiConfigService } from './services/ai-config.service'
 
 @ApiTags('AI Config')
 @Controller('ai/config')
 @JwtAuth(Role.ADMIN)
 export class AiConfigController {
-  constructor(private readonly openaiService: OpenaiService) {}
+  constructor(private readonly aiConfigurationService: AiConfigService) {}
 
   @Get()
   @ApiOperation({
     summary: 'Obtener configuración actual de modelos',
     description:
-      'Devuelve los modelos configurados para Responses, Embeddings e Imágenes. La configuración se mantiene en memoria (se pierde al reiniciar).',
+      'Devuelve los modelos configurados para Responses, Embeddings e Imágenes. Se respalda en base de datos de manera persistente.',
   })
   @ApiStandardResponse(AiModelConfigResponseDto)
   getConfig() {
-    return this.openaiService.getModelConfig()
+    return this.aiConfigurationService.getModelConfig()
   }
 
   @Get('models/responses')
@@ -68,16 +67,16 @@ export class AiConfigController {
   @ApiOperation({
     summary: 'Configurar modelos de IA',
     description:
-      'Actualiza los modelos usados para generación de contenido. Solo se envían los campos que se desean cambiar. La configuración se mantiene en memoria (se pierde al reiniciar).',
+      'Actualiza los modelos usados para generación de contenido. Solo se envían los campos que se desean cambiar. La configuración persiste en base de datos.',
   })
   @ApiStandardResponse(AiModelConfigResponseDto, HttpStatus.OK)
-  updateConfig(@Body() dto: UpdateAiModelConfigDto) {
+  async updateConfig(@Body() dto: UpdateAiModelConfigDto) {
     const config: Partial<AiModelConfig> = {}
     if (dto.responses)
       config.responses = dto.responses as AiModelConfig['responses']
     if (dto.embeddings)
       config.embeddings = dto.embeddings as AiModelConfig['embeddings']
     if (dto.images) config.images = dto.images as AiModelConfig['images']
-    return this.openaiService.setModelConfig(config)
+    return await this.aiConfigurationService.setModelConfig(config)
   }
 }
