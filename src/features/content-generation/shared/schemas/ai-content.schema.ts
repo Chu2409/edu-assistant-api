@@ -18,15 +18,6 @@ const aiCodeBlockSchema = z.object({
   }),
 })
 
-const aiImageBlockSchema = z.object({
-  type: z.literal(BlockType.IMAGE),
-  content: z.object({
-    url: z.string().url().optional(), // Might be empty before DALL-E generation
-    alt: z.string().min(1),
-    caption: z.string().optional(),
-  }),
-})
-
 const aiImageSuggestionBlockSchema = z.object({
   type: z.literal(BlockType.IMAGE_SUGGESTION),
   content: z.object({
@@ -42,7 +33,6 @@ const aiImageSuggestionBlockSchema = z.object({
 const aiContentBlockSchema = z.discriminatedUnion('type', [
   aiTextBlockSchema,
   aiCodeBlockSchema,
-  aiImageBlockSchema,
   aiImageSuggestionBlockSchema,
 ])
 
