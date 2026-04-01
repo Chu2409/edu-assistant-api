@@ -6,7 +6,7 @@ import {
 } from '@nestjs/common'
 import { DBService } from 'src/core/database/database.service'
 import { OpenaiService } from 'src/providers/ai/services/openai.service'
-import { extractPageConceptsPrompt } from './prompts/extract-page-concepts.prompt'
+import { extractLoConceptsPrompt } from './prompts/extract-lo-concepts.prompt'
 import { generateConceptDefinitionPrompt } from './prompts/generate-concept.prompt'
 import { ExtractConceptsDto } from './dtos/req/extract-concepts.dto'
 import { GenerateConceptDto } from './dtos/req/generate-concept.dto'
@@ -43,7 +43,7 @@ export class ConceptsService {
       throw new BadRequestException('Page has no blocks')
     }
 
-    const prompt = extractPageConceptsPrompt({
+    const prompt = extractLoConceptsPrompt({
       blocks: page.blocks
         .filter((b) => b.type === BlockType.TEXT)
         .map((b) => ({

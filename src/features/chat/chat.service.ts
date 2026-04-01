@@ -5,7 +5,7 @@ import {
 } from '@nestjs/common'
 import { DBService } from 'src/core/database/database.service'
 import { OpenaiService } from 'src/providers/ai/services/openai.service'
-import { PagesHelperService } from 'src/features/learning-objects/main/pages-helper.service'
+import { LoHelperService } from 'src/features/learning-objects/main/lo-helper.service'
 import { MessageRole, type User } from 'src/core/database/generated/client'
 import { CreateOrGetSessionDto } from './dtos/req/create-or-get-session.dto'
 import { SendMessageDto } from './dtos/req/send-message.dto'
@@ -28,7 +28,7 @@ export class ChatService {
   constructor(
     private readonly dbService: DBService,
     private readonly openAiService: OpenaiService,
-    private readonly pagesHelperService: PagesHelperService,
+    private readonly pagesHelperService: LoHelperService,
   ) {}
 
   async createOrGetSession(

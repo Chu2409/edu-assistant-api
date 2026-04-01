@@ -12,7 +12,7 @@ import {
 } from './prompts/generate-relations.prompt'
 import { GenerateRelationsDto } from './dtos/req/generate-relations.dto'
 import { GeneratedRelationsDto } from './dtos/res/generated-relations.dto'
-import { PageRelationsService } from '../../learning-objects/lo-relations/page-relations.service'
+import { LoRelationsService } from '../../learning-objects/lo-relations/lo-relations.service'
 import type { AiContent } from '../shared/interfaces/ai-generated-content.interface'
 import { parseJsonField } from 'src/providers/ai/helpers/utils'
 import { validateAiResponse } from 'src/providers/ai/helpers/ai-response-validator'
@@ -25,7 +25,7 @@ export class RelationsService {
   constructor(
     private readonly dbService: DBService,
     private readonly openAiService: OpenaiService,
-    private readonly pageRelationsService: PageRelationsService,
+    private readonly pageRelationsService: LoRelationsService,
   ) {}
 
   async generatePageRelations(

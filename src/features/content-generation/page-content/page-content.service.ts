@@ -9,7 +9,7 @@ import { GenerateContentDto } from './dtos/req/generate-content.dto'
 import { RegenerateContentDto } from './dtos/req/regenerate-content.dto'
 import { RegenerateBlockDto } from './dtos/req/regenerate-block.dto'
 import { ExpandContentDto } from './dtos/req/expand-content.dto'
-import { GeneratedPageContent } from './dtos/res/generated-page-content.dto'
+import { GeneratedLoContent } from './dtos/res/generated-lo-content.dto'
 import { RegeneratedBlockDto } from './dtos/res/regenerated-block.dto'
 import { ExpandedContentDto } from './dtos/res/expanded-content.dto'
 import type { AiContent } from '../shared/interfaces/ai-generated-content.interface'
@@ -32,7 +32,7 @@ export class PageContentService {
 
   async generatePageContent(
     data: GenerateContentDto,
-  ): Promise<GeneratedPageContent> {
+  ): Promise<GeneratedLoContent> {
     this.logger.log('Generating page content')
 
     const page = await this.dbService.learningObject.findUnique({
@@ -58,14 +58,14 @@ export class PageContentService {
       },
     })
     const aiResponse =
-      await this.openAiService.getResponse<GeneratedPageContent>(prompt)
+      await this.openAiService.getResponse<GeneratedLoContent>(prompt)
 
     return validateAiResponse(aiResponse.content, generatedPageContentSchema)
   }
 
   async regeneratePageContent(
     data: RegenerateContentDto,
-  ): Promise<GeneratedPageContent> {
+  ): Promise<GeneratedLoContent> {
     this.logger.log('Regenerating page content')
 
     const page = await this.dbService.learningObject.findUnique({
@@ -105,7 +105,7 @@ export class PageContentService {
     })
 
     const aiResponse =
-      await this.openAiService.getResponse<GeneratedPageContent>(prompt)
+      await this.openAiService.getResponse<GeneratedLoContent>(prompt)
 
     return validateAiResponse(aiResponse.content, generatedPageContentSchema)
   }

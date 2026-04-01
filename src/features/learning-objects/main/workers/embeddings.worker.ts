@@ -2,13 +2,13 @@ import { Processor, WorkerHost } from '@nestjs/bullmq'
 import { Logger } from '@nestjs/common'
 import { Job } from 'bullmq'
 import { QUEUE_NAMES } from 'src/shared/constants/queues'
-import { PageRelationsService } from '../../lo-relations/page-relations.service'
+import { LoRelationsService } from '../../lo-relations/lo-relations.service'
 
 @Processor(QUEUE_NAMES.EMBEDDINGS.NAME)
 export class EmbeddingsWorker extends WorkerHost {
   private readonly logger = new Logger(EmbeddingsWorker.name)
 
-  constructor(private readonly pageRelationsService: PageRelationsService) {
+  constructor(private readonly pageRelationsService: LoRelationsService) {
     super()
   }
 

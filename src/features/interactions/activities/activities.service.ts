@@ -24,13 +24,13 @@ import {
   AiMultipleChoiceActivity,
   AiTrueFalseActivity,
 } from 'src/features/content-generation/activities/interfaces/ai-generated-activity.interface'
-import { PagesHelperService } from 'src/features/learning-objects/main/pages-helper.service'
+import { LoHelperService } from 'src/features/learning-objects/main/lo-helper.service'
 
 @Injectable()
 export class ActivitiesService {
   constructor(
     private readonly dbService: DBService,
-    private readonly pagesHelperService: PagesHelperService,
+    private readonly pagesHelperService: LoHelperService,
   ) {}
 
   async list(pageId: number, user: User): Promise<ActivityDto[]> {
