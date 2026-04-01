@@ -24,7 +24,7 @@ import {
   AiMultipleChoiceActivity,
   AiTrueFalseActivity,
 } from 'src/features/content-generation/activities/interfaces/ai-generated-activity.interface'
-import { PagesHelperService } from 'src/features/pages/main/pages-helper.service'
+import { PagesHelperService } from 'src/features/learning-objects/main/pages-helper.service'
 
 @Injectable()
 export class ActivitiesService {

@@ -6,7 +6,7 @@ import {
 import { ModuleDto } from '../dtos/res/module.dto'
 import { AiConfigurationDto } from '../../ai-configurations/dtos/res/ai-configuration.dto'
 import { ModulePagesDto } from '../dtos/res/module-pages.dto'
-import { PagesMapper } from 'src/features/pages/main/mappers/pages.mapper'
+import { PagesMapper } from 'src/features/learning-objects/main/mappers/pages.mapper'
 
 export class ModulesMapper {
   static mapToDto(

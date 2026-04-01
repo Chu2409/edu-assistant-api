@@ -5,7 +5,7 @@ import { ConceptsService } from './concepts/concepts.service'
 import { RelationsService } from './relations/relations.service'
 import { ActivitiesService } from './activities/activities.service'
 import { AIModule } from 'src/providers/ai/ai.module'
-import { PagesModule } from '../pages/pages.module'
+import { PagesModule } from '../learning-objects/pages.module'
 
 @Module({
   imports: [AIModule, PagesModule],

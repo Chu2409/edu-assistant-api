@@ -12,7 +12,7 @@ import {
 } from './prompts/generate-relations.prompt'
 import { GenerateRelationsDto } from './dtos/req/generate-relations.dto'
 import { GeneratedRelationsDto } from './dtos/res/generated-relations.dto'
-import { PageRelationsService } from '../../pages/page-relations/page-relations.service'
+import { PageRelationsService } from '../../learning-objects/lo-relations/page-relations.service'
 import type { AiContent } from '../shared/interfaces/ai-generated-content.interface'
 import { parseJsonField } from 'src/providers/ai/helpers/utils'
 import { validateAiResponse } from 'src/providers/ai/helpers/ai-response-validator'

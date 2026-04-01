@@ -1,7 +1,7 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger'
-import { BlockDto } from 'src/features/pages/blocks/dtos/res/block.dto'
+import { BlockDto } from 'src/features/learning-objects/blocks/dtos/res/block.dto'
 import { NoteDto } from 'src/features/interactions/notes/dtos/res/note.dto'
-import { PageFeedbackDto } from 'src/features/interactions/page-feedbacks/dtos/res/page-feedback.dto'
+import { PageFeedbackDto } from 'src/features/interactions/lo-feedbacks/dtos/res/page-feedback.dto'
 import { StudentQuestionDto } from 'src/features/interactions/student-questions/dtos/res/student-question.dto'
 
 export class FullPageDto {

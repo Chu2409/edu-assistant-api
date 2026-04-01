@@ -2,7 +2,7 @@ import { Processor, WorkerHost } from '@nestjs/bullmq'
 import { Logger } from '@nestjs/common'
 import { Job } from 'bullmq'
 import { QUEUE_NAMES } from 'src/shared/constants/queues'
-import { PageRelationsService } from '../../page-relations/page-relations.service'
+import { PageRelationsService } from '../../lo-relations/page-relations.service'
 
 @Processor(QUEUE_NAMES.EMBEDDINGS.NAME)
 export class EmbeddingsWorker extends WorkerHost {

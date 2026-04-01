@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger'
 import { IsArray, ValidateNested, ArrayMinSize } from 'class-validator'
 import { Type } from 'class-transformer'
-import { UpsertBlockDto } from 'src/features/pages/blocks/dtos/req/upsert-block.dto'
+import { UpsertBlockDto } from 'src/features/learning-objects/blocks/dtos/req/upsert-block.dto'
 
 export class UpdatePageContentDto {
   @ApiProperty({
