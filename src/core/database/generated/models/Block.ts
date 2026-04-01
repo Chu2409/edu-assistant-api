@@ -28,19 +28,19 @@ export type AggregateBlock = {
 
 export type BlockAvgAggregateOutputType = {
   id: number | null
-  pageId: number | null
+  learningObjectId: number | null
   orderIndex: number | null
 }
 
 export type BlockSumAggregateOutputType = {
   id: number | null
-  pageId: number | null
+  learningObjectId: number | null
   orderIndex: number | null
 }
 
 export type BlockMinAggregateOutputType = {
   id: number | null
-  pageId: number | null
+  learningObjectId: number | null
   orderIndex: number | null
   type: $Enums.BlockType | null
   createdAt: Date | null
@@ -49,7 +49,7 @@ export type BlockMinAggregateOutputType = {
 
 export type BlockMaxAggregateOutputType = {
   id: number | null
-  pageId: number | null
+  learningObjectId: number | null
   orderIndex: number | null
   type: $Enums.BlockType | null
   createdAt: Date | null
@@ -58,7 +58,7 @@ export type BlockMaxAggregateOutputType = {
 
 export type BlockCountAggregateOutputType = {
   id: number
-  pageId: number
+  learningObjectId: number
   orderIndex: number
   type: number
   content: number
@@ -71,19 +71,19 @@ export type BlockCountAggregateOutputType = {
 
 export type BlockAvgAggregateInputType = {
   id?: true
-  pageId?: true
+  learningObjectId?: true
   orderIndex?: true
 }
 
 export type BlockSumAggregateInputType = {
   id?: true
-  pageId?: true
+  learningObjectId?: true
   orderIndex?: true
 }
 
 export type BlockMinAggregateInputType = {
   id?: true
-  pageId?: true
+  learningObjectId?: true
   orderIndex?: true
   type?: true
   createdAt?: true
@@ -92,7 +92,7 @@ export type BlockMinAggregateInputType = {
 
 export type BlockMaxAggregateInputType = {
   id?: true
-  pageId?: true
+  learningObjectId?: true
   orderIndex?: true
   type?: true
   createdAt?: true
@@ -101,7 +101,7 @@ export type BlockMaxAggregateInputType = {
 
 export type BlockCountAggregateInputType = {
   id?: true
-  pageId?: true
+  learningObjectId?: true
   orderIndex?: true
   type?: true
   content?: true
@@ -199,7 +199,7 @@ export type BlockGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalAr
 
 export type BlockGroupByOutputType = {
   id: number
-  pageId: number
+  learningObjectId: number
   orderIndex: number
   type: $Enums.BlockType
   content: runtime.JsonValue
@@ -233,47 +233,47 @@ export type BlockWhereInput = {
   OR?: Prisma.BlockWhereInput[]
   NOT?: Prisma.BlockWhereInput | Prisma.BlockWhereInput[]
   id?: Prisma.IntFilter<"Block"> | number
-  pageId?: Prisma.IntFilter<"Block"> | number
+  learningObjectId?: Prisma.IntFilter<"Block"> | number
   orderIndex?: Prisma.IntFilter<"Block"> | number
   type?: Prisma.EnumBlockTypeFilter<"Block"> | $Enums.BlockType
   content?: Prisma.JsonFilter<"Block">
   tipTapContent?: Prisma.JsonNullableFilter<"Block">
   createdAt?: Prisma.DateTimeFilter<"Block"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Block"> | Date | string
-  page?: Prisma.XOR<Prisma.PageScalarRelationFilter, Prisma.PageWhereInput>
+  learningObject?: Prisma.XOR<Prisma.LearningObjectScalarRelationFilter, Prisma.LearningObjectWhereInput>
 }
 
 export type BlockOrderByWithRelationInput = {
   id?: Prisma.SortOrder
-  pageId?: Prisma.SortOrder
+  learningObjectId?: Prisma.SortOrder
   orderIndex?: Prisma.SortOrder
   type?: Prisma.SortOrder
   content?: Prisma.SortOrder
   tipTapContent?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  page?: Prisma.PageOrderByWithRelationInput
+  learningObject?: Prisma.LearningObjectOrderByWithRelationInput
 }
 
 export type BlockWhereUniqueInput = Prisma.AtLeast<{
   id?: number
-  pageId_orderIndex?: Prisma.BlockPageIdOrderIndexCompoundUniqueInput
+  learningObjectId_orderIndex?: Prisma.BlockLearningObjectIdOrderIndexCompoundUniqueInput
   AND?: Prisma.BlockWhereInput | Prisma.BlockWhereInput[]
   OR?: Prisma.BlockWhereInput[]
   NOT?: Prisma.BlockWhereInput | Prisma.BlockWhereInput[]
-  pageId?: Prisma.IntFilter<"Block"> | number
+  learningObjectId?: Prisma.IntFilter<"Block"> | number
   orderIndex?: Prisma.IntFilter<"Block"> | number
   type?: Prisma.EnumBlockTypeFilter<"Block"> | $Enums.BlockType
   content?: Prisma.JsonFilter<"Block">
   tipTapContent?: Prisma.JsonNullableFilter<"Block">
   createdAt?: Prisma.DateTimeFilter<"Block"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Block"> | Date | string
-  page?: Prisma.XOR<Prisma.PageScalarRelationFilter, Prisma.PageWhereInput>
-}, "id" | "pageId_orderIndex">
+  learningObject?: Prisma.XOR<Prisma.LearningObjectScalarRelationFilter, Prisma.LearningObjectWhereInput>
+}, "id" | "learningObjectId_orderIndex">
 
 export type BlockOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
-  pageId?: Prisma.SortOrder
+  learningObjectId?: Prisma.SortOrder
   orderIndex?: Prisma.SortOrder
   type?: Prisma.SortOrder
   content?: Prisma.SortOrder
@@ -292,7 +292,7 @@ export type BlockScalarWhereWithAggregatesInput = {
   OR?: Prisma.BlockScalarWhereWithAggregatesInput[]
   NOT?: Prisma.BlockScalarWhereWithAggregatesInput | Prisma.BlockScalarWhereWithAggregatesInput[]
   id?: Prisma.IntWithAggregatesFilter<"Block"> | number
-  pageId?: Prisma.IntWithAggregatesFilter<"Block"> | number
+  learningObjectId?: Prisma.IntWithAggregatesFilter<"Block"> | number
   orderIndex?: Prisma.IntWithAggregatesFilter<"Block"> | number
   type?: Prisma.EnumBlockTypeWithAggregatesFilter<"Block"> | $Enums.BlockType
   content?: Prisma.JsonWithAggregatesFilter<"Block">
@@ -308,12 +308,12 @@ export type BlockCreateInput = {
   tipTapContent?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
-  page: Prisma.PageCreateNestedOneWithoutBlocksInput
+  learningObject: Prisma.LearningObjectCreateNestedOneWithoutBlocksInput
 }
 
 export type BlockUncheckedCreateInput = {
   id?: number
-  pageId: number
+  learningObjectId: number
   orderIndex: number
   type: $Enums.BlockType
   content: Prisma.JsonNullValueInput | runtime.InputJsonValue
@@ -329,12 +329,12 @@ export type BlockUpdateInput = {
   tipTapContent?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  page?: Prisma.PageUpdateOneRequiredWithoutBlocksNestedInput
+  learningObject?: Prisma.LearningObjectUpdateOneRequiredWithoutBlocksNestedInput
 }
 
 export type BlockUncheckedUpdateInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
-  pageId?: Prisma.IntFieldUpdateOperationsInput | number
+  learningObjectId?: Prisma.IntFieldUpdateOperationsInput | number
   orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
   type?: Prisma.EnumBlockTypeFieldUpdateOperationsInput | $Enums.BlockType
   content?: Prisma.JsonNullValueInput | runtime.InputJsonValue
@@ -345,7 +345,7 @@ export type BlockUncheckedUpdateInput = {
 
 export type BlockCreateManyInput = {
   id?: number
-  pageId: number
+  learningObjectId: number
   orderIndex: number
   type: $Enums.BlockType
   content: Prisma.JsonNullValueInput | runtime.InputJsonValue
@@ -365,7 +365,7 @@ export type BlockUpdateManyMutationInput = {
 
 export type BlockUncheckedUpdateManyInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
-  pageId?: Prisma.IntFieldUpdateOperationsInput | number
+  learningObjectId?: Prisma.IntFieldUpdateOperationsInput | number
   orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
   type?: Prisma.EnumBlockTypeFieldUpdateOperationsInput | $Enums.BlockType
   content?: Prisma.JsonNullValueInput | runtime.InputJsonValue
@@ -384,14 +384,14 @@ export type BlockOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
 }
 
-export type BlockPageIdOrderIndexCompoundUniqueInput = {
-  pageId: number
+export type BlockLearningObjectIdOrderIndexCompoundUniqueInput = {
+  learningObjectId: number
   orderIndex: number
 }
 
 export type BlockCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  pageId?: Prisma.SortOrder
+  learningObjectId?: Prisma.SortOrder
   orderIndex?: Prisma.SortOrder
   type?: Prisma.SortOrder
   content?: Prisma.SortOrder
@@ -402,13 +402,13 @@ export type BlockCountOrderByAggregateInput = {
 
 export type BlockAvgOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  pageId?: Prisma.SortOrder
+  learningObjectId?: Prisma.SortOrder
   orderIndex?: Prisma.SortOrder
 }
 
 export type BlockMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  pageId?: Prisma.SortOrder
+  learningObjectId?: Prisma.SortOrder
   orderIndex?: Prisma.SortOrder
   type?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -417,7 +417,7 @@ export type BlockMaxOrderByAggregateInput = {
 
 export type BlockMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  pageId?: Prisma.SortOrder
+  learningObjectId?: Prisma.SortOrder
   orderIndex?: Prisma.SortOrder
   type?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -426,49 +426,49 @@ export type BlockMinOrderByAggregateInput = {
 
 export type BlockSumOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  pageId?: Prisma.SortOrder
+  learningObjectId?: Prisma.SortOrder
   orderIndex?: Prisma.SortOrder
 }
 
-export type BlockCreateNestedManyWithoutPageInput = {
-  create?: Prisma.XOR<Prisma.BlockCreateWithoutPageInput, Prisma.BlockUncheckedCreateWithoutPageInput> | Prisma.BlockCreateWithoutPageInput[] | Prisma.BlockUncheckedCreateWithoutPageInput[]
-  connectOrCreate?: Prisma.BlockCreateOrConnectWithoutPageInput | Prisma.BlockCreateOrConnectWithoutPageInput[]
-  createMany?: Prisma.BlockCreateManyPageInputEnvelope
+export type BlockCreateNestedManyWithoutLearningObjectInput = {
+  create?: Prisma.XOR<Prisma.BlockCreateWithoutLearningObjectInput, Prisma.BlockUncheckedCreateWithoutLearningObjectInput> | Prisma.BlockCreateWithoutLearningObjectInput[] | Prisma.BlockUncheckedCreateWithoutLearningObjectInput[]
+  connectOrCreate?: Prisma.BlockCreateOrConnectWithoutLearningObjectInput | Prisma.BlockCreateOrConnectWithoutLearningObjectInput[]
+  createMany?: Prisma.BlockCreateManyLearningObjectInputEnvelope
   connect?: Prisma.BlockWhereUniqueInput | Prisma.BlockWhereUniqueInput[]
 }
 
-export type BlockUncheckedCreateNestedManyWithoutPageInput = {
-  create?: Prisma.XOR<Prisma.BlockCreateWithoutPageInput, Prisma.BlockUncheckedCreateWithoutPageInput> | Prisma.BlockCreateWithoutPageInput[] | Prisma.BlockUncheckedCreateWithoutPageInput[]
-  connectOrCreate?: Prisma.BlockCreateOrConnectWithoutPageInput | Prisma.BlockCreateOrConnectWithoutPageInput[]
-  createMany?: Prisma.BlockCreateManyPageInputEnvelope
+export type BlockUncheckedCreateNestedManyWithoutLearningObjectInput = {
+  create?: Prisma.XOR<Prisma.BlockCreateWithoutLearningObjectInput, Prisma.BlockUncheckedCreateWithoutLearningObjectInput> | Prisma.BlockCreateWithoutLearningObjectInput[] | Prisma.BlockUncheckedCreateWithoutLearningObjectInput[]
+  connectOrCreate?: Prisma.BlockCreateOrConnectWithoutLearningObjectInput | Prisma.BlockCreateOrConnectWithoutLearningObjectInput[]
+  createMany?: Prisma.BlockCreateManyLearningObjectInputEnvelope
   connect?: Prisma.BlockWhereUniqueInput | Prisma.BlockWhereUniqueInput[]
 }
 
-export type BlockUpdateManyWithoutPageNestedInput = {
-  create?: Prisma.XOR<Prisma.BlockCreateWithoutPageInput, Prisma.BlockUncheckedCreateWithoutPageInput> | Prisma.BlockCreateWithoutPageInput[] | Prisma.BlockUncheckedCreateWithoutPageInput[]
-  connectOrCreate?: Prisma.BlockCreateOrConnectWithoutPageInput | Prisma.BlockCreateOrConnectWithoutPageInput[]
-  upsert?: Prisma.BlockUpsertWithWhereUniqueWithoutPageInput | Prisma.BlockUpsertWithWhereUniqueWithoutPageInput[]
-  createMany?: Prisma.BlockCreateManyPageInputEnvelope
+export type BlockUpdateManyWithoutLearningObjectNestedInput = {
+  create?: Prisma.XOR<Prisma.BlockCreateWithoutLearningObjectInput, Prisma.BlockUncheckedCreateWithoutLearningObjectInput> | Prisma.BlockCreateWithoutLearningObjectInput[] | Prisma.BlockUncheckedCreateWithoutLearningObjectInput[]
+  connectOrCreate?: Prisma.BlockCreateOrConnectWithoutLearningObjectInput | Prisma.BlockCreateOrConnectWithoutLearningObjectInput[]
+  upsert?: Prisma.BlockUpsertWithWhereUniqueWithoutLearningObjectInput | Prisma.BlockUpsertWithWhereUniqueWithoutLearningObjectInput[]
+  createMany?: Prisma.BlockCreateManyLearningObjectInputEnvelope
   set?: Prisma.BlockWhereUniqueInput | Prisma.BlockWhereUniqueInput[]
   disconnect?: Prisma.BlockWhereUniqueInput | Prisma.BlockWhereUniqueInput[]
   delete?: Prisma.BlockWhereUniqueInput | Prisma.BlockWhereUniqueInput[]
   connect?: Prisma.BlockWhereUniqueInput | Prisma.BlockWhereUniqueInput[]
-  update?: Prisma.BlockUpdateWithWhereUniqueWithoutPageInput | Prisma.BlockUpdateWithWhereUniqueWithoutPageInput[]
-  updateMany?: Prisma.BlockUpdateManyWithWhereWithoutPageInput | Prisma.BlockUpdateManyWithWhereWithoutPageInput[]
+  update?: Prisma.BlockUpdateWithWhereUniqueWithoutLearningObjectInput | Prisma.BlockUpdateWithWhereUniqueWithoutLearningObjectInput[]
+  updateMany?: Prisma.BlockUpdateManyWithWhereWithoutLearningObjectInput | Prisma.BlockUpdateManyWithWhereWithoutLearningObjectInput[]
   deleteMany?: Prisma.BlockScalarWhereInput | Prisma.BlockScalarWhereInput[]
 }
 
-export type BlockUncheckedUpdateManyWithoutPageNestedInput = {
-  create?: Prisma.XOR<Prisma.BlockCreateWithoutPageInput, Prisma.BlockUncheckedCreateWithoutPageInput> | Prisma.BlockCreateWithoutPageInput[] | Prisma.BlockUncheckedCreateWithoutPageInput[]
-  connectOrCreate?: Prisma.BlockCreateOrConnectWithoutPageInput | Prisma.BlockCreateOrConnectWithoutPageInput[]
-  upsert?: Prisma.BlockUpsertWithWhereUniqueWithoutPageInput | Prisma.BlockUpsertWithWhereUniqueWithoutPageInput[]
-  createMany?: Prisma.BlockCreateManyPageInputEnvelope
+export type BlockUncheckedUpdateManyWithoutLearningObjectNestedInput = {
+  create?: Prisma.XOR<Prisma.BlockCreateWithoutLearningObjectInput, Prisma.BlockUncheckedCreateWithoutLearningObjectInput> | Prisma.BlockCreateWithoutLearningObjectInput[] | Prisma.BlockUncheckedCreateWithoutLearningObjectInput[]
+  connectOrCreate?: Prisma.BlockCreateOrConnectWithoutLearningObjectInput | Prisma.BlockCreateOrConnectWithoutLearningObjectInput[]
+  upsert?: Prisma.BlockUpsertWithWhereUniqueWithoutLearningObjectInput | Prisma.BlockUpsertWithWhereUniqueWithoutLearningObjectInput[]
+  createMany?: Prisma.BlockCreateManyLearningObjectInputEnvelope
   set?: Prisma.BlockWhereUniqueInput | Prisma.BlockWhereUniqueInput[]
   disconnect?: Prisma.BlockWhereUniqueInput | Prisma.BlockWhereUniqueInput[]
   delete?: Prisma.BlockWhereUniqueInput | Prisma.BlockWhereUniqueInput[]
   connect?: Prisma.BlockWhereUniqueInput | Prisma.BlockWhereUniqueInput[]
-  update?: Prisma.BlockUpdateWithWhereUniqueWithoutPageInput | Prisma.BlockUpdateWithWhereUniqueWithoutPageInput[]
-  updateMany?: Prisma.BlockUpdateManyWithWhereWithoutPageInput | Prisma.BlockUpdateManyWithWhereWithoutPageInput[]
+  update?: Prisma.BlockUpdateWithWhereUniqueWithoutLearningObjectInput | Prisma.BlockUpdateWithWhereUniqueWithoutLearningObjectInput[]
+  updateMany?: Prisma.BlockUpdateManyWithWhereWithoutLearningObjectInput | Prisma.BlockUpdateManyWithWhereWithoutLearningObjectInput[]
   deleteMany?: Prisma.BlockScalarWhereInput | Prisma.BlockScalarWhereInput[]
 }
 
@@ -476,7 +476,7 @@ export type EnumBlockTypeFieldUpdateOperationsInput = {
   set?: $Enums.BlockType
 }
 
-export type BlockCreateWithoutPageInput = {
+export type BlockCreateWithoutLearningObjectInput = {
   orderIndex: number
   type: $Enums.BlockType
   content: Prisma.JsonNullValueInput | runtime.InputJsonValue
@@ -485,7 +485,7 @@ export type BlockCreateWithoutPageInput = {
   updatedAt?: Date | string
 }
 
-export type BlockUncheckedCreateWithoutPageInput = {
+export type BlockUncheckedCreateWithoutLearningObjectInput = {
   id?: number
   orderIndex: number
   type: $Enums.BlockType
@@ -495,30 +495,30 @@ export type BlockUncheckedCreateWithoutPageInput = {
   updatedAt?: Date | string
 }
 
-export type BlockCreateOrConnectWithoutPageInput = {
+export type BlockCreateOrConnectWithoutLearningObjectInput = {
   where: Prisma.BlockWhereUniqueInput
-  create: Prisma.XOR<Prisma.BlockCreateWithoutPageInput, Prisma.BlockUncheckedCreateWithoutPageInput>
+  create: Prisma.XOR<Prisma.BlockCreateWithoutLearningObjectInput, Prisma.BlockUncheckedCreateWithoutLearningObjectInput>
 }
 
-export type BlockCreateManyPageInputEnvelope = {
-  data: Prisma.BlockCreateManyPageInput | Prisma.BlockCreateManyPageInput[]
+export type BlockCreateManyLearningObjectInputEnvelope = {
+  data: Prisma.BlockCreateManyLearningObjectInput | Prisma.BlockCreateManyLearningObjectInput[]
   skipDuplicates?: boolean
 }
 
-export type BlockUpsertWithWhereUniqueWithoutPageInput = {
+export type BlockUpsertWithWhereUniqueWithoutLearningObjectInput = {
   where: Prisma.BlockWhereUniqueInput
-  update: Prisma.XOR<Prisma.BlockUpdateWithoutPageInput, Prisma.BlockUncheckedUpdateWithoutPageInput>
-  create: Prisma.XOR<Prisma.BlockCreateWithoutPageInput, Prisma.BlockUncheckedCreateWithoutPageInput>
+  update: Prisma.XOR<Prisma.BlockUpdateWithoutLearningObjectInput, Prisma.BlockUncheckedUpdateWithoutLearningObjectInput>
+  create: Prisma.XOR<Prisma.BlockCreateWithoutLearningObjectInput, Prisma.BlockUncheckedCreateWithoutLearningObjectInput>
 }
 
-export type BlockUpdateWithWhereUniqueWithoutPageInput = {
+export type BlockUpdateWithWhereUniqueWithoutLearningObjectInput = {
   where: Prisma.BlockWhereUniqueInput
-  data: Prisma.XOR<Prisma.BlockUpdateWithoutPageInput, Prisma.BlockUncheckedUpdateWithoutPageInput>
+  data: Prisma.XOR<Prisma.BlockUpdateWithoutLearningObjectInput, Prisma.BlockUncheckedUpdateWithoutLearningObjectInput>
 }
 
-export type BlockUpdateManyWithWhereWithoutPageInput = {
+export type BlockUpdateManyWithWhereWithoutLearningObjectInput = {
   where: Prisma.BlockScalarWhereInput
-  data: Prisma.XOR<Prisma.BlockUpdateManyMutationInput, Prisma.BlockUncheckedUpdateManyWithoutPageInput>
+  data: Prisma.XOR<Prisma.BlockUpdateManyMutationInput, Prisma.BlockUncheckedUpdateManyWithoutLearningObjectInput>
 }
 
 export type BlockScalarWhereInput = {
@@ -526,7 +526,7 @@ export type BlockScalarWhereInput = {
   OR?: Prisma.BlockScalarWhereInput[]
   NOT?: Prisma.BlockScalarWhereInput | Prisma.BlockScalarWhereInput[]
   id?: Prisma.IntFilter<"Block"> | number
-  pageId?: Prisma.IntFilter<"Block"> | number
+  learningObjectId?: Prisma.IntFilter<"Block"> | number
   orderIndex?: Prisma.IntFilter<"Block"> | number
   type?: Prisma.EnumBlockTypeFilter<"Block"> | $Enums.BlockType
   content?: Prisma.JsonFilter<"Block">
@@ -535,7 +535,7 @@ export type BlockScalarWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"Block"> | Date | string
 }
 
-export type BlockCreateManyPageInput = {
+export type BlockCreateManyLearningObjectInput = {
   id?: number
   orderIndex: number
   type: $Enums.BlockType
@@ -545,7 +545,7 @@ export type BlockCreateManyPageInput = {
   updatedAt?: Date | string
 }
 
-export type BlockUpdateWithoutPageInput = {
+export type BlockUpdateWithoutLearningObjectInput = {
   orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
   type?: Prisma.EnumBlockTypeFieldUpdateOperationsInput | $Enums.BlockType
   content?: Prisma.JsonNullValueInput | runtime.InputJsonValue
@@ -554,7 +554,7 @@ export type BlockUpdateWithoutPageInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
-export type BlockUncheckedUpdateWithoutPageInput = {
+export type BlockUncheckedUpdateWithoutLearningObjectInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
   type?: Prisma.EnumBlockTypeFieldUpdateOperationsInput | $Enums.BlockType
@@ -564,7 +564,7 @@ export type BlockUncheckedUpdateWithoutPageInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
-export type BlockUncheckedUpdateManyWithoutPageInput = {
+export type BlockUncheckedUpdateManyWithoutLearningObjectInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
   type?: Prisma.EnumBlockTypeFieldUpdateOperationsInput | $Enums.BlockType
@@ -578,43 +578,43 @@ export type BlockUncheckedUpdateManyWithoutPageInput = {
 
 export type BlockSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  pageId?: boolean
+  learningObjectId?: boolean
   orderIndex?: boolean
   type?: boolean
   content?: boolean
   tipTapContent?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  page?: boolean | Prisma.PageDefaultArgs<ExtArgs>
+  learningObject?: boolean | Prisma.LearningObjectDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["block"]>
 
 export type BlockSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  pageId?: boolean
+  learningObjectId?: boolean
   orderIndex?: boolean
   type?: boolean
   content?: boolean
   tipTapContent?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  page?: boolean | Prisma.PageDefaultArgs<ExtArgs>
+  learningObject?: boolean | Prisma.LearningObjectDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["block"]>
 
 export type BlockSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  pageId?: boolean
+  learningObjectId?: boolean
   orderIndex?: boolean
   type?: boolean
   content?: boolean
   tipTapContent?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  page?: boolean | Prisma.PageDefaultArgs<ExtArgs>
+  learningObject?: boolean | Prisma.LearningObjectDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["block"]>
 
 export type BlockSelectScalar = {
   id?: boolean
-  pageId?: boolean
+  learningObjectId?: boolean
   orderIndex?: boolean
   type?: boolean
   content?: boolean
@@ -623,25 +623,25 @@ export type BlockSelectScalar = {
   updatedAt?: boolean
 }
 
-export type BlockOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "pageId" | "orderIndex" | "type" | "content" | "tipTapContent" | "createdAt" | "updatedAt", ExtArgs["result"]["block"]>
+export type BlockOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "learningObjectId" | "orderIndex" | "type" | "content" | "tipTapContent" | "createdAt" | "updatedAt", ExtArgs["result"]["block"]>
 export type BlockInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  page?: boolean | Prisma.PageDefaultArgs<ExtArgs>
+  learningObject?: boolean | Prisma.LearningObjectDefaultArgs<ExtArgs>
 }
 export type BlockIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  page?: boolean | Prisma.PageDefaultArgs<ExtArgs>
+  learningObject?: boolean | Prisma.LearningObjectDefaultArgs<ExtArgs>
 }
 export type BlockIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  page?: boolean | Prisma.PageDefaultArgs<ExtArgs>
+  learningObject?: boolean | Prisma.LearningObjectDefaultArgs<ExtArgs>
 }
 
 export type $BlockPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Block"
   objects: {
-    page: Prisma.$PagePayload<ExtArgs>
+    learningObject: Prisma.$LearningObjectPayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
-    pageId: number
+    learningObjectId: number
     orderIndex: number
     type: $Enums.BlockType
     content: runtime.JsonValue
@@ -1042,7 +1042,7 @@ readonly fields: BlockFieldRefs;
  */
 export interface Prisma__BlockClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  page<T extends Prisma.PageDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.PageDefaultArgs<ExtArgs>>): Prisma.Prisma__PageClient<runtime.Types.Result.GetResult<Prisma.$PagePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  learningObject<T extends Prisma.LearningObjectDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.LearningObjectDefaultArgs<ExtArgs>>): Prisma.Prisma__LearningObjectClient<runtime.Types.Result.GetResult<Prisma.$LearningObjectPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1073,7 +1073,7 @@ export interface Prisma__BlockClient<T, Null = never, ExtArgs extends runtime.Ty
  */
 export interface BlockFieldRefs {
   readonly id: Prisma.FieldRef<"Block", 'Int'>
-  readonly pageId: Prisma.FieldRef<"Block", 'Int'>
+  readonly learningObjectId: Prisma.FieldRef<"Block", 'Int'>
   readonly orderIndex: Prisma.FieldRef<"Block", 'Int'>
   readonly type: Prisma.FieldRef<"Block", 'BlockType'>
   readonly content: Prisma.FieldRef<"Block", 'Json'>

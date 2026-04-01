@@ -13,7 +13,7 @@ export class PageFeedbacksService {
   constructor(private readonly dbService: DBService) {}
 
   async create(userId: number, createPageFeedbackDto: CreatePageFeedbackDto) {
-    const newFeedback = await this.dbService.pageFeedback.create({
+    const newFeedback = await this.dbService.learningObjectFeedback.create({
       data: {
         userId,
         ...createPageFeedbackDto,
@@ -31,7 +31,7 @@ export class PageFeedbacksService {
     userId: number,
     updatePageFeedbackDto: UpdatePageFeedbackDto,
   ) {
-    const feedback = await this.dbService.pageFeedback.findUnique({
+    const feedback = await this.dbService.learningObjectFeedback.findUnique({
       where: { id },
     })
 
@@ -45,7 +45,7 @@ export class PageFeedbacksService {
       )
     }
 
-    const updatedFeedback = await this.dbService.pageFeedback.update({
+    const updatedFeedback = await this.dbService.learningObjectFeedback.update({
       where: { id },
       data: {
         ...updatePageFeedbackDto,
@@ -59,7 +59,7 @@ export class PageFeedbacksService {
   }
 
   async delete(id: number, userId: number) {
-    const feedback = await this.dbService.pageFeedback.findUnique({
+    const feedback = await this.dbService.learningObjectFeedback.findUnique({
       where: { id },
     })
 
@@ -73,7 +73,7 @@ export class PageFeedbacksService {
       )
     }
 
-    await this.dbService.pageFeedback.delete({
+    await this.dbService.learningObjectFeedback.delete({
       where: { id },
     })
 

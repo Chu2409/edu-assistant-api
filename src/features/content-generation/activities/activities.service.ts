@@ -32,7 +32,7 @@ export class ActivitiesService {
   ): Promise<AiGeneratedActivity> {
     this.logger.log('Generating activity')
 
-    const page = await this.dbService.page.findUnique({
+    const page = await this.dbService.learningObject.findUnique({
       where: { id: data.pageId },
       include: { blocks: true, module: { include: { aiConfiguration: true } } },
     })

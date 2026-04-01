@@ -26,9 +26,9 @@ export class PageConceptsService {
     await this.pagesHelperService.getPageForWrite(pageId, user)
 
     try {
-      const created = await this.dbService.pageConcept.create({
+      const created = await this.dbService.learningObjectConcept.create({
         data: {
-          pageId,
+          learningObjectId: pageId,
           term: dto.term,
           definition: dto.definition,
         },
@@ -56,14 +56,14 @@ export class PageConceptsService {
   ): Promise<PageConceptDto> {
     await this.pagesHelperService.getPageForWrite(pageId, user)
 
-    const existing = await this.dbService.pageConcept.findUnique({
+    const existing = await this.dbService.learningObjectConcept.findUnique({
       where: { id: conceptId },
     })
-    if (!existing || existing.pageId !== pageId) {
+    if (!existing || existing.learningObjectId !== pageId) {
       throw new NotFoundException('Concepto no encontrado')
     }
 
-    const updated = await this.dbService.pageConcept.update({
+    const updated = await this.dbService.learningObjectConcept.update({
       where: { id: conceptId },
       data: {
         ...(dto.term !== undefined && { term: dto.term }),
@@ -77,13 +77,15 @@ export class PageConceptsService {
   async delete(pageId: number, conceptId: number, user: User): Promise<void> {
     await this.pagesHelperService.getPageForWrite(pageId, user)
 
-    const existing = await this.dbService.pageConcept.findUnique({
+    const existing = await this.dbService.learningObjectConcept.findUnique({
       where: { id: conceptId },
     })
-    if (!existing || existing.pageId !== pageId) {
+    if (!existing || existing.learningObjectId !== pageId) {
       throw new NotFoundException('Concepto no encontrado')
     }
 
-    await this.dbService.pageConcept.delete({ where: { id: conceptId } })
+    await this.dbService.learningObjectConcept.delete({
+      where: { id: conceptId },
+    })
   }
 }

@@ -39,7 +39,9 @@ export class ChatService {
     const page = await this.pagesHelperService.getPageForRead(pageId, user)
 
     const existing = await this.dbService.session.findUnique({
-      where: { userId_pageId: { userId: user.id, pageId } },
+      where: {
+        userId_learningObjectId: { userId: user.id, learningObjectId: pageId },
+      },
     })
     if (existing) {
       return ChatMapper.toSessionDto(existing)
@@ -47,7 +49,7 @@ export class ChatService {
 
     const created = await this.dbService.session.create({
       data: {
-        pageId,
+        learningObjectId: pageId,
         userId: user.id,
         title: dto.title ?? `Chat: ${page.title}`,
       },
@@ -64,7 +66,9 @@ export class ChatService {
     const session = await this.dbService.session.findUnique({
       where: { id: sessionId },
       include: {
-        page: { include: { module: { include: { enrollments: true } } } },
+        learningObject: {
+          include: { module: { include: { enrollments: true } } },
+        },
       },
     })
 
@@ -77,7 +81,7 @@ export class ChatService {
     }
 
     // valida acceso a la página (por si cambió publicación/matrícula)
-    await this.pagesHelperService.getPageForRead(session.pageId, user)
+    await this.pagesHelperService.getPageForRead(session.learningObjectId, user)
 
     const skip = (query.page - 1) * query.limit
 
@@ -122,7 +126,7 @@ export class ChatService {
     const session = await this.dbService.session.findUnique({
       where: { id: sessionId },
       include: {
-        page: {
+        learningObject: {
           include: {
             blocks: true,
             module: { include: { enrollments: true, aiConfiguration: true } },
@@ -144,7 +148,7 @@ export class ChatService {
     }
 
     const page = await this.pagesHelperService.getPageForRead(
-      session.pageId,
+      session.learningObjectId,
       user,
     )
 
@@ -152,7 +156,7 @@ export class ChatService {
 
     const isFirstMessage = !previousResponseId
     const lessonContext = isFirstMessage
-      ? compileBlocksToText(session.page.blocks)
+      ? compileBlocksToText(session.learningObject.blocks)
       : undefined
 
     const language = page.module.aiConfiguration?.language ?? 'es'

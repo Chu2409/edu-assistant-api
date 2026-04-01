@@ -1,7 +1,7 @@
 import {
   AiConfiguration,
+  LearningObject,
   Module,
-  Page,
 } from 'src/core/database/generated/client'
 import { ModuleDto } from '../dtos/res/module.dto'
 import { AiConfigurationDto } from '../../ai-configurations/dtos/res/ai-configuration.dto'
@@ -48,7 +48,7 @@ export class ModulesMapper {
   static mapToModulePagesDto(
     module: Module & {
       aiConfiguration?: AiConfiguration | null
-      pages: Page[]
+      pages: LearningObject[]
     },
   ): ModulePagesDto {
     return {

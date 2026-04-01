@@ -28,19 +28,19 @@ export type AggregatePodcast = {
 
 export type PodcastAvgAggregateOutputType = {
   id: number | null
-  pageId: number | null
+  learningObjectId: number | null
   duration: number | null
 }
 
 export type PodcastSumAggregateOutputType = {
   id: number | null
-  pageId: number | null
+  learningObjectId: number | null
   duration: number | null
 }
 
 export type PodcastMinAggregateOutputType = {
   id: number | null
-  pageId: number | null
+  learningObjectId: number | null
   title: string | null
   description: string | null
   audioUrl: string | null
@@ -53,7 +53,7 @@ export type PodcastMinAggregateOutputType = {
 
 export type PodcastMaxAggregateOutputType = {
   id: number | null
-  pageId: number | null
+  learningObjectId: number | null
   title: string | null
   description: string | null
   audioUrl: string | null
@@ -66,7 +66,7 @@ export type PodcastMaxAggregateOutputType = {
 
 export type PodcastCountAggregateOutputType = {
   id: number
-  pageId: number
+  learningObjectId: number
   title: number
   description: number
   audioUrl: number
@@ -81,19 +81,19 @@ export type PodcastCountAggregateOutputType = {
 
 export type PodcastAvgAggregateInputType = {
   id?: true
-  pageId?: true
+  learningObjectId?: true
   duration?: true
 }
 
 export type PodcastSumAggregateInputType = {
   id?: true
-  pageId?: true
+  learningObjectId?: true
   duration?: true
 }
 
 export type PodcastMinAggregateInputType = {
   id?: true
-  pageId?: true
+  learningObjectId?: true
   title?: true
   description?: true
   audioUrl?: true
@@ -106,7 +106,7 @@ export type PodcastMinAggregateInputType = {
 
 export type PodcastMaxAggregateInputType = {
   id?: true
-  pageId?: true
+  learningObjectId?: true
   title?: true
   description?: true
   audioUrl?: true
@@ -119,7 +119,7 @@ export type PodcastMaxAggregateInputType = {
 
 export type PodcastCountAggregateInputType = {
   id?: true
-  pageId?: true
+  learningObjectId?: true
   title?: true
   description?: true
   audioUrl?: true
@@ -219,7 +219,7 @@ export type PodcastGroupByArgs<ExtArgs extends runtime.Types.Extensions.Internal
 
 export type PodcastGroupByOutputType = {
   id: number
-  pageId: number | null
+  learningObjectId: number | null
   title: string
   description: string | null
   audioUrl: string
@@ -255,7 +255,7 @@ export type PodcastWhereInput = {
   OR?: Prisma.PodcastWhereInput[]
   NOT?: Prisma.PodcastWhereInput | Prisma.PodcastWhereInput[]
   id?: Prisma.IntFilter<"Podcast"> | number
-  pageId?: Prisma.IntNullableFilter<"Podcast"> | number | null
+  learningObjectId?: Prisma.IntNullableFilter<"Podcast"> | number | null
   title?: Prisma.StringFilter<"Podcast"> | string
   description?: Prisma.StringNullableFilter<"Podcast"> | string | null
   audioUrl?: Prisma.StringFilter<"Podcast"> | string
@@ -264,12 +264,12 @@ export type PodcastWhereInput = {
   isPublished?: Prisma.BoolFilter<"Podcast"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Podcast"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Podcast"> | Date | string
-  page?: Prisma.XOR<Prisma.PageNullableScalarRelationFilter, Prisma.PageWhereInput> | null
+  learningObject?: Prisma.XOR<Prisma.LearningObjectNullableScalarRelationFilter, Prisma.LearningObjectWhereInput> | null
 }
 
 export type PodcastOrderByWithRelationInput = {
   id?: Prisma.SortOrder
-  pageId?: Prisma.SortOrderInput | Prisma.SortOrder
+  learningObjectId?: Prisma.SortOrderInput | Prisma.SortOrder
   title?: Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
   audioUrl?: Prisma.SortOrder
@@ -278,7 +278,7 @@ export type PodcastOrderByWithRelationInput = {
   isPublished?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  page?: Prisma.PageOrderByWithRelationInput
+  learningObject?: Prisma.LearningObjectOrderByWithRelationInput
 }
 
 export type PodcastWhereUniqueInput = Prisma.AtLeast<{
@@ -286,7 +286,7 @@ export type PodcastWhereUniqueInput = Prisma.AtLeast<{
   AND?: Prisma.PodcastWhereInput | Prisma.PodcastWhereInput[]
   OR?: Prisma.PodcastWhereInput[]
   NOT?: Prisma.PodcastWhereInput | Prisma.PodcastWhereInput[]
-  pageId?: Prisma.IntNullableFilter<"Podcast"> | number | null
+  learningObjectId?: Prisma.IntNullableFilter<"Podcast"> | number | null
   title?: Prisma.StringFilter<"Podcast"> | string
   description?: Prisma.StringNullableFilter<"Podcast"> | string | null
   audioUrl?: Prisma.StringFilter<"Podcast"> | string
@@ -295,12 +295,12 @@ export type PodcastWhereUniqueInput = Prisma.AtLeast<{
   isPublished?: Prisma.BoolFilter<"Podcast"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Podcast"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Podcast"> | Date | string
-  page?: Prisma.XOR<Prisma.PageNullableScalarRelationFilter, Prisma.PageWhereInput> | null
+  learningObject?: Prisma.XOR<Prisma.LearningObjectNullableScalarRelationFilter, Prisma.LearningObjectWhereInput> | null
 }, "id">
 
 export type PodcastOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
-  pageId?: Prisma.SortOrderInput | Prisma.SortOrder
+  learningObjectId?: Prisma.SortOrderInput | Prisma.SortOrder
   title?: Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
   audioUrl?: Prisma.SortOrder
@@ -321,7 +321,7 @@ export type PodcastScalarWhereWithAggregatesInput = {
   OR?: Prisma.PodcastScalarWhereWithAggregatesInput[]
   NOT?: Prisma.PodcastScalarWhereWithAggregatesInput | Prisma.PodcastScalarWhereWithAggregatesInput[]
   id?: Prisma.IntWithAggregatesFilter<"Podcast"> | number
-  pageId?: Prisma.IntNullableWithAggregatesFilter<"Podcast"> | number | null
+  learningObjectId?: Prisma.IntNullableWithAggregatesFilter<"Podcast"> | number | null
   title?: Prisma.StringWithAggregatesFilter<"Podcast"> | string
   description?: Prisma.StringNullableWithAggregatesFilter<"Podcast"> | string | null
   audioUrl?: Prisma.StringWithAggregatesFilter<"Podcast"> | string
@@ -341,12 +341,12 @@ export type PodcastCreateInput = {
   isPublished?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
-  page?: Prisma.PageCreateNestedOneWithoutPodcastsInput
+  learningObject?: Prisma.LearningObjectCreateNestedOneWithoutPodcastsInput
 }
 
 export type PodcastUncheckedCreateInput = {
   id?: number
-  pageId?: number | null
+  learningObjectId?: number | null
   title: string
   description?: string | null
   audioUrl: string
@@ -366,12 +366,12 @@ export type PodcastUpdateInput = {
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  page?: Prisma.PageUpdateOneWithoutPodcastsNestedInput
+  learningObject?: Prisma.LearningObjectUpdateOneWithoutPodcastsNestedInput
 }
 
 export type PodcastUncheckedUpdateInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
-  pageId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  learningObjectId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   audioUrl?: Prisma.StringFieldUpdateOperationsInput | string
@@ -384,7 +384,7 @@ export type PodcastUncheckedUpdateInput = {
 
 export type PodcastCreateManyInput = {
   id?: number
-  pageId?: number | null
+  learningObjectId?: number | null
   title: string
   description?: string | null
   audioUrl: string
@@ -408,7 +408,7 @@ export type PodcastUpdateManyMutationInput = {
 
 export type PodcastUncheckedUpdateManyInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
-  pageId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  learningObjectId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   audioUrl?: Prisma.StringFieldUpdateOperationsInput | string
@@ -431,7 +431,7 @@ export type PodcastOrderByRelationAggregateInput = {
 
 export type PodcastCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  pageId?: Prisma.SortOrder
+  learningObjectId?: Prisma.SortOrder
   title?: Prisma.SortOrder
   description?: Prisma.SortOrder
   audioUrl?: Prisma.SortOrder
@@ -444,13 +444,13 @@ export type PodcastCountOrderByAggregateInput = {
 
 export type PodcastAvgOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  pageId?: Prisma.SortOrder
+  learningObjectId?: Prisma.SortOrder
   duration?: Prisma.SortOrder
 }
 
 export type PodcastMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  pageId?: Prisma.SortOrder
+  learningObjectId?: Prisma.SortOrder
   title?: Prisma.SortOrder
   description?: Prisma.SortOrder
   audioUrl?: Prisma.SortOrder
@@ -463,7 +463,7 @@ export type PodcastMaxOrderByAggregateInput = {
 
 export type PodcastMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  pageId?: Prisma.SortOrder
+  learningObjectId?: Prisma.SortOrder
   title?: Prisma.SortOrder
   description?: Prisma.SortOrder
   audioUrl?: Prisma.SortOrder
@@ -476,53 +476,53 @@ export type PodcastMinOrderByAggregateInput = {
 
 export type PodcastSumOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  pageId?: Prisma.SortOrder
+  learningObjectId?: Prisma.SortOrder
   duration?: Prisma.SortOrder
 }
 
-export type PodcastCreateNestedManyWithoutPageInput = {
-  create?: Prisma.XOR<Prisma.PodcastCreateWithoutPageInput, Prisma.PodcastUncheckedCreateWithoutPageInput> | Prisma.PodcastCreateWithoutPageInput[] | Prisma.PodcastUncheckedCreateWithoutPageInput[]
-  connectOrCreate?: Prisma.PodcastCreateOrConnectWithoutPageInput | Prisma.PodcastCreateOrConnectWithoutPageInput[]
-  createMany?: Prisma.PodcastCreateManyPageInputEnvelope
+export type PodcastCreateNestedManyWithoutLearningObjectInput = {
+  create?: Prisma.XOR<Prisma.PodcastCreateWithoutLearningObjectInput, Prisma.PodcastUncheckedCreateWithoutLearningObjectInput> | Prisma.PodcastCreateWithoutLearningObjectInput[] | Prisma.PodcastUncheckedCreateWithoutLearningObjectInput[]
+  connectOrCreate?: Prisma.PodcastCreateOrConnectWithoutLearningObjectInput | Prisma.PodcastCreateOrConnectWithoutLearningObjectInput[]
+  createMany?: Prisma.PodcastCreateManyLearningObjectInputEnvelope
   connect?: Prisma.PodcastWhereUniqueInput | Prisma.PodcastWhereUniqueInput[]
 }
 
-export type PodcastUncheckedCreateNestedManyWithoutPageInput = {
-  create?: Prisma.XOR<Prisma.PodcastCreateWithoutPageInput, Prisma.PodcastUncheckedCreateWithoutPageInput> | Prisma.PodcastCreateWithoutPageInput[] | Prisma.PodcastUncheckedCreateWithoutPageInput[]
-  connectOrCreate?: Prisma.PodcastCreateOrConnectWithoutPageInput | Prisma.PodcastCreateOrConnectWithoutPageInput[]
-  createMany?: Prisma.PodcastCreateManyPageInputEnvelope
+export type PodcastUncheckedCreateNestedManyWithoutLearningObjectInput = {
+  create?: Prisma.XOR<Prisma.PodcastCreateWithoutLearningObjectInput, Prisma.PodcastUncheckedCreateWithoutLearningObjectInput> | Prisma.PodcastCreateWithoutLearningObjectInput[] | Prisma.PodcastUncheckedCreateWithoutLearningObjectInput[]
+  connectOrCreate?: Prisma.PodcastCreateOrConnectWithoutLearningObjectInput | Prisma.PodcastCreateOrConnectWithoutLearningObjectInput[]
+  createMany?: Prisma.PodcastCreateManyLearningObjectInputEnvelope
   connect?: Prisma.PodcastWhereUniqueInput | Prisma.PodcastWhereUniqueInput[]
 }
 
-export type PodcastUpdateManyWithoutPageNestedInput = {
-  create?: Prisma.XOR<Prisma.PodcastCreateWithoutPageInput, Prisma.PodcastUncheckedCreateWithoutPageInput> | Prisma.PodcastCreateWithoutPageInput[] | Prisma.PodcastUncheckedCreateWithoutPageInput[]
-  connectOrCreate?: Prisma.PodcastCreateOrConnectWithoutPageInput | Prisma.PodcastCreateOrConnectWithoutPageInput[]
-  upsert?: Prisma.PodcastUpsertWithWhereUniqueWithoutPageInput | Prisma.PodcastUpsertWithWhereUniqueWithoutPageInput[]
-  createMany?: Prisma.PodcastCreateManyPageInputEnvelope
+export type PodcastUpdateManyWithoutLearningObjectNestedInput = {
+  create?: Prisma.XOR<Prisma.PodcastCreateWithoutLearningObjectInput, Prisma.PodcastUncheckedCreateWithoutLearningObjectInput> | Prisma.PodcastCreateWithoutLearningObjectInput[] | Prisma.PodcastUncheckedCreateWithoutLearningObjectInput[]
+  connectOrCreate?: Prisma.PodcastCreateOrConnectWithoutLearningObjectInput | Prisma.PodcastCreateOrConnectWithoutLearningObjectInput[]
+  upsert?: Prisma.PodcastUpsertWithWhereUniqueWithoutLearningObjectInput | Prisma.PodcastUpsertWithWhereUniqueWithoutLearningObjectInput[]
+  createMany?: Prisma.PodcastCreateManyLearningObjectInputEnvelope
   set?: Prisma.PodcastWhereUniqueInput | Prisma.PodcastWhereUniqueInput[]
   disconnect?: Prisma.PodcastWhereUniqueInput | Prisma.PodcastWhereUniqueInput[]
   delete?: Prisma.PodcastWhereUniqueInput | Prisma.PodcastWhereUniqueInput[]
   connect?: Prisma.PodcastWhereUniqueInput | Prisma.PodcastWhereUniqueInput[]
-  update?: Prisma.PodcastUpdateWithWhereUniqueWithoutPageInput | Prisma.PodcastUpdateWithWhereUniqueWithoutPageInput[]
-  updateMany?: Prisma.PodcastUpdateManyWithWhereWithoutPageInput | Prisma.PodcastUpdateManyWithWhereWithoutPageInput[]
+  update?: Prisma.PodcastUpdateWithWhereUniqueWithoutLearningObjectInput | Prisma.PodcastUpdateWithWhereUniqueWithoutLearningObjectInput[]
+  updateMany?: Prisma.PodcastUpdateManyWithWhereWithoutLearningObjectInput | Prisma.PodcastUpdateManyWithWhereWithoutLearningObjectInput[]
   deleteMany?: Prisma.PodcastScalarWhereInput | Prisma.PodcastScalarWhereInput[]
 }
 
-export type PodcastUncheckedUpdateManyWithoutPageNestedInput = {
-  create?: Prisma.XOR<Prisma.PodcastCreateWithoutPageInput, Prisma.PodcastUncheckedCreateWithoutPageInput> | Prisma.PodcastCreateWithoutPageInput[] | Prisma.PodcastUncheckedCreateWithoutPageInput[]
-  connectOrCreate?: Prisma.PodcastCreateOrConnectWithoutPageInput | Prisma.PodcastCreateOrConnectWithoutPageInput[]
-  upsert?: Prisma.PodcastUpsertWithWhereUniqueWithoutPageInput | Prisma.PodcastUpsertWithWhereUniqueWithoutPageInput[]
-  createMany?: Prisma.PodcastCreateManyPageInputEnvelope
+export type PodcastUncheckedUpdateManyWithoutLearningObjectNestedInput = {
+  create?: Prisma.XOR<Prisma.PodcastCreateWithoutLearningObjectInput, Prisma.PodcastUncheckedCreateWithoutLearningObjectInput> | Prisma.PodcastCreateWithoutLearningObjectInput[] | Prisma.PodcastUncheckedCreateWithoutLearningObjectInput[]
+  connectOrCreate?: Prisma.PodcastCreateOrConnectWithoutLearningObjectInput | Prisma.PodcastCreateOrConnectWithoutLearningObjectInput[]
+  upsert?: Prisma.PodcastUpsertWithWhereUniqueWithoutLearningObjectInput | Prisma.PodcastUpsertWithWhereUniqueWithoutLearningObjectInput[]
+  createMany?: Prisma.PodcastCreateManyLearningObjectInputEnvelope
   set?: Prisma.PodcastWhereUniqueInput | Prisma.PodcastWhereUniqueInput[]
   disconnect?: Prisma.PodcastWhereUniqueInput | Prisma.PodcastWhereUniqueInput[]
   delete?: Prisma.PodcastWhereUniqueInput | Prisma.PodcastWhereUniqueInput[]
   connect?: Prisma.PodcastWhereUniqueInput | Prisma.PodcastWhereUniqueInput[]
-  update?: Prisma.PodcastUpdateWithWhereUniqueWithoutPageInput | Prisma.PodcastUpdateWithWhereUniqueWithoutPageInput[]
-  updateMany?: Prisma.PodcastUpdateManyWithWhereWithoutPageInput | Prisma.PodcastUpdateManyWithWhereWithoutPageInput[]
+  update?: Prisma.PodcastUpdateWithWhereUniqueWithoutLearningObjectInput | Prisma.PodcastUpdateWithWhereUniqueWithoutLearningObjectInput[]
+  updateMany?: Prisma.PodcastUpdateManyWithWhereWithoutLearningObjectInput | Prisma.PodcastUpdateManyWithWhereWithoutLearningObjectInput[]
   deleteMany?: Prisma.PodcastScalarWhereInput | Prisma.PodcastScalarWhereInput[]
 }
 
-export type PodcastCreateWithoutPageInput = {
+export type PodcastCreateWithoutLearningObjectInput = {
   title: string
   description?: string | null
   audioUrl: string
@@ -533,7 +533,7 @@ export type PodcastCreateWithoutPageInput = {
   updatedAt?: Date | string
 }
 
-export type PodcastUncheckedCreateWithoutPageInput = {
+export type PodcastUncheckedCreateWithoutLearningObjectInput = {
   id?: number
   title: string
   description?: string | null
@@ -545,30 +545,30 @@ export type PodcastUncheckedCreateWithoutPageInput = {
   updatedAt?: Date | string
 }
 
-export type PodcastCreateOrConnectWithoutPageInput = {
+export type PodcastCreateOrConnectWithoutLearningObjectInput = {
   where: Prisma.PodcastWhereUniqueInput
-  create: Prisma.XOR<Prisma.PodcastCreateWithoutPageInput, Prisma.PodcastUncheckedCreateWithoutPageInput>
+  create: Prisma.XOR<Prisma.PodcastCreateWithoutLearningObjectInput, Prisma.PodcastUncheckedCreateWithoutLearningObjectInput>
 }
 
-export type PodcastCreateManyPageInputEnvelope = {
-  data: Prisma.PodcastCreateManyPageInput | Prisma.PodcastCreateManyPageInput[]
+export type PodcastCreateManyLearningObjectInputEnvelope = {
+  data: Prisma.PodcastCreateManyLearningObjectInput | Prisma.PodcastCreateManyLearningObjectInput[]
   skipDuplicates?: boolean
 }
 
-export type PodcastUpsertWithWhereUniqueWithoutPageInput = {
+export type PodcastUpsertWithWhereUniqueWithoutLearningObjectInput = {
   where: Prisma.PodcastWhereUniqueInput
-  update: Prisma.XOR<Prisma.PodcastUpdateWithoutPageInput, Prisma.PodcastUncheckedUpdateWithoutPageInput>
-  create: Prisma.XOR<Prisma.PodcastCreateWithoutPageInput, Prisma.PodcastUncheckedCreateWithoutPageInput>
+  update: Prisma.XOR<Prisma.PodcastUpdateWithoutLearningObjectInput, Prisma.PodcastUncheckedUpdateWithoutLearningObjectInput>
+  create: Prisma.XOR<Prisma.PodcastCreateWithoutLearningObjectInput, Prisma.PodcastUncheckedCreateWithoutLearningObjectInput>
 }
 
-export type PodcastUpdateWithWhereUniqueWithoutPageInput = {
+export type PodcastUpdateWithWhereUniqueWithoutLearningObjectInput = {
   where: Prisma.PodcastWhereUniqueInput
-  data: Prisma.XOR<Prisma.PodcastUpdateWithoutPageInput, Prisma.PodcastUncheckedUpdateWithoutPageInput>
+  data: Prisma.XOR<Prisma.PodcastUpdateWithoutLearningObjectInput, Prisma.PodcastUncheckedUpdateWithoutLearningObjectInput>
 }
 
-export type PodcastUpdateManyWithWhereWithoutPageInput = {
+export type PodcastUpdateManyWithWhereWithoutLearningObjectInput = {
   where: Prisma.PodcastScalarWhereInput
-  data: Prisma.XOR<Prisma.PodcastUpdateManyMutationInput, Prisma.PodcastUncheckedUpdateManyWithoutPageInput>
+  data: Prisma.XOR<Prisma.PodcastUpdateManyMutationInput, Prisma.PodcastUncheckedUpdateManyWithoutLearningObjectInput>
 }
 
 export type PodcastScalarWhereInput = {
@@ -576,7 +576,7 @@ export type PodcastScalarWhereInput = {
   OR?: Prisma.PodcastScalarWhereInput[]
   NOT?: Prisma.PodcastScalarWhereInput | Prisma.PodcastScalarWhereInput[]
   id?: Prisma.IntFilter<"Podcast"> | number
-  pageId?: Prisma.IntNullableFilter<"Podcast"> | number | null
+  learningObjectId?: Prisma.IntNullableFilter<"Podcast"> | number | null
   title?: Prisma.StringFilter<"Podcast"> | string
   description?: Prisma.StringNullableFilter<"Podcast"> | string | null
   audioUrl?: Prisma.StringFilter<"Podcast"> | string
@@ -587,7 +587,7 @@ export type PodcastScalarWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"Podcast"> | Date | string
 }
 
-export type PodcastCreateManyPageInput = {
+export type PodcastCreateManyLearningObjectInput = {
   id?: number
   title: string
   description?: string | null
@@ -599,7 +599,7 @@ export type PodcastCreateManyPageInput = {
   updatedAt?: Date | string
 }
 
-export type PodcastUpdateWithoutPageInput = {
+export type PodcastUpdateWithoutLearningObjectInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   audioUrl?: Prisma.StringFieldUpdateOperationsInput | string
@@ -610,7 +610,7 @@ export type PodcastUpdateWithoutPageInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
-export type PodcastUncheckedUpdateWithoutPageInput = {
+export type PodcastUncheckedUpdateWithoutLearningObjectInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -622,7 +622,7 @@ export type PodcastUncheckedUpdateWithoutPageInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
-export type PodcastUncheckedUpdateManyWithoutPageInput = {
+export type PodcastUncheckedUpdateManyWithoutLearningObjectInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -638,7 +638,7 @@ export type PodcastUncheckedUpdateManyWithoutPageInput = {
 
 export type PodcastSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  pageId?: boolean
+  learningObjectId?: boolean
   title?: boolean
   description?: boolean
   audioUrl?: boolean
@@ -647,12 +647,12 @@ export type PodcastSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   isPublished?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  page?: boolean | Prisma.Podcast$pageArgs<ExtArgs>
+  learningObject?: boolean | Prisma.Podcast$learningObjectArgs<ExtArgs>
 }, ExtArgs["result"]["podcast"]>
 
 export type PodcastSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  pageId?: boolean
+  learningObjectId?: boolean
   title?: boolean
   description?: boolean
   audioUrl?: boolean
@@ -661,12 +661,12 @@ export type PodcastSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
   isPublished?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  page?: boolean | Prisma.Podcast$pageArgs<ExtArgs>
+  learningObject?: boolean | Prisma.Podcast$learningObjectArgs<ExtArgs>
 }, ExtArgs["result"]["podcast"]>
 
 export type PodcastSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  pageId?: boolean
+  learningObjectId?: boolean
   title?: boolean
   description?: boolean
   audioUrl?: boolean
@@ -675,12 +675,12 @@ export type PodcastSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
   isPublished?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  page?: boolean | Prisma.Podcast$pageArgs<ExtArgs>
+  learningObject?: boolean | Prisma.Podcast$learningObjectArgs<ExtArgs>
 }, ExtArgs["result"]["podcast"]>
 
 export type PodcastSelectScalar = {
   id?: boolean
-  pageId?: boolean
+  learningObjectId?: boolean
   title?: boolean
   description?: boolean
   audioUrl?: boolean
@@ -691,25 +691,25 @@ export type PodcastSelectScalar = {
   updatedAt?: boolean
 }
 
-export type PodcastOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "pageId" | "title" | "description" | "audioUrl" | "duration" | "scriptContent" | "isPublished" | "createdAt" | "updatedAt", ExtArgs["result"]["podcast"]>
+export type PodcastOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "learningObjectId" | "title" | "description" | "audioUrl" | "duration" | "scriptContent" | "isPublished" | "createdAt" | "updatedAt", ExtArgs["result"]["podcast"]>
 export type PodcastInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  page?: boolean | Prisma.Podcast$pageArgs<ExtArgs>
+  learningObject?: boolean | Prisma.Podcast$learningObjectArgs<ExtArgs>
 }
 export type PodcastIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  page?: boolean | Prisma.Podcast$pageArgs<ExtArgs>
+  learningObject?: boolean | Prisma.Podcast$learningObjectArgs<ExtArgs>
 }
 export type PodcastIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  page?: boolean | Prisma.Podcast$pageArgs<ExtArgs>
+  learningObject?: boolean | Prisma.Podcast$learningObjectArgs<ExtArgs>
 }
 
 export type $PodcastPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Podcast"
   objects: {
-    page: Prisma.$PagePayload<ExtArgs> | null
+    learningObject: Prisma.$LearningObjectPayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
-    pageId: number | null
+    learningObjectId: number | null
     title: string
     description: string | null
     audioUrl: string
@@ -1112,7 +1112,7 @@ readonly fields: PodcastFieldRefs;
  */
 export interface Prisma__PodcastClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  page<T extends Prisma.Podcast$pageArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Podcast$pageArgs<ExtArgs>>): Prisma.Prisma__PageClient<runtime.Types.Result.GetResult<Prisma.$PagePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  learningObject<T extends Prisma.Podcast$learningObjectArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Podcast$learningObjectArgs<ExtArgs>>): Prisma.Prisma__LearningObjectClient<runtime.Types.Result.GetResult<Prisma.$LearningObjectPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1143,7 +1143,7 @@ export interface Prisma__PodcastClient<T, Null = never, ExtArgs extends runtime.
  */
 export interface PodcastFieldRefs {
   readonly id: Prisma.FieldRef<"Podcast", 'Int'>
-  readonly pageId: Prisma.FieldRef<"Podcast", 'Int'>
+  readonly learningObjectId: Prisma.FieldRef<"Podcast", 'Int'>
   readonly title: Prisma.FieldRef<"Podcast", 'String'>
   readonly description: Prisma.FieldRef<"Podcast", 'String'>
   readonly audioUrl: Prisma.FieldRef<"Podcast", 'String'>
@@ -1553,22 +1553,22 @@ export type PodcastDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Inter
 }
 
 /**
- * Podcast.page
+ * Podcast.learningObject
  */
-export type Podcast$pageArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type Podcast$learningObjectArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the Page
+   * Select specific fields to fetch from the LearningObject
    */
-  select?: Prisma.PageSelect<ExtArgs> | null
+  select?: Prisma.LearningObjectSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the Page
+   * Omit specific fields from the LearningObject
    */
-  omit?: Prisma.PageOmit<ExtArgs> | null
+  omit?: Prisma.LearningObjectOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.PageInclude<ExtArgs> | null
-  where?: Prisma.PageWhereInput
+  include?: Prisma.LearningObjectInclude<ExtArgs> | null
+  where?: Prisma.LearningObjectWhereInput
 }
 
 /**

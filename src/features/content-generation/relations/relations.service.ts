@@ -33,7 +33,7 @@ export class RelationsService {
   ): Promise<GeneratedRelationsDto> {
     this.logger.log('Generating page relations')
 
-    const page = await this.dbService.page.findUnique({
+    const page = await this.dbService.learningObject.findUnique({
       where: { id: data.pageId },
       include: {
         blocks: { orderBy: { orderIndex: 'asc' } },
@@ -68,7 +68,7 @@ export class RelationsService {
 
     // 3. Obtener datos de las páginas candidatas (title, summary, keywords)
     const candidateIds = similarRows.map((r) => r.id)
-    const candidatePages = await this.dbService.page.findMany({
+    const candidatePages = await this.dbService.learningObject.findMany({
       where: { id: { in: candidateIds } },
       include: {
         blocks: true,

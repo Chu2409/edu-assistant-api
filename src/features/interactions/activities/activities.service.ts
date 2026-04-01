@@ -36,7 +36,7 @@ export class ActivitiesService {
   async list(pageId: number, user: User): Promise<ActivityDto[]> {
     await this.pagesHelperService.getPageForRead(pageId, user)
     const activities = await this.dbService.activity.findMany({
-      where: { pageId },
+      where: { learningObjectId: pageId },
       orderBy: { orderIndex: 'asc' },
     })
     return activities.map((a) => ActivitiesMapper.mapToDto(a))
@@ -50,13 +50,13 @@ export class ActivitiesService {
     await this.pagesHelperService.getPageForWrite(pageId, user)
 
     const last = await this.dbService.activity.findFirst({
-      where: { pageId },
+      where: { learningObjectId: pageId },
       orderBy: { orderIndex: 'desc' },
     })
 
     const created = await this.dbService.activity.create({
       data: {
-        pageId,
+        learningObjectId: pageId,
         type: dto.type,
         question: dto.question,
         options: JSON.stringify(dto.options),
@@ -81,7 +81,7 @@ export class ActivitiesService {
     const existing = await this.dbService.activity.findUnique({
       where: { id: activityId },
     })
-    if (!existing || existing.pageId !== pageId) {
+    if (!existing || existing.learningObjectId !== pageId) {
       throw new NotFoundException('Actividad no encontrada')
     }
 
@@ -116,7 +116,7 @@ export class ActivitiesService {
     const existing = await this.dbService.activity.findUnique({
       where: { id: activityId },
     })
-    if (!existing || existing.pageId !== pageId) {
+    if (!existing || existing.learningObjectId !== pageId) {
       throw new NotFoundException('Actividad no encontrada')
     }
 
@@ -131,7 +131,9 @@ export class ActivitiesService {
     const activity = await this.dbService.activity.findUnique({
       where: { id: activityId },
       include: {
-        page: { include: { module: { include: { enrollments: true } } } },
+        learningObject: {
+          include: { module: { include: { enrollments: true } } },
+        },
       },
     })
 
@@ -140,7 +142,10 @@ export class ActivitiesService {
     }
 
     // student access check
-    await this.pagesHelperService.getPageForRead(activity.pageId, user)
+    await this.pagesHelperService.getPageForRead(
+      activity.learningObjectId,
+      user,
+    )
 
     const lastAttempt = await this.dbService.activityAttempt.findFirst({
       where: { activityId, userId: user.id },

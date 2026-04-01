@@ -35,7 +35,7 @@ export class PageContentService {
   ): Promise<GeneratedPageContent> {
     this.logger.log('Generating page content')
 
-    const page = await this.dbService.page.findUnique({
+    const page = await this.dbService.learningObject.findUnique({
       where: { id: data.pageId },
       include: { module: { include: { aiConfiguration: true } } },
     })
@@ -68,7 +68,7 @@ export class PageContentService {
   ): Promise<GeneratedPageContent> {
     this.logger.log('Regenerating page content')
 
-    const page = await this.dbService.page.findUnique({
+    const page = await this.dbService.learningObject.findUnique({
       where: { id: data.pageId },
       include: {
         blocks: {
@@ -115,7 +115,7 @@ export class PageContentService {
   ): Promise<RegeneratedBlockDto> {
     this.logger.log('Regenerating block')
 
-    const page = await this.dbService.page.findUnique({
+    const page = await this.dbService.learningObject.findUnique({
       where: { id: data.pageId },
       include: {
         blocks: { orderBy: { orderIndex: 'asc' } },
@@ -191,7 +191,7 @@ export class PageContentService {
   async expandContent(data: ExpandContentDto): Promise<ExpandedContentDto> {
     this.logger.log('Expanding content')
 
-    const page = await this.dbService.page.findUnique({
+    const page = await this.dbService.learningObject.findUnique({
       where: { id: data.pageId },
       include: {
         blocks: { orderBy: { orderIndex: 'asc' } },

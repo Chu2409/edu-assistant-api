@@ -1,8 +1,8 @@
 import {
   Block,
   Note,
-  Page,
-  PageFeedback,
+  LearningObject,
+  LearningObjectFeedback,
   StudentQuestion,
   User,
   Session,
@@ -15,7 +15,7 @@ import { NotesMapper } from '../../../interactions/notes/mappers/notes.mapper'
 import { BlocksMapper } from '../../blocks/mappers/blocks.mapper'
 
 export class PagesMapper {
-  static mapToDto(page: Page): PageDto {
+  static mapToDto(page: LearningObject): PageDto {
     return {
       id: page.id,
       moduleId: page.moduleId,
@@ -29,10 +29,10 @@ export class PagesMapper {
   }
 
   static mapToFullPageDto(
-    page: Page & {
+    page: LearningObject & {
       notes?: Note[]
       studentQuestions: (StudentQuestion & { user: User })[]
-      pageFeedbacks?: (PageFeedback & { user: User })[]
+      pageFeedbacks?: (LearningObjectFeedback & { user: User })[]
       blocks: Block[]
       sessions?: Session[]
     },

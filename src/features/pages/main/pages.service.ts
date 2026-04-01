@@ -48,13 +48,14 @@ export class PagesService {
       )
     }
 
-    const lastPage = await this.dbService.page.findFirst({
+    const lastPage = await this.dbService.learningObject.findFirst({
       where: { moduleId: dto.moduleId },
       orderBy: { orderIndex: 'desc' },
     })
 
-    const page = await this.dbService.page.create({
+    const page = await this.dbService.learningObject.create({
       data: {
+        typeId: 1, // TODO: Change to dynamic
         moduleId: dto.moduleId,
         title: dto.title,
         isPublished: dto.isPublished ?? false,
@@ -94,7 +95,7 @@ export class PagesService {
     }
 
     // Construir filtro de búsqueda
-    const where: Prisma.PageWhereInput = {
+    const where: Prisma.LearningObjectWhereInput = {
       moduleId,
     }
 
@@ -108,7 +109,7 @@ export class PagesService {
     }
 
     const [entities, total] = await Promise.all([
-      this.dbService.page.findMany({
+      this.dbService.learningObject.findMany({
         where,
         skip: (params.page - 1) * params.limit,
         take: params.limit,
@@ -116,7 +117,7 @@ export class PagesService {
           orderIndex: 'asc',
         },
       }),
-      this.dbService.page.count({
+      this.dbService.learningObject.count({
         where,
       }),
     ])
@@ -131,10 +132,10 @@ export class PagesService {
   }
 
   private async findOneToTeacher(id: number, user: User) {
-    const page = await this.dbService.page.findUnique({
+    const page = await this.dbService.learningObject.findUnique({
       where: { id },
       include: {
-        pageFeedbacks: {
+        loFeedbacks: {
           include: {
             user: true,
           },
@@ -163,7 +164,7 @@ export class PagesService {
   }
 
   private async findOneToStudent(id: number, user: User) {
-    const page = await this.dbService.page.findUnique({
+    const page = await this.dbService.learningObject.findUnique({
       where: { id },
       include: {
         module: {
@@ -231,7 +232,7 @@ export class PagesService {
     user: User,
   ): Promise<PageDto> {
     // Verificar que la página existe
-    const existingPage = await this.dbService.page.findUnique({
+    const existingPage = await this.dbService.learningObject.findUnique({
       where: { id },
       include: {
         module: true,
@@ -249,7 +250,7 @@ export class PagesService {
       )
     }
 
-    const page = await this.dbService.page.update({
+    const page = await this.dbService.learningObject.update({
       where: { id },
       data: {
         ...(updatePageDto.title !== undefined && {
@@ -286,7 +287,7 @@ export class PagesService {
     user: User,
   ): Promise<PageDto> {
     // Verificar que la página existe
-    const existingPage = await this.dbService.page.findUnique({
+    const existingPage = await this.dbService.learningObject.findUnique({
       where: { id },
       include: {
         module: true,
@@ -315,7 +316,7 @@ export class PagesService {
       // Eliminar bloques que no están en la lista
       await prisma.block.deleteMany({
         where: {
-          pageId: id,
+          learningObjectId: id,
           id: {
             notIn: blockIdsToKeep.length > 0 ? blockIdsToKeep : [-1],
           },
@@ -343,7 +344,7 @@ export class PagesService {
           // Crear nuevo bloque
           await prisma.block.create({
             data: {
-              pageId: id,
+              learningObjectId: id,
               type: blockDto.type,
               content: blockDto.content,
               tipTapContent: blockDto.tipTapContent,
@@ -354,7 +355,7 @@ export class PagesService {
       }
 
       // Marcar la página como editada manualmente
-      await prisma.page.update({
+      await prisma.learningObject.update({
         where: { id },
         data: {
           hasManualEdits: true,
@@ -364,7 +365,7 @@ export class PagesService {
     })
 
     // Obtener y retornar la página actualizada
-    const updatedPage = await this.dbService.page.findUnique({
+    const updatedPage = await this.dbService.learningObject.findUnique({
       where: { id },
     })
 
@@ -390,7 +391,7 @@ export class PagesService {
 
     // Obtener todas las páginas a actualizar para verificar permisos
     const pageIds = reorderPagesDto.pages.map((p) => p.id)
-    const pages = await this.dbService.page.findMany({
+    const pages = await this.dbService.learningObject.findMany({
       where: {
         id: { in: pageIds },
       },
@@ -427,7 +428,7 @@ export class PagesService {
     // Actualizar los orderIndex de todas las páginas en una transacción
     await this.dbService.$transaction(
       reorderPagesDto.pages.map((pageReorder) =>
-        this.dbService.page.update({
+        this.dbService.learningObject.update({
           where: { id: pageReorder.id },
           data: { orderIndex: pageReorder.orderIndex },
         }),

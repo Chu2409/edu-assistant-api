@@ -29,14 +29,14 @@ export class PageRelationsService {
   ): Promise<PageRelationDto> {
     await this.pagesHelperService.getPageForWrite(pageId, user)
 
-    const related = await this.dbService.page.findUnique({
+    const related = await this.dbService.learningObject.findUnique({
       where: { id: dto.relatedPageId },
       select: { id: true, title: true, moduleId: true },
     })
     if (!related)
       throw new NotFoundException('Página relacionada no encontrada')
 
-    const origin = await this.dbService.page.findUnique({
+    const origin = await this.dbService.learningObject.findUnique({
       where: { id: pageId },
       select: { moduleId: true },
     })
@@ -49,23 +49,23 @@ export class PageRelationsService {
     }
 
     try {
-      const created = await this.dbService.pageRelation.create({
+      const created = await this.dbService.learningObjectRelation.create({
         data: {
-          originPageId: pageId,
-          relatedPageId: dto.relatedPageId,
+          originLoId: pageId,
+          relatedLoId: dto.relatedPageId,
           similarityScore: dto.similarityScore ?? 0,
           relationType: dto.relationType,
           mentionText: dto.mentionText,
           explanation: dto.explanation ?? null,
           isEmbedded: dto.isEmbedded ?? false,
         },
-        include: { relatedPage: { select: { id: true, title: true } } },
+        include: { relatedLo: { select: { id: true, title: true } } },
       })
 
       return {
         id: created.id,
-        originPageId: created.originPageId,
-        relatedPageId: created.relatedPageId,
+        originPageId: created.originLoId,
+        relatedPageId: created.relatedLoId,
         similarityScore: created.similarityScore,
         relationType: created.relationType,
         mentionText: created.mentionText,
@@ -75,8 +75,8 @@ export class PageRelationsService {
         calculatedAt: created.calculatedAt,
         createdAt: created.createdAt,
         relatedPage: {
-          id: created.relatedPage.id,
-          title: created.relatedPage.title,
+          id: created.relatedLo.id,
+          title: created.relatedLo.title,
         },
       }
     } catch (e) {
@@ -100,15 +100,15 @@ export class PageRelationsService {
   ): Promise<PageRelationDto> {
     await this.pagesHelperService.getPageForWrite(pageId, user)
 
-    const existing = await this.dbService.pageRelation.findUnique({
+    const existing = await this.dbService.learningObjectRelation.findUnique({
       where: { id: relationId },
-      include: { relatedPage: { select: { id: true, title: true } } },
+      include: { relatedLo: { select: { id: true, title: true } } },
     })
-    if (!existing || existing.originPageId !== pageId) {
+    if (!existing || existing.originLoId !== pageId) {
       throw new NotFoundException('Relación no encontrada')
     }
 
-    const updated = await this.dbService.pageRelation.update({
+    const updated = await this.dbService.learningObjectRelation.update({
       where: { id: relationId },
       data: {
         ...(dto.similarityScore !== undefined && {
@@ -124,13 +124,13 @@ export class PageRelationsService {
           embeddedAt: dto.isEmbedded ? new Date() : null,
         }),
       },
-      include: { relatedPage: { select: { id: true, title: true } } },
+      include: { relatedLo: { select: { id: true, title: true } } },
     })
 
     return {
       id: updated.id,
-      originPageId: updated.originPageId,
-      relatedPageId: updated.relatedPageId,
+      originPageId: updated.originLoId,
+      relatedPageId: updated.relatedLoId,
       similarityScore: updated.similarityScore,
       relationType: updated.relationType,
       mentionText: updated.mentionText,
@@ -140,8 +140,8 @@ export class PageRelationsService {
       calculatedAt: updated.calculatedAt,
       createdAt: updated.createdAt,
       relatedPage: {
-        id: updated.relatedPage.id,
-        title: updated.relatedPage.title,
+        id: updated.relatedLo.id,
+        title: updated.relatedLo.title,
       },
     }
   }
@@ -149,14 +149,16 @@ export class PageRelationsService {
   async delete(pageId: number, relationId: number, user: User): Promise<void> {
     await this.pagesHelperService.getPageForWrite(pageId, user)
 
-    const existing = await this.dbService.pageRelation.findUnique({
+    const existing = await this.dbService.learningObjectRelation.findUnique({
       where: { id: relationId },
     })
-    if (!existing || existing.originPageId !== pageId) {
+    if (!existing || existing.originLoId !== pageId) {
       throw new NotFoundException('Relación no encontrada')
     }
 
-    await this.dbService.pageRelation.delete({ where: { id: relationId } })
+    await this.dbService.learningObjectRelation.delete({
+      where: { id: relationId },
+    })
   }
 
   /**
@@ -165,7 +167,7 @@ export class PageRelationsService {
    * Retorna el embedding literal para búsquedas por similitud.
    */
   async processPageEmbedding(pageId: number): Promise<string | null> {
-    const page = await this.dbService.page.findUnique({
+    const page = await this.dbService.learningObject.findUnique({
       where: { id: pageId },
       include: { blocks: { orderBy: { orderIndex: 'asc' } } },
     })
@@ -189,7 +191,7 @@ export class PageRelationsService {
    * Obtiene o crea el embedding de una página. Retorna el literal para búsquedas.
    */
   async ensurePageEmbedding(pageId: number): Promise<string> {
-    const page = await this.dbService.page.findUnique({
+    const page = await this.dbService.learningObject.findUnique({
       where: { id: pageId },
       include: { blocks: { orderBy: { orderIndex: 'asc' } } },
     })

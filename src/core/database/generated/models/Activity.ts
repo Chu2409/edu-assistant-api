@@ -28,7 +28,7 @@ export type AggregateActivity = {
 
 export type ActivityAvgAggregateOutputType = {
   id: number | null
-  pageId: number | null
+  learningObjectId: number | null
   difficulty: number | null
   orderIndex: number | null
   generatedFromId: number | null
@@ -36,7 +36,7 @@ export type ActivityAvgAggregateOutputType = {
 
 export type ActivitySumAggregateOutputType = {
   id: number | null
-  pageId: number | null
+  learningObjectId: number | null
   difficulty: number | null
   orderIndex: number | null
   generatedFromId: number | null
@@ -44,7 +44,7 @@ export type ActivitySumAggregateOutputType = {
 
 export type ActivityMinAggregateOutputType = {
   id: number | null
-  pageId: number | null
+  learningObjectId: number | null
   type: $Enums.ActivityType | null
   question: string | null
   explanation: string | null
@@ -59,7 +59,7 @@ export type ActivityMinAggregateOutputType = {
 
 export type ActivityMaxAggregateOutputType = {
   id: number | null
-  pageId: number | null
+  learningObjectId: number | null
   type: $Enums.ActivityType | null
   question: string | null
   explanation: string | null
@@ -74,7 +74,7 @@ export type ActivityMaxAggregateOutputType = {
 
 export type ActivityCountAggregateOutputType = {
   id: number
-  pageId: number
+  learningObjectId: number
   type: number
   question: number
   options: number
@@ -92,7 +92,7 @@ export type ActivityCountAggregateOutputType = {
 
 export type ActivityAvgAggregateInputType = {
   id?: true
-  pageId?: true
+  learningObjectId?: true
   difficulty?: true
   orderIndex?: true
   generatedFromId?: true
@@ -100,7 +100,7 @@ export type ActivityAvgAggregateInputType = {
 
 export type ActivitySumAggregateInputType = {
   id?: true
-  pageId?: true
+  learningObjectId?: true
   difficulty?: true
   orderIndex?: true
   generatedFromId?: true
@@ -108,7 +108,7 @@ export type ActivitySumAggregateInputType = {
 
 export type ActivityMinAggregateInputType = {
   id?: true
-  pageId?: true
+  learningObjectId?: true
   type?: true
   question?: true
   explanation?: true
@@ -123,7 +123,7 @@ export type ActivityMinAggregateInputType = {
 
 export type ActivityMaxAggregateInputType = {
   id?: true
-  pageId?: true
+  learningObjectId?: true
   type?: true
   question?: true
   explanation?: true
@@ -138,7 +138,7 @@ export type ActivityMaxAggregateInputType = {
 
 export type ActivityCountAggregateInputType = {
   id?: true
-  pageId?: true
+  learningObjectId?: true
   type?: true
   question?: true
   options?: true
@@ -241,7 +241,7 @@ export type ActivityGroupByArgs<ExtArgs extends runtime.Types.Extensions.Interna
 
 export type ActivityGroupByOutputType = {
   id: number
-  pageId: number
+  learningObjectId: number
   type: $Enums.ActivityType
   question: string
   options: runtime.JsonValue | null
@@ -280,7 +280,7 @@ export type ActivityWhereInput = {
   OR?: Prisma.ActivityWhereInput[]
   NOT?: Prisma.ActivityWhereInput | Prisma.ActivityWhereInput[]
   id?: Prisma.IntFilter<"Activity"> | number
-  pageId?: Prisma.IntFilter<"Activity"> | number
+  learningObjectId?: Prisma.IntFilter<"Activity"> | number
   type?: Prisma.EnumActivityTypeFilter<"Activity"> | $Enums.ActivityType
   question?: Prisma.StringFilter<"Activity"> | string
   options?: Prisma.JsonNullableFilter<"Activity">
@@ -292,7 +292,7 @@ export type ActivityWhereInput = {
   generatedFromId?: Prisma.IntNullableFilter<"Activity"> | number | null
   createdAt?: Prisma.DateTimeFilter<"Activity"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Activity"> | Date | string
-  page?: Prisma.XOR<Prisma.PageScalarRelationFilter, Prisma.PageWhereInput>
+  learningObject?: Prisma.XOR<Prisma.LearningObjectScalarRelationFilter, Prisma.LearningObjectWhereInput>
   generatedFrom?: Prisma.XOR<Prisma.ActivityNullableScalarRelationFilter, Prisma.ActivityWhereInput> | null
   generatedActivities?: Prisma.ActivityListRelationFilter
   attempts?: Prisma.ActivityAttemptListRelationFilter
@@ -300,7 +300,7 @@ export type ActivityWhereInput = {
 
 export type ActivityOrderByWithRelationInput = {
   id?: Prisma.SortOrder
-  pageId?: Prisma.SortOrder
+  learningObjectId?: Prisma.SortOrder
   type?: Prisma.SortOrder
   question?: Prisma.SortOrder
   options?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -312,7 +312,7 @@ export type ActivityOrderByWithRelationInput = {
   generatedFromId?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  page?: Prisma.PageOrderByWithRelationInput
+  learningObject?: Prisma.LearningObjectOrderByWithRelationInput
   generatedFrom?: Prisma.ActivityOrderByWithRelationInput
   generatedActivities?: Prisma.ActivityOrderByRelationAggregateInput
   attempts?: Prisma.ActivityAttemptOrderByRelationAggregateInput
@@ -323,7 +323,7 @@ export type ActivityWhereUniqueInput = Prisma.AtLeast<{
   AND?: Prisma.ActivityWhereInput | Prisma.ActivityWhereInput[]
   OR?: Prisma.ActivityWhereInput[]
   NOT?: Prisma.ActivityWhereInput | Prisma.ActivityWhereInput[]
-  pageId?: Prisma.IntFilter<"Activity"> | number
+  learningObjectId?: Prisma.IntFilter<"Activity"> | number
   type?: Prisma.EnumActivityTypeFilter<"Activity"> | $Enums.ActivityType
   question?: Prisma.StringFilter<"Activity"> | string
   options?: Prisma.JsonNullableFilter<"Activity">
@@ -335,7 +335,7 @@ export type ActivityWhereUniqueInput = Prisma.AtLeast<{
   generatedFromId?: Prisma.IntNullableFilter<"Activity"> | number | null
   createdAt?: Prisma.DateTimeFilter<"Activity"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Activity"> | Date | string
-  page?: Prisma.XOR<Prisma.PageScalarRelationFilter, Prisma.PageWhereInput>
+  learningObject?: Prisma.XOR<Prisma.LearningObjectScalarRelationFilter, Prisma.LearningObjectWhereInput>
   generatedFrom?: Prisma.XOR<Prisma.ActivityNullableScalarRelationFilter, Prisma.ActivityWhereInput> | null
   generatedActivities?: Prisma.ActivityListRelationFilter
   attempts?: Prisma.ActivityAttemptListRelationFilter
@@ -343,7 +343,7 @@ export type ActivityWhereUniqueInput = Prisma.AtLeast<{
 
 export type ActivityOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
-  pageId?: Prisma.SortOrder
+  learningObjectId?: Prisma.SortOrder
   type?: Prisma.SortOrder
   question?: Prisma.SortOrder
   options?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -367,7 +367,7 @@ export type ActivityScalarWhereWithAggregatesInput = {
   OR?: Prisma.ActivityScalarWhereWithAggregatesInput[]
   NOT?: Prisma.ActivityScalarWhereWithAggregatesInput | Prisma.ActivityScalarWhereWithAggregatesInput[]
   id?: Prisma.IntWithAggregatesFilter<"Activity"> | number
-  pageId?: Prisma.IntWithAggregatesFilter<"Activity"> | number
+  learningObjectId?: Prisma.IntWithAggregatesFilter<"Activity"> | number
   type?: Prisma.EnumActivityTypeWithAggregatesFilter<"Activity"> | $Enums.ActivityType
   question?: Prisma.StringWithAggregatesFilter<"Activity"> | string
   options?: Prisma.JsonNullableWithAggregatesFilter<"Activity">
@@ -392,7 +392,7 @@ export type ActivityCreateInput = {
   usedAsExample?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
-  page: Prisma.PageCreateNestedOneWithoutActivitiesInput
+  learningObject: Prisma.LearningObjectCreateNestedOneWithoutActivitiesInput
   generatedFrom?: Prisma.ActivityCreateNestedOneWithoutGeneratedActivitiesInput
   generatedActivities?: Prisma.ActivityCreateNestedManyWithoutGeneratedFromInput
   attempts?: Prisma.ActivityAttemptCreateNestedManyWithoutActivityInput
@@ -400,7 +400,7 @@ export type ActivityCreateInput = {
 
 export type ActivityUncheckedCreateInput = {
   id?: number
-  pageId: number
+  learningObjectId: number
   type: $Enums.ActivityType
   question: string
   options?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -427,7 +427,7 @@ export type ActivityUpdateInput = {
   usedAsExample?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  page?: Prisma.PageUpdateOneRequiredWithoutActivitiesNestedInput
+  learningObject?: Prisma.LearningObjectUpdateOneRequiredWithoutActivitiesNestedInput
   generatedFrom?: Prisma.ActivityUpdateOneWithoutGeneratedActivitiesNestedInput
   generatedActivities?: Prisma.ActivityUpdateManyWithoutGeneratedFromNestedInput
   attempts?: Prisma.ActivityAttemptUpdateManyWithoutActivityNestedInput
@@ -435,7 +435,7 @@ export type ActivityUpdateInput = {
 
 export type ActivityUncheckedUpdateInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
-  pageId?: Prisma.IntFieldUpdateOperationsInput | number
+  learningObjectId?: Prisma.IntFieldUpdateOperationsInput | number
   type?: Prisma.EnumActivityTypeFieldUpdateOperationsInput | $Enums.ActivityType
   question?: Prisma.StringFieldUpdateOperationsInput | string
   options?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -453,7 +453,7 @@ export type ActivityUncheckedUpdateInput = {
 
 export type ActivityCreateManyInput = {
   id?: number
-  pageId: number
+  learningObjectId: number
   type: $Enums.ActivityType
   question: string
   options?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -482,7 +482,7 @@ export type ActivityUpdateManyMutationInput = {
 
 export type ActivityUncheckedUpdateManyInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
-  pageId?: Prisma.IntFieldUpdateOperationsInput | number
+  learningObjectId?: Prisma.IntFieldUpdateOperationsInput | number
   type?: Prisma.EnumActivityTypeFieldUpdateOperationsInput | $Enums.ActivityType
   question?: Prisma.StringFieldUpdateOperationsInput | string
   options?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -513,7 +513,7 @@ export type ActivityNullableScalarRelationFilter = {
 
 export type ActivityCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  pageId?: Prisma.SortOrder
+  learningObjectId?: Prisma.SortOrder
   type?: Prisma.SortOrder
   question?: Prisma.SortOrder
   options?: Prisma.SortOrder
@@ -529,7 +529,7 @@ export type ActivityCountOrderByAggregateInput = {
 
 export type ActivityAvgOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  pageId?: Prisma.SortOrder
+  learningObjectId?: Prisma.SortOrder
   difficulty?: Prisma.SortOrder
   orderIndex?: Prisma.SortOrder
   generatedFromId?: Prisma.SortOrder
@@ -537,7 +537,7 @@ export type ActivityAvgOrderByAggregateInput = {
 
 export type ActivityMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  pageId?: Prisma.SortOrder
+  learningObjectId?: Prisma.SortOrder
   type?: Prisma.SortOrder
   question?: Prisma.SortOrder
   explanation?: Prisma.SortOrder
@@ -552,7 +552,7 @@ export type ActivityMaxOrderByAggregateInput = {
 
 export type ActivityMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  pageId?: Prisma.SortOrder
+  learningObjectId?: Prisma.SortOrder
   type?: Prisma.SortOrder
   question?: Prisma.SortOrder
   explanation?: Prisma.SortOrder
@@ -567,7 +567,7 @@ export type ActivityMinOrderByAggregateInput = {
 
 export type ActivitySumOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  pageId?: Prisma.SortOrder
+  learningObjectId?: Prisma.SortOrder
   difficulty?: Prisma.SortOrder
   orderIndex?: Prisma.SortOrder
   generatedFromId?: Prisma.SortOrder
@@ -578,45 +578,45 @@ export type ActivityScalarRelationFilter = {
   isNot?: Prisma.ActivityWhereInput
 }
 
-export type ActivityCreateNestedManyWithoutPageInput = {
-  create?: Prisma.XOR<Prisma.ActivityCreateWithoutPageInput, Prisma.ActivityUncheckedCreateWithoutPageInput> | Prisma.ActivityCreateWithoutPageInput[] | Prisma.ActivityUncheckedCreateWithoutPageInput[]
-  connectOrCreate?: Prisma.ActivityCreateOrConnectWithoutPageInput | Prisma.ActivityCreateOrConnectWithoutPageInput[]
-  createMany?: Prisma.ActivityCreateManyPageInputEnvelope
+export type ActivityCreateNestedManyWithoutLearningObjectInput = {
+  create?: Prisma.XOR<Prisma.ActivityCreateWithoutLearningObjectInput, Prisma.ActivityUncheckedCreateWithoutLearningObjectInput> | Prisma.ActivityCreateWithoutLearningObjectInput[] | Prisma.ActivityUncheckedCreateWithoutLearningObjectInput[]
+  connectOrCreate?: Prisma.ActivityCreateOrConnectWithoutLearningObjectInput | Prisma.ActivityCreateOrConnectWithoutLearningObjectInput[]
+  createMany?: Prisma.ActivityCreateManyLearningObjectInputEnvelope
   connect?: Prisma.ActivityWhereUniqueInput | Prisma.ActivityWhereUniqueInput[]
 }
 
-export type ActivityUncheckedCreateNestedManyWithoutPageInput = {
-  create?: Prisma.XOR<Prisma.ActivityCreateWithoutPageInput, Prisma.ActivityUncheckedCreateWithoutPageInput> | Prisma.ActivityCreateWithoutPageInput[] | Prisma.ActivityUncheckedCreateWithoutPageInput[]
-  connectOrCreate?: Prisma.ActivityCreateOrConnectWithoutPageInput | Prisma.ActivityCreateOrConnectWithoutPageInput[]
-  createMany?: Prisma.ActivityCreateManyPageInputEnvelope
+export type ActivityUncheckedCreateNestedManyWithoutLearningObjectInput = {
+  create?: Prisma.XOR<Prisma.ActivityCreateWithoutLearningObjectInput, Prisma.ActivityUncheckedCreateWithoutLearningObjectInput> | Prisma.ActivityCreateWithoutLearningObjectInput[] | Prisma.ActivityUncheckedCreateWithoutLearningObjectInput[]
+  connectOrCreate?: Prisma.ActivityCreateOrConnectWithoutLearningObjectInput | Prisma.ActivityCreateOrConnectWithoutLearningObjectInput[]
+  createMany?: Prisma.ActivityCreateManyLearningObjectInputEnvelope
   connect?: Prisma.ActivityWhereUniqueInput | Prisma.ActivityWhereUniqueInput[]
 }
 
-export type ActivityUpdateManyWithoutPageNestedInput = {
-  create?: Prisma.XOR<Prisma.ActivityCreateWithoutPageInput, Prisma.ActivityUncheckedCreateWithoutPageInput> | Prisma.ActivityCreateWithoutPageInput[] | Prisma.ActivityUncheckedCreateWithoutPageInput[]
-  connectOrCreate?: Prisma.ActivityCreateOrConnectWithoutPageInput | Prisma.ActivityCreateOrConnectWithoutPageInput[]
-  upsert?: Prisma.ActivityUpsertWithWhereUniqueWithoutPageInput | Prisma.ActivityUpsertWithWhereUniqueWithoutPageInput[]
-  createMany?: Prisma.ActivityCreateManyPageInputEnvelope
+export type ActivityUpdateManyWithoutLearningObjectNestedInput = {
+  create?: Prisma.XOR<Prisma.ActivityCreateWithoutLearningObjectInput, Prisma.ActivityUncheckedCreateWithoutLearningObjectInput> | Prisma.ActivityCreateWithoutLearningObjectInput[] | Prisma.ActivityUncheckedCreateWithoutLearningObjectInput[]
+  connectOrCreate?: Prisma.ActivityCreateOrConnectWithoutLearningObjectInput | Prisma.ActivityCreateOrConnectWithoutLearningObjectInput[]
+  upsert?: Prisma.ActivityUpsertWithWhereUniqueWithoutLearningObjectInput | Prisma.ActivityUpsertWithWhereUniqueWithoutLearningObjectInput[]
+  createMany?: Prisma.ActivityCreateManyLearningObjectInputEnvelope
   set?: Prisma.ActivityWhereUniqueInput | Prisma.ActivityWhereUniqueInput[]
   disconnect?: Prisma.ActivityWhereUniqueInput | Prisma.ActivityWhereUniqueInput[]
   delete?: Prisma.ActivityWhereUniqueInput | Prisma.ActivityWhereUniqueInput[]
   connect?: Prisma.ActivityWhereUniqueInput | Prisma.ActivityWhereUniqueInput[]
-  update?: Prisma.ActivityUpdateWithWhereUniqueWithoutPageInput | Prisma.ActivityUpdateWithWhereUniqueWithoutPageInput[]
-  updateMany?: Prisma.ActivityUpdateManyWithWhereWithoutPageInput | Prisma.ActivityUpdateManyWithWhereWithoutPageInput[]
+  update?: Prisma.ActivityUpdateWithWhereUniqueWithoutLearningObjectInput | Prisma.ActivityUpdateWithWhereUniqueWithoutLearningObjectInput[]
+  updateMany?: Prisma.ActivityUpdateManyWithWhereWithoutLearningObjectInput | Prisma.ActivityUpdateManyWithWhereWithoutLearningObjectInput[]
   deleteMany?: Prisma.ActivityScalarWhereInput | Prisma.ActivityScalarWhereInput[]
 }
 
-export type ActivityUncheckedUpdateManyWithoutPageNestedInput = {
-  create?: Prisma.XOR<Prisma.ActivityCreateWithoutPageInput, Prisma.ActivityUncheckedCreateWithoutPageInput> | Prisma.ActivityCreateWithoutPageInput[] | Prisma.ActivityUncheckedCreateWithoutPageInput[]
-  connectOrCreate?: Prisma.ActivityCreateOrConnectWithoutPageInput | Prisma.ActivityCreateOrConnectWithoutPageInput[]
-  upsert?: Prisma.ActivityUpsertWithWhereUniqueWithoutPageInput | Prisma.ActivityUpsertWithWhereUniqueWithoutPageInput[]
-  createMany?: Prisma.ActivityCreateManyPageInputEnvelope
+export type ActivityUncheckedUpdateManyWithoutLearningObjectNestedInput = {
+  create?: Prisma.XOR<Prisma.ActivityCreateWithoutLearningObjectInput, Prisma.ActivityUncheckedCreateWithoutLearningObjectInput> | Prisma.ActivityCreateWithoutLearningObjectInput[] | Prisma.ActivityUncheckedCreateWithoutLearningObjectInput[]
+  connectOrCreate?: Prisma.ActivityCreateOrConnectWithoutLearningObjectInput | Prisma.ActivityCreateOrConnectWithoutLearningObjectInput[]
+  upsert?: Prisma.ActivityUpsertWithWhereUniqueWithoutLearningObjectInput | Prisma.ActivityUpsertWithWhereUniqueWithoutLearningObjectInput[]
+  createMany?: Prisma.ActivityCreateManyLearningObjectInputEnvelope
   set?: Prisma.ActivityWhereUniqueInput | Prisma.ActivityWhereUniqueInput[]
   disconnect?: Prisma.ActivityWhereUniqueInput | Prisma.ActivityWhereUniqueInput[]
   delete?: Prisma.ActivityWhereUniqueInput | Prisma.ActivityWhereUniqueInput[]
   connect?: Prisma.ActivityWhereUniqueInput | Prisma.ActivityWhereUniqueInput[]
-  update?: Prisma.ActivityUpdateWithWhereUniqueWithoutPageInput | Prisma.ActivityUpdateWithWhereUniqueWithoutPageInput[]
-  updateMany?: Prisma.ActivityUpdateManyWithWhereWithoutPageInput | Prisma.ActivityUpdateManyWithWhereWithoutPageInput[]
+  update?: Prisma.ActivityUpdateWithWhereUniqueWithoutLearningObjectInput | Prisma.ActivityUpdateWithWhereUniqueWithoutLearningObjectInput[]
+  updateMany?: Prisma.ActivityUpdateManyWithWhereWithoutLearningObjectInput | Prisma.ActivityUpdateManyWithWhereWithoutLearningObjectInput[]
   deleteMany?: Prisma.ActivityScalarWhereInput | Prisma.ActivityScalarWhereInput[]
 }
 
@@ -704,7 +704,7 @@ export type ActivityUpdateOneRequiredWithoutAttemptsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.ActivityUpdateToOneWithWhereWithoutAttemptsInput, Prisma.ActivityUpdateWithoutAttemptsInput>, Prisma.ActivityUncheckedUpdateWithoutAttemptsInput>
 }
 
-export type ActivityCreateWithoutPageInput = {
+export type ActivityCreateWithoutLearningObjectInput = {
   type: $Enums.ActivityType
   question: string
   options?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -720,7 +720,7 @@ export type ActivityCreateWithoutPageInput = {
   attempts?: Prisma.ActivityAttemptCreateNestedManyWithoutActivityInput
 }
 
-export type ActivityUncheckedCreateWithoutPageInput = {
+export type ActivityUncheckedCreateWithoutLearningObjectInput = {
   id?: number
   type: $Enums.ActivityType
   question: string
@@ -737,30 +737,30 @@ export type ActivityUncheckedCreateWithoutPageInput = {
   attempts?: Prisma.ActivityAttemptUncheckedCreateNestedManyWithoutActivityInput
 }
 
-export type ActivityCreateOrConnectWithoutPageInput = {
+export type ActivityCreateOrConnectWithoutLearningObjectInput = {
   where: Prisma.ActivityWhereUniqueInput
-  create: Prisma.XOR<Prisma.ActivityCreateWithoutPageInput, Prisma.ActivityUncheckedCreateWithoutPageInput>
+  create: Prisma.XOR<Prisma.ActivityCreateWithoutLearningObjectInput, Prisma.ActivityUncheckedCreateWithoutLearningObjectInput>
 }
 
-export type ActivityCreateManyPageInputEnvelope = {
-  data: Prisma.ActivityCreateManyPageInput | Prisma.ActivityCreateManyPageInput[]
+export type ActivityCreateManyLearningObjectInputEnvelope = {
+  data: Prisma.ActivityCreateManyLearningObjectInput | Prisma.ActivityCreateManyLearningObjectInput[]
   skipDuplicates?: boolean
 }
 
-export type ActivityUpsertWithWhereUniqueWithoutPageInput = {
+export type ActivityUpsertWithWhereUniqueWithoutLearningObjectInput = {
   where: Prisma.ActivityWhereUniqueInput
-  update: Prisma.XOR<Prisma.ActivityUpdateWithoutPageInput, Prisma.ActivityUncheckedUpdateWithoutPageInput>
-  create: Prisma.XOR<Prisma.ActivityCreateWithoutPageInput, Prisma.ActivityUncheckedCreateWithoutPageInput>
+  update: Prisma.XOR<Prisma.ActivityUpdateWithoutLearningObjectInput, Prisma.ActivityUncheckedUpdateWithoutLearningObjectInput>
+  create: Prisma.XOR<Prisma.ActivityCreateWithoutLearningObjectInput, Prisma.ActivityUncheckedCreateWithoutLearningObjectInput>
 }
 
-export type ActivityUpdateWithWhereUniqueWithoutPageInput = {
+export type ActivityUpdateWithWhereUniqueWithoutLearningObjectInput = {
   where: Prisma.ActivityWhereUniqueInput
-  data: Prisma.XOR<Prisma.ActivityUpdateWithoutPageInput, Prisma.ActivityUncheckedUpdateWithoutPageInput>
+  data: Prisma.XOR<Prisma.ActivityUpdateWithoutLearningObjectInput, Prisma.ActivityUncheckedUpdateWithoutLearningObjectInput>
 }
 
-export type ActivityUpdateManyWithWhereWithoutPageInput = {
+export type ActivityUpdateManyWithWhereWithoutLearningObjectInput = {
   where: Prisma.ActivityScalarWhereInput
-  data: Prisma.XOR<Prisma.ActivityUpdateManyMutationInput, Prisma.ActivityUncheckedUpdateManyWithoutPageInput>
+  data: Prisma.XOR<Prisma.ActivityUpdateManyMutationInput, Prisma.ActivityUncheckedUpdateManyWithoutLearningObjectInput>
 }
 
 export type ActivityScalarWhereInput = {
@@ -768,7 +768,7 @@ export type ActivityScalarWhereInput = {
   OR?: Prisma.ActivityScalarWhereInput[]
   NOT?: Prisma.ActivityScalarWhereInput | Prisma.ActivityScalarWhereInput[]
   id?: Prisma.IntFilter<"Activity"> | number
-  pageId?: Prisma.IntFilter<"Activity"> | number
+  learningObjectId?: Prisma.IntFilter<"Activity"> | number
   type?: Prisma.EnumActivityTypeFilter<"Activity"> | $Enums.ActivityType
   question?: Prisma.StringFilter<"Activity"> | string
   options?: Prisma.JsonNullableFilter<"Activity">
@@ -793,14 +793,14 @@ export type ActivityCreateWithoutGeneratedActivitiesInput = {
   usedAsExample?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
-  page: Prisma.PageCreateNestedOneWithoutActivitiesInput
+  learningObject: Prisma.LearningObjectCreateNestedOneWithoutActivitiesInput
   generatedFrom?: Prisma.ActivityCreateNestedOneWithoutGeneratedActivitiesInput
   attempts?: Prisma.ActivityAttemptCreateNestedManyWithoutActivityInput
 }
 
 export type ActivityUncheckedCreateWithoutGeneratedActivitiesInput = {
   id?: number
-  pageId: number
+  learningObjectId: number
   type: $Enums.ActivityType
   question: string
   options?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -831,14 +831,14 @@ export type ActivityCreateWithoutGeneratedFromInput = {
   usedAsExample?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
-  page: Prisma.PageCreateNestedOneWithoutActivitiesInput
+  learningObject: Prisma.LearningObjectCreateNestedOneWithoutActivitiesInput
   generatedActivities?: Prisma.ActivityCreateNestedManyWithoutGeneratedFromInput
   attempts?: Prisma.ActivityAttemptCreateNestedManyWithoutActivityInput
 }
 
 export type ActivityUncheckedCreateWithoutGeneratedFromInput = {
   id?: number
-  pageId: number
+  learningObjectId: number
   type: $Enums.ActivityType
   question: string
   options?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -885,14 +885,14 @@ export type ActivityUpdateWithoutGeneratedActivitiesInput = {
   usedAsExample?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  page?: Prisma.PageUpdateOneRequiredWithoutActivitiesNestedInput
+  learningObject?: Prisma.LearningObjectUpdateOneRequiredWithoutActivitiesNestedInput
   generatedFrom?: Prisma.ActivityUpdateOneWithoutGeneratedActivitiesNestedInput
   attempts?: Prisma.ActivityAttemptUpdateManyWithoutActivityNestedInput
 }
 
 export type ActivityUncheckedUpdateWithoutGeneratedActivitiesInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
-  pageId?: Prisma.IntFieldUpdateOperationsInput | number
+  learningObjectId?: Prisma.IntFieldUpdateOperationsInput | number
   type?: Prisma.EnumActivityTypeFieldUpdateOperationsInput | $Enums.ActivityType
   question?: Prisma.StringFieldUpdateOperationsInput | string
   options?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -934,14 +934,14 @@ export type ActivityCreateWithoutAttemptsInput = {
   usedAsExample?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
-  page: Prisma.PageCreateNestedOneWithoutActivitiesInput
+  learningObject: Prisma.LearningObjectCreateNestedOneWithoutActivitiesInput
   generatedFrom?: Prisma.ActivityCreateNestedOneWithoutGeneratedActivitiesInput
   generatedActivities?: Prisma.ActivityCreateNestedManyWithoutGeneratedFromInput
 }
 
 export type ActivityUncheckedCreateWithoutAttemptsInput = {
   id?: number
-  pageId: number
+  learningObjectId: number
   type: $Enums.ActivityType
   question: string
   options?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -983,14 +983,14 @@ export type ActivityUpdateWithoutAttemptsInput = {
   usedAsExample?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  page?: Prisma.PageUpdateOneRequiredWithoutActivitiesNestedInput
+  learningObject?: Prisma.LearningObjectUpdateOneRequiredWithoutActivitiesNestedInput
   generatedFrom?: Prisma.ActivityUpdateOneWithoutGeneratedActivitiesNestedInput
   generatedActivities?: Prisma.ActivityUpdateManyWithoutGeneratedFromNestedInput
 }
 
 export type ActivityUncheckedUpdateWithoutAttemptsInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
-  pageId?: Prisma.IntFieldUpdateOperationsInput | number
+  learningObjectId?: Prisma.IntFieldUpdateOperationsInput | number
   type?: Prisma.EnumActivityTypeFieldUpdateOperationsInput | $Enums.ActivityType
   question?: Prisma.StringFieldUpdateOperationsInput | string
   options?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -1005,7 +1005,7 @@ export type ActivityUncheckedUpdateWithoutAttemptsInput = {
   generatedActivities?: Prisma.ActivityUncheckedUpdateManyWithoutGeneratedFromNestedInput
 }
 
-export type ActivityCreateManyPageInput = {
+export type ActivityCreateManyLearningObjectInput = {
   id?: number
   type: $Enums.ActivityType
   question: string
@@ -1020,7 +1020,7 @@ export type ActivityCreateManyPageInput = {
   updatedAt?: Date | string
 }
 
-export type ActivityUpdateWithoutPageInput = {
+export type ActivityUpdateWithoutLearningObjectInput = {
   type?: Prisma.EnumActivityTypeFieldUpdateOperationsInput | $Enums.ActivityType
   question?: Prisma.StringFieldUpdateOperationsInput | string
   options?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -1036,7 +1036,7 @@ export type ActivityUpdateWithoutPageInput = {
   attempts?: Prisma.ActivityAttemptUpdateManyWithoutActivityNestedInput
 }
 
-export type ActivityUncheckedUpdateWithoutPageInput = {
+export type ActivityUncheckedUpdateWithoutLearningObjectInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   type?: Prisma.EnumActivityTypeFieldUpdateOperationsInput | $Enums.ActivityType
   question?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1053,7 +1053,7 @@ export type ActivityUncheckedUpdateWithoutPageInput = {
   attempts?: Prisma.ActivityAttemptUncheckedUpdateManyWithoutActivityNestedInput
 }
 
-export type ActivityUncheckedUpdateManyWithoutPageInput = {
+export type ActivityUncheckedUpdateManyWithoutLearningObjectInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   type?: Prisma.EnumActivityTypeFieldUpdateOperationsInput | $Enums.ActivityType
   question?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1070,7 +1070,7 @@ export type ActivityUncheckedUpdateManyWithoutPageInput = {
 
 export type ActivityCreateManyGeneratedFromInput = {
   id?: number
-  pageId: number
+  learningObjectId: number
   type: $Enums.ActivityType
   question: string
   options?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -1094,14 +1094,14 @@ export type ActivityUpdateWithoutGeneratedFromInput = {
   usedAsExample?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  page?: Prisma.PageUpdateOneRequiredWithoutActivitiesNestedInput
+  learningObject?: Prisma.LearningObjectUpdateOneRequiredWithoutActivitiesNestedInput
   generatedActivities?: Prisma.ActivityUpdateManyWithoutGeneratedFromNestedInput
   attempts?: Prisma.ActivityAttemptUpdateManyWithoutActivityNestedInput
 }
 
 export type ActivityUncheckedUpdateWithoutGeneratedFromInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
-  pageId?: Prisma.IntFieldUpdateOperationsInput | number
+  learningObjectId?: Prisma.IntFieldUpdateOperationsInput | number
   type?: Prisma.EnumActivityTypeFieldUpdateOperationsInput | $Enums.ActivityType
   question?: Prisma.StringFieldUpdateOperationsInput | string
   options?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -1118,7 +1118,7 @@ export type ActivityUncheckedUpdateWithoutGeneratedFromInput = {
 
 export type ActivityUncheckedUpdateManyWithoutGeneratedFromInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
-  pageId?: Prisma.IntFieldUpdateOperationsInput | number
+  learningObjectId?: Prisma.IntFieldUpdateOperationsInput | number
   type?: Prisma.EnumActivityTypeFieldUpdateOperationsInput | $Enums.ActivityType
   question?: Prisma.StringFieldUpdateOperationsInput | string
   options?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -1173,7 +1173,7 @@ export type ActivityCountOutputTypeCountAttemptsArgs<ExtArgs extends runtime.Typ
 
 export type ActivitySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  pageId?: boolean
+  learningObjectId?: boolean
   type?: boolean
   question?: boolean
   options?: boolean
@@ -1185,7 +1185,7 @@ export type ActivitySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   generatedFromId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  page?: boolean | Prisma.PageDefaultArgs<ExtArgs>
+  learningObject?: boolean | Prisma.LearningObjectDefaultArgs<ExtArgs>
   generatedFrom?: boolean | Prisma.Activity$generatedFromArgs<ExtArgs>
   generatedActivities?: boolean | Prisma.Activity$generatedActivitiesArgs<ExtArgs>
   attempts?: boolean | Prisma.Activity$attemptsArgs<ExtArgs>
@@ -1194,7 +1194,7 @@ export type ActivitySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
 
 export type ActivitySelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  pageId?: boolean
+  learningObjectId?: boolean
   type?: boolean
   question?: boolean
   options?: boolean
@@ -1206,13 +1206,13 @@ export type ActivitySelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exte
   generatedFromId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  page?: boolean | Prisma.PageDefaultArgs<ExtArgs>
+  learningObject?: boolean | Prisma.LearningObjectDefaultArgs<ExtArgs>
   generatedFrom?: boolean | Prisma.Activity$generatedFromArgs<ExtArgs>
 }, ExtArgs["result"]["activity"]>
 
 export type ActivitySelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  pageId?: boolean
+  learningObjectId?: boolean
   type?: boolean
   question?: boolean
   options?: boolean
@@ -1224,13 +1224,13 @@ export type ActivitySelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
   generatedFromId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  page?: boolean | Prisma.PageDefaultArgs<ExtArgs>
+  learningObject?: boolean | Prisma.LearningObjectDefaultArgs<ExtArgs>
   generatedFrom?: boolean | Prisma.Activity$generatedFromArgs<ExtArgs>
 }, ExtArgs["result"]["activity"]>
 
 export type ActivitySelectScalar = {
   id?: boolean
-  pageId?: boolean
+  learningObjectId?: boolean
   type?: boolean
   question?: boolean
   options?: boolean
@@ -1244,34 +1244,34 @@ export type ActivitySelectScalar = {
   updatedAt?: boolean
 }
 
-export type ActivityOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "pageId" | "type" | "question" | "options" | "explanation" | "difficulty" | "orderIndex" | "isApprovedByTeacher" | "usedAsExample" | "generatedFromId" | "createdAt" | "updatedAt", ExtArgs["result"]["activity"]>
+export type ActivityOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "learningObjectId" | "type" | "question" | "options" | "explanation" | "difficulty" | "orderIndex" | "isApprovedByTeacher" | "usedAsExample" | "generatedFromId" | "createdAt" | "updatedAt", ExtArgs["result"]["activity"]>
 export type ActivityInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  page?: boolean | Prisma.PageDefaultArgs<ExtArgs>
+  learningObject?: boolean | Prisma.LearningObjectDefaultArgs<ExtArgs>
   generatedFrom?: boolean | Prisma.Activity$generatedFromArgs<ExtArgs>
   generatedActivities?: boolean | Prisma.Activity$generatedActivitiesArgs<ExtArgs>
   attempts?: boolean | Prisma.Activity$attemptsArgs<ExtArgs>
   _count?: boolean | Prisma.ActivityCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type ActivityIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  page?: boolean | Prisma.PageDefaultArgs<ExtArgs>
+  learningObject?: boolean | Prisma.LearningObjectDefaultArgs<ExtArgs>
   generatedFrom?: boolean | Prisma.Activity$generatedFromArgs<ExtArgs>
 }
 export type ActivityIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  page?: boolean | Prisma.PageDefaultArgs<ExtArgs>
+  learningObject?: boolean | Prisma.LearningObjectDefaultArgs<ExtArgs>
   generatedFrom?: boolean | Prisma.Activity$generatedFromArgs<ExtArgs>
 }
 
 export type $ActivityPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Activity"
   objects: {
-    page: Prisma.$PagePayload<ExtArgs>
+    learningObject: Prisma.$LearningObjectPayload<ExtArgs>
     generatedFrom: Prisma.$ActivityPayload<ExtArgs> | null
     generatedActivities: Prisma.$ActivityPayload<ExtArgs>[]
     attempts: Prisma.$ActivityAttemptPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
-    pageId: number
+    learningObjectId: number
     type: $Enums.ActivityType
     question: string
     options: runtime.JsonValue | null
@@ -1677,7 +1677,7 @@ readonly fields: ActivityFieldRefs;
  */
 export interface Prisma__ActivityClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  page<T extends Prisma.PageDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.PageDefaultArgs<ExtArgs>>): Prisma.Prisma__PageClient<runtime.Types.Result.GetResult<Prisma.$PagePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  learningObject<T extends Prisma.LearningObjectDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.LearningObjectDefaultArgs<ExtArgs>>): Prisma.Prisma__LearningObjectClient<runtime.Types.Result.GetResult<Prisma.$LearningObjectPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   generatedFrom<T extends Prisma.Activity$generatedFromArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Activity$generatedFromArgs<ExtArgs>>): Prisma.Prisma__ActivityClient<runtime.Types.Result.GetResult<Prisma.$ActivityPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   generatedActivities<T extends Prisma.Activity$generatedActivitiesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Activity$generatedActivitiesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ActivityPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   attempts<T extends Prisma.Activity$attemptsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Activity$attemptsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ActivityAttemptPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -1711,7 +1711,7 @@ export interface Prisma__ActivityClient<T, Null = never, ExtArgs extends runtime
  */
 export interface ActivityFieldRefs {
   readonly id: Prisma.FieldRef<"Activity", 'Int'>
-  readonly pageId: Prisma.FieldRef<"Activity", 'Int'>
+  readonly learningObjectId: Prisma.FieldRef<"Activity", 'Int'>
   readonly type: Prisma.FieldRef<"Activity", 'ActivityType'>
   readonly question: Prisma.FieldRef<"Activity", 'String'>
   readonly options: Prisma.FieldRef<"Activity", 'Json'>

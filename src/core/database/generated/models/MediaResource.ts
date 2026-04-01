@@ -28,19 +28,19 @@ export type AggregateMediaResource = {
 
 export type MediaResourceAvgAggregateOutputType = {
   id: number | null
-  pageId: number | null
+  learningObjectId: number | null
   fileSize: number | null
 }
 
 export type MediaResourceSumAggregateOutputType = {
   id: number | null
-  pageId: number | null
+  learningObjectId: number | null
   fileSize: number | null
 }
 
 export type MediaResourceMinAggregateOutputType = {
   id: number | null
-  pageId: number | null
+  learningObjectId: number | null
   type: $Enums.MediaType | null
   title: string | null
   url: string | null
@@ -52,7 +52,7 @@ export type MediaResourceMinAggregateOutputType = {
 
 export type MediaResourceMaxAggregateOutputType = {
   id: number | null
-  pageId: number | null
+  learningObjectId: number | null
   type: $Enums.MediaType | null
   title: string | null
   url: string | null
@@ -64,7 +64,7 @@ export type MediaResourceMaxAggregateOutputType = {
 
 export type MediaResourceCountAggregateOutputType = {
   id: number
-  pageId: number
+  learningObjectId: number
   type: number
   title: number
   url: number
@@ -78,19 +78,19 @@ export type MediaResourceCountAggregateOutputType = {
 
 export type MediaResourceAvgAggregateInputType = {
   id?: true
-  pageId?: true
+  learningObjectId?: true
   fileSize?: true
 }
 
 export type MediaResourceSumAggregateInputType = {
   id?: true
-  pageId?: true
+  learningObjectId?: true
   fileSize?: true
 }
 
 export type MediaResourceMinAggregateInputType = {
   id?: true
-  pageId?: true
+  learningObjectId?: true
   type?: true
   title?: true
   url?: true
@@ -102,7 +102,7 @@ export type MediaResourceMinAggregateInputType = {
 
 export type MediaResourceMaxAggregateInputType = {
   id?: true
-  pageId?: true
+  learningObjectId?: true
   type?: true
   title?: true
   url?: true
@@ -114,7 +114,7 @@ export type MediaResourceMaxAggregateInputType = {
 
 export type MediaResourceCountAggregateInputType = {
   id?: true
-  pageId?: true
+  learningObjectId?: true
   type?: true
   title?: true
   url?: true
@@ -213,7 +213,7 @@ export type MediaResourceGroupByArgs<ExtArgs extends runtime.Types.Extensions.In
 
 export type MediaResourceGroupByOutputType = {
   id: number
-  pageId: number | null
+  learningObjectId: number | null
   type: $Enums.MediaType
   title: string | null
   url: string
@@ -248,7 +248,7 @@ export type MediaResourceWhereInput = {
   OR?: Prisma.MediaResourceWhereInput[]
   NOT?: Prisma.MediaResourceWhereInput | Prisma.MediaResourceWhereInput[]
   id?: Prisma.IntFilter<"MediaResource"> | number
-  pageId?: Prisma.IntNullableFilter<"MediaResource"> | number | null
+  learningObjectId?: Prisma.IntNullableFilter<"MediaResource"> | number | null
   type?: Prisma.EnumMediaTypeFilter<"MediaResource"> | $Enums.MediaType
   title?: Prisma.StringNullableFilter<"MediaResource"> | string | null
   url?: Prisma.StringFilter<"MediaResource"> | string
@@ -256,12 +256,12 @@ export type MediaResourceWhereInput = {
   fileSize?: Prisma.IntNullableFilter<"MediaResource"> | number | null
   mimeType?: Prisma.StringNullableFilter<"MediaResource"> | string | null
   createdAt?: Prisma.DateTimeFilter<"MediaResource"> | Date | string
-  page?: Prisma.XOR<Prisma.PageNullableScalarRelationFilter, Prisma.PageWhereInput> | null
+  learningObject?: Prisma.XOR<Prisma.LearningObjectNullableScalarRelationFilter, Prisma.LearningObjectWhereInput> | null
 }
 
 export type MediaResourceOrderByWithRelationInput = {
   id?: Prisma.SortOrder
-  pageId?: Prisma.SortOrderInput | Prisma.SortOrder
+  learningObjectId?: Prisma.SortOrderInput | Prisma.SortOrder
   type?: Prisma.SortOrder
   title?: Prisma.SortOrderInput | Prisma.SortOrder
   url?: Prisma.SortOrder
@@ -269,7 +269,7 @@ export type MediaResourceOrderByWithRelationInput = {
   fileSize?: Prisma.SortOrderInput | Prisma.SortOrder
   mimeType?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
-  page?: Prisma.PageOrderByWithRelationInput
+  learningObject?: Prisma.LearningObjectOrderByWithRelationInput
 }
 
 export type MediaResourceWhereUniqueInput = Prisma.AtLeast<{
@@ -277,7 +277,7 @@ export type MediaResourceWhereUniqueInput = Prisma.AtLeast<{
   AND?: Prisma.MediaResourceWhereInput | Prisma.MediaResourceWhereInput[]
   OR?: Prisma.MediaResourceWhereInput[]
   NOT?: Prisma.MediaResourceWhereInput | Prisma.MediaResourceWhereInput[]
-  pageId?: Prisma.IntNullableFilter<"MediaResource"> | number | null
+  learningObjectId?: Prisma.IntNullableFilter<"MediaResource"> | number | null
   type?: Prisma.EnumMediaTypeFilter<"MediaResource"> | $Enums.MediaType
   title?: Prisma.StringNullableFilter<"MediaResource"> | string | null
   url?: Prisma.StringFilter<"MediaResource"> | string
@@ -285,12 +285,12 @@ export type MediaResourceWhereUniqueInput = Prisma.AtLeast<{
   fileSize?: Prisma.IntNullableFilter<"MediaResource"> | number | null
   mimeType?: Prisma.StringNullableFilter<"MediaResource"> | string | null
   createdAt?: Prisma.DateTimeFilter<"MediaResource"> | Date | string
-  page?: Prisma.XOR<Prisma.PageNullableScalarRelationFilter, Prisma.PageWhereInput> | null
+  learningObject?: Prisma.XOR<Prisma.LearningObjectNullableScalarRelationFilter, Prisma.LearningObjectWhereInput> | null
 }, "id">
 
 export type MediaResourceOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
-  pageId?: Prisma.SortOrderInput | Prisma.SortOrder
+  learningObjectId?: Prisma.SortOrderInput | Prisma.SortOrder
   type?: Prisma.SortOrder
   title?: Prisma.SortOrderInput | Prisma.SortOrder
   url?: Prisma.SortOrder
@@ -310,7 +310,7 @@ export type MediaResourceScalarWhereWithAggregatesInput = {
   OR?: Prisma.MediaResourceScalarWhereWithAggregatesInput[]
   NOT?: Prisma.MediaResourceScalarWhereWithAggregatesInput | Prisma.MediaResourceScalarWhereWithAggregatesInput[]
   id?: Prisma.IntWithAggregatesFilter<"MediaResource"> | number
-  pageId?: Prisma.IntNullableWithAggregatesFilter<"MediaResource"> | number | null
+  learningObjectId?: Prisma.IntNullableWithAggregatesFilter<"MediaResource"> | number | null
   type?: Prisma.EnumMediaTypeWithAggregatesFilter<"MediaResource"> | $Enums.MediaType
   title?: Prisma.StringNullableWithAggregatesFilter<"MediaResource"> | string | null
   url?: Prisma.StringWithAggregatesFilter<"MediaResource"> | string
@@ -328,12 +328,12 @@ export type MediaResourceCreateInput = {
   fileSize?: number | null
   mimeType?: string | null
   createdAt?: Date | string
-  page?: Prisma.PageCreateNestedOneWithoutMediaResourcesInput
+  learningObject?: Prisma.LearningObjectCreateNestedOneWithoutMediaResourcesInput
 }
 
 export type MediaResourceUncheckedCreateInput = {
   id?: number
-  pageId?: number | null
+  learningObjectId?: number | null
   type: $Enums.MediaType
   title?: string | null
   url: string
@@ -351,12 +351,12 @@ export type MediaResourceUpdateInput = {
   fileSize?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   mimeType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  page?: Prisma.PageUpdateOneWithoutMediaResourcesNestedInput
+  learningObject?: Prisma.LearningObjectUpdateOneWithoutMediaResourcesNestedInput
 }
 
 export type MediaResourceUncheckedUpdateInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
-  pageId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  learningObjectId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   type?: Prisma.EnumMediaTypeFieldUpdateOperationsInput | $Enums.MediaType
   title?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   url?: Prisma.StringFieldUpdateOperationsInput | string
@@ -368,7 +368,7 @@ export type MediaResourceUncheckedUpdateInput = {
 
 export type MediaResourceCreateManyInput = {
   id?: number
-  pageId?: number | null
+  learningObjectId?: number | null
   type: $Enums.MediaType
   title?: string | null
   url: string
@@ -390,7 +390,7 @@ export type MediaResourceUpdateManyMutationInput = {
 
 export type MediaResourceUncheckedUpdateManyInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
-  pageId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  learningObjectId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   type?: Prisma.EnumMediaTypeFieldUpdateOperationsInput | $Enums.MediaType
   title?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   url?: Prisma.StringFieldUpdateOperationsInput | string
@@ -412,7 +412,7 @@ export type MediaResourceOrderByRelationAggregateInput = {
 
 export type MediaResourceCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  pageId?: Prisma.SortOrder
+  learningObjectId?: Prisma.SortOrder
   type?: Prisma.SortOrder
   title?: Prisma.SortOrder
   url?: Prisma.SortOrder
@@ -424,13 +424,13 @@ export type MediaResourceCountOrderByAggregateInput = {
 
 export type MediaResourceAvgOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  pageId?: Prisma.SortOrder
+  learningObjectId?: Prisma.SortOrder
   fileSize?: Prisma.SortOrder
 }
 
 export type MediaResourceMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  pageId?: Prisma.SortOrder
+  learningObjectId?: Prisma.SortOrder
   type?: Prisma.SortOrder
   title?: Prisma.SortOrder
   url?: Prisma.SortOrder
@@ -442,7 +442,7 @@ export type MediaResourceMaxOrderByAggregateInput = {
 
 export type MediaResourceMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  pageId?: Prisma.SortOrder
+  learningObjectId?: Prisma.SortOrder
   type?: Prisma.SortOrder
   title?: Prisma.SortOrder
   url?: Prisma.SortOrder
@@ -454,49 +454,49 @@ export type MediaResourceMinOrderByAggregateInput = {
 
 export type MediaResourceSumOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  pageId?: Prisma.SortOrder
+  learningObjectId?: Prisma.SortOrder
   fileSize?: Prisma.SortOrder
 }
 
-export type MediaResourceCreateNestedManyWithoutPageInput = {
-  create?: Prisma.XOR<Prisma.MediaResourceCreateWithoutPageInput, Prisma.MediaResourceUncheckedCreateWithoutPageInput> | Prisma.MediaResourceCreateWithoutPageInput[] | Prisma.MediaResourceUncheckedCreateWithoutPageInput[]
-  connectOrCreate?: Prisma.MediaResourceCreateOrConnectWithoutPageInput | Prisma.MediaResourceCreateOrConnectWithoutPageInput[]
-  createMany?: Prisma.MediaResourceCreateManyPageInputEnvelope
+export type MediaResourceCreateNestedManyWithoutLearningObjectInput = {
+  create?: Prisma.XOR<Prisma.MediaResourceCreateWithoutLearningObjectInput, Prisma.MediaResourceUncheckedCreateWithoutLearningObjectInput> | Prisma.MediaResourceCreateWithoutLearningObjectInput[] | Prisma.MediaResourceUncheckedCreateWithoutLearningObjectInput[]
+  connectOrCreate?: Prisma.MediaResourceCreateOrConnectWithoutLearningObjectInput | Prisma.MediaResourceCreateOrConnectWithoutLearningObjectInput[]
+  createMany?: Prisma.MediaResourceCreateManyLearningObjectInputEnvelope
   connect?: Prisma.MediaResourceWhereUniqueInput | Prisma.MediaResourceWhereUniqueInput[]
 }
 
-export type MediaResourceUncheckedCreateNestedManyWithoutPageInput = {
-  create?: Prisma.XOR<Prisma.MediaResourceCreateWithoutPageInput, Prisma.MediaResourceUncheckedCreateWithoutPageInput> | Prisma.MediaResourceCreateWithoutPageInput[] | Prisma.MediaResourceUncheckedCreateWithoutPageInput[]
-  connectOrCreate?: Prisma.MediaResourceCreateOrConnectWithoutPageInput | Prisma.MediaResourceCreateOrConnectWithoutPageInput[]
-  createMany?: Prisma.MediaResourceCreateManyPageInputEnvelope
+export type MediaResourceUncheckedCreateNestedManyWithoutLearningObjectInput = {
+  create?: Prisma.XOR<Prisma.MediaResourceCreateWithoutLearningObjectInput, Prisma.MediaResourceUncheckedCreateWithoutLearningObjectInput> | Prisma.MediaResourceCreateWithoutLearningObjectInput[] | Prisma.MediaResourceUncheckedCreateWithoutLearningObjectInput[]
+  connectOrCreate?: Prisma.MediaResourceCreateOrConnectWithoutLearningObjectInput | Prisma.MediaResourceCreateOrConnectWithoutLearningObjectInput[]
+  createMany?: Prisma.MediaResourceCreateManyLearningObjectInputEnvelope
   connect?: Prisma.MediaResourceWhereUniqueInput | Prisma.MediaResourceWhereUniqueInput[]
 }
 
-export type MediaResourceUpdateManyWithoutPageNestedInput = {
-  create?: Prisma.XOR<Prisma.MediaResourceCreateWithoutPageInput, Prisma.MediaResourceUncheckedCreateWithoutPageInput> | Prisma.MediaResourceCreateWithoutPageInput[] | Prisma.MediaResourceUncheckedCreateWithoutPageInput[]
-  connectOrCreate?: Prisma.MediaResourceCreateOrConnectWithoutPageInput | Prisma.MediaResourceCreateOrConnectWithoutPageInput[]
-  upsert?: Prisma.MediaResourceUpsertWithWhereUniqueWithoutPageInput | Prisma.MediaResourceUpsertWithWhereUniqueWithoutPageInput[]
-  createMany?: Prisma.MediaResourceCreateManyPageInputEnvelope
+export type MediaResourceUpdateManyWithoutLearningObjectNestedInput = {
+  create?: Prisma.XOR<Prisma.MediaResourceCreateWithoutLearningObjectInput, Prisma.MediaResourceUncheckedCreateWithoutLearningObjectInput> | Prisma.MediaResourceCreateWithoutLearningObjectInput[] | Prisma.MediaResourceUncheckedCreateWithoutLearningObjectInput[]
+  connectOrCreate?: Prisma.MediaResourceCreateOrConnectWithoutLearningObjectInput | Prisma.MediaResourceCreateOrConnectWithoutLearningObjectInput[]
+  upsert?: Prisma.MediaResourceUpsertWithWhereUniqueWithoutLearningObjectInput | Prisma.MediaResourceUpsertWithWhereUniqueWithoutLearningObjectInput[]
+  createMany?: Prisma.MediaResourceCreateManyLearningObjectInputEnvelope
   set?: Prisma.MediaResourceWhereUniqueInput | Prisma.MediaResourceWhereUniqueInput[]
   disconnect?: Prisma.MediaResourceWhereUniqueInput | Prisma.MediaResourceWhereUniqueInput[]
   delete?: Prisma.MediaResourceWhereUniqueInput | Prisma.MediaResourceWhereUniqueInput[]
   connect?: Prisma.MediaResourceWhereUniqueInput | Prisma.MediaResourceWhereUniqueInput[]
-  update?: Prisma.MediaResourceUpdateWithWhereUniqueWithoutPageInput | Prisma.MediaResourceUpdateWithWhereUniqueWithoutPageInput[]
-  updateMany?: Prisma.MediaResourceUpdateManyWithWhereWithoutPageInput | Prisma.MediaResourceUpdateManyWithWhereWithoutPageInput[]
+  update?: Prisma.MediaResourceUpdateWithWhereUniqueWithoutLearningObjectInput | Prisma.MediaResourceUpdateWithWhereUniqueWithoutLearningObjectInput[]
+  updateMany?: Prisma.MediaResourceUpdateManyWithWhereWithoutLearningObjectInput | Prisma.MediaResourceUpdateManyWithWhereWithoutLearningObjectInput[]
   deleteMany?: Prisma.MediaResourceScalarWhereInput | Prisma.MediaResourceScalarWhereInput[]
 }
 
-export type MediaResourceUncheckedUpdateManyWithoutPageNestedInput = {
-  create?: Prisma.XOR<Prisma.MediaResourceCreateWithoutPageInput, Prisma.MediaResourceUncheckedCreateWithoutPageInput> | Prisma.MediaResourceCreateWithoutPageInput[] | Prisma.MediaResourceUncheckedCreateWithoutPageInput[]
-  connectOrCreate?: Prisma.MediaResourceCreateOrConnectWithoutPageInput | Prisma.MediaResourceCreateOrConnectWithoutPageInput[]
-  upsert?: Prisma.MediaResourceUpsertWithWhereUniqueWithoutPageInput | Prisma.MediaResourceUpsertWithWhereUniqueWithoutPageInput[]
-  createMany?: Prisma.MediaResourceCreateManyPageInputEnvelope
+export type MediaResourceUncheckedUpdateManyWithoutLearningObjectNestedInput = {
+  create?: Prisma.XOR<Prisma.MediaResourceCreateWithoutLearningObjectInput, Prisma.MediaResourceUncheckedCreateWithoutLearningObjectInput> | Prisma.MediaResourceCreateWithoutLearningObjectInput[] | Prisma.MediaResourceUncheckedCreateWithoutLearningObjectInput[]
+  connectOrCreate?: Prisma.MediaResourceCreateOrConnectWithoutLearningObjectInput | Prisma.MediaResourceCreateOrConnectWithoutLearningObjectInput[]
+  upsert?: Prisma.MediaResourceUpsertWithWhereUniqueWithoutLearningObjectInput | Prisma.MediaResourceUpsertWithWhereUniqueWithoutLearningObjectInput[]
+  createMany?: Prisma.MediaResourceCreateManyLearningObjectInputEnvelope
   set?: Prisma.MediaResourceWhereUniqueInput | Prisma.MediaResourceWhereUniqueInput[]
   disconnect?: Prisma.MediaResourceWhereUniqueInput | Prisma.MediaResourceWhereUniqueInput[]
   delete?: Prisma.MediaResourceWhereUniqueInput | Prisma.MediaResourceWhereUniqueInput[]
   connect?: Prisma.MediaResourceWhereUniqueInput | Prisma.MediaResourceWhereUniqueInput[]
-  update?: Prisma.MediaResourceUpdateWithWhereUniqueWithoutPageInput | Prisma.MediaResourceUpdateWithWhereUniqueWithoutPageInput[]
-  updateMany?: Prisma.MediaResourceUpdateManyWithWhereWithoutPageInput | Prisma.MediaResourceUpdateManyWithWhereWithoutPageInput[]
+  update?: Prisma.MediaResourceUpdateWithWhereUniqueWithoutLearningObjectInput | Prisma.MediaResourceUpdateWithWhereUniqueWithoutLearningObjectInput[]
+  updateMany?: Prisma.MediaResourceUpdateManyWithWhereWithoutLearningObjectInput | Prisma.MediaResourceUpdateManyWithWhereWithoutLearningObjectInput[]
   deleteMany?: Prisma.MediaResourceScalarWhereInput | Prisma.MediaResourceScalarWhereInput[]
 }
 
@@ -504,7 +504,7 @@ export type EnumMediaTypeFieldUpdateOperationsInput = {
   set?: $Enums.MediaType
 }
 
-export type MediaResourceCreateWithoutPageInput = {
+export type MediaResourceCreateWithoutLearningObjectInput = {
   type: $Enums.MediaType
   title?: string | null
   url: string
@@ -514,7 +514,7 @@ export type MediaResourceCreateWithoutPageInput = {
   createdAt?: Date | string
 }
 
-export type MediaResourceUncheckedCreateWithoutPageInput = {
+export type MediaResourceUncheckedCreateWithoutLearningObjectInput = {
   id?: number
   type: $Enums.MediaType
   title?: string | null
@@ -525,30 +525,30 @@ export type MediaResourceUncheckedCreateWithoutPageInput = {
   createdAt?: Date | string
 }
 
-export type MediaResourceCreateOrConnectWithoutPageInput = {
+export type MediaResourceCreateOrConnectWithoutLearningObjectInput = {
   where: Prisma.MediaResourceWhereUniqueInput
-  create: Prisma.XOR<Prisma.MediaResourceCreateWithoutPageInput, Prisma.MediaResourceUncheckedCreateWithoutPageInput>
+  create: Prisma.XOR<Prisma.MediaResourceCreateWithoutLearningObjectInput, Prisma.MediaResourceUncheckedCreateWithoutLearningObjectInput>
 }
 
-export type MediaResourceCreateManyPageInputEnvelope = {
-  data: Prisma.MediaResourceCreateManyPageInput | Prisma.MediaResourceCreateManyPageInput[]
+export type MediaResourceCreateManyLearningObjectInputEnvelope = {
+  data: Prisma.MediaResourceCreateManyLearningObjectInput | Prisma.MediaResourceCreateManyLearningObjectInput[]
   skipDuplicates?: boolean
 }
 
-export type MediaResourceUpsertWithWhereUniqueWithoutPageInput = {
+export type MediaResourceUpsertWithWhereUniqueWithoutLearningObjectInput = {
   where: Prisma.MediaResourceWhereUniqueInput
-  update: Prisma.XOR<Prisma.MediaResourceUpdateWithoutPageInput, Prisma.MediaResourceUncheckedUpdateWithoutPageInput>
-  create: Prisma.XOR<Prisma.MediaResourceCreateWithoutPageInput, Prisma.MediaResourceUncheckedCreateWithoutPageInput>
+  update: Prisma.XOR<Prisma.MediaResourceUpdateWithoutLearningObjectInput, Prisma.MediaResourceUncheckedUpdateWithoutLearningObjectInput>
+  create: Prisma.XOR<Prisma.MediaResourceCreateWithoutLearningObjectInput, Prisma.MediaResourceUncheckedCreateWithoutLearningObjectInput>
 }
 
-export type MediaResourceUpdateWithWhereUniqueWithoutPageInput = {
+export type MediaResourceUpdateWithWhereUniqueWithoutLearningObjectInput = {
   where: Prisma.MediaResourceWhereUniqueInput
-  data: Prisma.XOR<Prisma.MediaResourceUpdateWithoutPageInput, Prisma.MediaResourceUncheckedUpdateWithoutPageInput>
+  data: Prisma.XOR<Prisma.MediaResourceUpdateWithoutLearningObjectInput, Prisma.MediaResourceUncheckedUpdateWithoutLearningObjectInput>
 }
 
-export type MediaResourceUpdateManyWithWhereWithoutPageInput = {
+export type MediaResourceUpdateManyWithWhereWithoutLearningObjectInput = {
   where: Prisma.MediaResourceScalarWhereInput
-  data: Prisma.XOR<Prisma.MediaResourceUpdateManyMutationInput, Prisma.MediaResourceUncheckedUpdateManyWithoutPageInput>
+  data: Prisma.XOR<Prisma.MediaResourceUpdateManyMutationInput, Prisma.MediaResourceUncheckedUpdateManyWithoutLearningObjectInput>
 }
 
 export type MediaResourceScalarWhereInput = {
@@ -556,7 +556,7 @@ export type MediaResourceScalarWhereInput = {
   OR?: Prisma.MediaResourceScalarWhereInput[]
   NOT?: Prisma.MediaResourceScalarWhereInput | Prisma.MediaResourceScalarWhereInput[]
   id?: Prisma.IntFilter<"MediaResource"> | number
-  pageId?: Prisma.IntNullableFilter<"MediaResource"> | number | null
+  learningObjectId?: Prisma.IntNullableFilter<"MediaResource"> | number | null
   type?: Prisma.EnumMediaTypeFilter<"MediaResource"> | $Enums.MediaType
   title?: Prisma.StringNullableFilter<"MediaResource"> | string | null
   url?: Prisma.StringFilter<"MediaResource"> | string
@@ -566,7 +566,7 @@ export type MediaResourceScalarWhereInput = {
   createdAt?: Prisma.DateTimeFilter<"MediaResource"> | Date | string
 }
 
-export type MediaResourceCreateManyPageInput = {
+export type MediaResourceCreateManyLearningObjectInput = {
   id?: number
   type: $Enums.MediaType
   title?: string | null
@@ -577,7 +577,7 @@ export type MediaResourceCreateManyPageInput = {
   createdAt?: Date | string
 }
 
-export type MediaResourceUpdateWithoutPageInput = {
+export type MediaResourceUpdateWithoutLearningObjectInput = {
   type?: Prisma.EnumMediaTypeFieldUpdateOperationsInput | $Enums.MediaType
   title?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   url?: Prisma.StringFieldUpdateOperationsInput | string
@@ -587,7 +587,7 @@ export type MediaResourceUpdateWithoutPageInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
-export type MediaResourceUncheckedUpdateWithoutPageInput = {
+export type MediaResourceUncheckedUpdateWithoutLearningObjectInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   type?: Prisma.EnumMediaTypeFieldUpdateOperationsInput | $Enums.MediaType
   title?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -598,7 +598,7 @@ export type MediaResourceUncheckedUpdateWithoutPageInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
-export type MediaResourceUncheckedUpdateManyWithoutPageInput = {
+export type MediaResourceUncheckedUpdateManyWithoutLearningObjectInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   type?: Prisma.EnumMediaTypeFieldUpdateOperationsInput | $Enums.MediaType
   title?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -613,7 +613,7 @@ export type MediaResourceUncheckedUpdateManyWithoutPageInput = {
 
 export type MediaResourceSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  pageId?: boolean
+  learningObjectId?: boolean
   type?: boolean
   title?: boolean
   url?: boolean
@@ -621,12 +621,12 @@ export type MediaResourceSelect<ExtArgs extends runtime.Types.Extensions.Interna
   fileSize?: boolean
   mimeType?: boolean
   createdAt?: boolean
-  page?: boolean | Prisma.MediaResource$pageArgs<ExtArgs>
+  learningObject?: boolean | Prisma.MediaResource$learningObjectArgs<ExtArgs>
 }, ExtArgs["result"]["mediaResource"]>
 
 export type MediaResourceSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  pageId?: boolean
+  learningObjectId?: boolean
   type?: boolean
   title?: boolean
   url?: boolean
@@ -634,12 +634,12 @@ export type MediaResourceSelectCreateManyAndReturn<ExtArgs extends runtime.Types
   fileSize?: boolean
   mimeType?: boolean
   createdAt?: boolean
-  page?: boolean | Prisma.MediaResource$pageArgs<ExtArgs>
+  learningObject?: boolean | Prisma.MediaResource$learningObjectArgs<ExtArgs>
 }, ExtArgs["result"]["mediaResource"]>
 
 export type MediaResourceSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  pageId?: boolean
+  learningObjectId?: boolean
   type?: boolean
   title?: boolean
   url?: boolean
@@ -647,12 +647,12 @@ export type MediaResourceSelectUpdateManyAndReturn<ExtArgs extends runtime.Types
   fileSize?: boolean
   mimeType?: boolean
   createdAt?: boolean
-  page?: boolean | Prisma.MediaResource$pageArgs<ExtArgs>
+  learningObject?: boolean | Prisma.MediaResource$learningObjectArgs<ExtArgs>
 }, ExtArgs["result"]["mediaResource"]>
 
 export type MediaResourceSelectScalar = {
   id?: boolean
-  pageId?: boolean
+  learningObjectId?: boolean
   type?: boolean
   title?: boolean
   url?: boolean
@@ -662,25 +662,25 @@ export type MediaResourceSelectScalar = {
   createdAt?: boolean
 }
 
-export type MediaResourceOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "pageId" | "type" | "title" | "url" | "thumbnailUrl" | "fileSize" | "mimeType" | "createdAt", ExtArgs["result"]["mediaResource"]>
+export type MediaResourceOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "learningObjectId" | "type" | "title" | "url" | "thumbnailUrl" | "fileSize" | "mimeType" | "createdAt", ExtArgs["result"]["mediaResource"]>
 export type MediaResourceInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  page?: boolean | Prisma.MediaResource$pageArgs<ExtArgs>
+  learningObject?: boolean | Prisma.MediaResource$learningObjectArgs<ExtArgs>
 }
 export type MediaResourceIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  page?: boolean | Prisma.MediaResource$pageArgs<ExtArgs>
+  learningObject?: boolean | Prisma.MediaResource$learningObjectArgs<ExtArgs>
 }
 export type MediaResourceIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  page?: boolean | Prisma.MediaResource$pageArgs<ExtArgs>
+  learningObject?: boolean | Prisma.MediaResource$learningObjectArgs<ExtArgs>
 }
 
 export type $MediaResourcePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "MediaResource"
   objects: {
-    page: Prisma.$PagePayload<ExtArgs> | null
+    learningObject: Prisma.$LearningObjectPayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
-    pageId: number | null
+    learningObjectId: number | null
     type: $Enums.MediaType
     title: string | null
     url: string
@@ -1082,7 +1082,7 @@ readonly fields: MediaResourceFieldRefs;
  */
 export interface Prisma__MediaResourceClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  page<T extends Prisma.MediaResource$pageArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.MediaResource$pageArgs<ExtArgs>>): Prisma.Prisma__PageClient<runtime.Types.Result.GetResult<Prisma.$PagePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  learningObject<T extends Prisma.MediaResource$learningObjectArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.MediaResource$learningObjectArgs<ExtArgs>>): Prisma.Prisma__LearningObjectClient<runtime.Types.Result.GetResult<Prisma.$LearningObjectPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1113,7 +1113,7 @@ export interface Prisma__MediaResourceClient<T, Null = never, ExtArgs extends ru
  */
 export interface MediaResourceFieldRefs {
   readonly id: Prisma.FieldRef<"MediaResource", 'Int'>
-  readonly pageId: Prisma.FieldRef<"MediaResource", 'Int'>
+  readonly learningObjectId: Prisma.FieldRef<"MediaResource", 'Int'>
   readonly type: Prisma.FieldRef<"MediaResource", 'MediaType'>
   readonly title: Prisma.FieldRef<"MediaResource", 'String'>
   readonly url: Prisma.FieldRef<"MediaResource", 'String'>
@@ -1522,22 +1522,22 @@ export type MediaResourceDeleteManyArgs<ExtArgs extends runtime.Types.Extensions
 }
 
 /**
- * MediaResource.page
+ * MediaResource.learningObject
  */
-export type MediaResource$pageArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type MediaResource$learningObjectArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the Page
+   * Select specific fields to fetch from the LearningObject
    */
-  select?: Prisma.PageSelect<ExtArgs> | null
+  select?: Prisma.LearningObjectSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the Page
+   * Omit specific fields from the LearningObject
    */
-  omit?: Prisma.PageOmit<ExtArgs> | null
+  omit?: Prisma.LearningObjectOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.PageInclude<ExtArgs> | null
-  where?: Prisma.PageWhereInput
+  include?: Prisma.LearningObjectInclude<ExtArgs> | null
+  where?: Prisma.LearningObjectWhereInput
 }
 
 /**

@@ -30,7 +30,7 @@ export class ConceptsService {
     data: ExtractConceptsDto,
   ): Promise<PageConceptsExtractedDto> {
     this.logger.log('Extracting page concepts')
-    const page = await this.dbService.page.findUnique({
+    const page = await this.dbService.learningObject.findUnique({
       where: { id: data.pageId },
       include: { blocks: true, module: { include: { aiConfiguration: true } } },
     })
@@ -70,7 +70,7 @@ export class ConceptsService {
 
     const block = await this.dbService.block.findUnique({
       where: { id: data.blockId },
-      include: { page: true },
+      include: { learningObject: true },
     })
 
     if (!block) {
@@ -82,7 +82,7 @@ export class ConceptsService {
       context: {
         surroundingText: parseJsonField<{ markdown: string }>(block.content)
           .markdown,
-        pageTitle: block.page.title,
+        pageTitle: block.learningObject.title,
       },
       config: {
         language: data.language ?? 'es',

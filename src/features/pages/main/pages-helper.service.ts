@@ -11,7 +11,7 @@ export class PagesHelperService {
   constructor(private readonly dbService: DBService) {}
 
   async getPageForRead(pageId: number, user: User) {
-    const page = await this.dbService.page.findUnique({
+    const page = await this.dbService.learningObject.findUnique({
       where: { id: pageId },
       include: {
         module: { include: { enrollments: true, aiConfiguration: true } },
@@ -52,7 +52,7 @@ export class PagesHelperService {
   }
 
   async getPageForWrite(pageId: number, user: User) {
-    const page = await this.dbService.page.findUnique({
+    const page = await this.dbService.learningObject.findUnique({
       where: { id: pageId },
       include: { module: true },
     })
