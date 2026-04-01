@@ -55,17 +55,18 @@ export const ModelName = {
   Module: 'Module',
   AiConfiguration: 'AiConfiguration',
   Enrollment: 'Enrollment',
-  Page: 'Page',
+  LearningObjectType: 'LearningObjectType',
+  LearningObject: 'LearningObject',
   Block: 'Block',
   Session: 'Session',
   Message: 'Message',
-  PageView: 'PageView',
-  PageRelation: 'PageRelation',
-  PageConcept: 'PageConcept',
+  LearningObjectView: 'LearningObjectView',
+  LearningObjectRelation: 'LearningObjectRelation',
+  LearningObjectConcept: 'LearningObjectConcept',
   Activity: 'Activity',
   ActivityAttempt: 'ActivityAttempt',
   Prompt: 'Prompt',
-  PageFeedback: 'PageFeedback',
+  LearningObjectFeedback: 'LearningObjectFeedback',
   Note: 'Note',
   StudentQuestion: 'StudentQuestion',
   QuestionReply: 'QuestionReply',
@@ -154,7 +155,18 @@ export const EnrollmentScalarFieldEnum = {
 export type EnrollmentScalarFieldEnum = (typeof EnrollmentScalarFieldEnum)[keyof typeof EnrollmentScalarFieldEnum]
 
 
-export const PageScalarFieldEnum = {
+export const LearningObjectTypeScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  description: 'description',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type LearningObjectTypeScalarFieldEnum = (typeof LearningObjectTypeScalarFieldEnum)[keyof typeof LearningObjectTypeScalarFieldEnum]
+
+
+export const LearningObjectScalarFieldEnum = {
   id: 'id',
   moduleId: 'moduleId',
   title: 'title',
@@ -166,15 +178,16 @@ export const PageScalarFieldEnum = {
   hasManualEdits: 'hasManualEdits',
   conceptsProcessed: 'conceptsProcessed',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  typeId: 'typeId'
 } as const
 
-export type PageScalarFieldEnum = (typeof PageScalarFieldEnum)[keyof typeof PageScalarFieldEnum]
+export type LearningObjectScalarFieldEnum = (typeof LearningObjectScalarFieldEnum)[keyof typeof LearningObjectScalarFieldEnum]
 
 
 export const BlockScalarFieldEnum = {
   id: 'id',
-  pageId: 'pageId',
+  learningObjectId: 'learningObjectId',
   orderIndex: 'orderIndex',
   type: 'type',
   content: 'content',
@@ -191,7 +204,7 @@ export const SessionScalarFieldEnum = {
   title: 'title',
   startedAt: 'startedAt',
   userId: 'userId',
-  pageId: 'pageId',
+  learningObjectId: 'learningObjectId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -212,10 +225,10 @@ export const MessageScalarFieldEnum = {
 export type MessageScalarFieldEnum = (typeof MessageScalarFieldEnum)[keyof typeof MessageScalarFieldEnum]
 
 
-export const PageViewScalarFieldEnum = {
+export const LearningObjectViewScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
-  pageId: 'pageId',
+  learningObjectId: 'learningObjectId',
   firstViewedAt: 'firstViewedAt',
   lastViewedAt: 'lastViewedAt',
   viewCount: 'viewCount',
@@ -224,13 +237,13 @@ export const PageViewScalarFieldEnum = {
   progress: 'progress'
 } as const
 
-export type PageViewScalarFieldEnum = (typeof PageViewScalarFieldEnum)[keyof typeof PageViewScalarFieldEnum]
+export type LearningObjectViewScalarFieldEnum = (typeof LearningObjectViewScalarFieldEnum)[keyof typeof LearningObjectViewScalarFieldEnum]
 
 
-export const PageRelationScalarFieldEnum = {
+export const LearningObjectRelationScalarFieldEnum = {
   id: 'id',
-  originPageId: 'originPageId',
-  relatedPageId: 'relatedPageId',
+  originLoId: 'originLoId',
+  relatedLoId: 'relatedLoId',
   similarityScore: 'similarityScore',
   relationType: 'relationType',
   mentionText: 'mentionText',
@@ -241,24 +254,24 @@ export const PageRelationScalarFieldEnum = {
   createdAt: 'createdAt'
 } as const
 
-export type PageRelationScalarFieldEnum = (typeof PageRelationScalarFieldEnum)[keyof typeof PageRelationScalarFieldEnum]
+export type LearningObjectRelationScalarFieldEnum = (typeof LearningObjectRelationScalarFieldEnum)[keyof typeof LearningObjectRelationScalarFieldEnum]
 
 
-export const PageConceptScalarFieldEnum = {
+export const LearningObjectConceptScalarFieldEnum = {
   id: 'id',
-  pageId: 'pageId',
+  learningObjectId: 'learningObjectId',
   term: 'term',
   definition: 'definition',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
 
-export type PageConceptScalarFieldEnum = (typeof PageConceptScalarFieldEnum)[keyof typeof PageConceptScalarFieldEnum]
+export type LearningObjectConceptScalarFieldEnum = (typeof LearningObjectConceptScalarFieldEnum)[keyof typeof LearningObjectConceptScalarFieldEnum]
 
 
 export const ActivityScalarFieldEnum = {
   id: 'id',
-  pageId: 'pageId',
+  learningObjectId: 'learningObjectId',
   type: 'type',
   question: 'question',
   options: 'options',
@@ -290,7 +303,7 @@ export type ActivityAttemptScalarFieldEnum = (typeof ActivityAttemptScalarFieldE
 
 export const PromptScalarFieldEnum = {
   id: 'id',
-  pageId: 'pageId',
+  learningObjectId: 'learningObjectId',
   userId: 'userId',
   prompt: 'prompt',
   createdAt: 'createdAt',
@@ -300,21 +313,21 @@ export const PromptScalarFieldEnum = {
 export type PromptScalarFieldEnum = (typeof PromptScalarFieldEnum)[keyof typeof PromptScalarFieldEnum]
 
 
-export const PageFeedbackScalarFieldEnum = {
+export const LearningObjectFeedbackScalarFieldEnum = {
   id: 'id',
-  pageId: 'pageId',
+  learningObjectId: 'learningObjectId',
   userId: 'userId',
   feedback: 'feedback',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
 
-export type PageFeedbackScalarFieldEnum = (typeof PageFeedbackScalarFieldEnum)[keyof typeof PageFeedbackScalarFieldEnum]
+export type LearningObjectFeedbackScalarFieldEnum = (typeof LearningObjectFeedbackScalarFieldEnum)[keyof typeof LearningObjectFeedbackScalarFieldEnum]
 
 
 export const NoteScalarFieldEnum = {
   id: 'id',
-  pageId: 'pageId',
+  learningObjectId: 'learningObjectId',
   userId: 'userId',
   content: 'content',
   createdAt: 'createdAt'
@@ -326,7 +339,7 @@ export type NoteScalarFieldEnum = (typeof NoteScalarFieldEnum)[keyof typeof Note
 export const StudentQuestionScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
-  pageId: 'pageId',
+  learningObjectId: 'learningObjectId',
   question: 'question',
   isPublic: 'isPublic',
   upvotes: 'upvotes',
@@ -367,7 +380,7 @@ export type NotificationScalarFieldEnum = (typeof NotificationScalarFieldEnum)[k
 
 export const PodcastScalarFieldEnum = {
   id: 'id',
-  pageId: 'pageId',
+  learningObjectId: 'learningObjectId',
   title: 'title',
   description: 'description',
   audioUrl: 'audioUrl',
@@ -383,7 +396,7 @@ export type PodcastScalarFieldEnum = (typeof PodcastScalarFieldEnum)[keyof typeo
 
 export const MediaResourceScalarFieldEnum = {
   id: 'id',
-  pageId: 'pageId',
+  learningObjectId: 'learningObjectId',
   type: 'type',
   title: 'title',
   url: 'url',
@@ -402,7 +415,7 @@ export const ModuleMetricsScalarFieldEnum = {
   totalViews: 'totalViews',
   totalStudents: 'totalStudents',
   averageCompletionRate: 'averageCompletionRate',
-  mostViewedPageId: 'mostViewedPageId',
+  mostViewedLoId: 'mostViewedLoId',
   lastCalculatedAt: 'lastCalculatedAt'
 } as const
 

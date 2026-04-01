@@ -28,19 +28,19 @@ export type AggregatePrompt = {
 
 export type PromptAvgAggregateOutputType = {
   id: number | null
-  pageId: number | null
+  learningObjectId: number | null
   userId: number | null
 }
 
 export type PromptSumAggregateOutputType = {
   id: number | null
-  pageId: number | null
+  learningObjectId: number | null
   userId: number | null
 }
 
 export type PromptMinAggregateOutputType = {
   id: number | null
-  pageId: number | null
+  learningObjectId: number | null
   userId: number | null
   prompt: string | null
   createdAt: Date | null
@@ -49,7 +49,7 @@ export type PromptMinAggregateOutputType = {
 
 export type PromptMaxAggregateOutputType = {
   id: number | null
-  pageId: number | null
+  learningObjectId: number | null
   userId: number | null
   prompt: string | null
   createdAt: Date | null
@@ -58,7 +58,7 @@ export type PromptMaxAggregateOutputType = {
 
 export type PromptCountAggregateOutputType = {
   id: number
-  pageId: number
+  learningObjectId: number
   userId: number
   prompt: number
   createdAt: number
@@ -69,19 +69,19 @@ export type PromptCountAggregateOutputType = {
 
 export type PromptAvgAggregateInputType = {
   id?: true
-  pageId?: true
+  learningObjectId?: true
   userId?: true
 }
 
 export type PromptSumAggregateInputType = {
   id?: true
-  pageId?: true
+  learningObjectId?: true
   userId?: true
 }
 
 export type PromptMinAggregateInputType = {
   id?: true
-  pageId?: true
+  learningObjectId?: true
   userId?: true
   prompt?: true
   createdAt?: true
@@ -90,7 +90,7 @@ export type PromptMinAggregateInputType = {
 
 export type PromptMaxAggregateInputType = {
   id?: true
-  pageId?: true
+  learningObjectId?: true
   userId?: true
   prompt?: true
   createdAt?: true
@@ -99,7 +99,7 @@ export type PromptMaxAggregateInputType = {
 
 export type PromptCountAggregateInputType = {
   id?: true
-  pageId?: true
+  learningObjectId?: true
   userId?: true
   prompt?: true
   createdAt?: true
@@ -195,7 +195,7 @@ export type PromptGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalA
 
 export type PromptGroupByOutputType = {
   id: number
-  pageId: number | null
+  learningObjectId: number | null
   userId: number
   prompt: string
   createdAt: Date
@@ -227,23 +227,23 @@ export type PromptWhereInput = {
   OR?: Prisma.PromptWhereInput[]
   NOT?: Prisma.PromptWhereInput | Prisma.PromptWhereInput[]
   id?: Prisma.IntFilter<"Prompt"> | number
-  pageId?: Prisma.IntNullableFilter<"Prompt"> | number | null
+  learningObjectId?: Prisma.IntNullableFilter<"Prompt"> | number | null
   userId?: Prisma.IntFilter<"Prompt"> | number
   prompt?: Prisma.StringFilter<"Prompt"> | string
   createdAt?: Prisma.DateTimeFilter<"Prompt"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Prompt"> | Date | string
-  page?: Prisma.XOR<Prisma.PageNullableScalarRelationFilter, Prisma.PageWhereInput> | null
+  learningObject?: Prisma.XOR<Prisma.LearningObjectNullableScalarRelationFilter, Prisma.LearningObjectWhereInput> | null
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
 }
 
 export type PromptOrderByWithRelationInput = {
   id?: Prisma.SortOrder
-  pageId?: Prisma.SortOrderInput | Prisma.SortOrder
+  learningObjectId?: Prisma.SortOrderInput | Prisma.SortOrder
   userId?: Prisma.SortOrder
   prompt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  page?: Prisma.PageOrderByWithRelationInput
+  learningObject?: Prisma.LearningObjectOrderByWithRelationInput
   user?: Prisma.UserOrderByWithRelationInput
 }
 
@@ -252,18 +252,18 @@ export type PromptWhereUniqueInput = Prisma.AtLeast<{
   AND?: Prisma.PromptWhereInput | Prisma.PromptWhereInput[]
   OR?: Prisma.PromptWhereInput[]
   NOT?: Prisma.PromptWhereInput | Prisma.PromptWhereInput[]
-  pageId?: Prisma.IntNullableFilter<"Prompt"> | number | null
+  learningObjectId?: Prisma.IntNullableFilter<"Prompt"> | number | null
   userId?: Prisma.IntFilter<"Prompt"> | number
   prompt?: Prisma.StringFilter<"Prompt"> | string
   createdAt?: Prisma.DateTimeFilter<"Prompt"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Prompt"> | Date | string
-  page?: Prisma.XOR<Prisma.PageNullableScalarRelationFilter, Prisma.PageWhereInput> | null
+  learningObject?: Prisma.XOR<Prisma.LearningObjectNullableScalarRelationFilter, Prisma.LearningObjectWhereInput> | null
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
 }, "id">
 
 export type PromptOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
-  pageId?: Prisma.SortOrderInput | Prisma.SortOrder
+  learningObjectId?: Prisma.SortOrderInput | Prisma.SortOrder
   userId?: Prisma.SortOrder
   prompt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -280,7 +280,7 @@ export type PromptScalarWhereWithAggregatesInput = {
   OR?: Prisma.PromptScalarWhereWithAggregatesInput[]
   NOT?: Prisma.PromptScalarWhereWithAggregatesInput | Prisma.PromptScalarWhereWithAggregatesInput[]
   id?: Prisma.IntWithAggregatesFilter<"Prompt"> | number
-  pageId?: Prisma.IntNullableWithAggregatesFilter<"Prompt"> | number | null
+  learningObjectId?: Prisma.IntNullableWithAggregatesFilter<"Prompt"> | number | null
   userId?: Prisma.IntWithAggregatesFilter<"Prompt"> | number
   prompt?: Prisma.StringWithAggregatesFilter<"Prompt"> | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Prompt"> | Date | string
@@ -291,13 +291,13 @@ export type PromptCreateInput = {
   prompt: string
   createdAt?: Date | string
   updatedAt?: Date | string
-  page?: Prisma.PageCreateNestedOneWithoutPromptFeedbacksInput
+  learningObject?: Prisma.LearningObjectCreateNestedOneWithoutPromptFeedbacksInput
   user: Prisma.UserCreateNestedOneWithoutPromptFeedbacksInput
 }
 
 export type PromptUncheckedCreateInput = {
   id?: number
-  pageId?: number | null
+  learningObjectId?: number | null
   userId: number
   prompt: string
   createdAt?: Date | string
@@ -308,13 +308,13 @@ export type PromptUpdateInput = {
   prompt?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  page?: Prisma.PageUpdateOneWithoutPromptFeedbacksNestedInput
+  learningObject?: Prisma.LearningObjectUpdateOneWithoutPromptFeedbacksNestedInput
   user?: Prisma.UserUpdateOneRequiredWithoutPromptFeedbacksNestedInput
 }
 
 export type PromptUncheckedUpdateInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
-  pageId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  learningObjectId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   userId?: Prisma.IntFieldUpdateOperationsInput | number
   prompt?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -323,7 +323,7 @@ export type PromptUncheckedUpdateInput = {
 
 export type PromptCreateManyInput = {
   id?: number
-  pageId?: number | null
+  learningObjectId?: number | null
   userId: number
   prompt: string
   createdAt?: Date | string
@@ -338,7 +338,7 @@ export type PromptUpdateManyMutationInput = {
 
 export type PromptUncheckedUpdateManyInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
-  pageId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  learningObjectId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   userId?: Prisma.IntFieldUpdateOperationsInput | number
   prompt?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -357,7 +357,7 @@ export type PromptOrderByRelationAggregateInput = {
 
 export type PromptCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  pageId?: Prisma.SortOrder
+  learningObjectId?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   prompt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -366,13 +366,13 @@ export type PromptCountOrderByAggregateInput = {
 
 export type PromptAvgOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  pageId?: Prisma.SortOrder
+  learningObjectId?: Prisma.SortOrder
   userId?: Prisma.SortOrder
 }
 
 export type PromptMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  pageId?: Prisma.SortOrder
+  learningObjectId?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   prompt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -381,7 +381,7 @@ export type PromptMaxOrderByAggregateInput = {
 
 export type PromptMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  pageId?: Prisma.SortOrder
+  learningObjectId?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   prompt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -390,7 +390,7 @@ export type PromptMinOrderByAggregateInput = {
 
 export type PromptSumOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  pageId?: Prisma.SortOrder
+  learningObjectId?: Prisma.SortOrder
   userId?: Prisma.SortOrder
 }
 
@@ -436,45 +436,45 @@ export type PromptUncheckedUpdateManyWithoutUserNestedInput = {
   deleteMany?: Prisma.PromptScalarWhereInput | Prisma.PromptScalarWhereInput[]
 }
 
-export type PromptCreateNestedManyWithoutPageInput = {
-  create?: Prisma.XOR<Prisma.PromptCreateWithoutPageInput, Prisma.PromptUncheckedCreateWithoutPageInput> | Prisma.PromptCreateWithoutPageInput[] | Prisma.PromptUncheckedCreateWithoutPageInput[]
-  connectOrCreate?: Prisma.PromptCreateOrConnectWithoutPageInput | Prisma.PromptCreateOrConnectWithoutPageInput[]
-  createMany?: Prisma.PromptCreateManyPageInputEnvelope
+export type PromptCreateNestedManyWithoutLearningObjectInput = {
+  create?: Prisma.XOR<Prisma.PromptCreateWithoutLearningObjectInput, Prisma.PromptUncheckedCreateWithoutLearningObjectInput> | Prisma.PromptCreateWithoutLearningObjectInput[] | Prisma.PromptUncheckedCreateWithoutLearningObjectInput[]
+  connectOrCreate?: Prisma.PromptCreateOrConnectWithoutLearningObjectInput | Prisma.PromptCreateOrConnectWithoutLearningObjectInput[]
+  createMany?: Prisma.PromptCreateManyLearningObjectInputEnvelope
   connect?: Prisma.PromptWhereUniqueInput | Prisma.PromptWhereUniqueInput[]
 }
 
-export type PromptUncheckedCreateNestedManyWithoutPageInput = {
-  create?: Prisma.XOR<Prisma.PromptCreateWithoutPageInput, Prisma.PromptUncheckedCreateWithoutPageInput> | Prisma.PromptCreateWithoutPageInput[] | Prisma.PromptUncheckedCreateWithoutPageInput[]
-  connectOrCreate?: Prisma.PromptCreateOrConnectWithoutPageInput | Prisma.PromptCreateOrConnectWithoutPageInput[]
-  createMany?: Prisma.PromptCreateManyPageInputEnvelope
+export type PromptUncheckedCreateNestedManyWithoutLearningObjectInput = {
+  create?: Prisma.XOR<Prisma.PromptCreateWithoutLearningObjectInput, Prisma.PromptUncheckedCreateWithoutLearningObjectInput> | Prisma.PromptCreateWithoutLearningObjectInput[] | Prisma.PromptUncheckedCreateWithoutLearningObjectInput[]
+  connectOrCreate?: Prisma.PromptCreateOrConnectWithoutLearningObjectInput | Prisma.PromptCreateOrConnectWithoutLearningObjectInput[]
+  createMany?: Prisma.PromptCreateManyLearningObjectInputEnvelope
   connect?: Prisma.PromptWhereUniqueInput | Prisma.PromptWhereUniqueInput[]
 }
 
-export type PromptUpdateManyWithoutPageNestedInput = {
-  create?: Prisma.XOR<Prisma.PromptCreateWithoutPageInput, Prisma.PromptUncheckedCreateWithoutPageInput> | Prisma.PromptCreateWithoutPageInput[] | Prisma.PromptUncheckedCreateWithoutPageInput[]
-  connectOrCreate?: Prisma.PromptCreateOrConnectWithoutPageInput | Prisma.PromptCreateOrConnectWithoutPageInput[]
-  upsert?: Prisma.PromptUpsertWithWhereUniqueWithoutPageInput | Prisma.PromptUpsertWithWhereUniqueWithoutPageInput[]
-  createMany?: Prisma.PromptCreateManyPageInputEnvelope
+export type PromptUpdateManyWithoutLearningObjectNestedInput = {
+  create?: Prisma.XOR<Prisma.PromptCreateWithoutLearningObjectInput, Prisma.PromptUncheckedCreateWithoutLearningObjectInput> | Prisma.PromptCreateWithoutLearningObjectInput[] | Prisma.PromptUncheckedCreateWithoutLearningObjectInput[]
+  connectOrCreate?: Prisma.PromptCreateOrConnectWithoutLearningObjectInput | Prisma.PromptCreateOrConnectWithoutLearningObjectInput[]
+  upsert?: Prisma.PromptUpsertWithWhereUniqueWithoutLearningObjectInput | Prisma.PromptUpsertWithWhereUniqueWithoutLearningObjectInput[]
+  createMany?: Prisma.PromptCreateManyLearningObjectInputEnvelope
   set?: Prisma.PromptWhereUniqueInput | Prisma.PromptWhereUniqueInput[]
   disconnect?: Prisma.PromptWhereUniqueInput | Prisma.PromptWhereUniqueInput[]
   delete?: Prisma.PromptWhereUniqueInput | Prisma.PromptWhereUniqueInput[]
   connect?: Prisma.PromptWhereUniqueInput | Prisma.PromptWhereUniqueInput[]
-  update?: Prisma.PromptUpdateWithWhereUniqueWithoutPageInput | Prisma.PromptUpdateWithWhereUniqueWithoutPageInput[]
-  updateMany?: Prisma.PromptUpdateManyWithWhereWithoutPageInput | Prisma.PromptUpdateManyWithWhereWithoutPageInput[]
+  update?: Prisma.PromptUpdateWithWhereUniqueWithoutLearningObjectInput | Prisma.PromptUpdateWithWhereUniqueWithoutLearningObjectInput[]
+  updateMany?: Prisma.PromptUpdateManyWithWhereWithoutLearningObjectInput | Prisma.PromptUpdateManyWithWhereWithoutLearningObjectInput[]
   deleteMany?: Prisma.PromptScalarWhereInput | Prisma.PromptScalarWhereInput[]
 }
 
-export type PromptUncheckedUpdateManyWithoutPageNestedInput = {
-  create?: Prisma.XOR<Prisma.PromptCreateWithoutPageInput, Prisma.PromptUncheckedCreateWithoutPageInput> | Prisma.PromptCreateWithoutPageInput[] | Prisma.PromptUncheckedCreateWithoutPageInput[]
-  connectOrCreate?: Prisma.PromptCreateOrConnectWithoutPageInput | Prisma.PromptCreateOrConnectWithoutPageInput[]
-  upsert?: Prisma.PromptUpsertWithWhereUniqueWithoutPageInput | Prisma.PromptUpsertWithWhereUniqueWithoutPageInput[]
-  createMany?: Prisma.PromptCreateManyPageInputEnvelope
+export type PromptUncheckedUpdateManyWithoutLearningObjectNestedInput = {
+  create?: Prisma.XOR<Prisma.PromptCreateWithoutLearningObjectInput, Prisma.PromptUncheckedCreateWithoutLearningObjectInput> | Prisma.PromptCreateWithoutLearningObjectInput[] | Prisma.PromptUncheckedCreateWithoutLearningObjectInput[]
+  connectOrCreate?: Prisma.PromptCreateOrConnectWithoutLearningObjectInput | Prisma.PromptCreateOrConnectWithoutLearningObjectInput[]
+  upsert?: Prisma.PromptUpsertWithWhereUniqueWithoutLearningObjectInput | Prisma.PromptUpsertWithWhereUniqueWithoutLearningObjectInput[]
+  createMany?: Prisma.PromptCreateManyLearningObjectInputEnvelope
   set?: Prisma.PromptWhereUniqueInput | Prisma.PromptWhereUniqueInput[]
   disconnect?: Prisma.PromptWhereUniqueInput | Prisma.PromptWhereUniqueInput[]
   delete?: Prisma.PromptWhereUniqueInput | Prisma.PromptWhereUniqueInput[]
   connect?: Prisma.PromptWhereUniqueInput | Prisma.PromptWhereUniqueInput[]
-  update?: Prisma.PromptUpdateWithWhereUniqueWithoutPageInput | Prisma.PromptUpdateWithWhereUniqueWithoutPageInput[]
-  updateMany?: Prisma.PromptUpdateManyWithWhereWithoutPageInput | Prisma.PromptUpdateManyWithWhereWithoutPageInput[]
+  update?: Prisma.PromptUpdateWithWhereUniqueWithoutLearningObjectInput | Prisma.PromptUpdateWithWhereUniqueWithoutLearningObjectInput[]
+  updateMany?: Prisma.PromptUpdateManyWithWhereWithoutLearningObjectInput | Prisma.PromptUpdateManyWithWhereWithoutLearningObjectInput[]
   deleteMany?: Prisma.PromptScalarWhereInput | Prisma.PromptScalarWhereInput[]
 }
 
@@ -482,12 +482,12 @@ export type PromptCreateWithoutUserInput = {
   prompt: string
   createdAt?: Date | string
   updatedAt?: Date | string
-  page?: Prisma.PageCreateNestedOneWithoutPromptFeedbacksInput
+  learningObject?: Prisma.LearningObjectCreateNestedOneWithoutPromptFeedbacksInput
 }
 
 export type PromptUncheckedCreateWithoutUserInput = {
   id?: number
-  pageId?: number | null
+  learningObjectId?: number | null
   prompt: string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -524,21 +524,21 @@ export type PromptScalarWhereInput = {
   OR?: Prisma.PromptScalarWhereInput[]
   NOT?: Prisma.PromptScalarWhereInput | Prisma.PromptScalarWhereInput[]
   id?: Prisma.IntFilter<"Prompt"> | number
-  pageId?: Prisma.IntNullableFilter<"Prompt"> | number | null
+  learningObjectId?: Prisma.IntNullableFilter<"Prompt"> | number | null
   userId?: Prisma.IntFilter<"Prompt"> | number
   prompt?: Prisma.StringFilter<"Prompt"> | string
   createdAt?: Prisma.DateTimeFilter<"Prompt"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Prompt"> | Date | string
 }
 
-export type PromptCreateWithoutPageInput = {
+export type PromptCreateWithoutLearningObjectInput = {
   prompt: string
   createdAt?: Date | string
   updatedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutPromptFeedbacksInput
 }
 
-export type PromptUncheckedCreateWithoutPageInput = {
+export type PromptUncheckedCreateWithoutLearningObjectInput = {
   id?: number
   userId: number
   prompt: string
@@ -546,35 +546,35 @@ export type PromptUncheckedCreateWithoutPageInput = {
   updatedAt?: Date | string
 }
 
-export type PromptCreateOrConnectWithoutPageInput = {
+export type PromptCreateOrConnectWithoutLearningObjectInput = {
   where: Prisma.PromptWhereUniqueInput
-  create: Prisma.XOR<Prisma.PromptCreateWithoutPageInput, Prisma.PromptUncheckedCreateWithoutPageInput>
+  create: Prisma.XOR<Prisma.PromptCreateWithoutLearningObjectInput, Prisma.PromptUncheckedCreateWithoutLearningObjectInput>
 }
 
-export type PromptCreateManyPageInputEnvelope = {
-  data: Prisma.PromptCreateManyPageInput | Prisma.PromptCreateManyPageInput[]
+export type PromptCreateManyLearningObjectInputEnvelope = {
+  data: Prisma.PromptCreateManyLearningObjectInput | Prisma.PromptCreateManyLearningObjectInput[]
   skipDuplicates?: boolean
 }
 
-export type PromptUpsertWithWhereUniqueWithoutPageInput = {
+export type PromptUpsertWithWhereUniqueWithoutLearningObjectInput = {
   where: Prisma.PromptWhereUniqueInput
-  update: Prisma.XOR<Prisma.PromptUpdateWithoutPageInput, Prisma.PromptUncheckedUpdateWithoutPageInput>
-  create: Prisma.XOR<Prisma.PromptCreateWithoutPageInput, Prisma.PromptUncheckedCreateWithoutPageInput>
+  update: Prisma.XOR<Prisma.PromptUpdateWithoutLearningObjectInput, Prisma.PromptUncheckedUpdateWithoutLearningObjectInput>
+  create: Prisma.XOR<Prisma.PromptCreateWithoutLearningObjectInput, Prisma.PromptUncheckedCreateWithoutLearningObjectInput>
 }
 
-export type PromptUpdateWithWhereUniqueWithoutPageInput = {
+export type PromptUpdateWithWhereUniqueWithoutLearningObjectInput = {
   where: Prisma.PromptWhereUniqueInput
-  data: Prisma.XOR<Prisma.PromptUpdateWithoutPageInput, Prisma.PromptUncheckedUpdateWithoutPageInput>
+  data: Prisma.XOR<Prisma.PromptUpdateWithoutLearningObjectInput, Prisma.PromptUncheckedUpdateWithoutLearningObjectInput>
 }
 
-export type PromptUpdateManyWithWhereWithoutPageInput = {
+export type PromptUpdateManyWithWhereWithoutLearningObjectInput = {
   where: Prisma.PromptScalarWhereInput
-  data: Prisma.XOR<Prisma.PromptUpdateManyMutationInput, Prisma.PromptUncheckedUpdateManyWithoutPageInput>
+  data: Prisma.XOR<Prisma.PromptUpdateManyMutationInput, Prisma.PromptUncheckedUpdateManyWithoutLearningObjectInput>
 }
 
 export type PromptCreateManyUserInput = {
   id?: number
-  pageId?: number | null
+  learningObjectId?: number | null
   prompt: string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -584,12 +584,12 @@ export type PromptUpdateWithoutUserInput = {
   prompt?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  page?: Prisma.PageUpdateOneWithoutPromptFeedbacksNestedInput
+  learningObject?: Prisma.LearningObjectUpdateOneWithoutPromptFeedbacksNestedInput
 }
 
 export type PromptUncheckedUpdateWithoutUserInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
-  pageId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  learningObjectId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   prompt?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -597,13 +597,13 @@ export type PromptUncheckedUpdateWithoutUserInput = {
 
 export type PromptUncheckedUpdateManyWithoutUserInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
-  pageId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  learningObjectId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   prompt?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
-export type PromptCreateManyPageInput = {
+export type PromptCreateManyLearningObjectInput = {
   id?: number
   userId: number
   prompt: string
@@ -611,14 +611,14 @@ export type PromptCreateManyPageInput = {
   updatedAt?: Date | string
 }
 
-export type PromptUpdateWithoutPageInput = {
+export type PromptUpdateWithoutLearningObjectInput = {
   prompt?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutPromptFeedbacksNestedInput
 }
 
-export type PromptUncheckedUpdateWithoutPageInput = {
+export type PromptUncheckedUpdateWithoutLearningObjectInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   userId?: Prisma.IntFieldUpdateOperationsInput | number
   prompt?: Prisma.StringFieldUpdateOperationsInput | string
@@ -626,7 +626,7 @@ export type PromptUncheckedUpdateWithoutPageInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
-export type PromptUncheckedUpdateManyWithoutPageInput = {
+export type PromptUncheckedUpdateManyWithoutLearningObjectInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   userId?: Prisma.IntFieldUpdateOperationsInput | number
   prompt?: Prisma.StringFieldUpdateOperationsInput | string
@@ -638,69 +638,69 @@ export type PromptUncheckedUpdateManyWithoutPageInput = {
 
 export type PromptSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  pageId?: boolean
+  learningObjectId?: boolean
   userId?: boolean
   prompt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  page?: boolean | Prisma.Prompt$pageArgs<ExtArgs>
+  learningObject?: boolean | Prisma.Prompt$learningObjectArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["prompt"]>
 
 export type PromptSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  pageId?: boolean
+  learningObjectId?: boolean
   userId?: boolean
   prompt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  page?: boolean | Prisma.Prompt$pageArgs<ExtArgs>
+  learningObject?: boolean | Prisma.Prompt$learningObjectArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["prompt"]>
 
 export type PromptSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  pageId?: boolean
+  learningObjectId?: boolean
   userId?: boolean
   prompt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  page?: boolean | Prisma.Prompt$pageArgs<ExtArgs>
+  learningObject?: boolean | Prisma.Prompt$learningObjectArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["prompt"]>
 
 export type PromptSelectScalar = {
   id?: boolean
-  pageId?: boolean
+  learningObjectId?: boolean
   userId?: boolean
   prompt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type PromptOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "pageId" | "userId" | "prompt" | "createdAt" | "updatedAt", ExtArgs["result"]["prompt"]>
+export type PromptOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "learningObjectId" | "userId" | "prompt" | "createdAt" | "updatedAt", ExtArgs["result"]["prompt"]>
 export type PromptInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  page?: boolean | Prisma.Prompt$pageArgs<ExtArgs>
+  learningObject?: boolean | Prisma.Prompt$learningObjectArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }
 export type PromptIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  page?: boolean | Prisma.Prompt$pageArgs<ExtArgs>
+  learningObject?: boolean | Prisma.Prompt$learningObjectArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }
 export type PromptIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  page?: boolean | Prisma.Prompt$pageArgs<ExtArgs>
+  learningObject?: boolean | Prisma.Prompt$learningObjectArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }
 
 export type $PromptPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Prompt"
   objects: {
-    page: Prisma.$PagePayload<ExtArgs> | null
+    learningObject: Prisma.$LearningObjectPayload<ExtArgs> | null
     user: Prisma.$UserPayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
-    pageId: number | null
+    learningObjectId: number | null
     userId: number
     prompt: string
     createdAt: Date
@@ -1099,7 +1099,7 @@ readonly fields: PromptFieldRefs;
  */
 export interface Prisma__PromptClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  page<T extends Prisma.Prompt$pageArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Prompt$pageArgs<ExtArgs>>): Prisma.Prisma__PageClient<runtime.Types.Result.GetResult<Prisma.$PagePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  learningObject<T extends Prisma.Prompt$learningObjectArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Prompt$learningObjectArgs<ExtArgs>>): Prisma.Prisma__LearningObjectClient<runtime.Types.Result.GetResult<Prisma.$LearningObjectPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   user<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -1131,7 +1131,7 @@ export interface Prisma__PromptClient<T, Null = never, ExtArgs extends runtime.T
  */
 export interface PromptFieldRefs {
   readonly id: Prisma.FieldRef<"Prompt", 'Int'>
-  readonly pageId: Prisma.FieldRef<"Prompt", 'Int'>
+  readonly learningObjectId: Prisma.FieldRef<"Prompt", 'Int'>
   readonly userId: Prisma.FieldRef<"Prompt", 'Int'>
   readonly prompt: Prisma.FieldRef<"Prompt", 'String'>
   readonly createdAt: Prisma.FieldRef<"Prompt", 'DateTime'>
@@ -1537,22 +1537,22 @@ export type PromptDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Intern
 }
 
 /**
- * Prompt.page
+ * Prompt.learningObject
  */
-export type Prompt$pageArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type Prompt$learningObjectArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the Page
+   * Select specific fields to fetch from the LearningObject
    */
-  select?: Prisma.PageSelect<ExtArgs> | null
+  select?: Prisma.LearningObjectSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the Page
+   * Omit specific fields from the LearningObject
    */
-  omit?: Prisma.PageOmit<ExtArgs> | null
+  omit?: Prisma.LearningObjectOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.PageInclude<ExtArgs> | null
-  where?: Prisma.PageWhereInput
+  include?: Prisma.LearningObjectInclude<ExtArgs> | null
+  where?: Prisma.LearningObjectWhereInput
 }
 
 /**

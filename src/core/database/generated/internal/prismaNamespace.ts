@@ -388,17 +388,18 @@ export const ModelName = {
   Module: 'Module',
   AiConfiguration: 'AiConfiguration',
   Enrollment: 'Enrollment',
-  Page: 'Page',
+  LearningObjectType: 'LearningObjectType',
+  LearningObject: 'LearningObject',
   Block: 'Block',
   Session: 'Session',
   Message: 'Message',
-  PageView: 'PageView',
-  PageRelation: 'PageRelation',
-  PageConcept: 'PageConcept',
+  LearningObjectView: 'LearningObjectView',
+  LearningObjectRelation: 'LearningObjectRelation',
+  LearningObjectConcept: 'LearningObjectConcept',
   Activity: 'Activity',
   ActivityAttempt: 'ActivityAttempt',
   Prompt: 'Prompt',
-  PageFeedback: 'PageFeedback',
+  LearningObjectFeedback: 'LearningObjectFeedback',
   Note: 'Note',
   StudentQuestion: 'StudentQuestion',
   QuestionReply: 'QuestionReply',
@@ -422,7 +423,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "module" | "aiConfiguration" | "enrollment" | "page" | "block" | "session" | "message" | "pageView" | "pageRelation" | "pageConcept" | "activity" | "activityAttempt" | "prompt" | "pageFeedback" | "note" | "studentQuestion" | "questionReply" | "notification" | "podcast" | "mediaResource" | "moduleMetrics" | "systemSetting"
+    modelProps: "user" | "module" | "aiConfiguration" | "enrollment" | "learningObjectType" | "learningObject" | "block" | "session" | "message" | "learningObjectView" | "learningObjectRelation" | "learningObjectConcept" | "activity" | "activityAttempt" | "prompt" | "learningObjectFeedback" | "note" | "studentQuestion" | "questionReply" | "notification" | "podcast" | "mediaResource" | "moduleMetrics" | "systemSetting"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -722,77 +723,151 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
-    Page: {
-      payload: Prisma.$PagePayload<ExtArgs>
-      fields: Prisma.PageFieldRefs
+    LearningObjectType: {
+      payload: Prisma.$LearningObjectTypePayload<ExtArgs>
+      fields: Prisma.LearningObjectTypeFieldRefs
       operations: {
         findUnique: {
-          args: Prisma.PageFindUniqueArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$PagePayload> | null
+          args: Prisma.LearningObjectTypeFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LearningObjectTypePayload> | null
         }
         findUniqueOrThrow: {
-          args: Prisma.PageFindUniqueOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$PagePayload>
+          args: Prisma.LearningObjectTypeFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LearningObjectTypePayload>
         }
         findFirst: {
-          args: Prisma.PageFindFirstArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$PagePayload> | null
+          args: Prisma.LearningObjectTypeFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LearningObjectTypePayload> | null
         }
         findFirstOrThrow: {
-          args: Prisma.PageFindFirstOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$PagePayload>
+          args: Prisma.LearningObjectTypeFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LearningObjectTypePayload>
         }
         findMany: {
-          args: Prisma.PageFindManyArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$PagePayload>[]
+          args: Prisma.LearningObjectTypeFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LearningObjectTypePayload>[]
         }
         create: {
-          args: Prisma.PageCreateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$PagePayload>
+          args: Prisma.LearningObjectTypeCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LearningObjectTypePayload>
         }
         createMany: {
-          args: Prisma.PageCreateManyArgs<ExtArgs>
+          args: Prisma.LearningObjectTypeCreateManyArgs<ExtArgs>
           result: BatchPayload
         }
         createManyAndReturn: {
-          args: Prisma.PageCreateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$PagePayload>[]
+          args: Prisma.LearningObjectTypeCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LearningObjectTypePayload>[]
         }
         delete: {
-          args: Prisma.PageDeleteArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$PagePayload>
+          args: Prisma.LearningObjectTypeDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LearningObjectTypePayload>
         }
         update: {
-          args: Prisma.PageUpdateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$PagePayload>
+          args: Prisma.LearningObjectTypeUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LearningObjectTypePayload>
         }
         deleteMany: {
-          args: Prisma.PageDeleteManyArgs<ExtArgs>
+          args: Prisma.LearningObjectTypeDeleteManyArgs<ExtArgs>
           result: BatchPayload
         }
         updateMany: {
-          args: Prisma.PageUpdateManyArgs<ExtArgs>
+          args: Prisma.LearningObjectTypeUpdateManyArgs<ExtArgs>
           result: BatchPayload
         }
         updateManyAndReturn: {
-          args: Prisma.PageUpdateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$PagePayload>[]
+          args: Prisma.LearningObjectTypeUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LearningObjectTypePayload>[]
         }
         upsert: {
-          args: Prisma.PageUpsertArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$PagePayload>
+          args: Prisma.LearningObjectTypeUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LearningObjectTypePayload>
         }
         aggregate: {
-          args: Prisma.PageAggregateArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.AggregatePage>
+          args: Prisma.LearningObjectTypeAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateLearningObjectType>
         }
         groupBy: {
-          args: Prisma.PageGroupByArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.PageGroupByOutputType>[]
+          args: Prisma.LearningObjectTypeGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.LearningObjectTypeGroupByOutputType>[]
         }
         count: {
-          args: Prisma.PageCountArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.PageCountAggregateOutputType> | number
+          args: Prisma.LearningObjectTypeCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.LearningObjectTypeCountAggregateOutputType> | number
+        }
+      }
+    }
+    LearningObject: {
+      payload: Prisma.$LearningObjectPayload<ExtArgs>
+      fields: Prisma.LearningObjectFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.LearningObjectFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LearningObjectPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.LearningObjectFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LearningObjectPayload>
+        }
+        findFirst: {
+          args: Prisma.LearningObjectFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LearningObjectPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.LearningObjectFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LearningObjectPayload>
+        }
+        findMany: {
+          args: Prisma.LearningObjectFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LearningObjectPayload>[]
+        }
+        create: {
+          args: Prisma.LearningObjectCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LearningObjectPayload>
+        }
+        createMany: {
+          args: Prisma.LearningObjectCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.LearningObjectCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LearningObjectPayload>[]
+        }
+        delete: {
+          args: Prisma.LearningObjectDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LearningObjectPayload>
+        }
+        update: {
+          args: Prisma.LearningObjectUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LearningObjectPayload>
+        }
+        deleteMany: {
+          args: Prisma.LearningObjectDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.LearningObjectUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.LearningObjectUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LearningObjectPayload>[]
+        }
+        upsert: {
+          args: Prisma.LearningObjectUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LearningObjectPayload>
+        }
+        aggregate: {
+          args: Prisma.LearningObjectAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateLearningObject>
+        }
+        groupBy: {
+          args: Prisma.LearningObjectGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.LearningObjectGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.LearningObjectCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.LearningObjectCountAggregateOutputType> | number
         }
       }
     }
@@ -1018,225 +1093,225 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
-    PageView: {
-      payload: Prisma.$PageViewPayload<ExtArgs>
-      fields: Prisma.PageViewFieldRefs
+    LearningObjectView: {
+      payload: Prisma.$LearningObjectViewPayload<ExtArgs>
+      fields: Prisma.LearningObjectViewFieldRefs
       operations: {
         findUnique: {
-          args: Prisma.PageViewFindUniqueArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$PageViewPayload> | null
+          args: Prisma.LearningObjectViewFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LearningObjectViewPayload> | null
         }
         findUniqueOrThrow: {
-          args: Prisma.PageViewFindUniqueOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$PageViewPayload>
+          args: Prisma.LearningObjectViewFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LearningObjectViewPayload>
         }
         findFirst: {
-          args: Prisma.PageViewFindFirstArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$PageViewPayload> | null
+          args: Prisma.LearningObjectViewFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LearningObjectViewPayload> | null
         }
         findFirstOrThrow: {
-          args: Prisma.PageViewFindFirstOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$PageViewPayload>
+          args: Prisma.LearningObjectViewFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LearningObjectViewPayload>
         }
         findMany: {
-          args: Prisma.PageViewFindManyArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$PageViewPayload>[]
+          args: Prisma.LearningObjectViewFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LearningObjectViewPayload>[]
         }
         create: {
-          args: Prisma.PageViewCreateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$PageViewPayload>
+          args: Prisma.LearningObjectViewCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LearningObjectViewPayload>
         }
         createMany: {
-          args: Prisma.PageViewCreateManyArgs<ExtArgs>
+          args: Prisma.LearningObjectViewCreateManyArgs<ExtArgs>
           result: BatchPayload
         }
         createManyAndReturn: {
-          args: Prisma.PageViewCreateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$PageViewPayload>[]
+          args: Prisma.LearningObjectViewCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LearningObjectViewPayload>[]
         }
         delete: {
-          args: Prisma.PageViewDeleteArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$PageViewPayload>
+          args: Prisma.LearningObjectViewDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LearningObjectViewPayload>
         }
         update: {
-          args: Prisma.PageViewUpdateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$PageViewPayload>
+          args: Prisma.LearningObjectViewUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LearningObjectViewPayload>
         }
         deleteMany: {
-          args: Prisma.PageViewDeleteManyArgs<ExtArgs>
+          args: Prisma.LearningObjectViewDeleteManyArgs<ExtArgs>
           result: BatchPayload
         }
         updateMany: {
-          args: Prisma.PageViewUpdateManyArgs<ExtArgs>
+          args: Prisma.LearningObjectViewUpdateManyArgs<ExtArgs>
           result: BatchPayload
         }
         updateManyAndReturn: {
-          args: Prisma.PageViewUpdateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$PageViewPayload>[]
+          args: Prisma.LearningObjectViewUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LearningObjectViewPayload>[]
         }
         upsert: {
-          args: Prisma.PageViewUpsertArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$PageViewPayload>
+          args: Prisma.LearningObjectViewUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LearningObjectViewPayload>
         }
         aggregate: {
-          args: Prisma.PageViewAggregateArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.AggregatePageView>
+          args: Prisma.LearningObjectViewAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateLearningObjectView>
         }
         groupBy: {
-          args: Prisma.PageViewGroupByArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.PageViewGroupByOutputType>[]
+          args: Prisma.LearningObjectViewGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.LearningObjectViewGroupByOutputType>[]
         }
         count: {
-          args: Prisma.PageViewCountArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.PageViewCountAggregateOutputType> | number
+          args: Prisma.LearningObjectViewCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.LearningObjectViewCountAggregateOutputType> | number
         }
       }
     }
-    PageRelation: {
-      payload: Prisma.$PageRelationPayload<ExtArgs>
-      fields: Prisma.PageRelationFieldRefs
+    LearningObjectRelation: {
+      payload: Prisma.$LearningObjectRelationPayload<ExtArgs>
+      fields: Prisma.LearningObjectRelationFieldRefs
       operations: {
         findUnique: {
-          args: Prisma.PageRelationFindUniqueArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$PageRelationPayload> | null
+          args: Prisma.LearningObjectRelationFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LearningObjectRelationPayload> | null
         }
         findUniqueOrThrow: {
-          args: Prisma.PageRelationFindUniqueOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$PageRelationPayload>
+          args: Prisma.LearningObjectRelationFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LearningObjectRelationPayload>
         }
         findFirst: {
-          args: Prisma.PageRelationFindFirstArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$PageRelationPayload> | null
+          args: Prisma.LearningObjectRelationFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LearningObjectRelationPayload> | null
         }
         findFirstOrThrow: {
-          args: Prisma.PageRelationFindFirstOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$PageRelationPayload>
+          args: Prisma.LearningObjectRelationFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LearningObjectRelationPayload>
         }
         findMany: {
-          args: Prisma.PageRelationFindManyArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$PageRelationPayload>[]
+          args: Prisma.LearningObjectRelationFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LearningObjectRelationPayload>[]
         }
         create: {
-          args: Prisma.PageRelationCreateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$PageRelationPayload>
+          args: Prisma.LearningObjectRelationCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LearningObjectRelationPayload>
         }
         createMany: {
-          args: Prisma.PageRelationCreateManyArgs<ExtArgs>
+          args: Prisma.LearningObjectRelationCreateManyArgs<ExtArgs>
           result: BatchPayload
         }
         createManyAndReturn: {
-          args: Prisma.PageRelationCreateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$PageRelationPayload>[]
+          args: Prisma.LearningObjectRelationCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LearningObjectRelationPayload>[]
         }
         delete: {
-          args: Prisma.PageRelationDeleteArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$PageRelationPayload>
+          args: Prisma.LearningObjectRelationDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LearningObjectRelationPayload>
         }
         update: {
-          args: Prisma.PageRelationUpdateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$PageRelationPayload>
+          args: Prisma.LearningObjectRelationUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LearningObjectRelationPayload>
         }
         deleteMany: {
-          args: Prisma.PageRelationDeleteManyArgs<ExtArgs>
+          args: Prisma.LearningObjectRelationDeleteManyArgs<ExtArgs>
           result: BatchPayload
         }
         updateMany: {
-          args: Prisma.PageRelationUpdateManyArgs<ExtArgs>
+          args: Prisma.LearningObjectRelationUpdateManyArgs<ExtArgs>
           result: BatchPayload
         }
         updateManyAndReturn: {
-          args: Prisma.PageRelationUpdateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$PageRelationPayload>[]
+          args: Prisma.LearningObjectRelationUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LearningObjectRelationPayload>[]
         }
         upsert: {
-          args: Prisma.PageRelationUpsertArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$PageRelationPayload>
+          args: Prisma.LearningObjectRelationUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LearningObjectRelationPayload>
         }
         aggregate: {
-          args: Prisma.PageRelationAggregateArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.AggregatePageRelation>
+          args: Prisma.LearningObjectRelationAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateLearningObjectRelation>
         }
         groupBy: {
-          args: Prisma.PageRelationGroupByArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.PageRelationGroupByOutputType>[]
+          args: Prisma.LearningObjectRelationGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.LearningObjectRelationGroupByOutputType>[]
         }
         count: {
-          args: Prisma.PageRelationCountArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.PageRelationCountAggregateOutputType> | number
+          args: Prisma.LearningObjectRelationCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.LearningObjectRelationCountAggregateOutputType> | number
         }
       }
     }
-    PageConcept: {
-      payload: Prisma.$PageConceptPayload<ExtArgs>
-      fields: Prisma.PageConceptFieldRefs
+    LearningObjectConcept: {
+      payload: Prisma.$LearningObjectConceptPayload<ExtArgs>
+      fields: Prisma.LearningObjectConceptFieldRefs
       operations: {
         findUnique: {
-          args: Prisma.PageConceptFindUniqueArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$PageConceptPayload> | null
+          args: Prisma.LearningObjectConceptFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LearningObjectConceptPayload> | null
         }
         findUniqueOrThrow: {
-          args: Prisma.PageConceptFindUniqueOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$PageConceptPayload>
+          args: Prisma.LearningObjectConceptFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LearningObjectConceptPayload>
         }
         findFirst: {
-          args: Prisma.PageConceptFindFirstArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$PageConceptPayload> | null
+          args: Prisma.LearningObjectConceptFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LearningObjectConceptPayload> | null
         }
         findFirstOrThrow: {
-          args: Prisma.PageConceptFindFirstOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$PageConceptPayload>
+          args: Prisma.LearningObjectConceptFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LearningObjectConceptPayload>
         }
         findMany: {
-          args: Prisma.PageConceptFindManyArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$PageConceptPayload>[]
+          args: Prisma.LearningObjectConceptFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LearningObjectConceptPayload>[]
         }
         create: {
-          args: Prisma.PageConceptCreateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$PageConceptPayload>
+          args: Prisma.LearningObjectConceptCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LearningObjectConceptPayload>
         }
         createMany: {
-          args: Prisma.PageConceptCreateManyArgs<ExtArgs>
+          args: Prisma.LearningObjectConceptCreateManyArgs<ExtArgs>
           result: BatchPayload
         }
         createManyAndReturn: {
-          args: Prisma.PageConceptCreateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$PageConceptPayload>[]
+          args: Prisma.LearningObjectConceptCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LearningObjectConceptPayload>[]
         }
         delete: {
-          args: Prisma.PageConceptDeleteArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$PageConceptPayload>
+          args: Prisma.LearningObjectConceptDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LearningObjectConceptPayload>
         }
         update: {
-          args: Prisma.PageConceptUpdateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$PageConceptPayload>
+          args: Prisma.LearningObjectConceptUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LearningObjectConceptPayload>
         }
         deleteMany: {
-          args: Prisma.PageConceptDeleteManyArgs<ExtArgs>
+          args: Prisma.LearningObjectConceptDeleteManyArgs<ExtArgs>
           result: BatchPayload
         }
         updateMany: {
-          args: Prisma.PageConceptUpdateManyArgs<ExtArgs>
+          args: Prisma.LearningObjectConceptUpdateManyArgs<ExtArgs>
           result: BatchPayload
         }
         updateManyAndReturn: {
-          args: Prisma.PageConceptUpdateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$PageConceptPayload>[]
+          args: Prisma.LearningObjectConceptUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LearningObjectConceptPayload>[]
         }
         upsert: {
-          args: Prisma.PageConceptUpsertArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$PageConceptPayload>
+          args: Prisma.LearningObjectConceptUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LearningObjectConceptPayload>
         }
         aggregate: {
-          args: Prisma.PageConceptAggregateArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.AggregatePageConcept>
+          args: Prisma.LearningObjectConceptAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateLearningObjectConcept>
         }
         groupBy: {
-          args: Prisma.PageConceptGroupByArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.PageConceptGroupByOutputType>[]
+          args: Prisma.LearningObjectConceptGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.LearningObjectConceptGroupByOutputType>[]
         }
         count: {
-          args: Prisma.PageConceptCountArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.PageConceptCountAggregateOutputType> | number
+          args: Prisma.LearningObjectConceptCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.LearningObjectConceptCountAggregateOutputType> | number
         }
       }
     }
@@ -1462,77 +1537,77 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
-    PageFeedback: {
-      payload: Prisma.$PageFeedbackPayload<ExtArgs>
-      fields: Prisma.PageFeedbackFieldRefs
+    LearningObjectFeedback: {
+      payload: Prisma.$LearningObjectFeedbackPayload<ExtArgs>
+      fields: Prisma.LearningObjectFeedbackFieldRefs
       operations: {
         findUnique: {
-          args: Prisma.PageFeedbackFindUniqueArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$PageFeedbackPayload> | null
+          args: Prisma.LearningObjectFeedbackFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LearningObjectFeedbackPayload> | null
         }
         findUniqueOrThrow: {
-          args: Prisma.PageFeedbackFindUniqueOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$PageFeedbackPayload>
+          args: Prisma.LearningObjectFeedbackFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LearningObjectFeedbackPayload>
         }
         findFirst: {
-          args: Prisma.PageFeedbackFindFirstArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$PageFeedbackPayload> | null
+          args: Prisma.LearningObjectFeedbackFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LearningObjectFeedbackPayload> | null
         }
         findFirstOrThrow: {
-          args: Prisma.PageFeedbackFindFirstOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$PageFeedbackPayload>
+          args: Prisma.LearningObjectFeedbackFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LearningObjectFeedbackPayload>
         }
         findMany: {
-          args: Prisma.PageFeedbackFindManyArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$PageFeedbackPayload>[]
+          args: Prisma.LearningObjectFeedbackFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LearningObjectFeedbackPayload>[]
         }
         create: {
-          args: Prisma.PageFeedbackCreateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$PageFeedbackPayload>
+          args: Prisma.LearningObjectFeedbackCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LearningObjectFeedbackPayload>
         }
         createMany: {
-          args: Prisma.PageFeedbackCreateManyArgs<ExtArgs>
+          args: Prisma.LearningObjectFeedbackCreateManyArgs<ExtArgs>
           result: BatchPayload
         }
         createManyAndReturn: {
-          args: Prisma.PageFeedbackCreateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$PageFeedbackPayload>[]
+          args: Prisma.LearningObjectFeedbackCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LearningObjectFeedbackPayload>[]
         }
         delete: {
-          args: Prisma.PageFeedbackDeleteArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$PageFeedbackPayload>
+          args: Prisma.LearningObjectFeedbackDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LearningObjectFeedbackPayload>
         }
         update: {
-          args: Prisma.PageFeedbackUpdateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$PageFeedbackPayload>
+          args: Prisma.LearningObjectFeedbackUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LearningObjectFeedbackPayload>
         }
         deleteMany: {
-          args: Prisma.PageFeedbackDeleteManyArgs<ExtArgs>
+          args: Prisma.LearningObjectFeedbackDeleteManyArgs<ExtArgs>
           result: BatchPayload
         }
         updateMany: {
-          args: Prisma.PageFeedbackUpdateManyArgs<ExtArgs>
+          args: Prisma.LearningObjectFeedbackUpdateManyArgs<ExtArgs>
           result: BatchPayload
         }
         updateManyAndReturn: {
-          args: Prisma.PageFeedbackUpdateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$PageFeedbackPayload>[]
+          args: Prisma.LearningObjectFeedbackUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LearningObjectFeedbackPayload>[]
         }
         upsert: {
-          args: Prisma.PageFeedbackUpsertArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$PageFeedbackPayload>
+          args: Prisma.LearningObjectFeedbackUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LearningObjectFeedbackPayload>
         }
         aggregate: {
-          args: Prisma.PageFeedbackAggregateArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.AggregatePageFeedback>
+          args: Prisma.LearningObjectFeedbackAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateLearningObjectFeedback>
         }
         groupBy: {
-          args: Prisma.PageFeedbackGroupByArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.PageFeedbackGroupByOutputType>[]
+          args: Prisma.LearningObjectFeedbackGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.LearningObjectFeedbackGroupByOutputType>[]
         }
         count: {
-          args: Prisma.PageFeedbackCountArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.PageFeedbackCountAggregateOutputType> | number
+          args: Prisma.LearningObjectFeedbackCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.LearningObjectFeedbackCountAggregateOutputType> | number
         }
       }
     }
@@ -2229,7 +2304,18 @@ export const EnrollmentScalarFieldEnum = {
 export type EnrollmentScalarFieldEnum = (typeof EnrollmentScalarFieldEnum)[keyof typeof EnrollmentScalarFieldEnum]
 
 
-export const PageScalarFieldEnum = {
+export const LearningObjectTypeScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  description: 'description',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type LearningObjectTypeScalarFieldEnum = (typeof LearningObjectTypeScalarFieldEnum)[keyof typeof LearningObjectTypeScalarFieldEnum]
+
+
+export const LearningObjectScalarFieldEnum = {
   id: 'id',
   moduleId: 'moduleId',
   title: 'title',
@@ -2241,15 +2327,16 @@ export const PageScalarFieldEnum = {
   hasManualEdits: 'hasManualEdits',
   conceptsProcessed: 'conceptsProcessed',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  typeId: 'typeId'
 } as const
 
-export type PageScalarFieldEnum = (typeof PageScalarFieldEnum)[keyof typeof PageScalarFieldEnum]
+export type LearningObjectScalarFieldEnum = (typeof LearningObjectScalarFieldEnum)[keyof typeof LearningObjectScalarFieldEnum]
 
 
 export const BlockScalarFieldEnum = {
   id: 'id',
-  pageId: 'pageId',
+  learningObjectId: 'learningObjectId',
   orderIndex: 'orderIndex',
   type: 'type',
   content: 'content',
@@ -2266,7 +2353,7 @@ export const SessionScalarFieldEnum = {
   title: 'title',
   startedAt: 'startedAt',
   userId: 'userId',
-  pageId: 'pageId',
+  learningObjectId: 'learningObjectId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -2287,10 +2374,10 @@ export const MessageScalarFieldEnum = {
 export type MessageScalarFieldEnum = (typeof MessageScalarFieldEnum)[keyof typeof MessageScalarFieldEnum]
 
 
-export const PageViewScalarFieldEnum = {
+export const LearningObjectViewScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
-  pageId: 'pageId',
+  learningObjectId: 'learningObjectId',
   firstViewedAt: 'firstViewedAt',
   lastViewedAt: 'lastViewedAt',
   viewCount: 'viewCount',
@@ -2299,13 +2386,13 @@ export const PageViewScalarFieldEnum = {
   progress: 'progress'
 } as const
 
-export type PageViewScalarFieldEnum = (typeof PageViewScalarFieldEnum)[keyof typeof PageViewScalarFieldEnum]
+export type LearningObjectViewScalarFieldEnum = (typeof LearningObjectViewScalarFieldEnum)[keyof typeof LearningObjectViewScalarFieldEnum]
 
 
-export const PageRelationScalarFieldEnum = {
+export const LearningObjectRelationScalarFieldEnum = {
   id: 'id',
-  originPageId: 'originPageId',
-  relatedPageId: 'relatedPageId',
+  originLoId: 'originLoId',
+  relatedLoId: 'relatedLoId',
   similarityScore: 'similarityScore',
   relationType: 'relationType',
   mentionText: 'mentionText',
@@ -2316,24 +2403,24 @@ export const PageRelationScalarFieldEnum = {
   createdAt: 'createdAt'
 } as const
 
-export type PageRelationScalarFieldEnum = (typeof PageRelationScalarFieldEnum)[keyof typeof PageRelationScalarFieldEnum]
+export type LearningObjectRelationScalarFieldEnum = (typeof LearningObjectRelationScalarFieldEnum)[keyof typeof LearningObjectRelationScalarFieldEnum]
 
 
-export const PageConceptScalarFieldEnum = {
+export const LearningObjectConceptScalarFieldEnum = {
   id: 'id',
-  pageId: 'pageId',
+  learningObjectId: 'learningObjectId',
   term: 'term',
   definition: 'definition',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
 
-export type PageConceptScalarFieldEnum = (typeof PageConceptScalarFieldEnum)[keyof typeof PageConceptScalarFieldEnum]
+export type LearningObjectConceptScalarFieldEnum = (typeof LearningObjectConceptScalarFieldEnum)[keyof typeof LearningObjectConceptScalarFieldEnum]
 
 
 export const ActivityScalarFieldEnum = {
   id: 'id',
-  pageId: 'pageId',
+  learningObjectId: 'learningObjectId',
   type: 'type',
   question: 'question',
   options: 'options',
@@ -2365,7 +2452,7 @@ export type ActivityAttemptScalarFieldEnum = (typeof ActivityAttemptScalarFieldE
 
 export const PromptScalarFieldEnum = {
   id: 'id',
-  pageId: 'pageId',
+  learningObjectId: 'learningObjectId',
   userId: 'userId',
   prompt: 'prompt',
   createdAt: 'createdAt',
@@ -2375,21 +2462,21 @@ export const PromptScalarFieldEnum = {
 export type PromptScalarFieldEnum = (typeof PromptScalarFieldEnum)[keyof typeof PromptScalarFieldEnum]
 
 
-export const PageFeedbackScalarFieldEnum = {
+export const LearningObjectFeedbackScalarFieldEnum = {
   id: 'id',
-  pageId: 'pageId',
+  learningObjectId: 'learningObjectId',
   userId: 'userId',
   feedback: 'feedback',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
 
-export type PageFeedbackScalarFieldEnum = (typeof PageFeedbackScalarFieldEnum)[keyof typeof PageFeedbackScalarFieldEnum]
+export type LearningObjectFeedbackScalarFieldEnum = (typeof LearningObjectFeedbackScalarFieldEnum)[keyof typeof LearningObjectFeedbackScalarFieldEnum]
 
 
 export const NoteScalarFieldEnum = {
   id: 'id',
-  pageId: 'pageId',
+  learningObjectId: 'learningObjectId',
   userId: 'userId',
   content: 'content',
   createdAt: 'createdAt'
@@ -2401,7 +2488,7 @@ export type NoteScalarFieldEnum = (typeof NoteScalarFieldEnum)[keyof typeof Note
 export const StudentQuestionScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
-  pageId: 'pageId',
+  learningObjectId: 'learningObjectId',
   question: 'question',
   isPublic: 'isPublic',
   upvotes: 'upvotes',
@@ -2442,7 +2529,7 @@ export type NotificationScalarFieldEnum = (typeof NotificationScalarFieldEnum)[k
 
 export const PodcastScalarFieldEnum = {
   id: 'id',
-  pageId: 'pageId',
+  learningObjectId: 'learningObjectId',
   title: 'title',
   description: 'description',
   audioUrl: 'audioUrl',
@@ -2458,7 +2545,7 @@ export type PodcastScalarFieldEnum = (typeof PodcastScalarFieldEnum)[keyof typeo
 
 export const MediaResourceScalarFieldEnum = {
   id: 'id',
-  pageId: 'pageId',
+  learningObjectId: 'learningObjectId',
   type: 'type',
   title: 'title',
   url: 'url',
@@ -2477,7 +2564,7 @@ export const ModuleMetricsScalarFieldEnum = {
   totalViews: 'totalViews',
   totalStudents: 'totalStudents',
   averageCompletionRate: 'averageCompletionRate',
-  mostViewedPageId: 'mostViewedPageId',
+  mostViewedLoId: 'mostViewedLoId',
   lastCalculatedAt: 'lastCalculatedAt'
 } as const
 
@@ -2877,17 +2964,18 @@ export type GlobalOmitConfig = {
   module?: Prisma.ModuleOmit
   aiConfiguration?: Prisma.AiConfigurationOmit
   enrollment?: Prisma.EnrollmentOmit
-  page?: Prisma.PageOmit
+  learningObjectType?: Prisma.LearningObjectTypeOmit
+  learningObject?: Prisma.LearningObjectOmit
   block?: Prisma.BlockOmit
   session?: Prisma.SessionOmit
   message?: Prisma.MessageOmit
-  pageView?: Prisma.PageViewOmit
-  pageRelation?: Prisma.PageRelationOmit
-  pageConcept?: Prisma.PageConceptOmit
+  learningObjectView?: Prisma.LearningObjectViewOmit
+  learningObjectRelation?: Prisma.LearningObjectRelationOmit
+  learningObjectConcept?: Prisma.LearningObjectConceptOmit
   activity?: Prisma.ActivityOmit
   activityAttempt?: Prisma.ActivityAttemptOmit
   prompt?: Prisma.PromptOmit
-  pageFeedback?: Prisma.PageFeedbackOmit
+  learningObjectFeedback?: Prisma.LearningObjectFeedbackOmit
   note?: Prisma.NoteOmit
   studentQuestion?: Prisma.StudentQuestionOmit
   questionReply?: Prisma.QuestionReplyOmit

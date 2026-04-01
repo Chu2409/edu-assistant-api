@@ -29,21 +29,21 @@ export type AggregateStudentQuestion = {
 export type StudentQuestionAvgAggregateOutputType = {
   id: number | null
   userId: number | null
-  pageId: number | null
+  learningObjectId: number | null
   upvotes: number | null
 }
 
 export type StudentQuestionSumAggregateOutputType = {
   id: number | null
   userId: number | null
-  pageId: number | null
+  learningObjectId: number | null
   upvotes: number | null
 }
 
 export type StudentQuestionMinAggregateOutputType = {
   id: number | null
   userId: number | null
-  pageId: number | null
+  learningObjectId: number | null
   question: string | null
   isPublic: boolean | null
   upvotes: number | null
@@ -54,7 +54,7 @@ export type StudentQuestionMinAggregateOutputType = {
 export type StudentQuestionMaxAggregateOutputType = {
   id: number | null
   userId: number | null
-  pageId: number | null
+  learningObjectId: number | null
   question: string | null
   isPublic: boolean | null
   upvotes: number | null
@@ -65,7 +65,7 @@ export type StudentQuestionMaxAggregateOutputType = {
 export type StudentQuestionCountAggregateOutputType = {
   id: number
   userId: number
-  pageId: number
+  learningObjectId: number
   question: number
   isPublic: number
   upvotes: number
@@ -78,21 +78,21 @@ export type StudentQuestionCountAggregateOutputType = {
 export type StudentQuestionAvgAggregateInputType = {
   id?: true
   userId?: true
-  pageId?: true
+  learningObjectId?: true
   upvotes?: true
 }
 
 export type StudentQuestionSumAggregateInputType = {
   id?: true
   userId?: true
-  pageId?: true
+  learningObjectId?: true
   upvotes?: true
 }
 
 export type StudentQuestionMinAggregateInputType = {
   id?: true
   userId?: true
-  pageId?: true
+  learningObjectId?: true
   question?: true
   isPublic?: true
   upvotes?: true
@@ -103,7 +103,7 @@ export type StudentQuestionMinAggregateInputType = {
 export type StudentQuestionMaxAggregateInputType = {
   id?: true
   userId?: true
-  pageId?: true
+  learningObjectId?: true
   question?: true
   isPublic?: true
   upvotes?: true
@@ -114,7 +114,7 @@ export type StudentQuestionMaxAggregateInputType = {
 export type StudentQuestionCountAggregateInputType = {
   id?: true
   userId?: true
-  pageId?: true
+  learningObjectId?: true
   question?: true
   isPublic?: true
   upvotes?: true
@@ -212,7 +212,7 @@ export type StudentQuestionGroupByArgs<ExtArgs extends runtime.Types.Extensions.
 export type StudentQuestionGroupByOutputType = {
   id: number
   userId: number
-  pageId: number
+  learningObjectId: number
   question: string
   isPublic: boolean
   upvotes: number
@@ -246,28 +246,28 @@ export type StudentQuestionWhereInput = {
   NOT?: Prisma.StudentQuestionWhereInput | Prisma.StudentQuestionWhereInput[]
   id?: Prisma.IntFilter<"StudentQuestion"> | number
   userId?: Prisma.IntFilter<"StudentQuestion"> | number
-  pageId?: Prisma.IntFilter<"StudentQuestion"> | number
+  learningObjectId?: Prisma.IntFilter<"StudentQuestion"> | number
   question?: Prisma.StringFilter<"StudentQuestion"> | string
   isPublic?: Prisma.BoolFilter<"StudentQuestion"> | boolean
   upvotes?: Prisma.IntFilter<"StudentQuestion"> | number
   createdAt?: Prisma.DateTimeFilter<"StudentQuestion"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"StudentQuestion"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
-  page?: Prisma.XOR<Prisma.PageScalarRelationFilter, Prisma.PageWhereInput>
+  learningObject?: Prisma.XOR<Prisma.LearningObjectScalarRelationFilter, Prisma.LearningObjectWhereInput>
   replies?: Prisma.QuestionReplyListRelationFilter
 }
 
 export type StudentQuestionOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
-  pageId?: Prisma.SortOrder
+  learningObjectId?: Prisma.SortOrder
   question?: Prisma.SortOrder
   isPublic?: Prisma.SortOrder
   upvotes?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   user?: Prisma.UserOrderByWithRelationInput
-  page?: Prisma.PageOrderByWithRelationInput
+  learningObject?: Prisma.LearningObjectOrderByWithRelationInput
   replies?: Prisma.QuestionReplyOrderByRelationAggregateInput
 }
 
@@ -277,21 +277,21 @@ export type StudentQuestionWhereUniqueInput = Prisma.AtLeast<{
   OR?: Prisma.StudentQuestionWhereInput[]
   NOT?: Prisma.StudentQuestionWhereInput | Prisma.StudentQuestionWhereInput[]
   userId?: Prisma.IntFilter<"StudentQuestion"> | number
-  pageId?: Prisma.IntFilter<"StudentQuestion"> | number
+  learningObjectId?: Prisma.IntFilter<"StudentQuestion"> | number
   question?: Prisma.StringFilter<"StudentQuestion"> | string
   isPublic?: Prisma.BoolFilter<"StudentQuestion"> | boolean
   upvotes?: Prisma.IntFilter<"StudentQuestion"> | number
   createdAt?: Prisma.DateTimeFilter<"StudentQuestion"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"StudentQuestion"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
-  page?: Prisma.XOR<Prisma.PageScalarRelationFilter, Prisma.PageWhereInput>
+  learningObject?: Prisma.XOR<Prisma.LearningObjectScalarRelationFilter, Prisma.LearningObjectWhereInput>
   replies?: Prisma.QuestionReplyListRelationFilter
 }, "id">
 
 export type StudentQuestionOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
-  pageId?: Prisma.SortOrder
+  learningObjectId?: Prisma.SortOrder
   question?: Prisma.SortOrder
   isPublic?: Prisma.SortOrder
   upvotes?: Prisma.SortOrder
@@ -310,7 +310,7 @@ export type StudentQuestionScalarWhereWithAggregatesInput = {
   NOT?: Prisma.StudentQuestionScalarWhereWithAggregatesInput | Prisma.StudentQuestionScalarWhereWithAggregatesInput[]
   id?: Prisma.IntWithAggregatesFilter<"StudentQuestion"> | number
   userId?: Prisma.IntWithAggregatesFilter<"StudentQuestion"> | number
-  pageId?: Prisma.IntWithAggregatesFilter<"StudentQuestion"> | number
+  learningObjectId?: Prisma.IntWithAggregatesFilter<"StudentQuestion"> | number
   question?: Prisma.StringWithAggregatesFilter<"StudentQuestion"> | string
   isPublic?: Prisma.BoolWithAggregatesFilter<"StudentQuestion"> | boolean
   upvotes?: Prisma.IntWithAggregatesFilter<"StudentQuestion"> | number
@@ -325,14 +325,14 @@ export type StudentQuestionCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutStudentQuestionsInput
-  page: Prisma.PageCreateNestedOneWithoutStudentQuestionsInput
+  learningObject: Prisma.LearningObjectCreateNestedOneWithoutStudentQuestionsInput
   replies?: Prisma.QuestionReplyCreateNestedManyWithoutQuestionInput
 }
 
 export type StudentQuestionUncheckedCreateInput = {
   id?: number
   userId: number
-  pageId: number
+  learningObjectId: number
   question: string
   isPublic?: boolean
   upvotes?: number
@@ -348,14 +348,14 @@ export type StudentQuestionUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutStudentQuestionsNestedInput
-  page?: Prisma.PageUpdateOneRequiredWithoutStudentQuestionsNestedInput
+  learningObject?: Prisma.LearningObjectUpdateOneRequiredWithoutStudentQuestionsNestedInput
   replies?: Prisma.QuestionReplyUpdateManyWithoutQuestionNestedInput
 }
 
 export type StudentQuestionUncheckedUpdateInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   userId?: Prisma.IntFieldUpdateOperationsInput | number
-  pageId?: Prisma.IntFieldUpdateOperationsInput | number
+  learningObjectId?: Prisma.IntFieldUpdateOperationsInput | number
   question?: Prisma.StringFieldUpdateOperationsInput | string
   isPublic?: Prisma.BoolFieldUpdateOperationsInput | boolean
   upvotes?: Prisma.IntFieldUpdateOperationsInput | number
@@ -367,7 +367,7 @@ export type StudentQuestionUncheckedUpdateInput = {
 export type StudentQuestionCreateManyInput = {
   id?: number
   userId: number
-  pageId: number
+  learningObjectId: number
   question: string
   isPublic?: boolean
   upvotes?: number
@@ -386,7 +386,7 @@ export type StudentQuestionUpdateManyMutationInput = {
 export type StudentQuestionUncheckedUpdateManyInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   userId?: Prisma.IntFieldUpdateOperationsInput | number
-  pageId?: Prisma.IntFieldUpdateOperationsInput | number
+  learningObjectId?: Prisma.IntFieldUpdateOperationsInput | number
   question?: Prisma.StringFieldUpdateOperationsInput | string
   isPublic?: Prisma.BoolFieldUpdateOperationsInput | boolean
   upvotes?: Prisma.IntFieldUpdateOperationsInput | number
@@ -407,7 +407,7 @@ export type StudentQuestionOrderByRelationAggregateInput = {
 export type StudentQuestionCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
-  pageId?: Prisma.SortOrder
+  learningObjectId?: Prisma.SortOrder
   question?: Prisma.SortOrder
   isPublic?: Prisma.SortOrder
   upvotes?: Prisma.SortOrder
@@ -418,14 +418,14 @@ export type StudentQuestionCountOrderByAggregateInput = {
 export type StudentQuestionAvgOrderByAggregateInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
-  pageId?: Prisma.SortOrder
+  learningObjectId?: Prisma.SortOrder
   upvotes?: Prisma.SortOrder
 }
 
 export type StudentQuestionMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
-  pageId?: Prisma.SortOrder
+  learningObjectId?: Prisma.SortOrder
   question?: Prisma.SortOrder
   isPublic?: Prisma.SortOrder
   upvotes?: Prisma.SortOrder
@@ -436,7 +436,7 @@ export type StudentQuestionMaxOrderByAggregateInput = {
 export type StudentQuestionMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
-  pageId?: Prisma.SortOrder
+  learningObjectId?: Prisma.SortOrder
   question?: Prisma.SortOrder
   isPublic?: Prisma.SortOrder
   upvotes?: Prisma.SortOrder
@@ -447,7 +447,7 @@ export type StudentQuestionMinOrderByAggregateInput = {
 export type StudentQuestionSumOrderByAggregateInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
-  pageId?: Prisma.SortOrder
+  learningObjectId?: Prisma.SortOrder
   upvotes?: Prisma.SortOrder
 }
 
@@ -498,45 +498,45 @@ export type StudentQuestionUncheckedUpdateManyWithoutUserNestedInput = {
   deleteMany?: Prisma.StudentQuestionScalarWhereInput | Prisma.StudentQuestionScalarWhereInput[]
 }
 
-export type StudentQuestionCreateNestedManyWithoutPageInput = {
-  create?: Prisma.XOR<Prisma.StudentQuestionCreateWithoutPageInput, Prisma.StudentQuestionUncheckedCreateWithoutPageInput> | Prisma.StudentQuestionCreateWithoutPageInput[] | Prisma.StudentQuestionUncheckedCreateWithoutPageInput[]
-  connectOrCreate?: Prisma.StudentQuestionCreateOrConnectWithoutPageInput | Prisma.StudentQuestionCreateOrConnectWithoutPageInput[]
-  createMany?: Prisma.StudentQuestionCreateManyPageInputEnvelope
+export type StudentQuestionCreateNestedManyWithoutLearningObjectInput = {
+  create?: Prisma.XOR<Prisma.StudentQuestionCreateWithoutLearningObjectInput, Prisma.StudentQuestionUncheckedCreateWithoutLearningObjectInput> | Prisma.StudentQuestionCreateWithoutLearningObjectInput[] | Prisma.StudentQuestionUncheckedCreateWithoutLearningObjectInput[]
+  connectOrCreate?: Prisma.StudentQuestionCreateOrConnectWithoutLearningObjectInput | Prisma.StudentQuestionCreateOrConnectWithoutLearningObjectInput[]
+  createMany?: Prisma.StudentQuestionCreateManyLearningObjectInputEnvelope
   connect?: Prisma.StudentQuestionWhereUniqueInput | Prisma.StudentQuestionWhereUniqueInput[]
 }
 
-export type StudentQuestionUncheckedCreateNestedManyWithoutPageInput = {
-  create?: Prisma.XOR<Prisma.StudentQuestionCreateWithoutPageInput, Prisma.StudentQuestionUncheckedCreateWithoutPageInput> | Prisma.StudentQuestionCreateWithoutPageInput[] | Prisma.StudentQuestionUncheckedCreateWithoutPageInput[]
-  connectOrCreate?: Prisma.StudentQuestionCreateOrConnectWithoutPageInput | Prisma.StudentQuestionCreateOrConnectWithoutPageInput[]
-  createMany?: Prisma.StudentQuestionCreateManyPageInputEnvelope
+export type StudentQuestionUncheckedCreateNestedManyWithoutLearningObjectInput = {
+  create?: Prisma.XOR<Prisma.StudentQuestionCreateWithoutLearningObjectInput, Prisma.StudentQuestionUncheckedCreateWithoutLearningObjectInput> | Prisma.StudentQuestionCreateWithoutLearningObjectInput[] | Prisma.StudentQuestionUncheckedCreateWithoutLearningObjectInput[]
+  connectOrCreate?: Prisma.StudentQuestionCreateOrConnectWithoutLearningObjectInput | Prisma.StudentQuestionCreateOrConnectWithoutLearningObjectInput[]
+  createMany?: Prisma.StudentQuestionCreateManyLearningObjectInputEnvelope
   connect?: Prisma.StudentQuestionWhereUniqueInput | Prisma.StudentQuestionWhereUniqueInput[]
 }
 
-export type StudentQuestionUpdateManyWithoutPageNestedInput = {
-  create?: Prisma.XOR<Prisma.StudentQuestionCreateWithoutPageInput, Prisma.StudentQuestionUncheckedCreateWithoutPageInput> | Prisma.StudentQuestionCreateWithoutPageInput[] | Prisma.StudentQuestionUncheckedCreateWithoutPageInput[]
-  connectOrCreate?: Prisma.StudentQuestionCreateOrConnectWithoutPageInput | Prisma.StudentQuestionCreateOrConnectWithoutPageInput[]
-  upsert?: Prisma.StudentQuestionUpsertWithWhereUniqueWithoutPageInput | Prisma.StudentQuestionUpsertWithWhereUniqueWithoutPageInput[]
-  createMany?: Prisma.StudentQuestionCreateManyPageInputEnvelope
+export type StudentQuestionUpdateManyWithoutLearningObjectNestedInput = {
+  create?: Prisma.XOR<Prisma.StudentQuestionCreateWithoutLearningObjectInput, Prisma.StudentQuestionUncheckedCreateWithoutLearningObjectInput> | Prisma.StudentQuestionCreateWithoutLearningObjectInput[] | Prisma.StudentQuestionUncheckedCreateWithoutLearningObjectInput[]
+  connectOrCreate?: Prisma.StudentQuestionCreateOrConnectWithoutLearningObjectInput | Prisma.StudentQuestionCreateOrConnectWithoutLearningObjectInput[]
+  upsert?: Prisma.StudentQuestionUpsertWithWhereUniqueWithoutLearningObjectInput | Prisma.StudentQuestionUpsertWithWhereUniqueWithoutLearningObjectInput[]
+  createMany?: Prisma.StudentQuestionCreateManyLearningObjectInputEnvelope
   set?: Prisma.StudentQuestionWhereUniqueInput | Prisma.StudentQuestionWhereUniqueInput[]
   disconnect?: Prisma.StudentQuestionWhereUniqueInput | Prisma.StudentQuestionWhereUniqueInput[]
   delete?: Prisma.StudentQuestionWhereUniqueInput | Prisma.StudentQuestionWhereUniqueInput[]
   connect?: Prisma.StudentQuestionWhereUniqueInput | Prisma.StudentQuestionWhereUniqueInput[]
-  update?: Prisma.StudentQuestionUpdateWithWhereUniqueWithoutPageInput | Prisma.StudentQuestionUpdateWithWhereUniqueWithoutPageInput[]
-  updateMany?: Prisma.StudentQuestionUpdateManyWithWhereWithoutPageInput | Prisma.StudentQuestionUpdateManyWithWhereWithoutPageInput[]
+  update?: Prisma.StudentQuestionUpdateWithWhereUniqueWithoutLearningObjectInput | Prisma.StudentQuestionUpdateWithWhereUniqueWithoutLearningObjectInput[]
+  updateMany?: Prisma.StudentQuestionUpdateManyWithWhereWithoutLearningObjectInput | Prisma.StudentQuestionUpdateManyWithWhereWithoutLearningObjectInput[]
   deleteMany?: Prisma.StudentQuestionScalarWhereInput | Prisma.StudentQuestionScalarWhereInput[]
 }
 
-export type StudentQuestionUncheckedUpdateManyWithoutPageNestedInput = {
-  create?: Prisma.XOR<Prisma.StudentQuestionCreateWithoutPageInput, Prisma.StudentQuestionUncheckedCreateWithoutPageInput> | Prisma.StudentQuestionCreateWithoutPageInput[] | Prisma.StudentQuestionUncheckedCreateWithoutPageInput[]
-  connectOrCreate?: Prisma.StudentQuestionCreateOrConnectWithoutPageInput | Prisma.StudentQuestionCreateOrConnectWithoutPageInput[]
-  upsert?: Prisma.StudentQuestionUpsertWithWhereUniqueWithoutPageInput | Prisma.StudentQuestionUpsertWithWhereUniqueWithoutPageInput[]
-  createMany?: Prisma.StudentQuestionCreateManyPageInputEnvelope
+export type StudentQuestionUncheckedUpdateManyWithoutLearningObjectNestedInput = {
+  create?: Prisma.XOR<Prisma.StudentQuestionCreateWithoutLearningObjectInput, Prisma.StudentQuestionUncheckedCreateWithoutLearningObjectInput> | Prisma.StudentQuestionCreateWithoutLearningObjectInput[] | Prisma.StudentQuestionUncheckedCreateWithoutLearningObjectInput[]
+  connectOrCreate?: Prisma.StudentQuestionCreateOrConnectWithoutLearningObjectInput | Prisma.StudentQuestionCreateOrConnectWithoutLearningObjectInput[]
+  upsert?: Prisma.StudentQuestionUpsertWithWhereUniqueWithoutLearningObjectInput | Prisma.StudentQuestionUpsertWithWhereUniqueWithoutLearningObjectInput[]
+  createMany?: Prisma.StudentQuestionCreateManyLearningObjectInputEnvelope
   set?: Prisma.StudentQuestionWhereUniqueInput | Prisma.StudentQuestionWhereUniqueInput[]
   disconnect?: Prisma.StudentQuestionWhereUniqueInput | Prisma.StudentQuestionWhereUniqueInput[]
   delete?: Prisma.StudentQuestionWhereUniqueInput | Prisma.StudentQuestionWhereUniqueInput[]
   connect?: Prisma.StudentQuestionWhereUniqueInput | Prisma.StudentQuestionWhereUniqueInput[]
-  update?: Prisma.StudentQuestionUpdateWithWhereUniqueWithoutPageInput | Prisma.StudentQuestionUpdateWithWhereUniqueWithoutPageInput[]
-  updateMany?: Prisma.StudentQuestionUpdateManyWithWhereWithoutPageInput | Prisma.StudentQuestionUpdateManyWithWhereWithoutPageInput[]
+  update?: Prisma.StudentQuestionUpdateWithWhereUniqueWithoutLearningObjectInput | Prisma.StudentQuestionUpdateWithWhereUniqueWithoutLearningObjectInput[]
+  updateMany?: Prisma.StudentQuestionUpdateManyWithWhereWithoutLearningObjectInput | Prisma.StudentQuestionUpdateManyWithWhereWithoutLearningObjectInput[]
   deleteMany?: Prisma.StudentQuestionScalarWhereInput | Prisma.StudentQuestionScalarWhereInput[]
 }
 
@@ -560,13 +560,13 @@ export type StudentQuestionCreateWithoutUserInput = {
   upvotes?: number
   createdAt?: Date | string
   updatedAt?: Date | string
-  page: Prisma.PageCreateNestedOneWithoutStudentQuestionsInput
+  learningObject: Prisma.LearningObjectCreateNestedOneWithoutStudentQuestionsInput
   replies?: Prisma.QuestionReplyCreateNestedManyWithoutQuestionInput
 }
 
 export type StudentQuestionUncheckedCreateWithoutUserInput = {
   id?: number
-  pageId: number
+  learningObjectId: number
   question: string
   isPublic?: boolean
   upvotes?: number
@@ -607,7 +607,7 @@ export type StudentQuestionScalarWhereInput = {
   NOT?: Prisma.StudentQuestionScalarWhereInput | Prisma.StudentQuestionScalarWhereInput[]
   id?: Prisma.IntFilter<"StudentQuestion"> | number
   userId?: Prisma.IntFilter<"StudentQuestion"> | number
-  pageId?: Prisma.IntFilter<"StudentQuestion"> | number
+  learningObjectId?: Prisma.IntFilter<"StudentQuestion"> | number
   question?: Prisma.StringFilter<"StudentQuestion"> | string
   isPublic?: Prisma.BoolFilter<"StudentQuestion"> | boolean
   upvotes?: Prisma.IntFilter<"StudentQuestion"> | number
@@ -615,7 +615,7 @@ export type StudentQuestionScalarWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"StudentQuestion"> | Date | string
 }
 
-export type StudentQuestionCreateWithoutPageInput = {
+export type StudentQuestionCreateWithoutLearningObjectInput = {
   question: string
   isPublic?: boolean
   upvotes?: number
@@ -625,7 +625,7 @@ export type StudentQuestionCreateWithoutPageInput = {
   replies?: Prisma.QuestionReplyCreateNestedManyWithoutQuestionInput
 }
 
-export type StudentQuestionUncheckedCreateWithoutPageInput = {
+export type StudentQuestionUncheckedCreateWithoutLearningObjectInput = {
   id?: number
   userId: number
   question: string
@@ -636,30 +636,30 @@ export type StudentQuestionUncheckedCreateWithoutPageInput = {
   replies?: Prisma.QuestionReplyUncheckedCreateNestedManyWithoutQuestionInput
 }
 
-export type StudentQuestionCreateOrConnectWithoutPageInput = {
+export type StudentQuestionCreateOrConnectWithoutLearningObjectInput = {
   where: Prisma.StudentQuestionWhereUniqueInput
-  create: Prisma.XOR<Prisma.StudentQuestionCreateWithoutPageInput, Prisma.StudentQuestionUncheckedCreateWithoutPageInput>
+  create: Prisma.XOR<Prisma.StudentQuestionCreateWithoutLearningObjectInput, Prisma.StudentQuestionUncheckedCreateWithoutLearningObjectInput>
 }
 
-export type StudentQuestionCreateManyPageInputEnvelope = {
-  data: Prisma.StudentQuestionCreateManyPageInput | Prisma.StudentQuestionCreateManyPageInput[]
+export type StudentQuestionCreateManyLearningObjectInputEnvelope = {
+  data: Prisma.StudentQuestionCreateManyLearningObjectInput | Prisma.StudentQuestionCreateManyLearningObjectInput[]
   skipDuplicates?: boolean
 }
 
-export type StudentQuestionUpsertWithWhereUniqueWithoutPageInput = {
+export type StudentQuestionUpsertWithWhereUniqueWithoutLearningObjectInput = {
   where: Prisma.StudentQuestionWhereUniqueInput
-  update: Prisma.XOR<Prisma.StudentQuestionUpdateWithoutPageInput, Prisma.StudentQuestionUncheckedUpdateWithoutPageInput>
-  create: Prisma.XOR<Prisma.StudentQuestionCreateWithoutPageInput, Prisma.StudentQuestionUncheckedCreateWithoutPageInput>
+  update: Prisma.XOR<Prisma.StudentQuestionUpdateWithoutLearningObjectInput, Prisma.StudentQuestionUncheckedUpdateWithoutLearningObjectInput>
+  create: Prisma.XOR<Prisma.StudentQuestionCreateWithoutLearningObjectInput, Prisma.StudentQuestionUncheckedCreateWithoutLearningObjectInput>
 }
 
-export type StudentQuestionUpdateWithWhereUniqueWithoutPageInput = {
+export type StudentQuestionUpdateWithWhereUniqueWithoutLearningObjectInput = {
   where: Prisma.StudentQuestionWhereUniqueInput
-  data: Prisma.XOR<Prisma.StudentQuestionUpdateWithoutPageInput, Prisma.StudentQuestionUncheckedUpdateWithoutPageInput>
+  data: Prisma.XOR<Prisma.StudentQuestionUpdateWithoutLearningObjectInput, Prisma.StudentQuestionUncheckedUpdateWithoutLearningObjectInput>
 }
 
-export type StudentQuestionUpdateManyWithWhereWithoutPageInput = {
+export type StudentQuestionUpdateManyWithWhereWithoutLearningObjectInput = {
   where: Prisma.StudentQuestionScalarWhereInput
-  data: Prisma.XOR<Prisma.StudentQuestionUpdateManyMutationInput, Prisma.StudentQuestionUncheckedUpdateManyWithoutPageInput>
+  data: Prisma.XOR<Prisma.StudentQuestionUpdateManyMutationInput, Prisma.StudentQuestionUncheckedUpdateManyWithoutLearningObjectInput>
 }
 
 export type StudentQuestionCreateWithoutRepliesInput = {
@@ -669,13 +669,13 @@ export type StudentQuestionCreateWithoutRepliesInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutStudentQuestionsInput
-  page: Prisma.PageCreateNestedOneWithoutStudentQuestionsInput
+  learningObject: Prisma.LearningObjectCreateNestedOneWithoutStudentQuestionsInput
 }
 
 export type StudentQuestionUncheckedCreateWithoutRepliesInput = {
   id?: number
   userId: number
-  pageId: number
+  learningObjectId: number
   question: string
   isPublic?: boolean
   upvotes?: number
@@ -706,13 +706,13 @@ export type StudentQuestionUpdateWithoutRepliesInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutStudentQuestionsNestedInput
-  page?: Prisma.PageUpdateOneRequiredWithoutStudentQuestionsNestedInput
+  learningObject?: Prisma.LearningObjectUpdateOneRequiredWithoutStudentQuestionsNestedInput
 }
 
 export type StudentQuestionUncheckedUpdateWithoutRepliesInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   userId?: Prisma.IntFieldUpdateOperationsInput | number
-  pageId?: Prisma.IntFieldUpdateOperationsInput | number
+  learningObjectId?: Prisma.IntFieldUpdateOperationsInput | number
   question?: Prisma.StringFieldUpdateOperationsInput | string
   isPublic?: Prisma.BoolFieldUpdateOperationsInput | boolean
   upvotes?: Prisma.IntFieldUpdateOperationsInput | number
@@ -722,7 +722,7 @@ export type StudentQuestionUncheckedUpdateWithoutRepliesInput = {
 
 export type StudentQuestionCreateManyUserInput = {
   id?: number
-  pageId: number
+  learningObjectId: number
   question: string
   isPublic?: boolean
   upvotes?: number
@@ -736,13 +736,13 @@ export type StudentQuestionUpdateWithoutUserInput = {
   upvotes?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  page?: Prisma.PageUpdateOneRequiredWithoutStudentQuestionsNestedInput
+  learningObject?: Prisma.LearningObjectUpdateOneRequiredWithoutStudentQuestionsNestedInput
   replies?: Prisma.QuestionReplyUpdateManyWithoutQuestionNestedInput
 }
 
 export type StudentQuestionUncheckedUpdateWithoutUserInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
-  pageId?: Prisma.IntFieldUpdateOperationsInput | number
+  learningObjectId?: Prisma.IntFieldUpdateOperationsInput | number
   question?: Prisma.StringFieldUpdateOperationsInput | string
   isPublic?: Prisma.BoolFieldUpdateOperationsInput | boolean
   upvotes?: Prisma.IntFieldUpdateOperationsInput | number
@@ -753,7 +753,7 @@ export type StudentQuestionUncheckedUpdateWithoutUserInput = {
 
 export type StudentQuestionUncheckedUpdateManyWithoutUserInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
-  pageId?: Prisma.IntFieldUpdateOperationsInput | number
+  learningObjectId?: Prisma.IntFieldUpdateOperationsInput | number
   question?: Prisma.StringFieldUpdateOperationsInput | string
   isPublic?: Prisma.BoolFieldUpdateOperationsInput | boolean
   upvotes?: Prisma.IntFieldUpdateOperationsInput | number
@@ -761,7 +761,7 @@ export type StudentQuestionUncheckedUpdateManyWithoutUserInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
-export type StudentQuestionCreateManyPageInput = {
+export type StudentQuestionCreateManyLearningObjectInput = {
   id?: number
   userId: number
   question: string
@@ -771,7 +771,7 @@ export type StudentQuestionCreateManyPageInput = {
   updatedAt?: Date | string
 }
 
-export type StudentQuestionUpdateWithoutPageInput = {
+export type StudentQuestionUpdateWithoutLearningObjectInput = {
   question?: Prisma.StringFieldUpdateOperationsInput | string
   isPublic?: Prisma.BoolFieldUpdateOperationsInput | boolean
   upvotes?: Prisma.IntFieldUpdateOperationsInput | number
@@ -781,7 +781,7 @@ export type StudentQuestionUpdateWithoutPageInput = {
   replies?: Prisma.QuestionReplyUpdateManyWithoutQuestionNestedInput
 }
 
-export type StudentQuestionUncheckedUpdateWithoutPageInput = {
+export type StudentQuestionUncheckedUpdateWithoutLearningObjectInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   userId?: Prisma.IntFieldUpdateOperationsInput | number
   question?: Prisma.StringFieldUpdateOperationsInput | string
@@ -792,7 +792,7 @@ export type StudentQuestionUncheckedUpdateWithoutPageInput = {
   replies?: Prisma.QuestionReplyUncheckedUpdateManyWithoutQuestionNestedInput
 }
 
-export type StudentQuestionUncheckedUpdateManyWithoutPageInput = {
+export type StudentQuestionUncheckedUpdateManyWithoutLearningObjectInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   userId?: Prisma.IntFieldUpdateOperationsInput | number
   question?: Prisma.StringFieldUpdateOperationsInput | string
@@ -836,14 +836,14 @@ export type StudentQuestionCountOutputTypeCountRepliesArgs<ExtArgs extends runti
 export type StudentQuestionSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   userId?: boolean
-  pageId?: boolean
+  learningObjectId?: boolean
   question?: boolean
   isPublic?: boolean
   upvotes?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
-  page?: boolean | Prisma.PageDefaultArgs<ExtArgs>
+  learningObject?: boolean | Prisma.LearningObjectDefaultArgs<ExtArgs>
   replies?: boolean | Prisma.StudentQuestion$repliesArgs<ExtArgs>
   _count?: boolean | Prisma.StudentQuestionCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["studentQuestion"]>
@@ -851,33 +851,33 @@ export type StudentQuestionSelect<ExtArgs extends runtime.Types.Extensions.Inter
 export type StudentQuestionSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   userId?: boolean
-  pageId?: boolean
+  learningObjectId?: boolean
   question?: boolean
   isPublic?: boolean
   upvotes?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
-  page?: boolean | Prisma.PageDefaultArgs<ExtArgs>
+  learningObject?: boolean | Prisma.LearningObjectDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["studentQuestion"]>
 
 export type StudentQuestionSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   userId?: boolean
-  pageId?: boolean
+  learningObjectId?: boolean
   question?: boolean
   isPublic?: boolean
   upvotes?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
-  page?: boolean | Prisma.PageDefaultArgs<ExtArgs>
+  learningObject?: boolean | Prisma.LearningObjectDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["studentQuestion"]>
 
 export type StudentQuestionSelectScalar = {
   id?: boolean
   userId?: boolean
-  pageId?: boolean
+  learningObjectId?: boolean
   question?: boolean
   isPublic?: boolean
   upvotes?: boolean
@@ -885,33 +885,33 @@ export type StudentQuestionSelectScalar = {
   updatedAt?: boolean
 }
 
-export type StudentQuestionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "pageId" | "question" | "isPublic" | "upvotes" | "createdAt" | "updatedAt", ExtArgs["result"]["studentQuestion"]>
+export type StudentQuestionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "learningObjectId" | "question" | "isPublic" | "upvotes" | "createdAt" | "updatedAt", ExtArgs["result"]["studentQuestion"]>
 export type StudentQuestionInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
-  page?: boolean | Prisma.PageDefaultArgs<ExtArgs>
+  learningObject?: boolean | Prisma.LearningObjectDefaultArgs<ExtArgs>
   replies?: boolean | Prisma.StudentQuestion$repliesArgs<ExtArgs>
   _count?: boolean | Prisma.StudentQuestionCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type StudentQuestionIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
-  page?: boolean | Prisma.PageDefaultArgs<ExtArgs>
+  learningObject?: boolean | Prisma.LearningObjectDefaultArgs<ExtArgs>
 }
 export type StudentQuestionIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
-  page?: boolean | Prisma.PageDefaultArgs<ExtArgs>
+  learningObject?: boolean | Prisma.LearningObjectDefaultArgs<ExtArgs>
 }
 
 export type $StudentQuestionPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "StudentQuestion"
   objects: {
     user: Prisma.$UserPayload<ExtArgs>
-    page: Prisma.$PagePayload<ExtArgs>
+    learningObject: Prisma.$LearningObjectPayload<ExtArgs>
     replies: Prisma.$QuestionReplyPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
     userId: number
-    pageId: number
+    learningObjectId: number
     question: string
     isPublic: boolean
     upvotes: number
@@ -1312,7 +1312,7 @@ readonly fields: StudentQuestionFieldRefs;
 export interface Prisma__StudentQuestionClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   user<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-  page<T extends Prisma.PageDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.PageDefaultArgs<ExtArgs>>): Prisma.Prisma__PageClient<runtime.Types.Result.GetResult<Prisma.$PagePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  learningObject<T extends Prisma.LearningObjectDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.LearningObjectDefaultArgs<ExtArgs>>): Prisma.Prisma__LearningObjectClient<runtime.Types.Result.GetResult<Prisma.$LearningObjectPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   replies<T extends Prisma.StudentQuestion$repliesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.StudentQuestion$repliesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$QuestionReplyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -1345,7 +1345,7 @@ export interface Prisma__StudentQuestionClient<T, Null = never, ExtArgs extends 
 export interface StudentQuestionFieldRefs {
   readonly id: Prisma.FieldRef<"StudentQuestion", 'Int'>
   readonly userId: Prisma.FieldRef<"StudentQuestion", 'Int'>
-  readonly pageId: Prisma.FieldRef<"StudentQuestion", 'Int'>
+  readonly learningObjectId: Prisma.FieldRef<"StudentQuestion", 'Int'>
   readonly question: Prisma.FieldRef<"StudentQuestion", 'String'>
   readonly isPublic: Prisma.FieldRef<"StudentQuestion", 'Boolean'>
   readonly upvotes: Prisma.FieldRef<"StudentQuestion", 'Int'>

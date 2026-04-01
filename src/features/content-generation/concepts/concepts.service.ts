@@ -6,7 +6,7 @@ import {
 } from '@nestjs/common'
 import { DBService } from 'src/core/database/database.service'
 import { OpenaiService } from 'src/providers/ai/services/openai.service'
-import { extractPageConceptsPrompt } from './prompts/extract-page-concepts.prompt'
+import { extractLoConceptsPrompt } from './prompts/extract-lo-concepts.prompt'
 import { generateConceptDefinitionPrompt } from './prompts/generate-concept.prompt'
 import { ExtractConceptsDto } from './dtos/req/extract-concepts.dto'
 import { GenerateConceptDto } from './dtos/req/generate-concept.dto'
@@ -30,7 +30,7 @@ export class ConceptsService {
     data: ExtractConceptsDto,
   ): Promise<PageConceptsExtractedDto> {
     this.logger.log('Extracting page concepts')
-    const page = await this.dbService.page.findUnique({
+    const page = await this.dbService.learningObject.findUnique({
       where: { id: data.pageId },
       include: { blocks: true, module: { include: { aiConfiguration: true } } },
     })
@@ -43,7 +43,7 @@ export class ConceptsService {
       throw new BadRequestException('Page has no blocks')
     }
 
-    const prompt = extractPageConceptsPrompt({
+    const prompt = extractLoConceptsPrompt({
       blocks: page.blocks
         .filter((b) => b.type === BlockType.TEXT)
         .map((b) => ({
@@ -70,7 +70,7 @@ export class ConceptsService {
 
     const block = await this.dbService.block.findUnique({
       where: { id: data.blockId },
-      include: { page: true },
+      include: { learningObject: true },
     })
 
     if (!block) {
@@ -82,7 +82,7 @@ export class ConceptsService {
       context: {
         surroundingText: parseJsonField<{ markdown: string }>(block.content)
           .markdown,
-        pageTitle: block.page.title,
+        pageTitle: block.learningObject.title,
       },
       config: {
         language: data.language ?? 'es',

@@ -269,7 +269,7 @@ export type ModuleWhereInput = {
   createdAt?: Prisma.DateTimeFilter<"Module"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Module"> | Date | string
   teacher?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
-  pages?: Prisma.PageListRelationFilter
+  learningObjects?: Prisma.LearningObjectListRelationFilter
   enrollments?: Prisma.EnrollmentListRelationFilter
   aiConfiguration?: Prisma.XOR<Prisma.AiConfigurationNullableScalarRelationFilter, Prisma.AiConfigurationWhereInput> | null
   moduleMetrics?: Prisma.XOR<Prisma.ModuleMetricsNullableScalarRelationFilter, Prisma.ModuleMetricsWhereInput> | null
@@ -288,7 +288,7 @@ export type ModuleOrderByWithRelationInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   teacher?: Prisma.UserOrderByWithRelationInput
-  pages?: Prisma.PageOrderByRelationAggregateInput
+  learningObjects?: Prisma.LearningObjectOrderByRelationAggregateInput
   enrollments?: Prisma.EnrollmentOrderByRelationAggregateInput
   aiConfiguration?: Prisma.AiConfigurationOrderByWithRelationInput
   moduleMetrics?: Prisma.ModuleMetricsOrderByWithRelationInput
@@ -310,7 +310,7 @@ export type ModuleWhereUniqueInput = Prisma.AtLeast<{
   createdAt?: Prisma.DateTimeFilter<"Module"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Module"> | Date | string
   teacher?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
-  pages?: Prisma.PageListRelationFilter
+  learningObjects?: Prisma.LearningObjectListRelationFilter
   enrollments?: Prisma.EnrollmentListRelationFilter
   aiConfiguration?: Prisma.XOR<Prisma.AiConfigurationNullableScalarRelationFilter, Prisma.AiConfigurationWhereInput> | null
   moduleMetrics?: Prisma.XOR<Prisma.ModuleMetricsNullableScalarRelationFilter, Prisma.ModuleMetricsWhereInput> | null
@@ -363,7 +363,7 @@ export type ModuleCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   teacher: Prisma.UserCreateNestedOneWithoutModulesAsTeacherInput
-  pages?: Prisma.PageCreateNestedManyWithoutModuleInput
+  learningObjects?: Prisma.LearningObjectCreateNestedManyWithoutModuleInput
   enrollments?: Prisma.EnrollmentCreateNestedManyWithoutModuleInput
   aiConfiguration?: Prisma.AiConfigurationCreateNestedOneWithoutModuleInput
   moduleMetrics?: Prisma.ModuleMetricsCreateNestedOneWithoutModuleInput
@@ -381,7 +381,7 @@ export type ModuleUncheckedCreateInput = {
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
-  pages?: Prisma.PageUncheckedCreateNestedManyWithoutModuleInput
+  learningObjects?: Prisma.LearningObjectUncheckedCreateNestedManyWithoutModuleInput
   enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutModuleInput
   aiConfiguration?: Prisma.AiConfigurationUncheckedCreateNestedOneWithoutModuleInput
   moduleMetrics?: Prisma.ModuleMetricsUncheckedCreateNestedOneWithoutModuleInput
@@ -398,7 +398,7 @@ export type ModuleUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   teacher?: Prisma.UserUpdateOneRequiredWithoutModulesAsTeacherNestedInput
-  pages?: Prisma.PageUpdateManyWithoutModuleNestedInput
+  learningObjects?: Prisma.LearningObjectUpdateManyWithoutModuleNestedInput
   enrollments?: Prisma.EnrollmentUpdateManyWithoutModuleNestedInput
   aiConfiguration?: Prisma.AiConfigurationUpdateOneWithoutModuleNestedInput
   moduleMetrics?: Prisma.ModuleMetricsUpdateOneWithoutModuleNestedInput
@@ -416,7 +416,7 @@ export type ModuleUncheckedUpdateInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  pages?: Prisma.PageUncheckedUpdateManyWithoutModuleNestedInput
+  learningObjects?: Prisma.LearningObjectUncheckedUpdateManyWithoutModuleNestedInput
   enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutModuleNestedInput
   aiConfiguration?: Prisma.AiConfigurationUncheckedUpdateOneWithoutModuleNestedInput
   moduleMetrics?: Prisma.ModuleMetricsUncheckedUpdateOneWithoutModuleNestedInput
@@ -599,18 +599,18 @@ export type ModuleUpdateOneRequiredWithoutEnrollmentsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.ModuleUpdateToOneWithWhereWithoutEnrollmentsInput, Prisma.ModuleUpdateWithoutEnrollmentsInput>, Prisma.ModuleUncheckedUpdateWithoutEnrollmentsInput>
 }
 
-export type ModuleCreateNestedOneWithoutPagesInput = {
-  create?: Prisma.XOR<Prisma.ModuleCreateWithoutPagesInput, Prisma.ModuleUncheckedCreateWithoutPagesInput>
-  connectOrCreate?: Prisma.ModuleCreateOrConnectWithoutPagesInput
+export type ModuleCreateNestedOneWithoutLearningObjectsInput = {
+  create?: Prisma.XOR<Prisma.ModuleCreateWithoutLearningObjectsInput, Prisma.ModuleUncheckedCreateWithoutLearningObjectsInput>
+  connectOrCreate?: Prisma.ModuleCreateOrConnectWithoutLearningObjectsInput
   connect?: Prisma.ModuleWhereUniqueInput
 }
 
-export type ModuleUpdateOneRequiredWithoutPagesNestedInput = {
-  create?: Prisma.XOR<Prisma.ModuleCreateWithoutPagesInput, Prisma.ModuleUncheckedCreateWithoutPagesInput>
-  connectOrCreate?: Prisma.ModuleCreateOrConnectWithoutPagesInput
-  upsert?: Prisma.ModuleUpsertWithoutPagesInput
+export type ModuleUpdateOneRequiredWithoutLearningObjectsNestedInput = {
+  create?: Prisma.XOR<Prisma.ModuleCreateWithoutLearningObjectsInput, Prisma.ModuleUncheckedCreateWithoutLearningObjectsInput>
+  connectOrCreate?: Prisma.ModuleCreateOrConnectWithoutLearningObjectsInput
+  upsert?: Prisma.ModuleUpsertWithoutLearningObjectsInput
   connect?: Prisma.ModuleWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.ModuleUpdateToOneWithWhereWithoutPagesInput, Prisma.ModuleUpdateWithoutPagesInput>, Prisma.ModuleUncheckedUpdateWithoutPagesInput>
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ModuleUpdateToOneWithWhereWithoutLearningObjectsInput, Prisma.ModuleUpdateWithoutLearningObjectsInput>, Prisma.ModuleUncheckedUpdateWithoutLearningObjectsInput>
 }
 
 export type ModuleCreateNestedOneWithoutModuleMetricsInput = {
@@ -637,7 +637,7 @@ export type ModuleCreateWithoutTeacherInput = {
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
-  pages?: Prisma.PageCreateNestedManyWithoutModuleInput
+  learningObjects?: Prisma.LearningObjectCreateNestedManyWithoutModuleInput
   enrollments?: Prisma.EnrollmentCreateNestedManyWithoutModuleInput
   aiConfiguration?: Prisma.AiConfigurationCreateNestedOneWithoutModuleInput
   moduleMetrics?: Prisma.ModuleMetricsCreateNestedOneWithoutModuleInput
@@ -654,7 +654,7 @@ export type ModuleUncheckedCreateWithoutTeacherInput = {
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
-  pages?: Prisma.PageUncheckedCreateNestedManyWithoutModuleInput
+  learningObjects?: Prisma.LearningObjectUncheckedCreateNestedManyWithoutModuleInput
   enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutModuleInput
   aiConfiguration?: Prisma.AiConfigurationUncheckedCreateNestedOneWithoutModuleInput
   moduleMetrics?: Prisma.ModuleMetricsUncheckedCreateNestedOneWithoutModuleInput
@@ -714,7 +714,7 @@ export type ModuleCreateWithoutAiConfigurationInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   teacher: Prisma.UserCreateNestedOneWithoutModulesAsTeacherInput
-  pages?: Prisma.PageCreateNestedManyWithoutModuleInput
+  learningObjects?: Prisma.LearningObjectCreateNestedManyWithoutModuleInput
   enrollments?: Prisma.EnrollmentCreateNestedManyWithoutModuleInput
   moduleMetrics?: Prisma.ModuleMetricsCreateNestedOneWithoutModuleInput
 }
@@ -731,7 +731,7 @@ export type ModuleUncheckedCreateWithoutAiConfigurationInput = {
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
-  pages?: Prisma.PageUncheckedCreateNestedManyWithoutModuleInput
+  learningObjects?: Prisma.LearningObjectUncheckedCreateNestedManyWithoutModuleInput
   enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutModuleInput
   moduleMetrics?: Prisma.ModuleMetricsUncheckedCreateNestedOneWithoutModuleInput
 }
@@ -763,7 +763,7 @@ export type ModuleUpdateWithoutAiConfigurationInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   teacher?: Prisma.UserUpdateOneRequiredWithoutModulesAsTeacherNestedInput
-  pages?: Prisma.PageUpdateManyWithoutModuleNestedInput
+  learningObjects?: Prisma.LearningObjectUpdateManyWithoutModuleNestedInput
   enrollments?: Prisma.EnrollmentUpdateManyWithoutModuleNestedInput
   moduleMetrics?: Prisma.ModuleMetricsUpdateOneWithoutModuleNestedInput
 }
@@ -780,7 +780,7 @@ export type ModuleUncheckedUpdateWithoutAiConfigurationInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  pages?: Prisma.PageUncheckedUpdateManyWithoutModuleNestedInput
+  learningObjects?: Prisma.LearningObjectUncheckedUpdateManyWithoutModuleNestedInput
   enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutModuleNestedInput
   moduleMetrics?: Prisma.ModuleMetricsUncheckedUpdateOneWithoutModuleNestedInput
 }
@@ -796,7 +796,7 @@ export type ModuleCreateWithoutEnrollmentsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   teacher: Prisma.UserCreateNestedOneWithoutModulesAsTeacherInput
-  pages?: Prisma.PageCreateNestedManyWithoutModuleInput
+  learningObjects?: Prisma.LearningObjectCreateNestedManyWithoutModuleInput
   aiConfiguration?: Prisma.AiConfigurationCreateNestedOneWithoutModuleInput
   moduleMetrics?: Prisma.ModuleMetricsCreateNestedOneWithoutModuleInput
 }
@@ -813,7 +813,7 @@ export type ModuleUncheckedCreateWithoutEnrollmentsInput = {
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
-  pages?: Prisma.PageUncheckedCreateNestedManyWithoutModuleInput
+  learningObjects?: Prisma.LearningObjectUncheckedCreateNestedManyWithoutModuleInput
   aiConfiguration?: Prisma.AiConfigurationUncheckedCreateNestedOneWithoutModuleInput
   moduleMetrics?: Prisma.ModuleMetricsUncheckedCreateNestedOneWithoutModuleInput
 }
@@ -845,7 +845,7 @@ export type ModuleUpdateWithoutEnrollmentsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   teacher?: Prisma.UserUpdateOneRequiredWithoutModulesAsTeacherNestedInput
-  pages?: Prisma.PageUpdateManyWithoutModuleNestedInput
+  learningObjects?: Prisma.LearningObjectUpdateManyWithoutModuleNestedInput
   aiConfiguration?: Prisma.AiConfigurationUpdateOneWithoutModuleNestedInput
   moduleMetrics?: Prisma.ModuleMetricsUpdateOneWithoutModuleNestedInput
 }
@@ -862,12 +862,12 @@ export type ModuleUncheckedUpdateWithoutEnrollmentsInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  pages?: Prisma.PageUncheckedUpdateManyWithoutModuleNestedInput
+  learningObjects?: Prisma.LearningObjectUncheckedUpdateManyWithoutModuleNestedInput
   aiConfiguration?: Prisma.AiConfigurationUncheckedUpdateOneWithoutModuleNestedInput
   moduleMetrics?: Prisma.ModuleMetricsUncheckedUpdateOneWithoutModuleNestedInput
 }
 
-export type ModuleCreateWithoutPagesInput = {
+export type ModuleCreateWithoutLearningObjectsInput = {
   title: string
   description?: string | null
   isPublic?: boolean
@@ -883,7 +883,7 @@ export type ModuleCreateWithoutPagesInput = {
   moduleMetrics?: Prisma.ModuleMetricsCreateNestedOneWithoutModuleInput
 }
 
-export type ModuleUncheckedCreateWithoutPagesInput = {
+export type ModuleUncheckedCreateWithoutLearningObjectsInput = {
   id?: number
   title: string
   description?: string | null
@@ -900,23 +900,23 @@ export type ModuleUncheckedCreateWithoutPagesInput = {
   moduleMetrics?: Prisma.ModuleMetricsUncheckedCreateNestedOneWithoutModuleInput
 }
 
-export type ModuleCreateOrConnectWithoutPagesInput = {
+export type ModuleCreateOrConnectWithoutLearningObjectsInput = {
   where: Prisma.ModuleWhereUniqueInput
-  create: Prisma.XOR<Prisma.ModuleCreateWithoutPagesInput, Prisma.ModuleUncheckedCreateWithoutPagesInput>
+  create: Prisma.XOR<Prisma.ModuleCreateWithoutLearningObjectsInput, Prisma.ModuleUncheckedCreateWithoutLearningObjectsInput>
 }
 
-export type ModuleUpsertWithoutPagesInput = {
-  update: Prisma.XOR<Prisma.ModuleUpdateWithoutPagesInput, Prisma.ModuleUncheckedUpdateWithoutPagesInput>
-  create: Prisma.XOR<Prisma.ModuleCreateWithoutPagesInput, Prisma.ModuleUncheckedCreateWithoutPagesInput>
+export type ModuleUpsertWithoutLearningObjectsInput = {
+  update: Prisma.XOR<Prisma.ModuleUpdateWithoutLearningObjectsInput, Prisma.ModuleUncheckedUpdateWithoutLearningObjectsInput>
+  create: Prisma.XOR<Prisma.ModuleCreateWithoutLearningObjectsInput, Prisma.ModuleUncheckedCreateWithoutLearningObjectsInput>
   where?: Prisma.ModuleWhereInput
 }
 
-export type ModuleUpdateToOneWithWhereWithoutPagesInput = {
+export type ModuleUpdateToOneWithWhereWithoutLearningObjectsInput = {
   where?: Prisma.ModuleWhereInput
-  data: Prisma.XOR<Prisma.ModuleUpdateWithoutPagesInput, Prisma.ModuleUncheckedUpdateWithoutPagesInput>
+  data: Prisma.XOR<Prisma.ModuleUpdateWithoutLearningObjectsInput, Prisma.ModuleUncheckedUpdateWithoutLearningObjectsInput>
 }
 
-export type ModuleUpdateWithoutPagesInput = {
+export type ModuleUpdateWithoutLearningObjectsInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isPublic?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -932,7 +932,7 @@ export type ModuleUpdateWithoutPagesInput = {
   moduleMetrics?: Prisma.ModuleMetricsUpdateOneWithoutModuleNestedInput
 }
 
-export type ModuleUncheckedUpdateWithoutPagesInput = {
+export type ModuleUncheckedUpdateWithoutLearningObjectsInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -960,7 +960,7 @@ export type ModuleCreateWithoutModuleMetricsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   teacher: Prisma.UserCreateNestedOneWithoutModulesAsTeacherInput
-  pages?: Prisma.PageCreateNestedManyWithoutModuleInput
+  learningObjects?: Prisma.LearningObjectCreateNestedManyWithoutModuleInput
   enrollments?: Prisma.EnrollmentCreateNestedManyWithoutModuleInput
   aiConfiguration?: Prisma.AiConfigurationCreateNestedOneWithoutModuleInput
 }
@@ -977,7 +977,7 @@ export type ModuleUncheckedCreateWithoutModuleMetricsInput = {
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
-  pages?: Prisma.PageUncheckedCreateNestedManyWithoutModuleInput
+  learningObjects?: Prisma.LearningObjectUncheckedCreateNestedManyWithoutModuleInput
   enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutModuleInput
   aiConfiguration?: Prisma.AiConfigurationUncheckedCreateNestedOneWithoutModuleInput
 }
@@ -1009,7 +1009,7 @@ export type ModuleUpdateWithoutModuleMetricsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   teacher?: Prisma.UserUpdateOneRequiredWithoutModulesAsTeacherNestedInput
-  pages?: Prisma.PageUpdateManyWithoutModuleNestedInput
+  learningObjects?: Prisma.LearningObjectUpdateManyWithoutModuleNestedInput
   enrollments?: Prisma.EnrollmentUpdateManyWithoutModuleNestedInput
   aiConfiguration?: Prisma.AiConfigurationUpdateOneWithoutModuleNestedInput
 }
@@ -1026,7 +1026,7 @@ export type ModuleUncheckedUpdateWithoutModuleMetricsInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  pages?: Prisma.PageUncheckedUpdateManyWithoutModuleNestedInput
+  learningObjects?: Prisma.LearningObjectUncheckedUpdateManyWithoutModuleNestedInput
   enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutModuleNestedInput
   aiConfiguration?: Prisma.AiConfigurationUncheckedUpdateOneWithoutModuleNestedInput
 }
@@ -1054,7 +1054,7 @@ export type ModuleUpdateWithoutTeacherInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  pages?: Prisma.PageUpdateManyWithoutModuleNestedInput
+  learningObjects?: Prisma.LearningObjectUpdateManyWithoutModuleNestedInput
   enrollments?: Prisma.EnrollmentUpdateManyWithoutModuleNestedInput
   aiConfiguration?: Prisma.AiConfigurationUpdateOneWithoutModuleNestedInput
   moduleMetrics?: Prisma.ModuleMetricsUpdateOneWithoutModuleNestedInput
@@ -1071,7 +1071,7 @@ export type ModuleUncheckedUpdateWithoutTeacherInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  pages?: Prisma.PageUncheckedUpdateManyWithoutModuleNestedInput
+  learningObjects?: Prisma.LearningObjectUncheckedUpdateManyWithoutModuleNestedInput
   enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutModuleNestedInput
   aiConfiguration?: Prisma.AiConfigurationUncheckedUpdateOneWithoutModuleNestedInput
   moduleMetrics?: Prisma.ModuleMetricsUncheckedUpdateOneWithoutModuleNestedInput
@@ -1096,12 +1096,12 @@ export type ModuleUncheckedUpdateManyWithoutTeacherInput = {
  */
 
 export type ModuleCountOutputType = {
-  pages: number
+  learningObjects: number
   enrollments: number
 }
 
 export type ModuleCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  pages?: boolean | ModuleCountOutputTypeCountPagesArgs
+  learningObjects?: boolean | ModuleCountOutputTypeCountLearningObjectsArgs
   enrollments?: boolean | ModuleCountOutputTypeCountEnrollmentsArgs
 }
 
@@ -1118,8 +1118,8 @@ export type ModuleCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Exten
 /**
  * ModuleCountOutputType without action
  */
-export type ModuleCountOutputTypeCountPagesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.PageWhereInput
+export type ModuleCountOutputTypeCountLearningObjectsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.LearningObjectWhereInput
 }
 
 /**
@@ -1143,7 +1143,7 @@ export type ModuleSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   createdAt?: boolean
   updatedAt?: boolean
   teacher?: boolean | Prisma.UserDefaultArgs<ExtArgs>
-  pages?: boolean | Prisma.Module$pagesArgs<ExtArgs>
+  learningObjects?: boolean | Prisma.Module$learningObjectsArgs<ExtArgs>
   enrollments?: boolean | Prisma.Module$enrollmentsArgs<ExtArgs>
   aiConfiguration?: boolean | Prisma.Module$aiConfigurationArgs<ExtArgs>
   moduleMetrics?: boolean | Prisma.Module$moduleMetricsArgs<ExtArgs>
@@ -1197,7 +1197,7 @@ export type ModuleSelectScalar = {
 export type ModuleOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "description" | "teacherId" | "isPublic" | "allowSelfEnroll" | "allowSelfUnenroll" | "logoUrl" | "isActive" | "createdAt" | "updatedAt", ExtArgs["result"]["module"]>
 export type ModuleInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   teacher?: boolean | Prisma.UserDefaultArgs<ExtArgs>
-  pages?: boolean | Prisma.Module$pagesArgs<ExtArgs>
+  learningObjects?: boolean | Prisma.Module$learningObjectsArgs<ExtArgs>
   enrollments?: boolean | Prisma.Module$enrollmentsArgs<ExtArgs>
   aiConfiguration?: boolean | Prisma.Module$aiConfigurationArgs<ExtArgs>
   moduleMetrics?: boolean | Prisma.Module$moduleMetricsArgs<ExtArgs>
@@ -1214,7 +1214,7 @@ export type $ModulePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
   name: "Module"
   objects: {
     teacher: Prisma.$UserPayload<ExtArgs>
-    pages: Prisma.$PagePayload<ExtArgs>[]
+    learningObjects: Prisma.$LearningObjectPayload<ExtArgs>[]
     enrollments: Prisma.$EnrollmentPayload<ExtArgs>[]
     aiConfiguration: Prisma.$AiConfigurationPayload<ExtArgs> | null
     moduleMetrics: Prisma.$ModuleMetricsPayload<ExtArgs> | null
@@ -1626,7 +1626,7 @@ readonly fields: ModuleFieldRefs;
 export interface Prisma__ModuleClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   teacher<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-  pages<T extends Prisma.Module$pagesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Module$pagesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  learningObjects<T extends Prisma.Module$learningObjectsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Module$learningObjectsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LearningObjectPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   enrollments<T extends Prisma.Module$enrollmentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Module$enrollmentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$EnrollmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   aiConfiguration<T extends Prisma.Module$aiConfigurationArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Module$aiConfigurationArgs<ExtArgs>>): Prisma.Prisma__AiConfigurationClient<runtime.Types.Result.GetResult<Prisma.$AiConfigurationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   moduleMetrics<T extends Prisma.Module$moduleMetricsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Module$moduleMetricsArgs<ExtArgs>>): Prisma.Prisma__ModuleMetricsClient<runtime.Types.Result.GetResult<Prisma.$ModuleMetricsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
@@ -2071,27 +2071,27 @@ export type ModuleDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Intern
 }
 
 /**
- * Module.pages
+ * Module.learningObjects
  */
-export type Module$pagesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type Module$learningObjectsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the Page
+   * Select specific fields to fetch from the LearningObject
    */
-  select?: Prisma.PageSelect<ExtArgs> | null
+  select?: Prisma.LearningObjectSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the Page
+   * Omit specific fields from the LearningObject
    */
-  omit?: Prisma.PageOmit<ExtArgs> | null
+  omit?: Prisma.LearningObjectOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.PageInclude<ExtArgs> | null
-  where?: Prisma.PageWhereInput
-  orderBy?: Prisma.PageOrderByWithRelationInput | Prisma.PageOrderByWithRelationInput[]
-  cursor?: Prisma.PageWhereUniqueInput
+  include?: Prisma.LearningObjectInclude<ExtArgs> | null
+  where?: Prisma.LearningObjectWhereInput
+  orderBy?: Prisma.LearningObjectOrderByWithRelationInput | Prisma.LearningObjectOrderByWithRelationInput[]
+  cursor?: Prisma.LearningObjectWhereUniqueInput
   take?: number
   skip?: number
-  distinct?: Prisma.PageScalarFieldEnum | Prisma.PageScalarFieldEnum[]
+  distinct?: Prisma.LearningObjectScalarFieldEnum | Prisma.LearningObjectScalarFieldEnum[]
 }
 
 /**

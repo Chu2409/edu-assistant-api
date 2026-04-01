@@ -9,7 +9,7 @@ export class StudentQuestionsMapper {
     return {
       id: studentQuestion.id,
       user: UsersMapper.mapToDto(studentQuestion.user),
-      pageId: studentQuestion.pageId,
+      pageId: studentQuestion.learningObjectId,
       question: studentQuestion.question,
       isPublic: studentQuestion.isPublic,
       upvotes: studentQuestion.upvotes,

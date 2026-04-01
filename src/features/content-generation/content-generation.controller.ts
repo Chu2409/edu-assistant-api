@@ -17,7 +17,7 @@ import { RegenerateContentDto } from './page-content/dtos/req/regenerate-content
 import { RegenerateBlockDto } from './page-content/dtos/req/regenerate-block.dto'
 import { ExpandContentDto } from './page-content/dtos/req/expand-content.dto'
 import { GenerateImageDto } from './page-content/dtos/req/generate-image.dto'
-import { GeneratedPageContent } from './page-content/dtos/res/generated-page-content.dto'
+import { GeneratedLoContent } from './page-content/dtos/res/generated-lo-content.dto'
 import { RegeneratedBlockDto } from './page-content/dtos/res/regenerated-block.dto'
 import { ExpandedContentDto } from './page-content/dtos/res/expanded-content.dto'
 import { GeneratedImageDto } from './page-content/dtos/res/generated-image.dto'
@@ -61,7 +61,7 @@ export class ContentGenerationController {
     description:
       'Genera contenido educativo usando IA para un módulo. Solo disponible para profesores.',
   })
-  @ApiStandardResponse(GeneratedPageContent)
+  @ApiStandardResponse(GeneratedLoContent)
   @ApiResponse({ status: 401, description: 'No autorizado' })
   @ApiResponse({
     status: 403,
@@ -82,7 +82,7 @@ export class ContentGenerationController {
     description:
       'Refina el contenido actual de la página según una instrucción. Devuelve bloques sugeridos (no persiste). Solo disponible para profesores.',
   })
-  @ApiStandardResponse(GeneratedPageContent, HttpStatus.CREATED)
+  @ApiStandardResponse(GeneratedLoContent, HttpStatus.CREATED)
   @ApiResponse({ status: 401, description: 'No autorizado' })
   @ApiResponse({
     status: 403,

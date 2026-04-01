@@ -1,0 +1,201 @@
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Query,
+  HttpStatus,
+  ParseIntPipe,
+} from '@nestjs/common'
+import {
+  ApiTags,
+  ApiOperation,
+  ApiResponse,
+  ApiParam,
+  ApiQuery,
+} from '@nestjs/swagger'
+import { LoService } from './lo.service'
+import { CreateLoDto } from './dtos/req/create-lo.dto'
+import { UpdateLoDto } from './dtos/req/update-lo.dto'
+import { UpdateLoContentDto } from './dtos/req/update-lo-content.dto'
+import { ReorderLoDto } from './dtos/req/reorder-lo.dto'
+import { LoDto } from './dtos/res/lo.dto'
+import { BaseParamsReqDto } from 'src/shared/dtos/req/base-params.dto'
+import { JwtAuth } from 'src/features/auth/decorators/jwt-auth.decorator'
+import { GetUser } from 'src/features/auth/decorators/get-user.decorator'
+import { Role, type User } from 'src/core/database/generated/client'
+import {
+  ApiPaginatedResponse,
+  ApiStandardResponse,
+} from 'src/shared/decorators/api-standard-response.decorator'
+import { ApiPaginatedRes } from 'src/shared/dtos/res/api-response.dto'
+import { FullLoDto } from './dtos/res/full-lo.dto'
+
+@ApiTags('Pages')
+@Controller('pages')
+export class LoController {
+  constructor(private readonly pagesService: LoService) {}
+
+  @Post()
+  @ApiOperation({
+    summary: 'Crear una nueva página',
+    description: 'Solo el profesor propietario del módulo puede crear páginas',
+  })
+  @ApiStandardResponse(LoDto, HttpStatus.CREATED)
+  @ApiResponse({ status: 401, description: 'No autorizado' })
+  @ApiResponse({ status: 400, description: 'Datos inválidos' })
+  @ApiResponse({
+    status: 403,
+    description: 'Solo el profesor propietario puede crear páginas',
+  })
+  @ApiResponse({
+    status: 409,
+    description: 'Ya existe una página con ese índice de orden',
+  })
+  @JwtAuth(Role.TEACHER)
+  create(
+    @Body() createPageDto: CreateLoDto,
+    @GetUser() user: User,
+  ): Promise<LoDto> {
+    return this.pagesService.create(createPageDto, user)
+  }
+
+  @Get('module/:moduleId')
+  @ApiOperation({
+    summary: 'Listar todas las páginas de un módulo',
+    description:
+      'El profesor puede ver todas las páginas, el estudiante solo las publicadas',
+  })
+  @ApiParam({
+    name: 'moduleId',
+    description: 'ID del módulo',
+    example: 1,
+  })
+  @ApiQuery({ name: 'page', required: false, type: Number, example: 1 })
+  @ApiQuery({ name: 'limit', required: false, type: Number, example: 10 })
+  @ApiQuery({
+    name: 'search',
+    required: false,
+    type: String,
+    example: 'programación',
+  })
+  @ApiPaginatedResponse(LoDto)
+  @ApiResponse({ status: 401, description: 'No autorizado' })
+  @ApiResponse({ status: 404, description: 'Módulo no encontrado' })
+  @ApiResponse({
+    status: 403,
+    description: 'Sin permisos para ver las páginas de este módulo',
+  })
+  findAll(
+    @Param('moduleId', ParseIntPipe) moduleId: number,
+    @Query() params: BaseParamsReqDto,
+    @GetUser() user: User,
+  ): Promise<ApiPaginatedRes<LoDto>> {
+    return this.pagesService.findAll(moduleId, params, user)
+  }
+
+  @Get(':id')
+  @ApiOperation({
+    summary: 'Obtener una página por ID',
+    description:
+      'Solo el profesor propietario, estudiante inscrito o módulo público pueden acceder',
+  })
+  @ApiParam({
+    name: 'id',
+    description: 'ID de la página',
+    example: 1,
+  })
+  @ApiStandardResponse(FullLoDto)
+  @ApiResponse({ status: 401, description: 'No autorizado' })
+  @ApiResponse({ status: 404, description: 'Página no encontrada' })
+  @ApiResponse({
+    status: 403,
+    description: 'Sin permisos para ver esta página',
+  })
+  findOne(
+    @Param('id', ParseIntPipe) id: number,
+    @GetUser() user: User,
+  ): Promise<FullLoDto> {
+    return this.pagesService.findOne(id, user)
+  }
+
+  @Patch('reorder')
+  @ApiOperation({
+    summary: 'Reordenar páginas',
+    description:
+      'Actualiza los índices de orden de múltiples páginas. Solo el profesor propietario puede reordenar páginas',
+  })
+  @ApiStandardResponse(undefined, HttpStatus.NO_CONTENT)
+  @ApiResponse({ status: 401, description: 'No autorizado' })
+  @ApiResponse({ status: 404, description: 'Una o más páginas no encontradas' })
+  @ApiResponse({
+    status: 403,
+    description: 'Solo el profesor propietario puede reordenar páginas',
+  })
+  @JwtAuth(Role.TEACHER)
+  async reorder(
+    @Body() reorderPagesDto: ReorderLoDto,
+    @GetUser() user: User,
+  ): Promise<void> {
+    return this.pagesService.reorder(reorderPagesDto, user)
+  }
+
+  @Patch(':id')
+  @ApiOperation({
+    summary: 'Actualizar una página',
+    description: 'Solo el profesor propietario puede actualizar la página',
+  })
+  @ApiParam({
+    name: 'id',
+    description: 'ID de la página',
+    example: 1,
+  })
+  @ApiStandardResponse(LoDto)
+  @ApiResponse({ status: 401, description: 'No autorizado' })
+  @ApiResponse({ status: 404, description: 'Página no encontrada' })
+  @ApiResponse({
+    status: 403,
+    description: 'Solo el profesor propietario puede actualizar',
+  })
+  @ApiResponse({
+    status: 409,
+    description: 'Ya existe una página con ese índice de orden',
+  })
+  @JwtAuth(Role.TEACHER)
+  update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updatePageDto: UpdateLoDto,
+    @GetUser() user: User,
+  ): Promise<LoDto> {
+    return this.pagesService.update(id, updatePageDto, user)
+  }
+
+  @Patch(':id/content')
+  @ApiOperation({
+    summary: 'Actualizar el contenido (bloques) de una página',
+    description:
+      'Permite crear, actualizar o reemplazar los bloques de contenido de una página. Si un bloque tiene ID, se actualiza; si no, se crea. Los bloques que no estén en la lista se eliminan.',
+  })
+  @ApiParam({
+    name: 'id',
+    description: 'ID de la página',
+    example: 1,
+  })
+  @ApiStandardResponse(LoDto)
+  @ApiResponse({ status: 401, description: 'No autorizado' })
+  @ApiResponse({ status: 404, description: 'Página no encontrada' })
+  @ApiResponse({
+    status: 403,
+    description: 'Solo el profesor propietario puede actualizar el contenido',
+  })
+  @JwtAuth(Role.TEACHER)
+  updateContent(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updatePageContentDto: UpdateLoContentDto,
+    @GetUser() user: User,
+  ): Promise<LoDto> {
+    return this.pagesService.updateContent(id, updatePageContentDto, user)
+  }
+}

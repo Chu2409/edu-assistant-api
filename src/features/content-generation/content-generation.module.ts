@@ -5,10 +5,10 @@ import { ConceptsService } from './concepts/concepts.service'
 import { RelationsService } from './relations/relations.service'
 import { ActivitiesService } from './activities/activities.service'
 import { AIModule } from 'src/providers/ai/ai.module'
-import { PagesModule } from '../pages/pages.module'
+import { LearningObjectsModule } from '../learning-objects/learning-objects.module'
 
 @Module({
-  imports: [AIModule, PagesModule],
+  imports: [AIModule, LearningObjectsModule],
   controllers: [ContentGenerationController],
   providers: [
     PageContentService,

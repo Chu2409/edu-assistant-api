@@ -16,6 +16,7 @@ export class StudentQuestionsService {
     const studentQuestion = await this.dbService.studentQuestion.create({
       data: {
         ...createStudentQuestionDto,
+        learningObjectId: createStudentQuestionDto.pageId,
         userId,
         isPublic: createStudentQuestionDto.isPublic ?? true,
       },

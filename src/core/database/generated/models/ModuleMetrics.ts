@@ -32,7 +32,7 @@ export type ModuleMetricsAvgAggregateOutputType = {
   totalViews: number | null
   totalStudents: number | null
   averageCompletionRate: number | null
-  mostViewedPageId: number | null
+  mostViewedLoId: number | null
 }
 
 export type ModuleMetricsSumAggregateOutputType = {
@@ -41,7 +41,7 @@ export type ModuleMetricsSumAggregateOutputType = {
   totalViews: number | null
   totalStudents: number | null
   averageCompletionRate: number | null
-  mostViewedPageId: number | null
+  mostViewedLoId: number | null
 }
 
 export type ModuleMetricsMinAggregateOutputType = {
@@ -50,7 +50,7 @@ export type ModuleMetricsMinAggregateOutputType = {
   totalViews: number | null
   totalStudents: number | null
   averageCompletionRate: number | null
-  mostViewedPageId: number | null
+  mostViewedLoId: number | null
   lastCalculatedAt: Date | null
 }
 
@@ -60,7 +60,7 @@ export type ModuleMetricsMaxAggregateOutputType = {
   totalViews: number | null
   totalStudents: number | null
   averageCompletionRate: number | null
-  mostViewedPageId: number | null
+  mostViewedLoId: number | null
   lastCalculatedAt: Date | null
 }
 
@@ -70,7 +70,7 @@ export type ModuleMetricsCountAggregateOutputType = {
   totalViews: number
   totalStudents: number
   averageCompletionRate: number
-  mostViewedPageId: number
+  mostViewedLoId: number
   lastCalculatedAt: number
   _all: number
 }
@@ -82,7 +82,7 @@ export type ModuleMetricsAvgAggregateInputType = {
   totalViews?: true
   totalStudents?: true
   averageCompletionRate?: true
-  mostViewedPageId?: true
+  mostViewedLoId?: true
 }
 
 export type ModuleMetricsSumAggregateInputType = {
@@ -91,7 +91,7 @@ export type ModuleMetricsSumAggregateInputType = {
   totalViews?: true
   totalStudents?: true
   averageCompletionRate?: true
-  mostViewedPageId?: true
+  mostViewedLoId?: true
 }
 
 export type ModuleMetricsMinAggregateInputType = {
@@ -100,7 +100,7 @@ export type ModuleMetricsMinAggregateInputType = {
   totalViews?: true
   totalStudents?: true
   averageCompletionRate?: true
-  mostViewedPageId?: true
+  mostViewedLoId?: true
   lastCalculatedAt?: true
 }
 
@@ -110,7 +110,7 @@ export type ModuleMetricsMaxAggregateInputType = {
   totalViews?: true
   totalStudents?: true
   averageCompletionRate?: true
-  mostViewedPageId?: true
+  mostViewedLoId?: true
   lastCalculatedAt?: true
 }
 
@@ -120,7 +120,7 @@ export type ModuleMetricsCountAggregateInputType = {
   totalViews?: true
   totalStudents?: true
   averageCompletionRate?: true
-  mostViewedPageId?: true
+  mostViewedLoId?: true
   lastCalculatedAt?: true
   _all?: true
 }
@@ -217,7 +217,7 @@ export type ModuleMetricsGroupByOutputType = {
   totalViews: number
   totalStudents: number
   averageCompletionRate: number
-  mostViewedPageId: number | null
+  mostViewedLoId: number | null
   lastCalculatedAt: Date
   _count: ModuleMetricsCountAggregateOutputType | null
   _avg: ModuleMetricsAvgAggregateOutputType | null
@@ -250,7 +250,7 @@ export type ModuleMetricsWhereInput = {
   totalViews?: Prisma.IntFilter<"ModuleMetrics"> | number
   totalStudents?: Prisma.IntFilter<"ModuleMetrics"> | number
   averageCompletionRate?: Prisma.FloatFilter<"ModuleMetrics"> | number
-  mostViewedPageId?: Prisma.IntNullableFilter<"ModuleMetrics"> | number | null
+  mostViewedLoId?: Prisma.IntNullableFilter<"ModuleMetrics"> | number | null
   lastCalculatedAt?: Prisma.DateTimeFilter<"ModuleMetrics"> | Date | string
   module?: Prisma.XOR<Prisma.ModuleScalarRelationFilter, Prisma.ModuleWhereInput>
 }
@@ -261,7 +261,7 @@ export type ModuleMetricsOrderByWithRelationInput = {
   totalViews?: Prisma.SortOrder
   totalStudents?: Prisma.SortOrder
   averageCompletionRate?: Prisma.SortOrder
-  mostViewedPageId?: Prisma.SortOrderInput | Prisma.SortOrder
+  mostViewedLoId?: Prisma.SortOrderInput | Prisma.SortOrder
   lastCalculatedAt?: Prisma.SortOrder
   module?: Prisma.ModuleOrderByWithRelationInput
 }
@@ -275,7 +275,7 @@ export type ModuleMetricsWhereUniqueInput = Prisma.AtLeast<{
   totalViews?: Prisma.IntFilter<"ModuleMetrics"> | number
   totalStudents?: Prisma.IntFilter<"ModuleMetrics"> | number
   averageCompletionRate?: Prisma.FloatFilter<"ModuleMetrics"> | number
-  mostViewedPageId?: Prisma.IntNullableFilter<"ModuleMetrics"> | number | null
+  mostViewedLoId?: Prisma.IntNullableFilter<"ModuleMetrics"> | number | null
   lastCalculatedAt?: Prisma.DateTimeFilter<"ModuleMetrics"> | Date | string
   module?: Prisma.XOR<Prisma.ModuleScalarRelationFilter, Prisma.ModuleWhereInput>
 }, "id" | "moduleId">
@@ -286,7 +286,7 @@ export type ModuleMetricsOrderByWithAggregationInput = {
   totalViews?: Prisma.SortOrder
   totalStudents?: Prisma.SortOrder
   averageCompletionRate?: Prisma.SortOrder
-  mostViewedPageId?: Prisma.SortOrderInput | Prisma.SortOrder
+  mostViewedLoId?: Prisma.SortOrderInput | Prisma.SortOrder
   lastCalculatedAt?: Prisma.SortOrder
   _count?: Prisma.ModuleMetricsCountOrderByAggregateInput
   _avg?: Prisma.ModuleMetricsAvgOrderByAggregateInput
@@ -304,7 +304,7 @@ export type ModuleMetricsScalarWhereWithAggregatesInput = {
   totalViews?: Prisma.IntWithAggregatesFilter<"ModuleMetrics"> | number
   totalStudents?: Prisma.IntWithAggregatesFilter<"ModuleMetrics"> | number
   averageCompletionRate?: Prisma.FloatWithAggregatesFilter<"ModuleMetrics"> | number
-  mostViewedPageId?: Prisma.IntNullableWithAggregatesFilter<"ModuleMetrics"> | number | null
+  mostViewedLoId?: Prisma.IntNullableWithAggregatesFilter<"ModuleMetrics"> | number | null
   lastCalculatedAt?: Prisma.DateTimeWithAggregatesFilter<"ModuleMetrics"> | Date | string
 }
 
@@ -312,7 +312,7 @@ export type ModuleMetricsCreateInput = {
   totalViews?: number
   totalStudents?: number
   averageCompletionRate?: number
-  mostViewedPageId?: number | null
+  mostViewedLoId?: number | null
   lastCalculatedAt?: Date | string
   module: Prisma.ModuleCreateNestedOneWithoutModuleMetricsInput
 }
@@ -323,7 +323,7 @@ export type ModuleMetricsUncheckedCreateInput = {
   totalViews?: number
   totalStudents?: number
   averageCompletionRate?: number
-  mostViewedPageId?: number | null
+  mostViewedLoId?: number | null
   lastCalculatedAt?: Date | string
 }
 
@@ -331,7 +331,7 @@ export type ModuleMetricsUpdateInput = {
   totalViews?: Prisma.IntFieldUpdateOperationsInput | number
   totalStudents?: Prisma.IntFieldUpdateOperationsInput | number
   averageCompletionRate?: Prisma.FloatFieldUpdateOperationsInput | number
-  mostViewedPageId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  mostViewedLoId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   lastCalculatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   module?: Prisma.ModuleUpdateOneRequiredWithoutModuleMetricsNestedInput
 }
@@ -342,7 +342,7 @@ export type ModuleMetricsUncheckedUpdateInput = {
   totalViews?: Prisma.IntFieldUpdateOperationsInput | number
   totalStudents?: Prisma.IntFieldUpdateOperationsInput | number
   averageCompletionRate?: Prisma.FloatFieldUpdateOperationsInput | number
-  mostViewedPageId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  mostViewedLoId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   lastCalculatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -352,7 +352,7 @@ export type ModuleMetricsCreateManyInput = {
   totalViews?: number
   totalStudents?: number
   averageCompletionRate?: number
-  mostViewedPageId?: number | null
+  mostViewedLoId?: number | null
   lastCalculatedAt?: Date | string
 }
 
@@ -360,7 +360,7 @@ export type ModuleMetricsUpdateManyMutationInput = {
   totalViews?: Prisma.IntFieldUpdateOperationsInput | number
   totalStudents?: Prisma.IntFieldUpdateOperationsInput | number
   averageCompletionRate?: Prisma.FloatFieldUpdateOperationsInput | number
-  mostViewedPageId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  mostViewedLoId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   lastCalculatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -370,7 +370,7 @@ export type ModuleMetricsUncheckedUpdateManyInput = {
   totalViews?: Prisma.IntFieldUpdateOperationsInput | number
   totalStudents?: Prisma.IntFieldUpdateOperationsInput | number
   averageCompletionRate?: Prisma.FloatFieldUpdateOperationsInput | number
-  mostViewedPageId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  mostViewedLoId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   lastCalculatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -385,7 +385,7 @@ export type ModuleMetricsCountOrderByAggregateInput = {
   totalViews?: Prisma.SortOrder
   totalStudents?: Prisma.SortOrder
   averageCompletionRate?: Prisma.SortOrder
-  mostViewedPageId?: Prisma.SortOrder
+  mostViewedLoId?: Prisma.SortOrder
   lastCalculatedAt?: Prisma.SortOrder
 }
 
@@ -395,7 +395,7 @@ export type ModuleMetricsAvgOrderByAggregateInput = {
   totalViews?: Prisma.SortOrder
   totalStudents?: Prisma.SortOrder
   averageCompletionRate?: Prisma.SortOrder
-  mostViewedPageId?: Prisma.SortOrder
+  mostViewedLoId?: Prisma.SortOrder
 }
 
 export type ModuleMetricsMaxOrderByAggregateInput = {
@@ -404,7 +404,7 @@ export type ModuleMetricsMaxOrderByAggregateInput = {
   totalViews?: Prisma.SortOrder
   totalStudents?: Prisma.SortOrder
   averageCompletionRate?: Prisma.SortOrder
-  mostViewedPageId?: Prisma.SortOrder
+  mostViewedLoId?: Prisma.SortOrder
   lastCalculatedAt?: Prisma.SortOrder
 }
 
@@ -414,7 +414,7 @@ export type ModuleMetricsMinOrderByAggregateInput = {
   totalViews?: Prisma.SortOrder
   totalStudents?: Prisma.SortOrder
   averageCompletionRate?: Prisma.SortOrder
-  mostViewedPageId?: Prisma.SortOrder
+  mostViewedLoId?: Prisma.SortOrder
   lastCalculatedAt?: Prisma.SortOrder
 }
 
@@ -424,7 +424,7 @@ export type ModuleMetricsSumOrderByAggregateInput = {
   totalViews?: Prisma.SortOrder
   totalStudents?: Prisma.SortOrder
   averageCompletionRate?: Prisma.SortOrder
-  mostViewedPageId?: Prisma.SortOrder
+  mostViewedLoId?: Prisma.SortOrder
 }
 
 export type ModuleMetricsCreateNestedOneWithoutModuleInput = {
@@ -463,7 +463,7 @@ export type ModuleMetricsCreateWithoutModuleInput = {
   totalViews?: number
   totalStudents?: number
   averageCompletionRate?: number
-  mostViewedPageId?: number | null
+  mostViewedLoId?: number | null
   lastCalculatedAt?: Date | string
 }
 
@@ -472,7 +472,7 @@ export type ModuleMetricsUncheckedCreateWithoutModuleInput = {
   totalViews?: number
   totalStudents?: number
   averageCompletionRate?: number
-  mostViewedPageId?: number | null
+  mostViewedLoId?: number | null
   lastCalculatedAt?: Date | string
 }
 
@@ -496,7 +496,7 @@ export type ModuleMetricsUpdateWithoutModuleInput = {
   totalViews?: Prisma.IntFieldUpdateOperationsInput | number
   totalStudents?: Prisma.IntFieldUpdateOperationsInput | number
   averageCompletionRate?: Prisma.FloatFieldUpdateOperationsInput | number
-  mostViewedPageId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  mostViewedLoId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   lastCalculatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -505,7 +505,7 @@ export type ModuleMetricsUncheckedUpdateWithoutModuleInput = {
   totalViews?: Prisma.IntFieldUpdateOperationsInput | number
   totalStudents?: Prisma.IntFieldUpdateOperationsInput | number
   averageCompletionRate?: Prisma.FloatFieldUpdateOperationsInput | number
-  mostViewedPageId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  mostViewedLoId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   lastCalculatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -517,7 +517,7 @@ export type ModuleMetricsSelect<ExtArgs extends runtime.Types.Extensions.Interna
   totalViews?: boolean
   totalStudents?: boolean
   averageCompletionRate?: boolean
-  mostViewedPageId?: boolean
+  mostViewedLoId?: boolean
   lastCalculatedAt?: boolean
   module?: boolean | Prisma.ModuleDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["moduleMetrics"]>
@@ -528,7 +528,7 @@ export type ModuleMetricsSelectCreateManyAndReturn<ExtArgs extends runtime.Types
   totalViews?: boolean
   totalStudents?: boolean
   averageCompletionRate?: boolean
-  mostViewedPageId?: boolean
+  mostViewedLoId?: boolean
   lastCalculatedAt?: boolean
   module?: boolean | Prisma.ModuleDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["moduleMetrics"]>
@@ -539,7 +539,7 @@ export type ModuleMetricsSelectUpdateManyAndReturn<ExtArgs extends runtime.Types
   totalViews?: boolean
   totalStudents?: boolean
   averageCompletionRate?: boolean
-  mostViewedPageId?: boolean
+  mostViewedLoId?: boolean
   lastCalculatedAt?: boolean
   module?: boolean | Prisma.ModuleDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["moduleMetrics"]>
@@ -550,11 +550,11 @@ export type ModuleMetricsSelectScalar = {
   totalViews?: boolean
   totalStudents?: boolean
   averageCompletionRate?: boolean
-  mostViewedPageId?: boolean
+  mostViewedLoId?: boolean
   lastCalculatedAt?: boolean
 }
 
-export type ModuleMetricsOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "moduleId" | "totalViews" | "totalStudents" | "averageCompletionRate" | "mostViewedPageId" | "lastCalculatedAt", ExtArgs["result"]["moduleMetrics"]>
+export type ModuleMetricsOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "moduleId" | "totalViews" | "totalStudents" | "averageCompletionRate" | "mostViewedLoId" | "lastCalculatedAt", ExtArgs["result"]["moduleMetrics"]>
 export type ModuleMetricsInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   module?: boolean | Prisma.ModuleDefaultArgs<ExtArgs>
 }
@@ -576,7 +576,7 @@ export type $ModuleMetricsPayload<ExtArgs extends runtime.Types.Extensions.Inter
     totalViews: number
     totalStudents: number
     averageCompletionRate: number
-    mostViewedPageId: number | null
+    mostViewedLoId: number | null
     lastCalculatedAt: Date
   }, ExtArgs["result"]["moduleMetrics"]>
   composites: {}
@@ -1007,7 +1007,7 @@ export interface ModuleMetricsFieldRefs {
   readonly totalViews: Prisma.FieldRef<"ModuleMetrics", 'Int'>
   readonly totalStudents: Prisma.FieldRef<"ModuleMetrics", 'Int'>
   readonly averageCompletionRate: Prisma.FieldRef<"ModuleMetrics", 'Float'>
-  readonly mostViewedPageId: Prisma.FieldRef<"ModuleMetrics", 'Int'>
+  readonly mostViewedLoId: Prisma.FieldRef<"ModuleMetrics", 'Int'>
   readonly lastCalculatedAt: Prisma.FieldRef<"ModuleMetrics", 'DateTime'>
 }
     
