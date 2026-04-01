@@ -8,36 +8,42 @@ import { LoRelationsService } from '../../lo-relations/lo-relations.service'
 export class EmbeddingsWorker extends WorkerHost {
   private readonly logger = new Logger(EmbeddingsWorker.name)
 
-  constructor(private readonly pageRelationsService: LoRelationsService) {
+  constructor(private readonly loRelationsService: LoRelationsService) {
     super()
   }
 
   async process(job: Job): Promise<unknown> {
     switch (job.name) {
-      case QUEUE_NAMES.EMBEDDINGS.JOBS.PROCESS_PAGE:
-        return this.handleProcessPageEmbedding(job)
+      case QUEUE_NAMES.EMBEDDINGS.JOBS.PROCESS_LO:
+        return this.handleProcessLoEmbedding(job)
       default:
         this.logger.warn(`Unknown job name: ${job.name}`)
     }
   }
 
-  private async handleProcessPageEmbedding(job: Job<{ pageId: number }>) {
+  private async handleProcessLoEmbedding(
+    job: Job<{ learningObjectId: number }>,
+  ) {
     // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     if (job.data == null) {
       return
     }
 
-    const { pageId } = job.data
+    const { learningObjectId } = job.data
 
-    this.logger.log(`Procesando embedding para la página: ${pageId}...`)
+    this.logger.log(
+      `Procesando embedding para el objeto de aprendizaje: ${learningObjectId}...`,
+    )
 
     try {
-      await this.pageRelationsService.processPageEmbedding(pageId)
-      this.logger.log(`Embedding generado correctamente para página ${pageId}`)
-      return { pageId, success: true }
+      await this.loRelationsService.processPageEmbedding(learningObjectId)
+      this.logger.log(
+        `Embedding generado correctamente para objeto de aprendizaje ${learningObjectId}`,
+      )
+      return { learningObjectId, success: true }
     } catch (error) {
       this.logger.error(
-        `Error al procesar embedding para página ${pageId}:`,
+        `Error al procesar embedding para objeto de aprendizaje ${learningObjectId}:`,
         error,
       )
       throw error

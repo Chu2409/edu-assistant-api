@@ -5,7 +5,7 @@ export class LoConceptDto {
   id: number
 
   @ApiProperty({ example: 1 })
-  pageId: number
+  learningObjectId: number
 
   @ApiProperty({ example: 'respiración celular' })
   term: string

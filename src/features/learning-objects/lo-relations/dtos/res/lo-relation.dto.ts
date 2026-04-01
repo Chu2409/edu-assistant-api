@@ -14,10 +14,10 @@ export class LoRelationDto {
   id: number
 
   @ApiProperty({ example: 1 })
-  originPageId: number
+  originLoId: number
 
   @ApiProperty({ example: 2 })
-  relatedPageId: number
+  relatedLoId: number
 
   @ApiProperty({ example: 0.81 })
   similarityScore: number
@@ -44,5 +44,5 @@ export class LoRelationDto {
   createdAt: Date
 
   @ApiProperty({ type: RelatedLoMiniDto })
-  relatedPage: RelatedLoMiniDto
+  relatedLo: RelatedLoMiniDto
 }

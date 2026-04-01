@@ -15,10 +15,10 @@ export class StudentQuestionDto {
   user: UserDto
 
   @ApiProperty({
-    description: 'ID de la página a la que pertenece la pregunta',
+    description: 'ID del objeto de aprendizaje al que pertenece la pregunta',
     example: 1,
   })
-  pageId: number
+  learningObjectId: number
 
   @ApiProperty({
     description: 'Pregunta del estudiante',

@@ -14,20 +14,22 @@ import { JwtAuth } from 'src/features/auth/decorators/jwt-auth.decorator'
 import { LoFeedbackDto } from './dtos/res/lo-feedback.dto'
 import { Role } from 'src/core/database/generated/enums'
 
-@ApiTags('Page Feedbacks')
-@Controller('page-feedbacks')
+@ApiTags('Learning Object Feedbacks')
+@Controller('learning-object-feedbacks')
 @JwtAuth(Role.STUDENT)
 export class LoFeedbacksController {
-  constructor(private readonly pageFeedbacksService: LoFeedbacksService) {}
+  constructor(private readonly loFeedbacksService: LoFeedbacksService) {}
 
   @Post()
-  @ApiOperation({ summary: 'Crear un nuevo feedback para una página' })
+  @ApiOperation({
+    summary: 'Crear un nuevo feedback para un objeto de aprendizaje',
+  })
   @ApiResponse({ status: 201, type: LoFeedbackDto })
   create(
     @GetUser('id') userId: number,
-    @Body() createPageFeedbackDto: CreateLoFeedbackDto,
+    @Body() createLoFeedbackDto: CreateLoFeedbackDto,
   ) {
-    return this.pageFeedbacksService.create(userId, createPageFeedbackDto)
+    return this.loFeedbacksService.create(userId, createLoFeedbackDto)
   }
 
   @Patch(':id')
@@ -42,7 +44,7 @@ export class LoFeedbacksController {
     @GetUser('id') userId: number,
     @Body() updatePageFeedbackDto: UpdateLoFeedbackDto,
   ) {
-    return this.pageFeedbacksService.update(+id, userId, updatePageFeedbackDto)
+    return this.loFeedbacksService.update(+id, userId, updatePageFeedbackDto)
   }
 
   @Delete(':id')
@@ -53,6 +55,6 @@ export class LoFeedbacksController {
     description: 'El feedback no pertenece al estudiante',
   })
   remove(@Param('id') id: string, @GetUser('id') userId: number) {
-    return this.pageFeedbacksService.delete(+id, userId)
+    return this.loFeedbacksService.delete(+id, userId)
   }
 }

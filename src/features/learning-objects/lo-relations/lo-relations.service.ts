@@ -19,40 +19,44 @@ export class LoRelationsService {
   constructor(
     private readonly dbService: DBService,
     private readonly openAiService: OpenaiService,
-    private readonly pagesHelperService: LoHelperService,
+    private readonly loHelperService: LoHelperService,
   ) {}
 
   async create(
-    pageId: number,
+    learningObjectId: number,
     dto: CreateLoRelationDto,
     user: User,
   ): Promise<LoRelationDto> {
-    await this.pagesHelperService.getPageForWrite(pageId, user)
+    await this.loHelperService.getLoForWrite(learningObjectId, user)
 
     const related = await this.dbService.learningObject.findUnique({
-      where: { id: dto.relatedPageId },
+      where: { id: dto.relatedLoId },
       select: { id: true, title: true, moduleId: true },
     })
     if (!related)
-      throw new NotFoundException('Página relacionada no encontrada')
+      throw new NotFoundException(
+        'Objeto de aprendizaje relacionado no encontrado',
+      )
 
     const origin = await this.dbService.learningObject.findUnique({
-      where: { id: pageId },
+      where: { id: learningObjectId },
       select: { moduleId: true },
     })
     if (!origin)
-      throw new NotFoundException(`Página con ID ${pageId} no encontrada`)
+      throw new NotFoundException(
+        `Objeto de aprendizaje con ID ${learningObjectId} no encontrado`,
+      )
     if (related.moduleId !== origin.moduleId) {
       throw new ForbiddenException(
-        'La página relacionada debe pertenecer al mismo módulo',
+        'El objeto de aprendizaje relacionado debe pertenecer al mismo módulo',
       )
     }
 
     try {
       const created = await this.dbService.learningObjectRelation.create({
         data: {
-          originLoId: pageId,
-          relatedLoId: dto.relatedPageId,
+          originLoId: learningObjectId,
+          relatedLoId: dto.relatedLoId,
           similarityScore: dto.similarityScore ?? 0,
           relationType: dto.relationType,
           mentionText: dto.mentionText,
@@ -64,8 +68,8 @@ export class LoRelationsService {
 
       return {
         id: created.id,
-        originPageId: created.originLoId,
-        relatedPageId: created.relatedLoId,
+        originLoId: created.originLoId,
+        relatedLoId: created.relatedLoId,
         similarityScore: created.similarityScore,
         relationType: created.relationType,
         mentionText: created.mentionText,
@@ -74,7 +78,7 @@ export class LoRelationsService {
         embeddedAt: created.embeddedAt ?? null,
         calculatedAt: created.calculatedAt,
         createdAt: created.createdAt,
-        relatedPage: {
+        relatedLo: {
           id: created.relatedLo.id,
           title: created.relatedLo.title,
         },
@@ -85,7 +89,7 @@ export class LoRelationsService {
         e.code === 'P2002'
       ) {
         throw new ForbiddenException(
-          'Ya existe una relación con esa página relacionada',
+          'Ya existe una relación con ese objeto de aprendizaje relacionado',
         )
       }
       throw e
@@ -93,18 +97,18 @@ export class LoRelationsService {
   }
 
   async update(
-    pageId: number,
+    learningObjectId: number,
     relationId: number,
     dto: UpdateLoRelationDto,
     user: User,
   ): Promise<LoRelationDto> {
-    await this.pagesHelperService.getPageForWrite(pageId, user)
+    await this.loHelperService.getLoForWrite(learningObjectId, user)
 
     const existing = await this.dbService.learningObjectRelation.findUnique({
       where: { id: relationId },
       include: { relatedLo: { select: { id: true, title: true } } },
     })
-    if (!existing || existing.originLoId !== pageId) {
+    if (!existing || existing.originLoId !== learningObjectId) {
       throw new NotFoundException('Relación no encontrada')
     }
 
@@ -129,8 +133,8 @@ export class LoRelationsService {
 
     return {
       id: updated.id,
-      originPageId: updated.originLoId,
-      relatedPageId: updated.relatedLoId,
+      originLoId: updated.originLoId,
+      relatedLoId: updated.relatedLoId,
       similarityScore: updated.similarityScore,
       relationType: updated.relationType,
       mentionText: updated.mentionText,
@@ -139,20 +143,24 @@ export class LoRelationsService {
       embeddedAt: updated.embeddedAt ?? null,
       calculatedAt: updated.calculatedAt,
       createdAt: updated.createdAt,
-      relatedPage: {
+      relatedLo: {
         id: updated.relatedLo.id,
         title: updated.relatedLo.title,
       },
     }
   }
 
-  async delete(pageId: number, relationId: number, user: User): Promise<void> {
-    await this.pagesHelperService.getPageForWrite(pageId, user)
+  async delete(
+    learningObjectId: number,
+    relationId: number,
+    user: User,
+  ): Promise<void> {
+    await this.loHelperService.getLoForWrite(learningObjectId, user)
 
     const existing = await this.dbService.learningObjectRelation.findUnique({
       where: { id: relationId },
     })
-    if (!existing || existing.originLoId !== pageId) {
+    if (!existing || existing.originLoId !== learningObjectId) {
       throw new NotFoundException('Relación no encontrada')
     }
 
@@ -162,54 +170,58 @@ export class LoRelationsService {
   }
 
   /**
-   * Procesa el embedding de una página (para uso interno: workers, jobs).
+   * Procesa el embedding de un objeto de aprendizaje (para uso interno: workers, jobs).
    * Compila contenido de bloques, obtiene embedding de OpenAI y guarda en DB.
    * Retorna el embedding literal para búsquedas por similitud.
    */
-  async processPageEmbedding(pageId: number): Promise<string | null> {
-    const page = await this.dbService.learningObject.findUnique({
-      where: { id: pageId },
+  async processPageEmbedding(learningObjectId: number): Promise<string | null> {
+    const lo = await this.dbService.learningObject.findUnique({
+      where: { id: learningObjectId },
       include: { blocks: { orderBy: { orderIndex: 'asc' } } },
     })
-    if (!page)
-      throw new NotFoundException(`Página con ID ${pageId} no encontrada`)
+    if (!lo)
+      throw new NotFoundException(
+        `Objeto de aprendizaje con ID ${learningObjectId} no encontrado`,
+      )
 
-    const compiledContent = compileBlocksToText(page.blocks)
+    const compiledContent = compileBlocksToText(lo.blocks)
     if (!compiledContent.trim()) return null
 
     const embedding = await this.openAiService.getEmbedding(compiledContent)
     const embeddingLiteral = `[${embedding.join(',')}]`
 
     await this.dbService.$executeRaw(
-      Prisma.sql`UPDATE pages SET embedding = ${embeddingLiteral}::vector, compiled_content = ${compiledContent} WHERE id = ${pageId}`,
+      Prisma.sql`UPDATE learning_objects SET embedding = ${embeddingLiteral}::vector, compiled_content = ${compiledContent} WHERE id = ${learningObjectId}`,
     )
 
     return embeddingLiteral
   }
 
   /**
-   * Obtiene o crea el embedding de una página. Retorna el literal para búsquedas.
+   * Obtiene o crea el embedding de un objeto de aprendizaje. Retorna el literal para búsquedas.
    */
-  async ensurePageEmbedding(pageId: number): Promise<string> {
-    const page = await this.dbService.learningObject.findUnique({
-      where: { id: pageId },
+  async ensurePageEmbedding(learningObjectId: number): Promise<string> {
+    const lo = await this.dbService.learningObject.findUnique({
+      where: { id: learningObjectId },
       include: { blocks: { orderBy: { orderIndex: 'asc' } } },
     })
-    if (!page)
-      throw new NotFoundException(`Página con ID ${pageId} no encontrada`)
+    if (!lo)
+      throw new NotFoundException(
+        `Objeto de aprendizaje con ID ${learningObjectId} no encontrado`,
+      )
 
     // Si ya existe embedding, leerlo desde DB
     const rows = await this.dbService.$queryRaw<{ embedding: string }[]>(
-      Prisma.sql`SELECT embedding::text as embedding FROM pages WHERE id = ${pageId} AND embedding IS NOT NULL LIMIT 1`,
+      Prisma.sql`SELECT embedding::text as embedding FROM learning_objects WHERE id = ${learningObjectId} AND embedding IS NOT NULL LIMIT 1`,
     )
     const embeddingLiteral = rows[0]?.embedding
     if (embeddingLiteral) return embeddingLiteral
 
     // Crear embedding
-    const result = await this.processPageEmbedding(pageId)
+    const result = await this.processPageEmbedding(learningObjectId)
     if (!result) {
       throw new NotFoundException(
-        `La página ${pageId} no tiene contenido para generar embedding`,
+        `El objeto de aprendizaje ${learningObjectId} no tiene contenido para generar embedding`,
       )
     }
     return result
@@ -218,14 +230,14 @@ export class LoRelationsService {
   async findSimilarPages(params: {
     embeddingLiteral: string
     moduleId: number
-    originPageId: number
+    originLoId: number
     onlyPublished: boolean
     minSimilarity?: number
   }): Promise<SimilarRow[]> {
     const {
       embeddingLiteral,
       moduleId,
-      originPageId,
+      originLoId,
       onlyPublished,
       minSimilarity = 0.5,
     } = params
@@ -237,9 +249,9 @@ export class LoRelationsService {
         SELECT
           id,
           (1 - (embedding <=> ${embeddingLiteral}::vector))::float as similarity
-        FROM pages
+        FROM learning_objects
         WHERE module_id = ${moduleId}
-          AND id <> ${originPageId}
+          AND id <> ${originLoId}
           AND embedding IS NOT NULL
           AND (1 - (embedding <=> ${embeddingLiteral}::vector)) >= ${minSimilarity}
           ${onlyPublished ? Prisma.sql`AND is_published = true` : Prisma.sql``}

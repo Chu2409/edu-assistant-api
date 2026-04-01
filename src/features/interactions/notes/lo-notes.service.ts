@@ -11,11 +11,11 @@ export class LoNotesService {
 
   async create(
     userId: number,
-    createPageNoteDto: CreateLoNoteDto,
+    createLoNoteDto: CreateLoNoteDto,
   ): Promise<NoteDto> {
     const note = await this.dbService.note.create({
       data: {
-        ...createPageNoteDto,
+        ...createLoNoteDto,
         userId,
       },
     })
@@ -25,7 +25,7 @@ export class LoNotesService {
   async update(
     userId: number,
     noteId: number,
-    updatePageNoteDto: UpdateLoNoteDto,
+    updateLoNoteDto: UpdateLoNoteDto,
   ): Promise<NoteDto> {
     const existingNote = await this.dbService.note.findUnique({
       where: { id: noteId },
@@ -38,7 +38,7 @@ export class LoNotesService {
     const updatedNote = await this.dbService.note.update({
       where: { id: noteId },
       data: {
-        content: updatePageNoteDto.content,
+        content: updateLoNoteDto.content,
       },
     })
 

@@ -28,19 +28,22 @@ export class ChatService {
   constructor(
     private readonly dbService: DBService,
     private readonly openAiService: OpenaiService,
-    private readonly pagesHelperService: LoHelperService,
+    private readonly loHelperService: LoHelperService,
   ) {}
 
   async createOrGetSession(
-    pageId: number,
+    learningObjectId: number,
     dto: CreateOrGetSessionDto,
     user: User,
   ): Promise<SessionDto> {
-    const page = await this.pagesHelperService.getPageForRead(pageId, user)
+    const lo = await this.loHelperService.getLoForRead(learningObjectId, user)
 
     const existing = await this.dbService.session.findUnique({
       where: {
-        userId_learningObjectId: { userId: user.id, learningObjectId: pageId },
+        userId_learningObjectId: {
+          userId: user.id,
+          learningObjectId,
+        },
       },
     })
     if (existing) {
@@ -49,9 +52,9 @@ export class ChatService {
 
     const created = await this.dbService.session.create({
       data: {
-        learningObjectId: pageId,
+        learningObjectId,
         userId: user.id,
-        title: dto.title ?? `Chat: ${page.title}`,
+        title: dto.title ?? `Chat: ${lo.title}`,
       },
     })
 
@@ -80,8 +83,8 @@ export class ChatService {
       throw new ForbiddenException('No tienes permisos para ver esta sesión')
     }
 
-    // valida acceso a la página (por si cambió publicación/matrícula)
-    await this.pagesHelperService.getPageForRead(session.learningObjectId, user)
+    // valida acceso al objeto de aprendizaje (por si cambió publicación/matrícula)
+    await this.loHelperService.getLoForRead(session.learningObjectId, user)
 
     const skip = (query.page - 1) * query.limit
 
@@ -147,7 +150,7 @@ export class ChatService {
       throw new ForbiddenException('No tienes permisos para usar esta sesión')
     }
 
-    const page = await this.pagesHelperService.getPageForRead(
+    const lo = await this.loHelperService.getLoForRead(
       session.learningObjectId,
       user,
     )
@@ -159,11 +162,11 @@ export class ChatService {
       ? compileBlocksToText(session.learningObject.blocks)
       : undefined
 
-    const language = page.module.aiConfiguration?.language ?? 'es'
+    const language = lo.module.aiConfiguration?.language ?? 'es'
 
     const prompt = chatSessionPrompt({
       language,
-      lessonTitle: page.title,
+      lessonTitle: lo.title,
       lessonContext,
       userMessage: dto.message,
       isFirstMessage,

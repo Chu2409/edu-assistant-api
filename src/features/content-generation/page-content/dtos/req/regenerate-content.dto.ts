@@ -12,12 +12,12 @@ import { AiTargetLevel } from 'src/core/database/generated/enums'
 
 export class RegenerateContentDto {
   @ApiProperty({
-    description: 'ID de la página a generar contenido',
+    description: 'ID del objeto de aprendizaje a generar contenido',
     example: 1,
   })
   @IsInt()
   @Min(1)
-  pageId: number
+  learningObjectId: number
 
   @ApiProperty({
     description: 'Instrucciones específicas para la generación del contenido',

@@ -25,39 +25,42 @@ export class RelationsService {
   constructor(
     private readonly dbService: DBService,
     private readonly openAiService: OpenaiService,
-    private readonly pageRelationsService: LoRelationsService,
+    private readonly loRelationsService: LoRelationsService,
   ) {}
 
-  async generatePageRelations(
+  async generateLoRelations(
     data: GenerateRelationsDto,
   ): Promise<GeneratedRelationsDto> {
-    this.logger.log('Generating page relations')
+    this.logger.log('Generating learning object relations')
 
-    const page = await this.dbService.learningObject.findUnique({
-      where: { id: data.pageId },
+    const lo = await this.dbService.learningObject.findUnique({
+      where: { id: data.learningObjectId },
       include: {
         blocks: { orderBy: { orderIndex: 'asc' } },
       },
     })
 
-    if (!page) {
-      throw new NotFoundException(`Page with id ${data.pageId} not found`)
+    if (!lo) {
+      throw new NotFoundException(
+        `Learning Object with id ${data.learningObjectId} not found`,
+      )
     }
 
-    if (page.blocks.length === 0) {
-      throw new BadRequestException('Page has no blocks')
+    if (lo.blocks.length === 0) {
+      throw new BadRequestException('Learning Object has no blocks')
     }
 
-    // 1. Procesar embedding de la página para poder buscar similares
-    const embeddingLiteral =
-      await this.pageRelationsService.ensurePageEmbedding(data.pageId)
+    // 1. Procesar embedding para poder buscar similares
+    const embeddingLiteral = await this.loRelationsService.ensurePageEmbedding(
+      data.learningObjectId,
+    )
 
-    // 2. Obtener páginas similares por embedding
+    // 2. Obtener objetos de aprendizaje similares por embedding
     const minSimilarity = data.minSimilarity ?? 0.5
-    const similarRows = await this.pageRelationsService.findSimilarPages({
+    const similarRows = await this.loRelationsService.findSimilarPages({
       embeddingLiteral,
-      moduleId: page.moduleId,
-      originPageId: data.pageId,
+      moduleId: lo.moduleId,
+      originLoId: data.learningObjectId,
       onlyPublished: false,
       minSimilarity,
     })
@@ -66,25 +69,25 @@ export class RelationsService {
       return { relations: [] }
     }
 
-    // 3. Obtener datos de las páginas candidatas (title, summary, keywords)
+    // 3. Obtener datos de los candidatos (title, summary, keywords)
     const candidateIds = similarRows.map((r) => r.id)
-    const candidatePages = await this.dbService.learningObject.findMany({
+    const candidateLos = await this.dbService.learningObject.findMany({
       where: { id: { in: candidateIds } },
       include: {
         blocks: true,
       },
     })
 
-    const candidatePagesForPrompt: GeneratePageRelationsPromptInput['candidatePages'] =
-      candidatePages.map((p) => ({
+    const candidateLosForPrompt: GeneratePageRelationsPromptInput['candidatePages'] =
+      candidateLos.map((p) => ({
         id: p.id,
         title: p.title,
         summary: (p.compiledContent ?? '').slice(0, 200).trim() || p.title,
         keywords: p.keywords,
       }))
 
-    // 4. Construir bloques de la página actual para el prompt
-    const currentPageBlocks = page.blocks.map((b) => ({
+    // 4. Construir bloques del objeto de aprendizaje actual para el prompt
+    const currentLoBlocks = lo.blocks.map((b) => ({
       type: b.type,
       content: parseJsonField<AiContent>(b.content),
     }))
@@ -93,11 +96,11 @@ export class RelationsService {
 
     const prompt = generatePageRelationsPrompt({
       currentPage: {
-        id: page.id,
-        title: page.title,
-        blocks: currentPageBlocks,
+        id: lo.id,
+        title: lo.title,
+        blocks: currentLoBlocks,
       },
-      candidatePages: candidatePagesForPrompt,
+      candidatePages: candidateLosForPrompt,
       config: {
         maxRelationsPerPage,
       },

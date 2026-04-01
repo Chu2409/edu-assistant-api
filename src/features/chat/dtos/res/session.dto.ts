@@ -5,7 +5,7 @@ export class SessionDto {
   id: number
 
   @ApiProperty({ example: 1 })
-  pageId: number
+  learningObjectId: number
 
   @ApiProperty({ example: 1 })
   userId: number

@@ -16,12 +16,12 @@ export enum ExpandInsertPosition {
 
 export class ExpandContentDto {
   @ApiProperty({
-    description: 'ID de la página donde expandir el contenido',
+    description: 'ID del objeto de aprendizaje donde expandir el contenido',
     example: 1,
   })
   @IsInt()
   @Min(1)
-  pageId: number
+  learningObjectId: number
 
   @ApiProperty({
     description: 'Instrucciones para el contenido a generar',

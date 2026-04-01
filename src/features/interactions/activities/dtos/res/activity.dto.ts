@@ -17,7 +17,7 @@ export class ActivityDto {
   id: number
 
   @ApiProperty({ example: 1 })
-  pageId: number
+  learningObjectId: number
 
   @ApiProperty({ enum: ActivityType, example: ActivityType.MULTIPLE_CHOICE })
   type: ActivityType

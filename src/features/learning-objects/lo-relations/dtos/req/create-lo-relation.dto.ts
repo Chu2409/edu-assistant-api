@@ -13,11 +13,14 @@ import {
 import { RelationType } from 'src/core/database/generated/enums'
 
 export class CreateLoRelationDto {
-  @ApiProperty({ description: 'ID de la página relacionada', example: 2 })
+  @ApiProperty({
+    description: 'ID del objeto de aprendizaje relacionado',
+    example: 2,
+  })
   @Type(() => Number)
   @IsInt()
   @Min(1)
-  relatedPageId: number
+  relatedLoId: number
 
   @ApiPropertyOptional({
     description: 'Score de similitud (0-1). Si es manual puede omitirse.',

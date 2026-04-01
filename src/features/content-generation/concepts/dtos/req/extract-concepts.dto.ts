@@ -3,9 +3,9 @@ import { IsInt } from 'class-validator'
 
 export class ExtractConceptsDto {
   @ApiProperty({
-    description: 'ID de la página de la cual extraer conceptos',
+    description: 'ID del objeto de aprendizaje de la cual extraer conceptos',
     example: 1,
   })
   @IsInt()
-  pageId: number
+  learningObjectId: number
 }

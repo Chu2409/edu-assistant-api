@@ -41,29 +41,29 @@ export class LoService {
     if (!module) {
       throw new NotFoundException(`Módulo con ID ${dto.moduleId} no encontrado`)
     }
-    // Solo el profesor propietario puede crear páginas
+    // Solo el profesor propietario puede crear objetos de aprendizaje
     if (module.teacherId !== user.id) {
       throw new ForbiddenException(
-        'Solo el profesor propietario puede crear páginas en este módulo',
+        'Solo el profesor propietario puede crear objetos de aprendizaje en este módulo',
       )
     }
 
-    const lastPage = await this.dbService.learningObject.findFirst({
+    const lastLo = await this.dbService.learningObject.findFirst({
       where: { moduleId: dto.moduleId },
       orderBy: { orderIndex: 'desc' },
     })
 
-    const page = await this.dbService.learningObject.create({
+    const lo = await this.dbService.learningObject.create({
       data: {
         typeId: 1, // TODO: Change to dynamic
         moduleId: dto.moduleId,
         title: dto.title,
         isPublished: dto.isPublished ?? false,
-        orderIndex: lastPage?.orderIndex ? lastPage.orderIndex + 1 : 1,
+        orderIndex: lastLo?.orderIndex ? lastLo.orderIndex + 1 : 1,
       },
     })
 
-    return LoMapper.mapToDto(page)
+    return LoMapper.mapToDto(lo)
   }
 
   async findAll(
@@ -90,7 +90,7 @@ export class LoService {
       !module.enrollments.some((enrollment) => enrollment.userId === user.id)
     ) {
       throw new ForbiddenException(
-        'No tienes permisos para ver las páginas de este módulo',
+        'No tienes permisos para ver los objetos de aprendizaje de este módulo',
       )
     }
 
@@ -103,7 +103,7 @@ export class LoService {
       where.OR = [{ title: { contains: params.search, mode: 'insensitive' } }]
     }
 
-    // Si es estudiante, solo mostrar páginas publicadas
+    // Si es estudiante, solo mostrar objetos de aprendizaje publicados
     if (user.role === Role.STUDENT && module.teacherId !== user.id) {
       where.isPublished = true
     }
@@ -132,7 +132,7 @@ export class LoService {
   }
 
   private async findOneToTeacher(id: number, user: User) {
-    const page = await this.dbService.learningObject.findUnique({
+    const lo = await this.dbService.learningObject.findUnique({
       where: { id },
       include: {
         loFeedbacks: {
@@ -152,19 +152,23 @@ export class LoService {
       },
     })
 
-    if (!page) {
-      throw new NotFoundException(`Página con ID ${id} no encontrada`)
+    if (!lo) {
+      throw new NotFoundException(
+        `Objeto de aprendizaje con ID ${id} no encontrado`,
+      )
     }
 
-    if (page.module.teacherId !== user.id) {
-      throw new ForbiddenException('No tienes permisos para ver esta página')
+    if (lo.module.teacherId !== user.id) {
+      throw new ForbiddenException(
+        'No tienes permisos para ver este objeto de aprendizaje',
+      )
     }
 
-    return page
+    return lo
   }
 
   private async findOneToStudent(id: number, user: User) {
-    const page = await this.dbService.learningObject.findUnique({
+    const lo = await this.dbService.learningObject.findUnique({
       where: { id },
       include: {
         module: {
@@ -195,99 +199,107 @@ export class LoService {
       },
     })
 
-    if (!page) {
-      throw new NotFoundException(`Página con ID ${id} no encontrada`)
+    if (!lo) {
+      throw new NotFoundException(
+        `Objeto de aprendizaje con ID ${id} no encontrado`,
+      )
     }
 
     if (
-      !page.module.isPublic &&
-      !page.module.enrollments.some(
+      !lo.module.isPublic &&
+      !lo.module.enrollments.some(
         (enrollment: Enrollment) =>
           enrollment.userId === user.id && enrollment.isActive,
       )
     ) {
-      throw new ForbiddenException('No tienes permisos para ver esta página')
+      throw new ForbiddenException(
+        'No tienes permisos para ver este objeto de aprendizaje',
+      )
     }
 
-    if (!page.isPublished) {
-      throw new ForbiddenException('Esta página no está publicada aún')
+    if (!lo.isPublished) {
+      throw new ForbiddenException(
+        'Este objeto de aprendizaje no está publicado aún',
+      )
     }
 
-    return page
+    return lo
   }
 
   async findOne(id: number, user: User): Promise<FullLoDto> {
     if (user.role === Role.STUDENT) {
-      const page = await this.findOneToStudent(id, user)
-      return LoMapper.mapToFullPageDto(page)
+      const lo = await this.findOneToStudent(id, user)
+      return LoMapper.mapToFullLoDto(lo)
     }
 
-    const page = await this.findOneToTeacher(id, user)
-    return LoMapper.mapToFullPageDto(page)
+    const lo = await this.findOneToTeacher(id, user)
+    return LoMapper.mapToFullLoDto(lo)
   }
 
   async update(
     id: number,
-    updatePageDto: UpdateLoDto,
+    updateLoDto: UpdateLoDto,
     user: User,
   ): Promise<LoDto> {
-    // Verificar que la página existe
-    const existingPage = await this.dbService.learningObject.findUnique({
+    // Verificar que el objeto de aprendizaje existe
+    const existingLo = await this.dbService.learningObject.findUnique({
       where: { id },
       include: {
         module: true,
       },
     })
 
-    if (!existingPage) {
-      throw new NotFoundException(`Página con ID ${id} no encontrada`)
-    }
-
-    // Solo el profesor propietario puede actualizar páginas
-    if (existingPage.module.teacherId !== user.id) {
-      throw new ForbiddenException(
-        'Solo el profesor propietario puede actualizar esta página',
+    if (!existingLo) {
+      throw new NotFoundException(
+        `Objeto de aprendizaje con ID ${id} no encontrado`,
       )
     }
 
-    const page = await this.dbService.learningObject.update({
+    // Solo el profesor propietario puede actualizar objetos de aprendizaje
+    if (existingLo.module.teacherId !== user.id) {
+      throw new ForbiddenException(
+        'Solo el profesor propietario puede actualizar este objeto de aprendizaje',
+      )
+    }
+
+    const lo = await this.dbService.learningObject.update({
       where: { id },
       data: {
-        ...(updatePageDto.title !== undefined && {
-          title: updatePageDto.title,
+        ...(updateLoDto.title !== undefined && {
+          title: updateLoDto.title,
         }),
-        ...(updatePageDto.isPublished !== undefined && {
-          isPublished: updatePageDto.isPublished,
+        ...(updateLoDto.isPublished !== undefined && {
+          isPublished: updateLoDto.isPublished,
         }),
-        ...(updatePageDto.hasManualEdits !== undefined && {
-          hasManualEdits: updatePageDto.hasManualEdits,
-          conceptsProcessed: updatePageDto.hasManualEdits ? false : undefined,
+        ...(updateLoDto.hasManualEdits !== undefined && {
+          hasManualEdits: updateLoDto.hasManualEdits,
+          conceptsProcessed: updateLoDto.hasManualEdits ? false : undefined,
         }),
-        ...(updatePageDto.keywords !== undefined && {
-          keywords: updatePageDto.keywords,
+        ...(updateLoDto.keywords !== undefined && {
+          keywords: updateLoDto.keywords,
         }),
       },
     })
 
-    // Al publicar la página, encolar procesamiento de embeddings
-    if (updatePageDto.isPublished === true) {
+    // Al publicar el objeto de aprendizaje, encolar procesamiento de embeddings
+    if (updateLoDto.isPublished === true) {
       await this.embeddingsQueue.add(
-        QUEUE_NAMES.EMBEDDINGS.JOBS.PROCESS_PAGE,
-        { pageId: id },
+        QUEUE_NAMES.EMBEDDINGS.JOBS.PROCESS_LO,
+        { learningObjectId: id },
         { removeOnComplete: true },
       )
     }
 
-    return LoMapper.mapToDto(page)
+    return LoMapper.mapToDto(lo)
   }
 
   async updateContent(
     id: number,
-    updatePageContentDto: UpdateLoContentDto,
+    updateLoContentDto: UpdateLoContentDto,
     user: User,
   ): Promise<LoDto> {
-    // Verificar que la página existe
-    const existingPage = await this.dbService.learningObject.findUnique({
+    // Verificar que el objeto de aprendizaje existe
+    const existingLo = await this.dbService.learningObject.findUnique({
       where: { id },
       include: {
         module: true,
@@ -295,21 +307,23 @@ export class LoService {
       },
     })
 
-    if (!existingPage) {
-      throw new NotFoundException(`Página con ID ${id} no encontrada`)
+    if (!existingLo) {
+      throw new NotFoundException(
+        `Objeto de aprendizaje con ID ${id} no encontrado`,
+      )
     }
 
     // Solo el profesor propietario puede actualizar el contenido
-    if (existingPage.module.teacherId !== user.id) {
+    if (existingLo.module.teacherId !== user.id) {
       throw new ForbiddenException(
-        'Solo el profesor propietario puede actualizar el contenido de esta página',
+        'Solo el profesor propietario puede actualizar el contenido de este objeto de aprendizaje',
       )
     }
 
     // Ejecutar actualización de bloques en una transacción
     await this.dbService.$transaction(async (prisma) => {
       // Obtener los IDs de los bloques que se van a mantener/actualizar
-      const blockIdsToKeep = updatePageContentDto.blocks
+      const blockIdsToKeep = updateLoContentDto.blocks
         .filter((block) => block.id !== undefined)
         .map((block) => block.id!)
 
@@ -324,8 +338,8 @@ export class LoService {
       })
 
       // Actualizar o crear bloques
-      for (let index = 0; index < updatePageContentDto.blocks.length; index++) {
-        const blockDto = updatePageContentDto.blocks[index]
+      for (let index = 0; index < updateLoContentDto.blocks.length; index++) {
+        const blockDto = updateLoContentDto.blocks[index]
         // El orden del array es la fuente de verdad; orderIndex es 0-based
         const orderIndex = index
 
@@ -354,7 +368,7 @@ export class LoService {
         }
       }
 
-      // Marcar la página como editada manualmente
+      // Marcar el objeto de aprendizaje como editado manualmente
       await prisma.learningObject.update({
         where: { id },
         data: {
@@ -364,21 +378,21 @@ export class LoService {
       })
     })
 
-    // Obtener y retornar la página actualizada
-    const updatedPage = await this.dbService.learningObject.findUnique({
+    // Obtener y retornar el objeto de aprendizaje actualizado
+    const updatedLo = await this.dbService.learningObject.findUnique({
       where: { id },
     })
 
-    return LoMapper.mapToDto(updatedPage!)
+    return LoMapper.mapToDto(updatedLo!)
   }
 
-  async reorder(reorderPagesDto: ReorderLoDto, user: User): Promise<void> {
-    if (reorderPagesDto.pages.length === 0) {
+  async reorder(reorderLosDto: ReorderLoDto, user: User): Promise<void> {
+    if (reorderLosDto.los.length === 0) {
       return
     }
 
     // Validar que los índices de orden sean únicos
-    const orderIndices = reorderPagesDto.pages.map((p) => p.orderIndex)
+    const orderIndices = reorderLosDto.los.map((p) => p.orderIndex)
     const uniqueOrderIndices = new Set(orderIndices)
     if (orderIndices.length !== uniqueOrderIndices.size) {
       const duplicates = orderIndices.filter(
@@ -389,48 +403,48 @@ export class LoService {
       )
     }
 
-    // Obtener todas las páginas a actualizar para verificar permisos
-    const pageIds = reorderPagesDto.pages.map((p) => p.id)
-    const pages = await this.dbService.learningObject.findMany({
+    // Obtener todos los objetos de aprendizaje a actualizar para verificar permisos
+    const loIds = reorderLosDto.los.map((p) => p.id)
+    const los = await this.dbService.learningObject.findMany({
       where: {
-        id: { in: pageIds },
+        id: { in: loIds },
       },
       include: {
         module: true,
       },
     })
 
-    if (pages.length !== pageIds.length) {
-      const foundIds = pages.map((p) => p.id)
-      const missingIds = pageIds.filter((id) => !foundIds.includes(id))
+    if (los.length !== loIds.length) {
+      const foundIds = los.map((p) => p.id)
+      const missingIds = loIds.filter((id) => !foundIds.includes(id))
       throw new NotFoundException(
-        `Páginas con IDs ${missingIds.join(', ')} no encontradas`,
+        `Objetos de aprendizaje con IDs ${missingIds.join(', ')} no encontrados`,
       )
     }
 
-    // Verificar que todas las páginas pertenecen al mismo módulo
-    const moduleIds = [...new Set(pages.map((p) => p.moduleId))]
+    // Verificar que todos los objetos de aprendizaje pertenecen al mismo módulo
+    const moduleIds = [...new Set(los.map((p) => p.moduleId))]
     if (moduleIds.length > 1) {
       throw new ForbiddenException(
-        'Todas las páginas deben pertenecer al mismo módulo',
+        'Todos los objetos de aprendizaje deben pertenecer al mismo módulo',
       )
     }
 
-    const module = pages[0].module
+    const module = los[0].module
 
-    // Solo el profesor propietario puede reordenar páginas
+    // Solo el profesor propietario puede reordenar objetos de aprendizaje
     if (module.teacherId !== user.id) {
       throw new ForbiddenException(
-        'Solo el profesor propietario puede reordenar las páginas de este módulo',
+        'Solo el profesor propietario puede reordenar los objetos de aprendizaje de este módulo',
       )
     }
 
-    // Actualizar los orderIndex de todas las páginas en una transacción
+    // Actualizar los orderIndex de todos los objetos de aprendizaje en una transacción
     await this.dbService.$transaction(
-      reorderPagesDto.pages.map((pageReorder) =>
+      reorderLosDto.los.map((loReorder) =>
         this.dbService.learningObject.update({
-          where: { id: pageReorder.id },
-          data: { orderIndex: pageReorder.orderIndex },
+          where: { id: loReorder.id },
+          data: { orderIndex: loReorder.orderIndex },
         }),
       ),
     )

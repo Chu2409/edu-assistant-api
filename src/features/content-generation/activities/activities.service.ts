@@ -32,20 +32,22 @@ export class ActivitiesService {
   ): Promise<AiGeneratedActivity> {
     this.logger.log('Generating activity')
 
-    const page = await this.dbService.learningObject.findUnique({
-      where: { id: data.pageId },
+    const lo = await this.dbService.learningObject.findUnique({
+      where: { id: data.learningObjectId },
       include: { blocks: true, module: { include: { aiConfiguration: true } } },
     })
 
-    if (!page) {
-      throw new NotFoundException(`Page with id ${data.pageId} not found`)
+    if (!lo) {
+      throw new NotFoundException(
+        `Learning Object with id ${data.learningObjectId} not found`,
+      )
     }
 
-    if (page.blocks.length === 0) {
-      throw new BadRequestException('Page has no blocks')
+    if (lo.blocks.length === 0) {
+      throw new BadRequestException('Learning Object has no blocks')
     }
 
-    const blocks = page.blocks
+    const blocks = lo.blocks
       .filter((b) => b.type === BlockType.TEXT || b.type === BlockType.CODE)
       .map((b) => ({
         type: b.type,
@@ -59,7 +61,7 @@ export class ActivitiesService {
     }
 
     const language =
-      data.language ?? page.module.aiConfiguration?.language ?? 'es'
+      data.language ?? lo.module.aiConfiguration?.language ?? 'es'
 
     const prompt = generateActivityPrompt({
       type: data.type,

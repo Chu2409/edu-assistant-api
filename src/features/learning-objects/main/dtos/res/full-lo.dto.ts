@@ -6,25 +6,25 @@ import { StudentQuestionDto } from 'src/features/interactions/student-questions/
 
 export class FullLoDto {
   @ApiProperty({
-    description: 'ID de la página',
+    description: 'ID del objeto de aprendizaje',
     example: 1,
   })
   id: number
 
   @ApiProperty({
-    description: 'ID del módulo al que pertenece la página',
+    description: 'ID del módulo al que pertenece el objeto de aprendizaje',
     example: 1,
   })
   moduleId: number
 
   @ApiProperty({
-    description: 'Título de la página',
+    description: 'Título del objeto de aprendizaje',
     example: 'Introducción a la Programación',
   })
   title: string
 
   @ApiPropertyOptional({
-    description: 'Índice de orden de la página dentro del módulo',
+    description: 'Índice de orden del objeto de aprendizaje dentro del módulo',
     example: 1,
   })
   orderIndex: number | null
@@ -37,19 +37,19 @@ export class FullLoDto {
   keywords: string[]
 
   @ApiProperty({
-    description: 'Indica si la página está publicada',
+    description: 'Indica si el objeto de aprendizaje está publicado',
     example: false,
   })
   isPublished: boolean
 
   @ApiProperty({
-    description: 'Fecha de creación de la página',
+    description: 'Fecha de creación del objeto de aprendizaje',
     example: '2024-01-01T00:00:00.000Z',
   })
   createdAt: Date
 
   @ApiProperty({
-    description: 'Fecha de última actualización de la página',
+    description: 'Fecha de última actualización del objeto de aprendizaje',
     example: '2024-01-02T00:00:00.000Z',
   })
   updatedAt: Date
@@ -61,14 +61,14 @@ export class FullLoDto {
   studentQuestions: StudentQuestionDto[]
 
   @ApiPropertyOptional({
-    description: 'Reseñas de la página',
+    description: 'Reseñas del objeto de aprendizaje',
     type: [LoFeedbackDto],
     nullable: true,
   })
-  pageFeedbacks: LoFeedbackDto[] | null
+  loFeedbacks: LoFeedbackDto[] | null
 
   @ApiPropertyOptional({
-    description: 'Notas de la página',
+    description: 'Notas del objeto de aprendizaje',
     type: [NoteDto],
     nullable: true,
   })
@@ -139,7 +139,7 @@ export class FullLoDto {
 
   @ApiPropertyOptional({
     description:
-      'ID de la sesión de chat con IA asociada a esta página y usuario actual',
+      'ID de la sesión de chat con IA asociada a este objeto de aprendizaje y usuario actual',
     example: 1,
     nullable: true,
   })

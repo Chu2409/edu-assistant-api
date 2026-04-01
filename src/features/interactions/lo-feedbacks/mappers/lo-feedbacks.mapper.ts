@@ -7,14 +7,14 @@ import { UsersMapper } from 'src/features/users/mappers/users.mapper'
 
 export class LoFeedbacksMapper {
   static mapToDto(
-    pageFeedback: LearningObjectFeedback & { user: User },
+    loFeedback: LearningObjectFeedback & { user: User },
   ): LoFeedbackDto {
     return {
-      id: pageFeedback.id,
-      user: UsersMapper.mapToDto(pageFeedback.user),
-      feedback: pageFeedback.feedback,
-      createdAt: pageFeedback.createdAt,
-      updatedAt: pageFeedback.updatedAt,
+      id: loFeedback.id,
+      user: UsersMapper.mapToDto(loFeedback.user),
+      feedback: loFeedback.feedback,
+      createdAt: loFeedback.createdAt,
+      updatedAt: loFeedback.updatedAt,
     }
   }
 }

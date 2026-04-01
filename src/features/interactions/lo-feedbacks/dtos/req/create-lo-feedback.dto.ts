@@ -3,12 +3,12 @@ import { IsNotEmpty, IsNumber, IsString } from 'class-validator'
 
 export class CreateLoFeedbackDto {
   @ApiProperty({
-    description: 'El ID de la página a la que pertenece el feedback',
+    description: 'El ID del objeto de aprendizaje al que pertenece el feedback',
     example: 1,
   })
   @IsNumber()
   @IsNotEmpty()
-  pageId: number
+  learningObjectId: number
 
   @ApiProperty({
     description: 'El contenido del feedback',
