@@ -147,6 +147,11 @@ export class LoService {
         studentQuestions: {
           include: {
             user: true,
+            replies: {
+              include: {
+                user: true,
+              },
+            },
           },
         },
         blocks: {
@@ -183,6 +188,11 @@ export class LoService {
         studentQuestions: {
           include: {
             user: true,
+            replies: {
+              include: {
+                user: true,
+              },
+            },
           },
           where: {
             OR: [{ isPublic: true }, { userId: user.id }],
