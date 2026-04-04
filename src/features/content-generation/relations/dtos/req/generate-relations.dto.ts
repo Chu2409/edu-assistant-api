@@ -4,13 +4,13 @@ import { Type } from 'class-transformer'
 
 export class GenerateRelationsDto {
   @ApiProperty({
-    description: 'ID de la página para la cual generar relaciones',
+    description: 'ID del objeto de aprendizaje para el cual generar relaciones',
     example: 1,
   })
   @IsInt()
   @Min(1)
   @Type(() => Number)
-  pageId: number
+  learningObjectId: number
 
   @ApiPropertyOptional({
     description:

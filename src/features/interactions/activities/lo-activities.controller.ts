@@ -20,63 +20,68 @@ import { CreateActivityDto } from './dtos/req/create-activity.dto'
 import { UpdateActivityDto } from './dtos/req/update-activity.dto'
 
 @ApiTags('Activities')
-@Controller('pages')
+@Controller('learning-objects')
 export class LoActivitiesController {
   constructor(private readonly activitiesService: ActivitiesService) {}
 
-  @Get(':pageId/activities')
-  @ApiOperation({ summary: 'Listar actividades de una página' })
-  @ApiParam({ name: 'pageId', type: Number, example: 1 })
+  @Get(':learningObjectId/activities')
+  @ApiOperation({ summary: 'Listar actividades de un objeto de aprendizaje' })
+  @ApiParam({ name: 'learningObjectId', type: Number, example: 1 })
   @ApiStandardResponse([ActivityDto])
   list(
-    @Param('pageId', ParseIntPipe) pageId: number,
+    @Param('learningObjectId', ParseIntPipe) learningObjectId: number,
     @GetUser() user: User,
   ): Promise<ActivityDto[]> {
-    return this.activitiesService.list(pageId, user)
+    return this.activitiesService.list(learningObjectId, user)
   }
 
-  @Post(':pageId/activities')
+  @Post(':learningObjectId/activities')
   @ApiOperation({ summary: 'Crear actividad' })
-  @ApiParam({ name: 'pageId', type: Number, example: 1 })
+  @ApiParam({ name: 'learningObjectId', type: Number, example: 1 })
   @ApiStandardResponse(ActivityDto, HttpStatus.CREATED)
   @ApiResponse({ status: 403, description: 'Solo profesores' })
   @JwtAuth(Role.TEACHER)
   create(
-    @Param('pageId', ParseIntPipe) pageId: number,
+    @Param('learningObjectId', ParseIntPipe) learningObjectId: number,
     @Body() dto: CreateActivityDto,
     @GetUser() user: User,
   ): Promise<ActivityDto> {
-    return this.activitiesService.create(pageId, dto, user)
+    return this.activitiesService.create(learningObjectId, dto, user)
   }
 
-  @Patch(':pageId/activities/:activityId')
+  @Patch(':learningObjectId/activities/:activityId')
   @ApiOperation({ summary: 'Actualizar actividad' })
-  @ApiParam({ name: 'pageId', type: Number, example: 1 })
+  @ApiParam({ name: 'learningObjectId', type: Number, example: 1 })
   @ApiParam({ name: 'activityId', type: Number, example: 1 })
   @ApiStandardResponse(ActivityDto)
   @ApiResponse({ status: 403, description: 'Solo profesores' })
   @JwtAuth(Role.TEACHER)
   update(
-    @Param('pageId', ParseIntPipe) pageId: number,
+    @Param('learningObjectId', ParseIntPipe) learningObjectId: number,
     @Param('activityId', ParseIntPipe) activityId: number,
     @Body() dto: UpdateActivityDto,
     @GetUser() user: User,
   ): Promise<ActivityDto> {
-    return this.activitiesService.update(pageId, activityId, dto, user)
+    return this.activitiesService.update(
+      learningObjectId,
+      activityId,
+      dto,
+      user,
+    )
   }
 
-  @Delete(':pageId/activities/:activityId')
+  @Delete(':learningObjectId/activities/:activityId')
   @ApiOperation({ summary: 'Eliminar actividad' })
-  @ApiParam({ name: 'pageId', type: Number, example: 1 })
+  @ApiParam({ name: 'learningObjectId', type: Number, example: 1 })
   @ApiParam({ name: 'activityId', type: Number, example: 1 })
   @ApiStandardResponse(undefined, HttpStatus.NO_CONTENT)
   @ApiResponse({ status: 403, description: 'Solo profesores' })
   @JwtAuth(Role.TEACHER)
   delete(
-    @Param('pageId', ParseIntPipe) pageId: number,
+    @Param('learningObjectId', ParseIntPipe) learningObjectId: number,
     @Param('activityId', ParseIntPipe) activityId: number,
     @GetUser() user: User,
   ): Promise<void> {
-    return this.activitiesService.delete(pageId, activityId, user)
+    return this.activitiesService.delete(learningObjectId, activityId, user)
   }
 }

@@ -9,12 +9,12 @@ import {
 
 export class CreateStudentQuestionDto {
   @ApiProperty({
-    description: 'El ID de la página a la que pertenece la pregunta',
+    description: 'El ID del objeto de aprendizaje al que pertenece la pregunta',
     example: 1,
   })
   @IsNumber()
   @IsNotEmpty()
-  pageId: number
+  learningObjectId: number
 
   @ApiProperty({
     description: 'La pregunta del estudiante',

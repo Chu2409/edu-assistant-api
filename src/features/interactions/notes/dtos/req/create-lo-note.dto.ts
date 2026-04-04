@@ -3,12 +3,12 @@ import { IsNotEmpty, IsNumber, IsString } from 'class-validator'
 
 export class CreateLoNoteDto {
   @ApiProperty({
-    description: 'El ID de la página a la que pertenece la nota',
+    description: 'El ID del objeto de aprendizaje al que pertenece la nota',
     example: 1,
   })
   @IsNumber()
   @IsNotEmpty()
-  pageId: number
+  learningObjectId: number
 
   @ApiProperty({
     description: 'El contenido de la nota',

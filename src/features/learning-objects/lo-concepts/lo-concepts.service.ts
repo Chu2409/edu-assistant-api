@@ -15,33 +15,33 @@ import { LoHelperService } from '../main/lo-helper.service'
 export class LoConceptsService {
   constructor(
     private readonly dbService: DBService,
-    private readonly pagesHelperService: LoHelperService,
+    private readonly loHelperService: LoHelperService,
   ) {}
 
   async create(
-    pageId: number,
+    learningObjectId: number,
     dto: CreateLoConceptDto,
     user: User,
   ): Promise<LoConceptDto> {
-    await this.pagesHelperService.getPageForWrite(pageId, user)
+    await this.loHelperService.getLoForWrite(learningObjectId, user)
 
     try {
       const created = await this.dbService.learningObjectConcept.create({
         data: {
-          learningObjectId: pageId,
+          learningObjectId,
           term: dto.term,
           definition: dto.definition,
         },
       })
       return LoConceptsMapper.toDto(created)
     } catch (e) {
-      // Unique constraint: (pageId, term)
+      // Unique constraint: (learningObjectId, term)
       if (
         e instanceof Prisma.PrismaClientKnownRequestError &&
         e.code === 'P2002'
       ) {
         throw new ForbiddenException(
-          'Ya existe un concepto con ese término en esta página',
+          'Ya existe un concepto con ese término en este objeto de aprendizaje',
         )
       }
       throw e
@@ -49,17 +49,17 @@ export class LoConceptsService {
   }
 
   async update(
-    pageId: number,
+    learningObjectId: number,
     conceptId: number,
     dto: UpdateLoConceptDto,
     user: User,
   ): Promise<LoConceptDto> {
-    await this.pagesHelperService.getPageForWrite(pageId, user)
+    await this.loHelperService.getLoForWrite(learningObjectId, user)
 
     const existing = await this.dbService.learningObjectConcept.findUnique({
       where: { id: conceptId },
     })
-    if (!existing || existing.learningObjectId !== pageId) {
+    if (!existing || existing.learningObjectId !== learningObjectId) {
       throw new NotFoundException('Concepto no encontrado')
     }
 
@@ -74,13 +74,17 @@ export class LoConceptsService {
     return LoConceptsMapper.toDto(updated)
   }
 
-  async delete(pageId: number, conceptId: number, user: User): Promise<void> {
-    await this.pagesHelperService.getPageForWrite(pageId, user)
+  async delete(
+    learningObjectId: number,
+    conceptId: number,
+    user: User,
+  ): Promise<void> {
+    await this.loHelperService.getLoForWrite(learningObjectId, user)
 
     const existing = await this.dbService.learningObjectConcept.findUnique({
       where: { id: conceptId },
     })
-    if (!existing || existing.learningObjectId !== pageId) {
+    if (!existing || existing.learningObjectId !== learningObjectId) {
       throw new NotFoundException('Concepto no encontrado')
     }
 

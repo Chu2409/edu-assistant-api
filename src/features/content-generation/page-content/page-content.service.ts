@@ -36,12 +36,14 @@ export class PageContentService {
     this.logger.log('Generating page content')
 
     const page = await this.dbService.learningObject.findUnique({
-      where: { id: data.pageId },
+      where: { id: data.learningObjectId },
       include: { module: { include: { aiConfiguration: true } } },
     })
 
     if (!page) {
-      throw new NotFoundException(`Page with id ${data.pageId} not found`)
+      throw new NotFoundException(
+        `Page with id ${data.learningObjectId} not found`,
+      )
     }
 
     const prompt = generatePageContentPrompt({
@@ -69,7 +71,7 @@ export class PageContentService {
     this.logger.log('Regenerating page content')
 
     const page = await this.dbService.learningObject.findUnique({
-      where: { id: data.pageId },
+      where: { id: data.learningObjectId },
       include: {
         blocks: {
           orderBy: {
@@ -81,7 +83,9 @@ export class PageContentService {
     })
 
     if (!page) {
-      throw new NotFoundException(`Page with id ${data.pageId} not found`)
+      throw new NotFoundException(
+        `Page with id ${data.learningObjectId} not found`,
+      )
     }
 
     const blocks = page.blocks.map((b) => ({
@@ -116,7 +120,7 @@ export class PageContentService {
     this.logger.log('Regenerating block')
 
     const page = await this.dbService.learningObject.findUnique({
-      where: { id: data.pageId },
+      where: { id: data.learningObjectId },
       include: {
         blocks: { orderBy: { orderIndex: 'asc' } },
         module: { include: { aiConfiguration: true } },
@@ -124,7 +128,9 @@ export class PageContentService {
     })
 
     if (!page) {
-      throw new NotFoundException(`Page with id ${data.pageId} not found`)
+      throw new NotFoundException(
+        `Page with id ${data.learningObjectId} not found`,
+      )
     }
 
     const blockIndex = page.blocks.findIndex(
@@ -133,7 +139,7 @@ export class PageContentService {
 
     if (blockIndex === -1) {
       throw new NotFoundException(
-        `Block with orderIndex ${data.orderIndex} not found in page ${data.pageId}`,
+        `Block with orderIndex ${data.orderIndex} not found in page ${data.learningObjectId}`,
       )
     }
 
@@ -192,7 +198,7 @@ export class PageContentService {
     this.logger.log('Expanding content')
 
     const page = await this.dbService.learningObject.findUnique({
-      where: { id: data.pageId },
+      where: { id: data.learningObjectId },
       include: {
         blocks: { orderBy: { orderIndex: 'asc' } },
         module: { include: { aiConfiguration: true } },
@@ -200,7 +206,9 @@ export class PageContentService {
     })
 
     if (!page) {
-      throw new NotFoundException(`Page with id ${data.pageId} not found`)
+      throw new NotFoundException(
+        `Page with id ${data.learningObjectId} not found`,
+      )
     }
 
     let targetBlockIndex: number | undefined = undefined

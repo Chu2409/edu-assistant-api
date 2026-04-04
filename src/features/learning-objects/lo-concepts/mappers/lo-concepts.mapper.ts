@@ -5,7 +5,7 @@ export class LoConceptsMapper {
   static toDto(entity: LearningObjectConcept): LoConceptDto {
     return {
       id: entity.id,
-      pageId: entity.learningObjectId,
+      learningObjectId: entity.learningObjectId,
       term: entity.term,
       definition: entity.definition,
       createdAt: entity.createdAt,

@@ -14,21 +14,23 @@ import { ChatService } from './chat.service'
 import { CreateOrGetSessionDto } from './dtos/req/create-or-get-session.dto'
 import { SessionDto } from './dtos/res/session.dto'
 
-@ApiTags('Page Chat')
-@Controller('pages')
+@ApiTags('Learning Object Chat')
+@Controller('learning-objects')
 export class LoSessionsController {
   constructor(private readonly chatService: ChatService) {}
 
-  @Post(':pageId/sessions')
-  @ApiOperation({ summary: 'Crear u obtener sesión de chat para una página' })
-  @ApiParam({ name: 'pageId', type: Number, example: 1 })
+  @Post(':learningObjectId/sessions')
+  @ApiOperation({
+    summary: 'Crear u obtener sesión de chat para un objeto de aprendizaje',
+  })
+  @ApiParam({ name: 'learningObjectId', type: Number, example: 1 })
   @ApiStandardResponse(SessionDto, HttpStatus.CREATED)
   @ApiResponse({ status: 401, description: 'No autorizado' })
   createOrGet(
-    @Param('pageId', ParseIntPipe) pageId: number,
+    @Param('learningObjectId', ParseIntPipe) learningObjectId: number,
     @Body() dto: CreateOrGetSessionDto,
     @GetUser() user: User,
   ): Promise<SessionDto> {
-    return this.chatService.createOrGetSession(pageId, dto, user)
+    return this.chatService.createOrGetSession(learningObjectId, dto, user)
   }
 }

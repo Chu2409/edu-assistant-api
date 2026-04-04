@@ -26,31 +26,33 @@ export class ConceptsService {
     private readonly openAiService: OpenaiService,
   ) {}
 
-  async extractPageConcepts(
+  async extractLoConcepts(
     data: ExtractConceptsDto,
   ): Promise<PageConceptsExtractedDto> {
-    this.logger.log('Extracting page concepts')
-    const page = await this.dbService.learningObject.findUnique({
-      where: { id: data.pageId },
+    this.logger.log('Extracting learning object concepts')
+    const lo = await this.dbService.learningObject.findUnique({
+      where: { id: data.learningObjectId },
       include: { blocks: true, module: { include: { aiConfiguration: true } } },
     })
 
-    if (!page) {
-      throw new NotFoundException(`Page with id ${data.pageId} not found`)
+    if (!lo) {
+      throw new NotFoundException(
+        `Learning Object with id ${data.learningObjectId} not found`,
+      )
     }
 
-    if (page.blocks.length === 0) {
-      throw new BadRequestException('Page has no blocks')
+    if (lo.blocks.length === 0) {
+      throw new BadRequestException('Learning Object has no blocks')
     }
 
     const prompt = extractLoConceptsPrompt({
-      blocks: page.blocks
+      blocks: lo.blocks
         .filter((b) => b.type === BlockType.TEXT)
         .map((b) => ({
           markdown: parseJsonField<{ markdown: string }>(b.content).markdown,
         })),
       config: {
-        language: page.module.aiConfiguration!.language,
+        language: lo.module.aiConfiguration!.language,
       },
     })
 

@@ -28,37 +28,37 @@ export class LoMapper {
     }
   }
 
-  static mapToFullPageDto(
-    page: LearningObject & {
+  static mapToFullLoDto(
+    lo: LearningObject & {
       notes?: Note[]
       studentQuestions: (StudentQuestion & { user: User })[]
-      pageFeedbacks?: (LearningObjectFeedback & { user: User })[]
+      loFeedbacks?: (LearningObjectFeedback & { user: User })[]
       blocks: Block[]
       sessions?: Session[]
     },
   ): FullLoDto {
     return {
-      id: page.id,
-      moduleId: page.moduleId,
-      title: page.title,
-      orderIndex: page.orderIndex,
-      keywords: page.keywords,
-      isPublished: page.isPublished,
-      createdAt: page.createdAt,
-      updatedAt: page.updatedAt,
-      studentQuestions: page.studentQuestions.map((studentQuestion) =>
+      id: lo.id,
+      moduleId: lo.moduleId,
+      title: lo.title,
+      orderIndex: lo.orderIndex,
+      keywords: lo.keywords,
+      isPublished: lo.isPublished,
+      createdAt: lo.createdAt,
+      updatedAt: lo.updatedAt,
+      studentQuestions: lo.studentQuestions.map((studentQuestion) =>
         StudentQuestionsMapper.mapToDto(studentQuestion),
       ),
-      pageFeedbacks: page.pageFeedbacks
-        ? page.pageFeedbacks.map((pageFeedback) =>
-            LoFeedbacksMapper.mapToDto(pageFeedback),
+      loFeedbacks: lo.loFeedbacks
+        ? lo.loFeedbacks.map((loFeedback) =>
+            LoFeedbacksMapper.mapToDto(loFeedback),
           )
         : null,
-      notes: page.notes
-        ? page.notes.map((note) => NotesMapper.mapToDto(note))
+      notes: lo.notes
+        ? lo.notes.map((note) => NotesMapper.mapToDto(note))
         : null,
-      chatSessionId: page.sessions?.[0]?.id ?? null,
-      blocks: page.blocks.map((block) => BlocksMapper.mapToDto(block)),
+      chatSessionId: lo.sessions?.[0]?.id ?? null,
+      blocks: lo.blocks.map((block) => BlocksMapper.mapToDto(block)),
     }
   }
 }

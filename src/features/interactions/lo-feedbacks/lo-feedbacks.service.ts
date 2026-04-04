@@ -12,11 +12,11 @@ import { LoFeedbacksMapper } from './mappers/lo-feedbacks.mapper'
 export class LoFeedbacksService {
   constructor(private readonly dbService: DBService) {}
 
-  async create(userId: number, createPageFeedbackDto: CreateLoFeedbackDto) {
+  async create(userId: number, createLoFeedbackDto: CreateLoFeedbackDto) {
     const newFeedback = await this.dbService.learningObjectFeedback.create({
       data: {
         userId,
-        ...createPageFeedbackDto,
+        ...createLoFeedbackDto,
       },
       include: {
         user: true,
@@ -29,7 +29,7 @@ export class LoFeedbacksService {
   async update(
     id: number,
     userId: number,
-    updatePageFeedbackDto: UpdateLoFeedbackDto,
+    updateLoFeedbackDto: UpdateLoFeedbackDto,
   ) {
     const feedback = await this.dbService.learningObjectFeedback.findUnique({
       where: { id },
@@ -48,7 +48,7 @@ export class LoFeedbacksService {
     const updatedFeedback = await this.dbService.learningObjectFeedback.update({
       where: { id },
       data: {
-        ...updatePageFeedbackDto,
+        ...updateLoFeedbackDto,
       },
       include: {
         user: true,

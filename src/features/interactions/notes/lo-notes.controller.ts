@@ -22,8 +22,8 @@ import {
 import { JwtAuth } from 'src/features/auth/decorators/jwt-auth.decorator'
 import { Role } from 'src/core/database/generated/enums'
 
-@ApiTags('Page Notes')
-@Controller('pages/notes')
+@ApiTags('Learning Object Notes')
+@Controller('learning-objects/notes')
 @JwtAuth(Role.STUDENT)
 export class LoNotesController {
   constructor(private readonly pageNotesService: LoNotesService) {}

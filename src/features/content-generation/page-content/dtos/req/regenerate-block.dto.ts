@@ -15,12 +15,12 @@ import {
 
 export class RegenerateBlockDto {
   @ApiProperty({
-    description: 'ID de la página que contiene el bloque',
+    description: 'ID del objeto de aprendizaje que contiene el bloque',
     example: 1,
   })
   @IsInt()
   @Min(1)
-  pageId: number
+  learningObjectId: number
 
   @ApiProperty({
     description: 'Orden del bloque a regenerar (orderIndex)',

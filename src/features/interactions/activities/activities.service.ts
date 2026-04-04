@@ -30,33 +30,33 @@ import { LoHelperService } from 'src/features/learning-objects/main/lo-helper.se
 export class ActivitiesService {
   constructor(
     private readonly dbService: DBService,
-    private readonly pagesHelperService: LoHelperService,
+    private readonly loHelperService: LoHelperService,
   ) {}
 
-  async list(pageId: number, user: User): Promise<ActivityDto[]> {
-    await this.pagesHelperService.getPageForRead(pageId, user)
+  async list(learningObjectId: number, user: User): Promise<ActivityDto[]> {
+    await this.loHelperService.getLoForRead(learningObjectId, user)
     const activities = await this.dbService.activity.findMany({
-      where: { learningObjectId: pageId },
+      where: { learningObjectId },
       orderBy: { orderIndex: 'asc' },
     })
     return activities.map((a) => ActivitiesMapper.mapToDto(a))
   }
 
   async create(
-    pageId: number,
+    learningObjectId: number,
     dto: CreateActivityDto,
     user: User,
   ): Promise<ActivityDto> {
-    await this.pagesHelperService.getPageForWrite(pageId, user)
+    await this.loHelperService.getLoForWrite(learningObjectId, user)
 
     const last = await this.dbService.activity.findFirst({
-      where: { learningObjectId: pageId },
+      where: { learningObjectId },
       orderBy: { orderIndex: 'desc' },
     })
 
     const created = await this.dbService.activity.create({
       data: {
-        learningObjectId: pageId,
+        learningObjectId,
         type: dto.type,
         question: dto.question,
         options: JSON.stringify(dto.options),
@@ -71,17 +71,17 @@ export class ActivitiesService {
   }
 
   async update(
-    pageId: number,
+    learningObjectId: number,
     activityId: number,
     dto: UpdateActivityDto,
     user: User,
   ): Promise<ActivityDto> {
-    await this.pagesHelperService.getPageForWrite(pageId, user)
+    await this.loHelperService.getLoForWrite(learningObjectId, user)
 
     const existing = await this.dbService.activity.findUnique({
       where: { id: activityId },
     })
-    if (!existing || existing.learningObjectId !== pageId) {
+    if (!existing || existing.learningObjectId !== learningObjectId) {
       throw new NotFoundException('Actividad no encontrada')
     }
 
@@ -110,13 +110,17 @@ export class ActivitiesService {
     return ActivitiesMapper.mapToDto(updated)
   }
 
-  async delete(pageId: number, activityId: number, user: User): Promise<void> {
-    await this.pagesHelperService.getPageForWrite(pageId, user)
+  async delete(
+    learningObjectId: number,
+    activityId: number,
+    user: User,
+  ): Promise<void> {
+    await this.loHelperService.getLoForWrite(learningObjectId, user)
 
     const existing = await this.dbService.activity.findUnique({
       where: { id: activityId },
     })
-    if (!existing || existing.learningObjectId !== pageId) {
+    if (!existing || existing.learningObjectId !== learningObjectId) {
       throw new NotFoundException('Actividad no encontrada')
     }
 
@@ -142,10 +146,7 @@ export class ActivitiesService {
     }
 
     // student access check
-    await this.pagesHelperService.getPageForRead(
-      activity.learningObjectId,
-      user,
-    )
+    await this.loHelperService.getLoForRead(activity.learningObjectId, user)
 
     const lastAttempt = await this.dbService.activityAttempt.findFirst({
       where: { activityId, userId: user.id },

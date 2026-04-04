@@ -4,14 +4,14 @@ import { IsArray, IsInt, ValidateNested } from 'class-validator'
 
 class ReorderLo {
   @ApiProperty({
-    description: 'ID de la página',
+    description: 'ID del objeto de aprendizaje',
     example: 1,
   })
   @IsInt()
   id: number
 
   @ApiProperty({
-    description: 'Índice de orden de la página',
+    description: 'Índice de orden del objeto de aprendizaje',
     example: 1,
   })
   @IsInt()
@@ -20,11 +20,11 @@ class ReorderLo {
 
 export class ReorderLoDto {
   @ApiProperty({
-    description: 'Páginas a reordenar',
+    description: 'Objetos de aprendizaje a reordenar',
     type: [ReorderLo],
   })
   @IsArray()
   @ValidateNested({ each: true })
   @Type(() => ReorderLo)
-  pages: ReorderLo[]
+  los: ReorderLo[]
 }

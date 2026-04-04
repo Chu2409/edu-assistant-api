@@ -10,65 +10,71 @@ import { Enrollment, Role, type User } from 'src/core/database/generated/client'
 export class LoHelperService {
   constructor(private readonly dbService: DBService) {}
 
-  async getPageForRead(pageId: number, user: User) {
-    const page = await this.dbService.learningObject.findUnique({
-      where: { id: pageId },
+  async getLoForRead(learningObjectId: number, user: User) {
+    const lo = await this.dbService.learningObject.findUnique({
+      where: { id: learningObjectId },
       include: {
         module: { include: { enrollments: true, aiConfiguration: true } },
       },
     })
 
-    if (!page) {
-      throw new NotFoundException(`Página con ID ${pageId} no encontrada`)
+    if (!lo) {
+      throw new NotFoundException(
+        `Objeto de aprendizaje con ID ${learningObjectId} no encontrado`,
+      )
     }
 
-    if (user.role === Role.ADMIN) return page
+    if (user.role === Role.ADMIN) return lo
 
     if (user.role === Role.TEACHER) {
-      if (page.module.teacherId !== user.id) {
+      if (lo.module.teacherId !== user.id) {
         throw new ForbiddenException(
-          'No tienes permisos para acceder a esta página',
+          'No tienes permisos para acceder a este objeto de aprendizaje',
         )
       }
-      return page
+      return lo
     }
 
     const hasAccess =
-      page.module.isPublic ||
-      page.module.enrollments.some(
+      lo.module.isPublic ||
+      lo.module.enrollments.some(
         (enrollment: Enrollment) =>
           enrollment.userId === user.id && enrollment.isActive,
       )
 
     if (!hasAccess) {
       throw new ForbiddenException(
-        'No tienes permisos para acceder a esta página',
+        'No tienes permisos para acceder a este objeto de aprendizaje',
       )
     }
-    if (!page.isPublished) {
-      throw new ForbiddenException('Esta página no está publicada aún')
+    if (!lo.isPublished) {
+      throw new ForbiddenException(
+        'Este objeto de aprendizaje no está publicado aún',
+      )
     }
-    return page
+    return lo
   }
 
-  async getPageForWrite(pageId: number, user: User) {
-    const page = await this.dbService.learningObject.findUnique({
-      where: { id: pageId },
+  async getLoForWrite(learningObjectId: number, user: User) {
+    const lo = await this.dbService.learningObject.findUnique({
+      where: { id: learningObjectId },
       include: { module: true },
     })
 
-    if (!page) {
-      throw new NotFoundException(`Página con ID ${pageId} no encontrada`)
-    }
-
-    if (user.role === Role.ADMIN) return page
-
-    if (page.module.teacherId !== user.id) {
-      throw new ForbiddenException(
-        'Solo el profesor propietario puede modificar esta página',
+    if (!lo) {
+      throw new NotFoundException(
+        `Objeto de aprendizaje con ID ${learningObjectId} no encontrado`,
       )
     }
 
-    return page
+    if (user.role === Role.ADMIN) return lo
+
+    if (lo.module.teacherId !== user.id) {
+      throw new ForbiddenException(
+        'Solo el profesor propietario puede modificar este objeto de aprendizaje',
+      )
+    }
+
+    return lo
   }
 }

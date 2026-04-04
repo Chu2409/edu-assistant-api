@@ -18,48 +18,48 @@ import { LoConceptDto } from './dtos/res/lo-concept.dto'
 import { CreateLoConceptDto } from './dtos/req/create-lo-concept.dto'
 import { UpdateLoConceptDto } from './dtos/req/update-lo-concept.dto'
 
-@ApiTags('Page Concepts')
-@Controller('pages')
+@ApiTags('Learning Object Concepts')
+@Controller('learning-objects')
 @JwtAuth(Role.TEACHER)
 export class LoConceptsController {
-  constructor(private readonly pageConceptsService: LoConceptsService) {}
+  constructor(private readonly loConceptsService: LoConceptsService) {}
 
-  @Post(':pageId/concepts')
+  @Post(':learningObjectId/concepts')
   @ApiOperation({ summary: 'Crear concepto manualmente' })
-  @ApiParam({ name: 'pageId', type: Number, example: 1 })
+  @ApiParam({ name: 'learningObjectId', type: Number, example: 1 })
   @ApiStandardResponse(LoConceptDto, HttpStatus.CREATED)
   create(
-    @Param('pageId', ParseIntPipe) pageId: number,
+    @Param('learningObjectId', ParseIntPipe) learningObjectId: number,
     @Body() dto: CreateLoConceptDto,
     @GetUser() user: User,
   ): Promise<LoConceptDto> {
-    return this.pageConceptsService.create(pageId, dto, user)
+    return this.loConceptsService.create(learningObjectId, dto, user)
   }
 
-  @Patch(':pageId/concepts/:conceptId')
+  @Patch(':learningObjectId/concepts/:conceptId')
   @ApiOperation({ summary: 'Actualizar concepto' })
-  @ApiParam({ name: 'pageId', type: Number, example: 1 })
+  @ApiParam({ name: 'learningObjectId', type: Number, example: 1 })
   @ApiParam({ name: 'conceptId', type: Number, example: 1 })
   @ApiStandardResponse(LoConceptDto)
   update(
-    @Param('pageId', ParseIntPipe) pageId: number,
+    @Param('learningObjectId', ParseIntPipe) learningObjectId: number,
     @Param('conceptId', ParseIntPipe) conceptId: number,
     @Body() dto: UpdateLoConceptDto,
     @GetUser() user: User,
   ): Promise<LoConceptDto> {
-    return this.pageConceptsService.update(pageId, conceptId, dto, user)
+    return this.loConceptsService.update(learningObjectId, conceptId, dto, user)
   }
 
-  @Delete(':pageId/concepts/:conceptId')
+  @Delete(':learningObjectId/concepts/:conceptId')
   @ApiOperation({ summary: 'Eliminar concepto' })
-  @ApiParam({ name: 'pageId', type: Number, example: 1 })
+  @ApiParam({ name: 'learningObjectId', type: Number, example: 1 })
   @ApiParam({ name: 'conceptId', type: Number, example: 1 })
   @ApiStandardResponse(undefined, HttpStatus.NO_CONTENT)
   async delete(
-    @Param('pageId', ParseIntPipe) pageId: number,
+    @Param('learningObjectId', ParseIntPipe) learningObjectId: number,
     @Param('conceptId', ParseIntPipe) conceptId: number,
     @GetUser() user: User,
   ): Promise<void> {
-    return this.pageConceptsService.delete(pageId, conceptId, user)
+    return this.loConceptsService.delete(learningObjectId, conceptId, user)
   }
 }

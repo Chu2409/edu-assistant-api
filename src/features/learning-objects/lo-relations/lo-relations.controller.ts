@@ -18,51 +18,56 @@ import { LoRelationDto } from './dtos/res/lo-relation.dto'
 import { CreateLoRelationDto } from './dtos/req/create-lo-relation.dto'
 import { UpdateLoRelationDto } from './dtos/req/update-lo-relation.dto'
 
-@ApiTags('Page Relations')
-@Controller('pages')
+@ApiTags('Learning Object Relations')
+@Controller('learning-objects')
 @JwtAuth(Role.TEACHER)
 export class LoRelationsController {
-  constructor(private readonly pageRelationsService: LoRelationsService) {}
+  constructor(private readonly loRelationsService: LoRelationsService) {}
 
-  @Post(':pageId/relations')
+  @Post(':learningObjectId/relations')
   @ApiOperation({ summary: 'Crear relación manualmente' })
-  @ApiParam({ name: 'pageId', type: Number, example: 1 })
+  @ApiParam({ name: 'learningObjectId', type: Number, example: 1 })
   @ApiStandardResponse(LoRelationDto, HttpStatus.CREATED)
   @ApiResponse({ status: 403, description: 'Solo profesores' })
   create(
-    @Param('pageId', ParseIntPipe) pageId: number,
+    @Param('learningObjectId', ParseIntPipe) learningObjectId: number,
     @Body() dto: CreateLoRelationDto,
     @GetUser() user: User,
   ): Promise<LoRelationDto> {
-    return this.pageRelationsService.create(pageId, dto, user)
+    return this.loRelationsService.create(learningObjectId, dto, user)
   }
 
-  @Patch(':pageId/relations/:relationId')
+  @Patch(':learningObjectId/relations/:relationId')
   @ApiOperation({ summary: 'Actualizar relación' })
-  @ApiParam({ name: 'pageId', type: Number, example: 1 })
+  @ApiParam({ name: 'learningObjectId', type: Number, example: 1 })
   @ApiParam({ name: 'relationId', type: Number, example: 1 })
   @ApiStandardResponse(LoRelationDto)
   @ApiResponse({ status: 403, description: 'Solo profesores' })
   update(
-    @Param('pageId', ParseIntPipe) pageId: number,
+    @Param('learningObjectId', ParseIntPipe) learningObjectId: number,
     @Param('relationId', ParseIntPipe) relationId: number,
     @Body() dto: UpdateLoRelationDto,
     @GetUser() user: User,
   ): Promise<LoRelationDto> {
-    return this.pageRelationsService.update(pageId, relationId, dto, user)
+    return this.loRelationsService.update(
+      learningObjectId,
+      relationId,
+      dto,
+      user,
+    )
   }
 
-  @Delete(':pageId/relations/:relationId')
+  @Delete(':learningObjectId/relations/:relationId')
   @ApiOperation({ summary: 'Eliminar relación' })
-  @ApiParam({ name: 'pageId', type: Number, example: 1 })
+  @ApiParam({ name: 'learningObjectId', type: Number, example: 1 })
   @ApiParam({ name: 'relationId', type: Number, example: 1 })
   @ApiStandardResponse(undefined, HttpStatus.NO_CONTENT)
   @ApiResponse({ status: 403, description: 'Solo profesores' })
   delete(
-    @Param('pageId', ParseIntPipe) pageId: number,
+    @Param('learningObjectId', ParseIntPipe) learningObjectId: number,
     @Param('relationId', ParseIntPipe) relationId: number,
     @GetUser() user: User,
   ): Promise<void> {
-    return this.pageRelationsService.delete(pageId, relationId, user)
+    return this.loRelationsService.delete(learningObjectId, relationId, user)
   }
 }

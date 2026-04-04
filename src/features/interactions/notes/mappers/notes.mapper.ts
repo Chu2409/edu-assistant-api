@@ -5,7 +5,7 @@ export class NotesMapper {
   static mapToDto(note: Note): NoteDto {
     return {
       id: note.id,
-      pageId: note.learningObjectId,
+      learningObjectId: note.learningObjectId,
       userId: note.userId,
       content: note.content,
       createdAt: note.createdAt,
