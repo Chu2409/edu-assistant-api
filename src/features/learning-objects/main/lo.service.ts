@@ -61,6 +61,7 @@ export class LoService {
         isPublished: dto.isPublished ?? false,
         orderIndex: lastLo?.orderIndex ? lastLo.orderIndex + 1 : 1,
       },
+      include: { type: true },
     })
 
     return LoMapper.mapToDto(lo)
@@ -116,6 +117,7 @@ export class LoService {
         orderBy: {
           orderIndex: 'asc',
         },
+        include: { type: true },
       }),
       this.dbService.learningObject.count({
         where,
@@ -135,6 +137,7 @@ export class LoService {
     const lo = await this.dbService.learningObject.findUnique({
       where: { id },
       include: {
+        type: true,
         loFeedbacks: {
           include: {
             user: true,
@@ -171,6 +174,7 @@ export class LoService {
     const lo = await this.dbService.learningObject.findUnique({
       where: { id },
       include: {
+        type: true,
         module: {
           include: {
             enrollments: true,
@@ -279,6 +283,7 @@ export class LoService {
           keywords: updateLoDto.keywords,
         }),
       },
+      include: { type: true },
     })
 
     // Al publicar el objeto de aprendizaje, encolar procesamiento de embeddings
@@ -381,6 +386,7 @@ export class LoService {
     // Obtener y retornar el objeto de aprendizaje actualizado
     const updatedLo = await this.dbService.learningObject.findUnique({
       where: { id },
+      include: { type: true },
     })
 
     return LoMapper.mapToDto(updatedLo!)

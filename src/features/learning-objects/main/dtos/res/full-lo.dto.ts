@@ -3,6 +3,7 @@ import { BlockDto } from 'src/features/learning-objects/blocks/dtos/res/block.dt
 import { NoteDto } from 'src/features/interactions/notes/dtos/res/note.dto'
 import { LoFeedbackDto } from 'src/features/interactions/lo-feedbacks/dtos/res/lo-feedback.dto'
 import { StudentQuestionDto } from 'src/features/interactions/student-questions/dtos/res/student-question.dto'
+import { LoTypeDto } from './lo-type.dto'
 
 export class FullLoDto {
   @ApiProperty({
@@ -22,6 +23,12 @@ export class FullLoDto {
     example: 'Introducción a la Programación',
   })
   title: string
+
+  @ApiProperty({
+    description: 'Tipo de objeto de aprendizaje',
+    type: () => LoTypeDto,
+  })
+  type: LoTypeDto
 
   @ApiPropertyOptional({
     description: 'Índice de orden del objeto de aprendizaje dentro del módulo',
