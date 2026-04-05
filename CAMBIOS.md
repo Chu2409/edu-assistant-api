@@ -50,27 +50,51 @@ Para mantener la coherencia con la lógica interna de generación, este módulo 
 
 ## 🚀 Guía de Migración para Frontend (Breaking Changes)
 
-> **IMPORTANTE:** Es necesario realizar los siguientes cambios en el cliente para asegurar la compatibilidad con la nueva versión de la API.
+> **IMPORTANTE:** Esta migración es obligatoria. El backend ya no reconoce el término `pageId` en sus contratos públicos (excepto en logs internos).
 
-### 1. Renombre de Propiedades (Global)
+### 1. Renombre de Propiedades (Global Search & Replace)
 
-Reemplazar en todas las interfaces, modelos y estados de la aplicación cualquier propiedad llamada `pageId` por **`learningObjectId`**.
+**Qué cambiar:** 
+- `pageId` ➔ **`learningObjectId`**
+- `page` ➔ **`learningObject`** (en relaciones u objetos anidados)
+
+**Dónde buscar:**
+- **Interfaces/Tipos:** Buscá en `src/interfaces/`, `src/types/` o donde definas tus modelos de datos.
+- **State Management:** Si usás Redux, Pinia o Signals, revisá las acciones y selectores que manejan el ID de la página actual.
+- **Componentes de Formulario:** Revisá los `name` de los inputs o los objetos que enviás en los `onSubmit`.
 
 ### 2. Actualización de Endpoints
 
+Actualizá tus constantes de rutas o servicios de API:
+
 | Recurso              | Ruta Antigua          | Ruta Nueva                       |
 | :------------------- | :-------------------- | :------------------------------- |
-| **Learning Objects** | `/pages`              | `/learning-objects`              |
-| **Feedbacks**        | `/page-feedbacks`     | `/learning-object-feedbacks`     |
-| **Chat Sessions**    | `/pages/:id/sessions` | `/learning-objects/:id/sessions` |
+| **Learning Objects** | `/pages`              | **`/learning-objects`**          |
+| **Feedbacks**        | `/page-feedbacks`     | **`/learning-object-feedbacks`** |
+| **Chat Sessions**    | `/pages/:id/sessions` | **`/learning-objects/:id/sessions`** |
 
-### 3. Cambios en Relaciones
+### 3. Cambios Específicos en DTOs y Mappers
 
-Si utilizas el endpoint de relaciones entre contenidos, ten en cuenta los nuevos nombres de propiedades en el body:
+**A. Objeto de Aprendizaje Completo (`FullLoDto`):**
+- **Dónde:** En el componente que renderiza el contenido del LO y sus feedbacks.
+- **Cambio:** La propiedad `pageFeedbacks` ahora se llama **`loFeedbacks`**.
 
-- `originPageId` ➔ **`originLoId`**
-- `relatedPageId` ➔ **`relatedLoId`**
+**B. Reordenamiento de Contenido:**
+- **Dónde:** En la lógica de Drag & Drop de los módulos.
+- **Cambio:** El body del `PUT/PATCH` ahora espera una propiedad **`los`** (antes `pages`) que contiene el array de IDs.
 
-### 4. Generación de Contenido
+**C. Relaciones entre Contenidos:**
+- **Dónde:** Módulo de grafos o enlaces entre páginas.
+- **Cambio:** 
+  - `originPageId` ➔ **`originLoId`**
+  - `relatedPageId` ➔ **`relatedLoId`**
 
-Aunque el endpoint sea `/content/generate-content`, el body **debe llevar** `learningObjectId`.
+### 4. Generación de Contenido (AI)
+
+**Dónde:** Servicios que llaman a `/content/generate-content` o `/content/regenerate-content`.
+**Cambio:** El objeto enviado debe usar **`learningObjectId`**. Aunque el módulo interno diga "page-content", el contrato externo es LO.
+
+---
+
+### 💡 Tip para el equipo:
+Si usan TypeScript, empiecen renombrando la propiedad en la interfaz base del `LearningObject`. El compilador les va a gritar exactamente en qué archivos y líneas de código tienen que aplicar el resto de los cambios.

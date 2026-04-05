@@ -1,26 +1,33 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger'
+import { LoTypeDto } from './lo-type.dto'
 
 export class LoDto {
   @ApiProperty({
-    description: 'ID de la página',
+    description: 'ID del objeto de aprendizaje',
     example: 1,
   })
   id: number
 
   @ApiProperty({
-    description: 'ID del módulo al que pertenece la página',
+    description: 'ID del módulo al que pertenece el objeto de aprendizaje',
     example: 1,
   })
   moduleId: number
 
   @ApiProperty({
-    description: 'Título de la página',
+    description: 'Título del objeto de aprendizaje',
     example: 'Introducción a la Programación',
   })
   title: string
 
+  @ApiProperty({
+    description: 'Tipo de objeto de aprendizaje',
+    type: () => LoTypeDto,
+  })
+  type: LoTypeDto
+
   @ApiPropertyOptional({
-    description: 'Índice de orden de la página dentro del módulo',
+    description: 'Índice de orden del objeto de aprendizaje dentro del módulo',
     example: 1,
   })
   orderIndex: number | null

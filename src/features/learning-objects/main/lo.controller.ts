@@ -205,7 +205,7 @@ export class LoController {
   })
   @ApiResponse({
     status: 403,
-    description: 'Solo el profesor propietario puede actualizar el contenido',
+    description: 'Solo el profesor propietario puede actualizar the contenido',
   })
   @JwtAuth(Role.TEACHER)
   updateContent(

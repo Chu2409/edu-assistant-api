@@ -6,6 +6,7 @@ import {
   StudentQuestion,
   User,
   Session,
+  LearningObjectType,
 } from 'src/core/database/generated/client'
 import { LoDto } from '../dtos/res/lo.dto'
 import { FullLoDto } from '../dtos/res/full-lo.dto'
@@ -15,11 +16,12 @@ import { NotesMapper } from '../../../interactions/notes/mappers/notes.mapper'
 import { BlocksMapper } from '../../blocks/mappers/blocks.mapper'
 
 export class LoMapper {
-  static mapToDto(page: LearningObject): LoDto {
+  static mapToDto(page: LearningObject & { type: LearningObjectType }): LoDto {
     return {
       id: page.id,
       moduleId: page.moduleId,
       title: page.title,
+      type: page.type,
       orderIndex: page.orderIndex,
       keywords: page.keywords,
       isPublished: page.isPublished,
@@ -30,6 +32,7 @@ export class LoMapper {
 
   static mapToFullLoDto(
     lo: LearningObject & {
+      type: LearningObjectType
       notes?: Note[]
       studentQuestions: (StudentQuestion & { user: User })[]
       loFeedbacks?: (LearningObjectFeedback & { user: User })[]
@@ -41,6 +44,7 @@ export class LoMapper {
       id: lo.id,
       moduleId: lo.moduleId,
       title: lo.title,
+      type: lo.type,
       orderIndex: lo.orderIndex,
       keywords: lo.keywords,
       isPublished: lo.isPublished,
