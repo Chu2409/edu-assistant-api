@@ -393,12 +393,10 @@ export const ModelName = {
   Block: 'Block',
   Session: 'Session',
   Message: 'Message',
-  LearningObjectView: 'LearningObjectView',
   LearningObjectRelation: 'LearningObjectRelation',
   LearningObjectConcept: 'LearningObjectConcept',
   Activity: 'Activity',
   ActivityAttempt: 'ActivityAttempt',
-  Prompt: 'Prompt',
   LearningObjectFeedback: 'LearningObjectFeedback',
   Note: 'Note',
   StudentQuestion: 'StudentQuestion',
@@ -423,7 +421,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "module" | "aiConfiguration" | "enrollment" | "learningObjectType" | "learningObject" | "block" | "session" | "message" | "learningObjectView" | "learningObjectRelation" | "learningObjectConcept" | "activity" | "activityAttempt" | "prompt" | "learningObjectFeedback" | "note" | "studentQuestion" | "questionReply" | "notification" | "podcast" | "mediaResource" | "moduleMetrics" | "systemSetting"
+    modelProps: "user" | "module" | "aiConfiguration" | "enrollment" | "learningObjectType" | "learningObject" | "block" | "session" | "message" | "learningObjectRelation" | "learningObjectConcept" | "activity" | "activityAttempt" | "learningObjectFeedback" | "note" | "studentQuestion" | "questionReply" | "notification" | "podcast" | "mediaResource" | "moduleMetrics" | "systemSetting"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1093,80 +1091,6 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
-    LearningObjectView: {
-      payload: Prisma.$LearningObjectViewPayload<ExtArgs>
-      fields: Prisma.LearningObjectViewFieldRefs
-      operations: {
-        findUnique: {
-          args: Prisma.LearningObjectViewFindUniqueArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$LearningObjectViewPayload> | null
-        }
-        findUniqueOrThrow: {
-          args: Prisma.LearningObjectViewFindUniqueOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$LearningObjectViewPayload>
-        }
-        findFirst: {
-          args: Prisma.LearningObjectViewFindFirstArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$LearningObjectViewPayload> | null
-        }
-        findFirstOrThrow: {
-          args: Prisma.LearningObjectViewFindFirstOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$LearningObjectViewPayload>
-        }
-        findMany: {
-          args: Prisma.LearningObjectViewFindManyArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$LearningObjectViewPayload>[]
-        }
-        create: {
-          args: Prisma.LearningObjectViewCreateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$LearningObjectViewPayload>
-        }
-        createMany: {
-          args: Prisma.LearningObjectViewCreateManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        createManyAndReturn: {
-          args: Prisma.LearningObjectViewCreateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$LearningObjectViewPayload>[]
-        }
-        delete: {
-          args: Prisma.LearningObjectViewDeleteArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$LearningObjectViewPayload>
-        }
-        update: {
-          args: Prisma.LearningObjectViewUpdateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$LearningObjectViewPayload>
-        }
-        deleteMany: {
-          args: Prisma.LearningObjectViewDeleteManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        updateMany: {
-          args: Prisma.LearningObjectViewUpdateManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        updateManyAndReturn: {
-          args: Prisma.LearningObjectViewUpdateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$LearningObjectViewPayload>[]
-        }
-        upsert: {
-          args: Prisma.LearningObjectViewUpsertArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$LearningObjectViewPayload>
-        }
-        aggregate: {
-          args: Prisma.LearningObjectViewAggregateArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.AggregateLearningObjectView>
-        }
-        groupBy: {
-          args: Prisma.LearningObjectViewGroupByArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.LearningObjectViewGroupByOutputType>[]
-        }
-        count: {
-          args: Prisma.LearningObjectViewCountArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.LearningObjectViewCountAggregateOutputType> | number
-        }
-      }
-    }
     LearningObjectRelation: {
       payload: Prisma.$LearningObjectRelationPayload<ExtArgs>
       fields: Prisma.LearningObjectRelationFieldRefs
@@ -1460,80 +1384,6 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.ActivityAttemptCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.ActivityAttemptCountAggregateOutputType> | number
-        }
-      }
-    }
-    Prompt: {
-      payload: Prisma.$PromptPayload<ExtArgs>
-      fields: Prisma.PromptFieldRefs
-      operations: {
-        findUnique: {
-          args: Prisma.PromptFindUniqueArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$PromptPayload> | null
-        }
-        findUniqueOrThrow: {
-          args: Prisma.PromptFindUniqueOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$PromptPayload>
-        }
-        findFirst: {
-          args: Prisma.PromptFindFirstArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$PromptPayload> | null
-        }
-        findFirstOrThrow: {
-          args: Prisma.PromptFindFirstOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$PromptPayload>
-        }
-        findMany: {
-          args: Prisma.PromptFindManyArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$PromptPayload>[]
-        }
-        create: {
-          args: Prisma.PromptCreateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$PromptPayload>
-        }
-        createMany: {
-          args: Prisma.PromptCreateManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        createManyAndReturn: {
-          args: Prisma.PromptCreateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$PromptPayload>[]
-        }
-        delete: {
-          args: Prisma.PromptDeleteArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$PromptPayload>
-        }
-        update: {
-          args: Prisma.PromptUpdateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$PromptPayload>
-        }
-        deleteMany: {
-          args: Prisma.PromptDeleteManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        updateMany: {
-          args: Prisma.PromptUpdateManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        updateManyAndReturn: {
-          args: Prisma.PromptUpdateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$PromptPayload>[]
-        }
-        upsert: {
-          args: Prisma.PromptUpsertArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$PromptPayload>
-        }
-        aggregate: {
-          args: Prisma.PromptAggregateArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.AggregatePrompt>
-        }
-        groupBy: {
-          args: Prisma.PromptGroupByArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.PromptGroupByOutputType>[]
-        }
-        count: {
-          args: Prisma.PromptCountArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.PromptCountAggregateOutputType> | number
         }
       }
     }
@@ -2374,21 +2224,6 @@ export const MessageScalarFieldEnum = {
 export type MessageScalarFieldEnum = (typeof MessageScalarFieldEnum)[keyof typeof MessageScalarFieldEnum]
 
 
-export const LearningObjectViewScalarFieldEnum = {
-  id: 'id',
-  userId: 'userId',
-  learningObjectId: 'learningObjectId',
-  firstViewedAt: 'firstViewedAt',
-  lastViewedAt: 'lastViewedAt',
-  viewCount: 'viewCount',
-  timeSpent: 'timeSpent',
-  isCompleted: 'isCompleted',
-  progress: 'progress'
-} as const
-
-export type LearningObjectViewScalarFieldEnum = (typeof LearningObjectViewScalarFieldEnum)[keyof typeof LearningObjectViewScalarFieldEnum]
-
-
 export const LearningObjectRelationScalarFieldEnum = {
   id: 'id',
   originLoId: 'originLoId',
@@ -2448,18 +2283,6 @@ export const ActivityAttemptScalarFieldEnum = {
 } as const
 
 export type ActivityAttemptScalarFieldEnum = (typeof ActivityAttemptScalarFieldEnum)[keyof typeof ActivityAttemptScalarFieldEnum]
-
-
-export const PromptScalarFieldEnum = {
-  id: 'id',
-  learningObjectId: 'learningObjectId',
-  userId: 'userId',
-  prompt: 'prompt',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-} as const
-
-export type PromptScalarFieldEnum = (typeof PromptScalarFieldEnum)[keyof typeof PromptScalarFieldEnum]
 
 
 export const LearningObjectFeedbackScalarFieldEnum = {
@@ -2969,12 +2792,10 @@ export type GlobalOmitConfig = {
   block?: Prisma.BlockOmit
   session?: Prisma.SessionOmit
   message?: Prisma.MessageOmit
-  learningObjectView?: Prisma.LearningObjectViewOmit
   learningObjectRelation?: Prisma.LearningObjectRelationOmit
   learningObjectConcept?: Prisma.LearningObjectConceptOmit
   activity?: Prisma.ActivityOmit
   activityAttempt?: Prisma.ActivityAttemptOmit
-  prompt?: Prisma.PromptOmit
   learningObjectFeedback?: Prisma.LearningObjectFeedbackOmit
   note?: Prisma.NoteOmit
   studentQuestion?: Prisma.StudentQuestionOmit

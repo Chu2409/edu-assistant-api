@@ -35,16 +35,14 @@ model User {
   updatedAt      DateTime  @updatedAt @map("updated_at")
 
   // Relations
-  modulesAsTeacher Module[]          @relation("TeacherModules")
+  modulesAsTeacher Module[]                 @relation("TeacherModules")
   enrollments      Enrollment[]
   generatedContent Note[]
   activityAttempts ActivityAttempt[]
   notifications    Notification[]
   loFeedbacks      LearningObjectFeedback[]
-  promptFeedbacks  Prompt[]
   studentQuestions StudentQuestion[]
   questionReplies  QuestionReply[]
-  loViews          LearningObjectView[]
   sessions         Session[]
 
   @@index([microsoftId])
@@ -163,7 +161,6 @@ model LearningObjectType {
   @@map("lo_types")
 }
 
-
 // ============================================
 // LEARNING OBJECTS
 // ============================================
@@ -183,21 +180,19 @@ model LearningObject {
   createdAt         DateTime                     @default(now()) @map("created_at")
   updatedAt         DateTime                     @updatedAt @map("updated_at")
 
-  typeId            Int                          @map("type_id")
-  type              LearningObjectType           @relation(fields: [typeId], references: [id])
-  module            Module                       @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+  typeId Int                @map("type_id")
+  type   LearningObjectType @relation(fields: [typeId], references: [id])
+  module Module             @relation(fields: [moduleId], references: [id], onDelete: Cascade)
 
   activities       Activity[]
-  relatedLosFrom   LearningObjectRelation[]    @relation("OriginLo")
-  relatedLosTo   LearningObjectRelation[]    @relation("RelatedLo")
+  relatedLosFrom   LearningObjectRelation[] @relation("OriginLo")
+  relatedLosTo     LearningObjectRelation[] @relation("RelatedLo")
   conceptMentions  LearningObjectConcept[]
   notes            Note[]
   podcasts         Podcast[]
   mediaResources   MediaResource[]
   loFeedbacks      LearningObjectFeedback[]
-  promptFeedbacks  Prompt[]
   studentQuestions StudentQuestion[]
-  loViews          LearningObjectView[]
   sessions         Session[]
   blocks           Block[]
 
@@ -268,32 +263,6 @@ model Message {
   session   Session @relation(fields: [sessionId], references: [id], onDelete: Cascade)
 
   @@map("messages")
-}
-
-// ============================================
-// LEARNING OBJECT VIEWS (Control de visualización de estudiantes)
-// ============================================
-
-model LearningObjectView {
-  id               Int      @id @default(autoincrement())
-  userId           Int      @map("user_id")
-  learningObjectId Int      @map("learning_object_id")
-  firstViewedAt    DateTime @default(now()) @map("first_viewed_at")
-  lastViewedAt     DateTime @updatedAt @map("last_viewed_at")
-  viewCount        Int      @default(1) @map("view_count") // número de veces que ha visto la página
-  timeSpent        Int      @default(0) @map("time_spent") // tiempo total en segundos
-  isCompleted      Boolean  @default(false) @map("is_completed") // si completó la visualización
-  progress         Float    @default(0) // porcentaje de progreso (0-100)
-
-  // Relations
-  user           User           @relation(fields: [userId], references: [id], onDelete: Cascade)
-  learningObject LearningObject @relation(fields: [learningObjectId], references: [id], onDelete: Cascade)
-
-  @@unique([userId, learningObjectId])
-  @@index([userId])
-  @@index([learningObjectId])
-  @@index([isCompleted])
-  @@map("lo_views")
 }
 
 // ============================================
@@ -408,26 +377,6 @@ model ActivityAttempt {
   @@index([userId])
   @@index([isCorrect])
   @@map("activity_attempts")
-}
-
-// ============================================
-// GENERATED CONTENT (RF-4, RF-5)
-// ============================================
-model Prompt {
-  id               Int      @id @default(autoincrement())
-  learningObjectId Int?     @map("learning_object_id")
-  userId           Int      @map("user_id") // quien solicitó la generación
-  prompt           String   @db.Text
-  createdAt        DateTime @default(now()) @map("created_at")
-  updatedAt        DateTime @updatedAt @map("updated_at")
-
-  // Relations
-  learningObject LearningObject? @relation(fields: [learningObjectId], references: [id], onDelete: Cascade)
-  user           User            @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@index([learningObjectId])
-  @@index([userId])
-  @@map("prompts")
 }
 
 model LearningObjectFeedback {
@@ -630,7 +579,7 @@ model ModuleMetrics {
 
 model SystemSetting {
   key         String   @id // Ej: "AI_MODELS", "TEACHER_EMAILS"
-  value       Json     // Valor en formato JSON (soporta arrays, objetos, strings)
+  value       Json // Valor en formato JSON (soporta arrays, objetos, strings)
   description String?  @db.Text // (Opcional) Descripción interna
   updatedAt   DateTime @updatedAt @map("updated_at")
 

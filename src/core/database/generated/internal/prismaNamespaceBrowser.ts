@@ -60,12 +60,10 @@ export const ModelName = {
   Block: 'Block',
   Session: 'Session',
   Message: 'Message',
-  LearningObjectView: 'LearningObjectView',
   LearningObjectRelation: 'LearningObjectRelation',
   LearningObjectConcept: 'LearningObjectConcept',
   Activity: 'Activity',
   ActivityAttempt: 'ActivityAttempt',
-  Prompt: 'Prompt',
   LearningObjectFeedback: 'LearningObjectFeedback',
   Note: 'Note',
   StudentQuestion: 'StudentQuestion',
@@ -225,21 +223,6 @@ export const MessageScalarFieldEnum = {
 export type MessageScalarFieldEnum = (typeof MessageScalarFieldEnum)[keyof typeof MessageScalarFieldEnum]
 
 
-export const LearningObjectViewScalarFieldEnum = {
-  id: 'id',
-  userId: 'userId',
-  learningObjectId: 'learningObjectId',
-  firstViewedAt: 'firstViewedAt',
-  lastViewedAt: 'lastViewedAt',
-  viewCount: 'viewCount',
-  timeSpent: 'timeSpent',
-  isCompleted: 'isCompleted',
-  progress: 'progress'
-} as const
-
-export type LearningObjectViewScalarFieldEnum = (typeof LearningObjectViewScalarFieldEnum)[keyof typeof LearningObjectViewScalarFieldEnum]
-
-
 export const LearningObjectRelationScalarFieldEnum = {
   id: 'id',
   originLoId: 'originLoId',
@@ -299,18 +282,6 @@ export const ActivityAttemptScalarFieldEnum = {
 } as const
 
 export type ActivityAttemptScalarFieldEnum = (typeof ActivityAttemptScalarFieldEnum)[keyof typeof ActivityAttemptScalarFieldEnum]
-
-
-export const PromptScalarFieldEnum = {
-  id: 'id',
-  learningObjectId: 'learningObjectId',
-  userId: 'userId',
-  prompt: 'prompt',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-} as const
-
-export type PromptScalarFieldEnum = (typeof PromptScalarFieldEnum)[keyof typeof PromptScalarFieldEnum]
 
 
 export const LearningObjectFeedbackScalarFieldEnum = {

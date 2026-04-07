@@ -600,6 +600,14 @@ export type LearningObjectRelationUncheckedUpdateManyWithoutRelatedLoNestedInput
   deleteMany?: Prisma.LearningObjectRelationScalarWhereInput | Prisma.LearningObjectRelationScalarWhereInput[]
 }
 
+export type FloatFieldUpdateOperationsInput = {
+  set?: number
+  increment?: number
+  decrement?: number
+  multiply?: number
+  divide?: number
+}
+
 export type EnumRelationTypeFieldUpdateOperationsInput = {
   set?: $Enums.RelationType
 }

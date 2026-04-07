@@ -85,11 +85,6 @@ export type Session = Prisma.SessionModel
  */
 export type Message = Prisma.MessageModel
 /**
- * Model LearningObjectView
- * 
- */
-export type LearningObjectView = Prisma.LearningObjectViewModel
-/**
  * Model LearningObjectRelation
  * 
  */
@@ -109,11 +104,6 @@ export type Activity = Prisma.ActivityModel
  * 
  */
 export type ActivityAttempt = Prisma.ActivityAttemptModel
-/**
- * Model Prompt
- * 
- */
-export type Prompt = Prisma.PromptModel
 /**
  * Model LearningObjectFeedback
  * 
