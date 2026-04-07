@@ -6,9 +6,22 @@ import {
   MinLength,
   MaxLength,
   IsArray,
+  IsInt,
+  Min,
 } from 'class-validator'
+import { Type } from 'class-transformer'
 
 export class UpdateLoDto {
+  @ApiPropertyOptional({
+    description: 'ID del tipo de objeto de aprendizaje',
+    example: 1,
+  })
+  @IsOptional()
+  @Type(() => Number)
+  @IsInt()
+  @Min(1)
+  typeId?: number
+
   @ApiPropertyOptional({
     description: 'Título de la página',
     example: 'Introducción a la Programación Avanzada',
