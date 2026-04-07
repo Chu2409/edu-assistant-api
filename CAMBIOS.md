@@ -98,3 +98,60 @@ Actualizá tus constantes de rutas o servicios de API:
 
 ### 💡 Tip para el equipo:
 Si usan TypeScript, empiecen renombrando la propiedad en la interfaz base del `LearningObject`. El compilador les va a gritar exactamente en qué archivos y líneas de código tienen que aplicar el resto de los cambios.
+
+---
+
+# 🆕 Implementación: CRUD de Tipos de Objetos de Aprendizaje e Integración Dinámica
+
+Se ha implementado un nuevo módulo para gestionar los tipos de objetos de aprendizaje (`LearningObjectType`) y se ha refactorizado la creación de objetos de aprendizaje para que el tipo sea dinámico y obligatorio.
+
+---
+
+## 1. Nuevo Módulo: `Learning Object Types`
+
+- **Endpoints de API:**
+  - `GET /learning-object-types`: Listar todos los tipos disponibles (Acceso: Cualquier usuario autenticado).
+  - `GET /learning-object-types/:id`: Obtener un tipo específico por su ID.
+  - `POST /learning-object-types`: Crear un nuevo tipo (**Solo ADMIN**).
+  - `PATCH /learning-object-types/:id`: Actualizar un tipo existente (**Solo ADMIN**).
+  - `DELETE /learning-object-types/:id`: Eliminar un tipo (**Solo ADMIN**). *Nota: No se permite eliminar si el tipo está en uso.*
+
+- **Estructura de Datos (`CreateLoTypeDto`):**
+  - `name`: String (3-50 caracteres, único).
+  - `description`: String opcional (máx. 500 caracteres).
+
+---
+
+## 2. Integración Dinámica en Learning Objects
+
+- **Cambio en Creación (`CreateLoDto`):**
+  - Se eliminó el valor hardcodeado (`typeId: 1`) en el servidor.
+  - **BREAKING CHANGE:** Ahora es obligatorio enviar la propiedad **`typeId`** (integer) al crear un objeto de aprendizaje.
+  
+- **Cambio en Actualización (`UpdateLoDto`):**
+  - Se agregó la propiedad opcional **`typeId`** para permitir cambiar la categoría de un objeto de aprendizaje después de su creación.
+
+---
+
+## 3. Justificación Técnica
+
+1. **Flexibilidad:** El sistema ya no está limitado a un único tipo de contenido. Ahora los administradores pueden definir categorías como "Video", "Lectura", "Laboratorio", etc.
+2. **Seguridad y Consistencia:** Se implementaron validaciones estrictas y protección de rutas mediante roles para asegurar que solo los administradores gestionen el catálogo de tipos.
+3. **Integridad Referencial:** Se agregaron validaciones en el servicio para evitar la eliminación de tipos que tengan objetos de aprendizaje asociados.
+
+---
+
+## 🚀 Guía de Actualización para Frontend
+
+### 1. Nuevos Formularios de Creación
+Al crear un `LearningObject`, el frontend debe:
+1. Consultar primero `GET /learning-object-types` para obtener la lista de tipos disponibles.
+2. Permitir al profesor seleccionar uno.
+3. Enviar el ID seleccionado en el campo `typeId` del `POST /learning-objects`.
+
+### 2. Edición de Tipos
+En el formulario de edición de un `LearningObject`, se puede incluir un selector para cambiar el `typeId`, enviándolo en el `PATCH`.
+
+### 3. Gestión de Tipos (Panel de Admin)
+Se recomienda crear una vista de administración para gestionar el catálogo de tipos usando los nuevos endpoints de `/learning-object-types`.
+
