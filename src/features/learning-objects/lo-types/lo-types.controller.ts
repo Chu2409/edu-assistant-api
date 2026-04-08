@@ -9,7 +9,7 @@ import {
   ParseIntPipe,
   HttpStatus,
 } from '@nestjs/common'
-import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger'
+import { ApiTags, ApiOperation } from '@nestjs/swagger'
 import { LoTypesService } from './lo-types.service'
 import { CreateLoTypeDto } from './dtos/req/create-lo-type.dto'
 import { UpdateLoTypeDto } from './dtos/req/update-lo-type.dto'
