@@ -36,8 +36,8 @@ export class LoTypesController {
 
   @Get()
   @ApiOperation({ summary: 'Listar todos los tipos de objeto de aprendizaje' })
-  @ApiStandardResponse(LoTypeDto, HttpStatus.OK)
-  findAll(): Promise<LoTypeDto[]> {
+  @ApiStandardResponse([LoTypeDto], HttpStatus.OK)
+  findAll() {
     return this.loTypesService.findAll()
   }
 
