@@ -21,7 +21,12 @@ import { LoTypesModule } from './lo-types/lo-types.module'
       name: QUEUE_NAMES.EMBEDDINGS.NAME,
     }),
   ],
-  controllers: [LoController, LoConceptsController, LoRelationsController, LoTypesController],
+  controllers: [
+    LoController,
+    LoConceptsController,
+    LoRelationsController,
+    LoTypesController,
+  ],
   providers: [
     LoService,
     LoHelperService,
