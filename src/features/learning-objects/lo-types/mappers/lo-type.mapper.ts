@@ -1,5 +1,5 @@
 import { LearningObjectType } from 'src/core/database/generated/client'
-import { LoTypeDto } from '../dtos/lo-type.dto'
+import { LoTypeDto } from '../dtos/res/lo-type.dto'
 
 export class LoTypeMapper {
   static mapToDto(entity: LearningObjectType): LoTypeDto {

@@ -7,6 +7,5 @@ import { AuthModule } from 'src/features/auth/auth.module'
   imports: [AuthModule],
   controllers: [LoTypesController],
   providers: [LoTypesService],
-  exports: [LoTypesService],
 })
 export class LoTypesModule {}

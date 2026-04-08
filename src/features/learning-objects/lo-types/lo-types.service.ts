@@ -4,7 +4,9 @@ import {
   ConflictException,
 } from '@nestjs/common'
 import { DBService } from 'src/core/database/database.service'
-import { CreateLoTypeDto, UpdateLoTypeDto, LoTypeDto } from './dtos/lo-type.dto'
+import { CreateLoTypeDto } from './dtos/req/create-lo-type.dto'
+import { UpdateLoTypeDto } from './dtos/req/update-lo-type.dto'
+import { LoTypeDto } from './dtos/res/lo-type.dto'
 import { LoTypeMapper } from './mappers/lo-type.mapper'
 
 @Injectable()
