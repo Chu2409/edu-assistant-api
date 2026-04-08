@@ -7,8 +7,8 @@ import { User } from 'src/core/database/generated/client'
 import { AuthService } from '../services/auth.service'
 
 interface MicrosoftProfileName {
-  familyName: string
-  givenName: string
+  familyName?: string
+  givenName?: string
 }
 
 interface MicrosoftProfileEmail {
@@ -78,10 +78,19 @@ export class MicrosoftStrategy extends PassportStrategy(Strategy, 'microsoft') {
       )
     }
 
+    let name = profile.name.givenName
+    let lastName = profile.name.familyName
+
+    if (!name || !lastName) {
+      const nameParts = (profile.displayName || '').trim().split(' ')
+      name = nameParts.slice(0, 2).join(' ')
+      lastName = nameParts.slice(2).join(' ')
+    }
+
     const user = await this.authService.validateUser({
       email,
-      name: profile.name.givenName,
-      lastName: profile.name.familyName,
+      name,
+      lastName,
       microsoftId: profile.id,
       displayName: profile.displayName,
     })
