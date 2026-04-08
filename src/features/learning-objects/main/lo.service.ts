@@ -55,7 +55,7 @@ export class LoService {
 
     const lo = await this.dbService.learningObject.create({
       data: {
-        typeId: 1, // TODO: Change to dynamic
+        typeId: dto.typeId,
         moduleId: dto.moduleId,
         title: dto.title,
         isPublished: dto.isPublished ?? false,
@@ -291,6 +291,9 @@ export class LoService {
         }),
         ...(updateLoDto.keywords !== undefined && {
           keywords: updateLoDto.keywords,
+        }),
+        ...(updateLoDto.typeId !== undefined && {
+          typeId: updateLoDto.typeId,
         }),
       },
       include: { type: true },

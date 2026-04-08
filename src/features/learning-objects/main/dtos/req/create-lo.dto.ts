@@ -21,6 +21,15 @@ export class CreateLoDto {
   moduleId: number
 
   @ApiProperty({
+    description: 'ID del tipo de objeto de aprendizaje',
+    example: 1,
+  })
+  @Type(() => Number)
+  @IsInt()
+  @Min(1)
+  typeId: number
+
+  @ApiProperty({
     description: 'Título de la página',
     example: 'Introducción a la Programación',
     minLength: 3,

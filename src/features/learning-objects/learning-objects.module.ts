@@ -9,10 +9,12 @@ import { LoRelationsController } from './lo-relations/lo-relations.controller'
 import { LoRelationsService } from './lo-relations/lo-relations.service'
 import { BullModule } from '@nestjs/bullmq'
 import { QUEUE_NAMES } from 'src/shared/constants/queues'
+import { LoTypesModule } from './lo-types/lo-types.module'
 
 @Module({
   imports: [
     AIModule,
+    LoTypesModule,
     BullModule.registerQueue({
       name: QUEUE_NAMES.EMBEDDINGS.NAME,
     }),
