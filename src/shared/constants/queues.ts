@@ -11,6 +11,12 @@ export const QUEUE_NAMES = {
       PROCESS_LO: 'process-lo-embedding',
     },
   },
+  TEACHER_FEEDBACK: {
+    NAME: 'teacher-feedback',
+    JOBS: {
+      GENERATE_ALL: 'generate-all-feedbacks',
+    },
+  },
 } as const satisfies Record<
   string,
   { NAME: string; JOBS: Record<string, string> }
