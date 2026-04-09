@@ -1,4 +1,4 @@
-import { ApiPropertyOptional } from '@nestjs/swagger'
+import { ApiPropertyOptional, getSchemaPath } from '@nestjs/swagger'
 import { Type } from 'class-transformer'
 import {
   IsBoolean,
@@ -6,12 +6,17 @@ import {
   IsInt,
   IsObject,
   IsOptional,
-  IsString,
   Max,
   Min,
-  MinLength,
 } from 'class-validator'
 import { ActivityType } from 'src/core/database/generated/enums'
+import {
+  AiFillBlankActivity,
+  type AiGeneratedActivity,
+  AiGeneratedMatchActivity,
+  AiMultipleChoiceActivity,
+  AiTrueFalseActivity,
+} from 'src/features/content-generation/activities/interfaces/ai-generated-activity.interface'
 
 export class UpdateActivityDto {
   @ApiPropertyOptional({ enum: ActivityType })
@@ -19,28 +24,19 @@ export class UpdateActivityDto {
   @IsEnum(ActivityType)
   type?: ActivityType
 
-  @ApiPropertyOptional({ description: 'Enunciado/pregunta' })
-  @IsOptional()
-  @IsString()
-  @MinLength(1)
-  question?: string
-
-  @ApiPropertyOptional({ description: 'Opciones (JSON)' })
-  @IsOptional()
-  @IsObject()
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  options?: Record<string, any> | null
-
-  @ApiPropertyOptional({ description: 'Respuesta correcta (JSON)' })
+  @ApiPropertyOptional({
+    description:
+      'Opciones (depende del tipo). Para MULTIPLE_CHOICE/MATCH normalmente va aquí.',
+    oneOf: [
+      { $ref: getSchemaPath(AiMultipleChoiceActivity) },
+      { $ref: getSchemaPath(AiTrueFalseActivity) },
+      { $ref: getSchemaPath(AiFillBlankActivity) },
+      { $ref: getSchemaPath(AiGeneratedMatchActivity) },
+    ],
+  })
   @IsOptional()
   @IsObject()
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  correctAnswer?: Record<string, any>
-
-  @ApiPropertyOptional({ description: 'Explicación' })
-  @IsOptional()
-  @IsString()
-  explanation?: string | null
+  options?: AiGeneratedActivity
 
   @ApiPropertyOptional({ description: 'Dificultad 1-5' })
   @IsOptional()

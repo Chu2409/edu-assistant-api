@@ -22,7 +22,7 @@ import { UpdateLoDto } from './dtos/req/update-lo.dto'
 import { UpdateLoContentDto } from './dtos/req/update-lo-content.dto'
 import { ReorderLoDto } from './dtos/req/reorder-lo.dto'
 import { LoDto } from './dtos/res/lo.dto'
-import { BaseParamsReqDto } from 'src/shared/dtos/req/base-params.dto'
+import { LoFiltersDto } from './dtos/req/lo-filters.dto'
 import { JwtAuth } from 'src/features/auth/decorators/jwt-auth.decorator'
 import { GetUser } from 'src/features/auth/decorators/get-user.decorator'
 import { Role, type User } from 'src/core/database/generated/client'
@@ -93,7 +93,7 @@ export class LoController {
   })
   findAll(
     @Param('moduleId', ParseIntPipe) moduleId: number,
-    @Query() params: BaseParamsReqDto,
+    @Query() params: LoFiltersDto,
     @GetUser() user: User,
   ): Promise<ApiPaginatedRes<LoDto>> {
     return this.loService.findAll(moduleId, params, user)

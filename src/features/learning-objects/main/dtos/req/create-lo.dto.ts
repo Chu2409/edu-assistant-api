@@ -12,7 +12,7 @@ import { Type } from 'class-transformer'
 
 export class CreateLoDto {
   @ApiProperty({
-    description: 'ID del módulo al que pertenece la página',
+    description: 'ID del módulo al que pertenece el objeto de aprendizaje',
     example: 1,
   })
   @Type(() => Number)
@@ -30,7 +30,7 @@ export class CreateLoDto {
   typeId: number
 
   @ApiProperty({
-    description: 'Título de la página',
+    description: 'Título del objeto de aprendizaje',
     example: 'Introducción a la Programación',
     minLength: 3,
     maxLength: 200,
@@ -41,7 +41,7 @@ export class CreateLoDto {
   title: string
 
   @ApiPropertyOptional({
-    description: 'Indica si la página está publicada',
+    description: 'Indica si el objeto de aprendizaje está publicado',
     example: false,
     default: false,
   })

@@ -18,7 +18,7 @@ import {
   Role,
   type User,
 } from 'src/core/database/generated/client'
-import { BaseParamsReqDto } from 'src/shared/dtos/req/base-params.dto'
+import { LoFiltersDto } from './dtos/req/lo-filters.dto'
 import { LoMapper } from './mappers/lo.mapper'
 import { ApiPaginatedRes } from 'src/shared/dtos/res/api-response.dto'
 import { FullLoDto } from './dtos/res/full-lo.dto'
@@ -69,7 +69,7 @@ export class LoService {
 
   async findAll(
     moduleId: number,
-    params: BaseParamsReqDto,
+    params: LoFiltersDto,
     user: User,
   ): Promise<ApiPaginatedRes<LoDto>> {
     // Verificar que el módulo existe
@@ -98,6 +98,10 @@ export class LoService {
     // Construir filtro de búsqueda
     const where: Prisma.LearningObjectWhereInput = {
       moduleId,
+    }
+
+    if (params.typeId) {
+      where.typeId = params.typeId
     }
 
     if (params.search) {
