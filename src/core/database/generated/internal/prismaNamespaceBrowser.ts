@@ -72,7 +72,8 @@ export const ModelName = {
   Podcast: 'Podcast',
   MediaResource: 'MediaResource',
   ModuleMetrics: 'ModuleMetrics',
-  SystemSetting: 'SystemSetting'
+  SystemSetting: 'SystemSetting',
+  TeacherAiFeedback: 'TeacherAiFeedback'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -401,6 +402,18 @@ export const SystemSettingScalarFieldEnum = {
 } as const
 
 export type SystemSettingScalarFieldEnum = (typeof SystemSettingScalarFieldEnum)[keyof typeof SystemSettingScalarFieldEnum]
+
+
+export const TeacherAiFeedbackScalarFieldEnum = {
+  id: 'id',
+  scope: 'scope',
+  moduleId: 'moduleId',
+  learningObjectId: 'learningObjectId',
+  content: 'content',
+  createdAt: 'createdAt'
+} as const
+
+export type TeacherAiFeedbackScalarFieldEnum = (typeof TeacherAiFeedbackScalarFieldEnum)[keyof typeof TeacherAiFeedbackScalarFieldEnum]
 
 
 export const SortOrder = {

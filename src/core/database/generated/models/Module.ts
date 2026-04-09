@@ -273,6 +273,7 @@ export type ModuleWhereInput = {
   enrollments?: Prisma.EnrollmentListRelationFilter
   aiConfiguration?: Prisma.XOR<Prisma.AiConfigurationNullableScalarRelationFilter, Prisma.AiConfigurationWhereInput> | null
   moduleMetrics?: Prisma.XOR<Prisma.ModuleMetricsNullableScalarRelationFilter, Prisma.ModuleMetricsWhereInput> | null
+  teacherFeedbacks?: Prisma.TeacherAiFeedbackListRelationFilter
 }
 
 export type ModuleOrderByWithRelationInput = {
@@ -292,6 +293,7 @@ export type ModuleOrderByWithRelationInput = {
   enrollments?: Prisma.EnrollmentOrderByRelationAggregateInput
   aiConfiguration?: Prisma.AiConfigurationOrderByWithRelationInput
   moduleMetrics?: Prisma.ModuleMetricsOrderByWithRelationInput
+  teacherFeedbacks?: Prisma.TeacherAiFeedbackOrderByRelationAggregateInput
 }
 
 export type ModuleWhereUniqueInput = Prisma.AtLeast<{
@@ -314,6 +316,7 @@ export type ModuleWhereUniqueInput = Prisma.AtLeast<{
   enrollments?: Prisma.EnrollmentListRelationFilter
   aiConfiguration?: Prisma.XOR<Prisma.AiConfigurationNullableScalarRelationFilter, Prisma.AiConfigurationWhereInput> | null
   moduleMetrics?: Prisma.XOR<Prisma.ModuleMetricsNullableScalarRelationFilter, Prisma.ModuleMetricsWhereInput> | null
+  teacherFeedbacks?: Prisma.TeacherAiFeedbackListRelationFilter
 }, "id">
 
 export type ModuleOrderByWithAggregationInput = {
@@ -367,6 +370,7 @@ export type ModuleCreateInput = {
   enrollments?: Prisma.EnrollmentCreateNestedManyWithoutModuleInput
   aiConfiguration?: Prisma.AiConfigurationCreateNestedOneWithoutModuleInput
   moduleMetrics?: Prisma.ModuleMetricsCreateNestedOneWithoutModuleInput
+  teacherFeedbacks?: Prisma.TeacherAiFeedbackCreateNestedManyWithoutModuleInput
 }
 
 export type ModuleUncheckedCreateInput = {
@@ -385,6 +389,7 @@ export type ModuleUncheckedCreateInput = {
   enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutModuleInput
   aiConfiguration?: Prisma.AiConfigurationUncheckedCreateNestedOneWithoutModuleInput
   moduleMetrics?: Prisma.ModuleMetricsUncheckedCreateNestedOneWithoutModuleInput
+  teacherFeedbacks?: Prisma.TeacherAiFeedbackUncheckedCreateNestedManyWithoutModuleInput
 }
 
 export type ModuleUpdateInput = {
@@ -402,6 +407,7 @@ export type ModuleUpdateInput = {
   enrollments?: Prisma.EnrollmentUpdateManyWithoutModuleNestedInput
   aiConfiguration?: Prisma.AiConfigurationUpdateOneWithoutModuleNestedInput
   moduleMetrics?: Prisma.ModuleMetricsUpdateOneWithoutModuleNestedInput
+  teacherFeedbacks?: Prisma.TeacherAiFeedbackUpdateManyWithoutModuleNestedInput
 }
 
 export type ModuleUncheckedUpdateInput = {
@@ -420,6 +426,7 @@ export type ModuleUncheckedUpdateInput = {
   enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutModuleNestedInput
   aiConfiguration?: Prisma.AiConfigurationUncheckedUpdateOneWithoutModuleNestedInput
   moduleMetrics?: Prisma.ModuleMetricsUncheckedUpdateOneWithoutModuleNestedInput
+  teacherFeedbacks?: Prisma.TeacherAiFeedbackUncheckedUpdateManyWithoutModuleNestedInput
 }
 
 export type ModuleCreateManyInput = {
@@ -627,6 +634,20 @@ export type ModuleUpdateOneRequiredWithoutModuleMetricsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.ModuleUpdateToOneWithWhereWithoutModuleMetricsInput, Prisma.ModuleUpdateWithoutModuleMetricsInput>, Prisma.ModuleUncheckedUpdateWithoutModuleMetricsInput>
 }
 
+export type ModuleCreateNestedOneWithoutTeacherFeedbacksInput = {
+  create?: Prisma.XOR<Prisma.ModuleCreateWithoutTeacherFeedbacksInput, Prisma.ModuleUncheckedCreateWithoutTeacherFeedbacksInput>
+  connectOrCreate?: Prisma.ModuleCreateOrConnectWithoutTeacherFeedbacksInput
+  connect?: Prisma.ModuleWhereUniqueInput
+}
+
+export type ModuleUpdateOneRequiredWithoutTeacherFeedbacksNestedInput = {
+  create?: Prisma.XOR<Prisma.ModuleCreateWithoutTeacherFeedbacksInput, Prisma.ModuleUncheckedCreateWithoutTeacherFeedbacksInput>
+  connectOrCreate?: Prisma.ModuleCreateOrConnectWithoutTeacherFeedbacksInput
+  upsert?: Prisma.ModuleUpsertWithoutTeacherFeedbacksInput
+  connect?: Prisma.ModuleWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ModuleUpdateToOneWithWhereWithoutTeacherFeedbacksInput, Prisma.ModuleUpdateWithoutTeacherFeedbacksInput>, Prisma.ModuleUncheckedUpdateWithoutTeacherFeedbacksInput>
+}
+
 export type ModuleCreateWithoutTeacherInput = {
   title: string
   description?: string | null
@@ -641,6 +662,7 @@ export type ModuleCreateWithoutTeacherInput = {
   enrollments?: Prisma.EnrollmentCreateNestedManyWithoutModuleInput
   aiConfiguration?: Prisma.AiConfigurationCreateNestedOneWithoutModuleInput
   moduleMetrics?: Prisma.ModuleMetricsCreateNestedOneWithoutModuleInput
+  teacherFeedbacks?: Prisma.TeacherAiFeedbackCreateNestedManyWithoutModuleInput
 }
 
 export type ModuleUncheckedCreateWithoutTeacherInput = {
@@ -658,6 +680,7 @@ export type ModuleUncheckedCreateWithoutTeacherInput = {
   enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutModuleInput
   aiConfiguration?: Prisma.AiConfigurationUncheckedCreateNestedOneWithoutModuleInput
   moduleMetrics?: Prisma.ModuleMetricsUncheckedCreateNestedOneWithoutModuleInput
+  teacherFeedbacks?: Prisma.TeacherAiFeedbackUncheckedCreateNestedManyWithoutModuleInput
 }
 
 export type ModuleCreateOrConnectWithoutTeacherInput = {
@@ -717,6 +740,7 @@ export type ModuleCreateWithoutAiConfigurationInput = {
   learningObjects?: Prisma.LearningObjectCreateNestedManyWithoutModuleInput
   enrollments?: Prisma.EnrollmentCreateNestedManyWithoutModuleInput
   moduleMetrics?: Prisma.ModuleMetricsCreateNestedOneWithoutModuleInput
+  teacherFeedbacks?: Prisma.TeacherAiFeedbackCreateNestedManyWithoutModuleInput
 }
 
 export type ModuleUncheckedCreateWithoutAiConfigurationInput = {
@@ -734,6 +758,7 @@ export type ModuleUncheckedCreateWithoutAiConfigurationInput = {
   learningObjects?: Prisma.LearningObjectUncheckedCreateNestedManyWithoutModuleInput
   enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutModuleInput
   moduleMetrics?: Prisma.ModuleMetricsUncheckedCreateNestedOneWithoutModuleInput
+  teacherFeedbacks?: Prisma.TeacherAiFeedbackUncheckedCreateNestedManyWithoutModuleInput
 }
 
 export type ModuleCreateOrConnectWithoutAiConfigurationInput = {
@@ -766,6 +791,7 @@ export type ModuleUpdateWithoutAiConfigurationInput = {
   learningObjects?: Prisma.LearningObjectUpdateManyWithoutModuleNestedInput
   enrollments?: Prisma.EnrollmentUpdateManyWithoutModuleNestedInput
   moduleMetrics?: Prisma.ModuleMetricsUpdateOneWithoutModuleNestedInput
+  teacherFeedbacks?: Prisma.TeacherAiFeedbackUpdateManyWithoutModuleNestedInput
 }
 
 export type ModuleUncheckedUpdateWithoutAiConfigurationInput = {
@@ -783,6 +809,7 @@ export type ModuleUncheckedUpdateWithoutAiConfigurationInput = {
   learningObjects?: Prisma.LearningObjectUncheckedUpdateManyWithoutModuleNestedInput
   enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutModuleNestedInput
   moduleMetrics?: Prisma.ModuleMetricsUncheckedUpdateOneWithoutModuleNestedInput
+  teacherFeedbacks?: Prisma.TeacherAiFeedbackUncheckedUpdateManyWithoutModuleNestedInput
 }
 
 export type ModuleCreateWithoutEnrollmentsInput = {
@@ -799,6 +826,7 @@ export type ModuleCreateWithoutEnrollmentsInput = {
   learningObjects?: Prisma.LearningObjectCreateNestedManyWithoutModuleInput
   aiConfiguration?: Prisma.AiConfigurationCreateNestedOneWithoutModuleInput
   moduleMetrics?: Prisma.ModuleMetricsCreateNestedOneWithoutModuleInput
+  teacherFeedbacks?: Prisma.TeacherAiFeedbackCreateNestedManyWithoutModuleInput
 }
 
 export type ModuleUncheckedCreateWithoutEnrollmentsInput = {
@@ -816,6 +844,7 @@ export type ModuleUncheckedCreateWithoutEnrollmentsInput = {
   learningObjects?: Prisma.LearningObjectUncheckedCreateNestedManyWithoutModuleInput
   aiConfiguration?: Prisma.AiConfigurationUncheckedCreateNestedOneWithoutModuleInput
   moduleMetrics?: Prisma.ModuleMetricsUncheckedCreateNestedOneWithoutModuleInput
+  teacherFeedbacks?: Prisma.TeacherAiFeedbackUncheckedCreateNestedManyWithoutModuleInput
 }
 
 export type ModuleCreateOrConnectWithoutEnrollmentsInput = {
@@ -848,6 +877,7 @@ export type ModuleUpdateWithoutEnrollmentsInput = {
   learningObjects?: Prisma.LearningObjectUpdateManyWithoutModuleNestedInput
   aiConfiguration?: Prisma.AiConfigurationUpdateOneWithoutModuleNestedInput
   moduleMetrics?: Prisma.ModuleMetricsUpdateOneWithoutModuleNestedInput
+  teacherFeedbacks?: Prisma.TeacherAiFeedbackUpdateManyWithoutModuleNestedInput
 }
 
 export type ModuleUncheckedUpdateWithoutEnrollmentsInput = {
@@ -865,6 +895,7 @@ export type ModuleUncheckedUpdateWithoutEnrollmentsInput = {
   learningObjects?: Prisma.LearningObjectUncheckedUpdateManyWithoutModuleNestedInput
   aiConfiguration?: Prisma.AiConfigurationUncheckedUpdateOneWithoutModuleNestedInput
   moduleMetrics?: Prisma.ModuleMetricsUncheckedUpdateOneWithoutModuleNestedInput
+  teacherFeedbacks?: Prisma.TeacherAiFeedbackUncheckedUpdateManyWithoutModuleNestedInput
 }
 
 export type ModuleCreateWithoutLearningObjectsInput = {
@@ -881,6 +912,7 @@ export type ModuleCreateWithoutLearningObjectsInput = {
   enrollments?: Prisma.EnrollmentCreateNestedManyWithoutModuleInput
   aiConfiguration?: Prisma.AiConfigurationCreateNestedOneWithoutModuleInput
   moduleMetrics?: Prisma.ModuleMetricsCreateNestedOneWithoutModuleInput
+  teacherFeedbacks?: Prisma.TeacherAiFeedbackCreateNestedManyWithoutModuleInput
 }
 
 export type ModuleUncheckedCreateWithoutLearningObjectsInput = {
@@ -898,6 +930,7 @@ export type ModuleUncheckedCreateWithoutLearningObjectsInput = {
   enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutModuleInput
   aiConfiguration?: Prisma.AiConfigurationUncheckedCreateNestedOneWithoutModuleInput
   moduleMetrics?: Prisma.ModuleMetricsUncheckedCreateNestedOneWithoutModuleInput
+  teacherFeedbacks?: Prisma.TeacherAiFeedbackUncheckedCreateNestedManyWithoutModuleInput
 }
 
 export type ModuleCreateOrConnectWithoutLearningObjectsInput = {
@@ -930,6 +963,7 @@ export type ModuleUpdateWithoutLearningObjectsInput = {
   enrollments?: Prisma.EnrollmentUpdateManyWithoutModuleNestedInput
   aiConfiguration?: Prisma.AiConfigurationUpdateOneWithoutModuleNestedInput
   moduleMetrics?: Prisma.ModuleMetricsUpdateOneWithoutModuleNestedInput
+  teacherFeedbacks?: Prisma.TeacherAiFeedbackUpdateManyWithoutModuleNestedInput
 }
 
 export type ModuleUncheckedUpdateWithoutLearningObjectsInput = {
@@ -947,6 +981,7 @@ export type ModuleUncheckedUpdateWithoutLearningObjectsInput = {
   enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutModuleNestedInput
   aiConfiguration?: Prisma.AiConfigurationUncheckedUpdateOneWithoutModuleNestedInput
   moduleMetrics?: Prisma.ModuleMetricsUncheckedUpdateOneWithoutModuleNestedInput
+  teacherFeedbacks?: Prisma.TeacherAiFeedbackUncheckedUpdateManyWithoutModuleNestedInput
 }
 
 export type ModuleCreateWithoutModuleMetricsInput = {
@@ -963,6 +998,7 @@ export type ModuleCreateWithoutModuleMetricsInput = {
   learningObjects?: Prisma.LearningObjectCreateNestedManyWithoutModuleInput
   enrollments?: Prisma.EnrollmentCreateNestedManyWithoutModuleInput
   aiConfiguration?: Prisma.AiConfigurationCreateNestedOneWithoutModuleInput
+  teacherFeedbacks?: Prisma.TeacherAiFeedbackCreateNestedManyWithoutModuleInput
 }
 
 export type ModuleUncheckedCreateWithoutModuleMetricsInput = {
@@ -980,6 +1016,7 @@ export type ModuleUncheckedCreateWithoutModuleMetricsInput = {
   learningObjects?: Prisma.LearningObjectUncheckedCreateNestedManyWithoutModuleInput
   enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutModuleInput
   aiConfiguration?: Prisma.AiConfigurationUncheckedCreateNestedOneWithoutModuleInput
+  teacherFeedbacks?: Prisma.TeacherAiFeedbackUncheckedCreateNestedManyWithoutModuleInput
 }
 
 export type ModuleCreateOrConnectWithoutModuleMetricsInput = {
@@ -1012,6 +1049,7 @@ export type ModuleUpdateWithoutModuleMetricsInput = {
   learningObjects?: Prisma.LearningObjectUpdateManyWithoutModuleNestedInput
   enrollments?: Prisma.EnrollmentUpdateManyWithoutModuleNestedInput
   aiConfiguration?: Prisma.AiConfigurationUpdateOneWithoutModuleNestedInput
+  teacherFeedbacks?: Prisma.TeacherAiFeedbackUpdateManyWithoutModuleNestedInput
 }
 
 export type ModuleUncheckedUpdateWithoutModuleMetricsInput = {
@@ -1029,6 +1067,93 @@ export type ModuleUncheckedUpdateWithoutModuleMetricsInput = {
   learningObjects?: Prisma.LearningObjectUncheckedUpdateManyWithoutModuleNestedInput
   enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutModuleNestedInput
   aiConfiguration?: Prisma.AiConfigurationUncheckedUpdateOneWithoutModuleNestedInput
+  teacherFeedbacks?: Prisma.TeacherAiFeedbackUncheckedUpdateManyWithoutModuleNestedInput
+}
+
+export type ModuleCreateWithoutTeacherFeedbacksInput = {
+  title: string
+  description?: string | null
+  isPublic?: boolean
+  allowSelfEnroll?: boolean
+  allowSelfUnenroll?: boolean
+  logoUrl?: string | null
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  teacher: Prisma.UserCreateNestedOneWithoutModulesAsTeacherInput
+  learningObjects?: Prisma.LearningObjectCreateNestedManyWithoutModuleInput
+  enrollments?: Prisma.EnrollmentCreateNestedManyWithoutModuleInput
+  aiConfiguration?: Prisma.AiConfigurationCreateNestedOneWithoutModuleInput
+  moduleMetrics?: Prisma.ModuleMetricsCreateNestedOneWithoutModuleInput
+}
+
+export type ModuleUncheckedCreateWithoutTeacherFeedbacksInput = {
+  id?: number
+  title: string
+  description?: string | null
+  teacherId: number
+  isPublic?: boolean
+  allowSelfEnroll?: boolean
+  allowSelfUnenroll?: boolean
+  logoUrl?: string | null
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  learningObjects?: Prisma.LearningObjectUncheckedCreateNestedManyWithoutModuleInput
+  enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutModuleInput
+  aiConfiguration?: Prisma.AiConfigurationUncheckedCreateNestedOneWithoutModuleInput
+  moduleMetrics?: Prisma.ModuleMetricsUncheckedCreateNestedOneWithoutModuleInput
+}
+
+export type ModuleCreateOrConnectWithoutTeacherFeedbacksInput = {
+  where: Prisma.ModuleWhereUniqueInput
+  create: Prisma.XOR<Prisma.ModuleCreateWithoutTeacherFeedbacksInput, Prisma.ModuleUncheckedCreateWithoutTeacherFeedbacksInput>
+}
+
+export type ModuleUpsertWithoutTeacherFeedbacksInput = {
+  update: Prisma.XOR<Prisma.ModuleUpdateWithoutTeacherFeedbacksInput, Prisma.ModuleUncheckedUpdateWithoutTeacherFeedbacksInput>
+  create: Prisma.XOR<Prisma.ModuleCreateWithoutTeacherFeedbacksInput, Prisma.ModuleUncheckedCreateWithoutTeacherFeedbacksInput>
+  where?: Prisma.ModuleWhereInput
+}
+
+export type ModuleUpdateToOneWithWhereWithoutTeacherFeedbacksInput = {
+  where?: Prisma.ModuleWhereInput
+  data: Prisma.XOR<Prisma.ModuleUpdateWithoutTeacherFeedbacksInput, Prisma.ModuleUncheckedUpdateWithoutTeacherFeedbacksInput>
+}
+
+export type ModuleUpdateWithoutTeacherFeedbacksInput = {
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isPublic?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  allowSelfEnroll?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  allowSelfUnenroll?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  logoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  teacher?: Prisma.UserUpdateOneRequiredWithoutModulesAsTeacherNestedInput
+  learningObjects?: Prisma.LearningObjectUpdateManyWithoutModuleNestedInput
+  enrollments?: Prisma.EnrollmentUpdateManyWithoutModuleNestedInput
+  aiConfiguration?: Prisma.AiConfigurationUpdateOneWithoutModuleNestedInput
+  moduleMetrics?: Prisma.ModuleMetricsUpdateOneWithoutModuleNestedInput
+}
+
+export type ModuleUncheckedUpdateWithoutTeacherFeedbacksInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  teacherId?: Prisma.IntFieldUpdateOperationsInput | number
+  isPublic?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  allowSelfEnroll?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  allowSelfUnenroll?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  logoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  learningObjects?: Prisma.LearningObjectUncheckedUpdateManyWithoutModuleNestedInput
+  enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutModuleNestedInput
+  aiConfiguration?: Prisma.AiConfigurationUncheckedUpdateOneWithoutModuleNestedInput
+  moduleMetrics?: Prisma.ModuleMetricsUncheckedUpdateOneWithoutModuleNestedInput
 }
 
 export type ModuleCreateManyTeacherInput = {
@@ -1058,6 +1183,7 @@ export type ModuleUpdateWithoutTeacherInput = {
   enrollments?: Prisma.EnrollmentUpdateManyWithoutModuleNestedInput
   aiConfiguration?: Prisma.AiConfigurationUpdateOneWithoutModuleNestedInput
   moduleMetrics?: Prisma.ModuleMetricsUpdateOneWithoutModuleNestedInput
+  teacherFeedbacks?: Prisma.TeacherAiFeedbackUpdateManyWithoutModuleNestedInput
 }
 
 export type ModuleUncheckedUpdateWithoutTeacherInput = {
@@ -1075,6 +1201,7 @@ export type ModuleUncheckedUpdateWithoutTeacherInput = {
   enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutModuleNestedInput
   aiConfiguration?: Prisma.AiConfigurationUncheckedUpdateOneWithoutModuleNestedInput
   moduleMetrics?: Prisma.ModuleMetricsUncheckedUpdateOneWithoutModuleNestedInput
+  teacherFeedbacks?: Prisma.TeacherAiFeedbackUncheckedUpdateManyWithoutModuleNestedInput
 }
 
 export type ModuleUncheckedUpdateManyWithoutTeacherInput = {
@@ -1098,11 +1225,13 @@ export type ModuleUncheckedUpdateManyWithoutTeacherInput = {
 export type ModuleCountOutputType = {
   learningObjects: number
   enrollments: number
+  teacherFeedbacks: number
 }
 
 export type ModuleCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   learningObjects?: boolean | ModuleCountOutputTypeCountLearningObjectsArgs
   enrollments?: boolean | ModuleCountOutputTypeCountEnrollmentsArgs
+  teacherFeedbacks?: boolean | ModuleCountOutputTypeCountTeacherFeedbacksArgs
 }
 
 /**
@@ -1129,6 +1258,13 @@ export type ModuleCountOutputTypeCountEnrollmentsArgs<ExtArgs extends runtime.Ty
   where?: Prisma.EnrollmentWhereInput
 }
 
+/**
+ * ModuleCountOutputType without action
+ */
+export type ModuleCountOutputTypeCountTeacherFeedbacksArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.TeacherAiFeedbackWhereInput
+}
+
 
 export type ModuleSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1147,6 +1283,7 @@ export type ModuleSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   enrollments?: boolean | Prisma.Module$enrollmentsArgs<ExtArgs>
   aiConfiguration?: boolean | Prisma.Module$aiConfigurationArgs<ExtArgs>
   moduleMetrics?: boolean | Prisma.Module$moduleMetricsArgs<ExtArgs>
+  teacherFeedbacks?: boolean | Prisma.Module$teacherFeedbacksArgs<ExtArgs>
   _count?: boolean | Prisma.ModuleCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["module"]>
 
@@ -1201,6 +1338,7 @@ export type ModuleInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   enrollments?: boolean | Prisma.Module$enrollmentsArgs<ExtArgs>
   aiConfiguration?: boolean | Prisma.Module$aiConfigurationArgs<ExtArgs>
   moduleMetrics?: boolean | Prisma.Module$moduleMetricsArgs<ExtArgs>
+  teacherFeedbacks?: boolean | Prisma.Module$teacherFeedbacksArgs<ExtArgs>
   _count?: boolean | Prisma.ModuleCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type ModuleIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1218,6 +1356,7 @@ export type $ModulePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     enrollments: Prisma.$EnrollmentPayload<ExtArgs>[]
     aiConfiguration: Prisma.$AiConfigurationPayload<ExtArgs> | null
     moduleMetrics: Prisma.$ModuleMetricsPayload<ExtArgs> | null
+    teacherFeedbacks: Prisma.$TeacherAiFeedbackPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
@@ -1630,6 +1769,7 @@ export interface Prisma__ModuleClient<T, Null = never, ExtArgs extends runtime.T
   enrollments<T extends Prisma.Module$enrollmentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Module$enrollmentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$EnrollmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   aiConfiguration<T extends Prisma.Module$aiConfigurationArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Module$aiConfigurationArgs<ExtArgs>>): Prisma.Prisma__AiConfigurationClient<runtime.Types.Result.GetResult<Prisma.$AiConfigurationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   moduleMetrics<T extends Prisma.Module$moduleMetricsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Module$moduleMetricsArgs<ExtArgs>>): Prisma.Prisma__ModuleMetricsClient<runtime.Types.Result.GetResult<Prisma.$ModuleMetricsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  teacherFeedbacks<T extends Prisma.Module$teacherFeedbacksArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Module$teacherFeedbacksArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TeacherAiFeedbackPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2154,6 +2294,30 @@ export type Module$moduleMetricsArgs<ExtArgs extends runtime.Types.Extensions.In
    */
   include?: Prisma.ModuleMetricsInclude<ExtArgs> | null
   where?: Prisma.ModuleMetricsWhereInput
+}
+
+/**
+ * Module.teacherFeedbacks
+ */
+export type Module$teacherFeedbacksArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the TeacherAiFeedback
+   */
+  select?: Prisma.TeacherAiFeedbackSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the TeacherAiFeedback
+   */
+  omit?: Prisma.TeacherAiFeedbackOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.TeacherAiFeedbackInclude<ExtArgs> | null
+  where?: Prisma.TeacherAiFeedbackWhereInput
+  orderBy?: Prisma.TeacherAiFeedbackOrderByWithRelationInput | Prisma.TeacherAiFeedbackOrderByWithRelationInput[]
+  cursor?: Prisma.TeacherAiFeedbackWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.TeacherAiFeedbackScalarFieldEnum | Prisma.TeacherAiFeedbackScalarFieldEnum[]
 }
 
 /**

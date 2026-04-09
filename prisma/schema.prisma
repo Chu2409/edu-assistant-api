@@ -67,11 +67,12 @@ model Module {
   updatedAt         DateTime @updatedAt @map("updated_at")
 
   // Relations
-  teacher         User             @relation("TeacherModules", fields: [teacherId], references: [id], onDelete: Cascade)
-  learningObjects LearningObject[]
-  enrollments     Enrollment[]
-  aiConfiguration AiConfiguration?
-  moduleMetrics   ModuleMetrics?
+  teacher          User                @relation("TeacherModules", fields: [teacherId], references: [id], onDelete: Cascade)
+  learningObjects  LearningObject[]
+  enrollments      Enrollment[]
+  aiConfiguration  AiConfiguration?
+  moduleMetrics    ModuleMetrics?
+  teacherFeedbacks TeacherAiFeedback[]
 
   @@index([teacherId])
   @@map("modules")
@@ -195,6 +196,7 @@ model LearningObject {
   studentQuestions StudentQuestion[]
   sessions         Session[]
   blocks           Block[]
+  teacherFeedbacks TeacherAiFeedback[]
 
   @@unique([moduleId, orderIndex])
   @@index([moduleId])
@@ -584,4 +586,31 @@ model SystemSetting {
   updatedAt   DateTime @updatedAt @map("updated_at")
 
   @@map("system_settings")
+}
+
+// ============================================
+// TEACHER AI FEEDBACK (Feedback pedagógico generado por IA)
+// ============================================
+
+enum TeacherFeedbackScope {
+  LEARNING_OBJECT
+  MODULE
+}
+
+model TeacherAiFeedback {
+  id               Int                  @id @default(autoincrement())
+  scope            TeacherFeedbackScope
+  moduleId         Int                  @map("module_id")
+  learningObjectId Int?                 @map("learning_object_id")
+  content          Json // Respuesta estructurada de la IA: { summary, strengths, improvements, recommendations }
+  createdAt        DateTime             @default(now()) @map("created_at")
+
+  // Relations
+  module         Module          @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+  learningObject LearningObject? @relation(fields: [learningObjectId], references: [id], onDelete: Cascade)
+
+  @@index([moduleId])
+  @@index([learningObjectId])
+  @@index([createdAt])
+  @@map("teacher_ai_feedbacks")
 }

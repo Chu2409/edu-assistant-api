@@ -518,6 +518,23 @@ export type EnumMediaTypeWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedEnumMediaTypeFilter<$PrismaModel>
 }
 
+export type EnumTeacherFeedbackScopeFilter<$PrismaModel = never> = {
+  equals?: $Enums.TeacherFeedbackScope | Prisma.EnumTeacherFeedbackScopeFieldRefInput<$PrismaModel>
+  in?: $Enums.TeacherFeedbackScope[] | Prisma.ListEnumTeacherFeedbackScopeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.TeacherFeedbackScope[] | Prisma.ListEnumTeacherFeedbackScopeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumTeacherFeedbackScopeFilter<$PrismaModel> | $Enums.TeacherFeedbackScope
+}
+
+export type EnumTeacherFeedbackScopeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.TeacherFeedbackScope | Prisma.EnumTeacherFeedbackScopeFieldRefInput<$PrismaModel>
+  in?: $Enums.TeacherFeedbackScope[] | Prisma.ListEnumTeacherFeedbackScopeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.TeacherFeedbackScope[] | Prisma.ListEnumTeacherFeedbackScopeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumTeacherFeedbackScopeWithAggregatesFilter<$PrismaModel> | $Enums.TeacherFeedbackScope
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumTeacherFeedbackScopeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumTeacherFeedbackScopeFilter<$PrismaModel>
+}
+
 export type NestedIntFilter<$PrismaModel = never> = {
   equals?: number | Prisma.IntFieldRefInput<$PrismaModel>
   in?: number[] | Prisma.ListIntFieldRefInput<$PrismaModel>
@@ -968,6 +985,23 @@ export type NestedEnumMediaTypeWithAggregatesFilter<$PrismaModel = never> = {
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumMediaTypeFilter<$PrismaModel>
   _max?: Prisma.NestedEnumMediaTypeFilter<$PrismaModel>
+}
+
+export type NestedEnumTeacherFeedbackScopeFilter<$PrismaModel = never> = {
+  equals?: $Enums.TeacherFeedbackScope | Prisma.EnumTeacherFeedbackScopeFieldRefInput<$PrismaModel>
+  in?: $Enums.TeacherFeedbackScope[] | Prisma.ListEnumTeacherFeedbackScopeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.TeacherFeedbackScope[] | Prisma.ListEnumTeacherFeedbackScopeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumTeacherFeedbackScopeFilter<$PrismaModel> | $Enums.TeacherFeedbackScope
+}
+
+export type NestedEnumTeacherFeedbackScopeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.TeacherFeedbackScope | Prisma.EnumTeacherFeedbackScopeFieldRefInput<$PrismaModel>
+  in?: $Enums.TeacherFeedbackScope[] | Prisma.ListEnumTeacherFeedbackScopeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.TeacherFeedbackScope[] | Prisma.ListEnumTeacherFeedbackScopeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumTeacherFeedbackScopeWithAggregatesFilter<$PrismaModel> | $Enums.TeacherFeedbackScope
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumTeacherFeedbackScopeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumTeacherFeedbackScopeFilter<$PrismaModel>
 }
 
 

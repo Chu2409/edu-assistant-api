@@ -301,6 +301,7 @@ export type LearningObjectWhereInput = {
   studentQuestions?: Prisma.StudentQuestionListRelationFilter
   sessions?: Prisma.SessionListRelationFilter
   blocks?: Prisma.BlockListRelationFilter
+  teacherFeedbacks?: Prisma.TeacherAiFeedbackListRelationFilter
 }
 
 export type LearningObjectOrderByWithRelationInput = {
@@ -330,6 +331,7 @@ export type LearningObjectOrderByWithRelationInput = {
   studentQuestions?: Prisma.StudentQuestionOrderByRelationAggregateInput
   sessions?: Prisma.SessionOrderByRelationAggregateInput
   blocks?: Prisma.BlockOrderByRelationAggregateInput
+  teacherFeedbacks?: Prisma.TeacherAiFeedbackOrderByRelationAggregateInput
 }
 
 export type LearningObjectWhereUniqueInput = Prisma.AtLeast<{
@@ -363,6 +365,7 @@ export type LearningObjectWhereUniqueInput = Prisma.AtLeast<{
   studentQuestions?: Prisma.StudentQuestionListRelationFilter
   sessions?: Prisma.SessionListRelationFilter
   blocks?: Prisma.BlockListRelationFilter
+  teacherFeedbacks?: Prisma.TeacherAiFeedbackListRelationFilter
 }, "id" | "moduleId_orderIndex">
 
 export type LearningObjectOrderByWithAggregationInput = {
@@ -429,6 +432,7 @@ export type LearningObjectCreateInput = {
   studentQuestions?: Prisma.StudentQuestionCreateNestedManyWithoutLearningObjectInput
   sessions?: Prisma.SessionCreateNestedManyWithoutLearningObjectInput
   blocks?: Prisma.BlockCreateNestedManyWithoutLearningObjectInput
+  teacherFeedbacks?: Prisma.TeacherAiFeedbackCreateNestedManyWithoutLearningObjectInput
 }
 
 export type LearningObjectUncheckedCreateInput = {
@@ -456,6 +460,7 @@ export type LearningObjectUncheckedCreateInput = {
   studentQuestions?: Prisma.StudentQuestionUncheckedCreateNestedManyWithoutLearningObjectInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutLearningObjectInput
   blocks?: Prisma.BlockUncheckedCreateNestedManyWithoutLearningObjectInput
+  teacherFeedbacks?: Prisma.TeacherAiFeedbackUncheckedCreateNestedManyWithoutLearningObjectInput
 }
 
 export type LearningObjectUpdateInput = {
@@ -482,6 +487,7 @@ export type LearningObjectUpdateInput = {
   studentQuestions?: Prisma.StudentQuestionUpdateManyWithoutLearningObjectNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutLearningObjectNestedInput
   blocks?: Prisma.BlockUpdateManyWithoutLearningObjectNestedInput
+  teacherFeedbacks?: Prisma.TeacherAiFeedbackUpdateManyWithoutLearningObjectNestedInput
 }
 
 export type LearningObjectUncheckedUpdateInput = {
@@ -509,6 +515,7 @@ export type LearningObjectUncheckedUpdateInput = {
   studentQuestions?: Prisma.StudentQuestionUncheckedUpdateManyWithoutLearningObjectNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutLearningObjectNestedInput
   blocks?: Prisma.BlockUncheckedUpdateManyWithoutLearningObjectNestedInput
+  teacherFeedbacks?: Prisma.TeacherAiFeedbackUncheckedUpdateManyWithoutLearningObjectNestedInput
 }
 
 export type LearningObjectCreateManyInput = {
@@ -904,6 +911,22 @@ export type LearningObjectUpdateOneWithoutMediaResourcesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.LearningObjectUpdateToOneWithWhereWithoutMediaResourcesInput, Prisma.LearningObjectUpdateWithoutMediaResourcesInput>, Prisma.LearningObjectUncheckedUpdateWithoutMediaResourcesInput>
 }
 
+export type LearningObjectCreateNestedOneWithoutTeacherFeedbacksInput = {
+  create?: Prisma.XOR<Prisma.LearningObjectCreateWithoutTeacherFeedbacksInput, Prisma.LearningObjectUncheckedCreateWithoutTeacherFeedbacksInput>
+  connectOrCreate?: Prisma.LearningObjectCreateOrConnectWithoutTeacherFeedbacksInput
+  connect?: Prisma.LearningObjectWhereUniqueInput
+}
+
+export type LearningObjectUpdateOneWithoutTeacherFeedbacksNestedInput = {
+  create?: Prisma.XOR<Prisma.LearningObjectCreateWithoutTeacherFeedbacksInput, Prisma.LearningObjectUncheckedCreateWithoutTeacherFeedbacksInput>
+  connectOrCreate?: Prisma.LearningObjectCreateOrConnectWithoutTeacherFeedbacksInput
+  upsert?: Prisma.LearningObjectUpsertWithoutTeacherFeedbacksInput
+  disconnect?: Prisma.LearningObjectWhereInput | boolean
+  delete?: Prisma.LearningObjectWhereInput | boolean
+  connect?: Prisma.LearningObjectWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.LearningObjectUpdateToOneWithWhereWithoutTeacherFeedbacksInput, Prisma.LearningObjectUpdateWithoutTeacherFeedbacksInput>, Prisma.LearningObjectUncheckedUpdateWithoutTeacherFeedbacksInput>
+}
+
 export type LearningObjectCreateWithoutModuleInput = {
   title: string
   orderIndex: number
@@ -927,6 +950,7 @@ export type LearningObjectCreateWithoutModuleInput = {
   studentQuestions?: Prisma.StudentQuestionCreateNestedManyWithoutLearningObjectInput
   sessions?: Prisma.SessionCreateNestedManyWithoutLearningObjectInput
   blocks?: Prisma.BlockCreateNestedManyWithoutLearningObjectInput
+  teacherFeedbacks?: Prisma.TeacherAiFeedbackCreateNestedManyWithoutLearningObjectInput
 }
 
 export type LearningObjectUncheckedCreateWithoutModuleInput = {
@@ -953,6 +977,7 @@ export type LearningObjectUncheckedCreateWithoutModuleInput = {
   studentQuestions?: Prisma.StudentQuestionUncheckedCreateNestedManyWithoutLearningObjectInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutLearningObjectInput
   blocks?: Prisma.BlockUncheckedCreateNestedManyWithoutLearningObjectInput
+  teacherFeedbacks?: Prisma.TeacherAiFeedbackUncheckedCreateNestedManyWithoutLearningObjectInput
 }
 
 export type LearningObjectCreateOrConnectWithoutModuleInput = {
@@ -1023,6 +1048,7 @@ export type LearningObjectCreateWithoutTypeInput = {
   studentQuestions?: Prisma.StudentQuestionCreateNestedManyWithoutLearningObjectInput
   sessions?: Prisma.SessionCreateNestedManyWithoutLearningObjectInput
   blocks?: Prisma.BlockCreateNestedManyWithoutLearningObjectInput
+  teacherFeedbacks?: Prisma.TeacherAiFeedbackCreateNestedManyWithoutLearningObjectInput
 }
 
 export type LearningObjectUncheckedCreateWithoutTypeInput = {
@@ -1049,6 +1075,7 @@ export type LearningObjectUncheckedCreateWithoutTypeInput = {
   studentQuestions?: Prisma.StudentQuestionUncheckedCreateNestedManyWithoutLearningObjectInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutLearningObjectInput
   blocks?: Prisma.BlockUncheckedCreateNestedManyWithoutLearningObjectInput
+  teacherFeedbacks?: Prisma.TeacherAiFeedbackUncheckedCreateNestedManyWithoutLearningObjectInput
 }
 
 export type LearningObjectCreateOrConnectWithoutTypeInput = {
@@ -1100,6 +1127,7 @@ export type LearningObjectCreateWithoutBlocksInput = {
   loFeedbacks?: Prisma.LearningObjectFeedbackCreateNestedManyWithoutLearningObjectInput
   studentQuestions?: Prisma.StudentQuestionCreateNestedManyWithoutLearningObjectInput
   sessions?: Prisma.SessionCreateNestedManyWithoutLearningObjectInput
+  teacherFeedbacks?: Prisma.TeacherAiFeedbackCreateNestedManyWithoutLearningObjectInput
 }
 
 export type LearningObjectUncheckedCreateWithoutBlocksInput = {
@@ -1126,6 +1154,7 @@ export type LearningObjectUncheckedCreateWithoutBlocksInput = {
   loFeedbacks?: Prisma.LearningObjectFeedbackUncheckedCreateNestedManyWithoutLearningObjectInput
   studentQuestions?: Prisma.StudentQuestionUncheckedCreateNestedManyWithoutLearningObjectInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutLearningObjectInput
+  teacherFeedbacks?: Prisma.TeacherAiFeedbackUncheckedCreateNestedManyWithoutLearningObjectInput
 }
 
 export type LearningObjectCreateOrConnectWithoutBlocksInput = {
@@ -1167,6 +1196,7 @@ export type LearningObjectUpdateWithoutBlocksInput = {
   loFeedbacks?: Prisma.LearningObjectFeedbackUpdateManyWithoutLearningObjectNestedInput
   studentQuestions?: Prisma.StudentQuestionUpdateManyWithoutLearningObjectNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutLearningObjectNestedInput
+  teacherFeedbacks?: Prisma.TeacherAiFeedbackUpdateManyWithoutLearningObjectNestedInput
 }
 
 export type LearningObjectUncheckedUpdateWithoutBlocksInput = {
@@ -1193,6 +1223,7 @@ export type LearningObjectUncheckedUpdateWithoutBlocksInput = {
   loFeedbacks?: Prisma.LearningObjectFeedbackUncheckedUpdateManyWithoutLearningObjectNestedInput
   studentQuestions?: Prisma.StudentQuestionUncheckedUpdateManyWithoutLearningObjectNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutLearningObjectNestedInput
+  teacherFeedbacks?: Prisma.TeacherAiFeedbackUncheckedUpdateManyWithoutLearningObjectNestedInput
 }
 
 export type LearningObjectCreateWithoutSessionsInput = {
@@ -1218,6 +1249,7 @@ export type LearningObjectCreateWithoutSessionsInput = {
   loFeedbacks?: Prisma.LearningObjectFeedbackCreateNestedManyWithoutLearningObjectInput
   studentQuestions?: Prisma.StudentQuestionCreateNestedManyWithoutLearningObjectInput
   blocks?: Prisma.BlockCreateNestedManyWithoutLearningObjectInput
+  teacherFeedbacks?: Prisma.TeacherAiFeedbackCreateNestedManyWithoutLearningObjectInput
 }
 
 export type LearningObjectUncheckedCreateWithoutSessionsInput = {
@@ -1244,6 +1276,7 @@ export type LearningObjectUncheckedCreateWithoutSessionsInput = {
   loFeedbacks?: Prisma.LearningObjectFeedbackUncheckedCreateNestedManyWithoutLearningObjectInput
   studentQuestions?: Prisma.StudentQuestionUncheckedCreateNestedManyWithoutLearningObjectInput
   blocks?: Prisma.BlockUncheckedCreateNestedManyWithoutLearningObjectInput
+  teacherFeedbacks?: Prisma.TeacherAiFeedbackUncheckedCreateNestedManyWithoutLearningObjectInput
 }
 
 export type LearningObjectCreateOrConnectWithoutSessionsInput = {
@@ -1285,6 +1318,7 @@ export type LearningObjectUpdateWithoutSessionsInput = {
   loFeedbacks?: Prisma.LearningObjectFeedbackUpdateManyWithoutLearningObjectNestedInput
   studentQuestions?: Prisma.StudentQuestionUpdateManyWithoutLearningObjectNestedInput
   blocks?: Prisma.BlockUpdateManyWithoutLearningObjectNestedInput
+  teacherFeedbacks?: Prisma.TeacherAiFeedbackUpdateManyWithoutLearningObjectNestedInput
 }
 
 export type LearningObjectUncheckedUpdateWithoutSessionsInput = {
@@ -1311,6 +1345,7 @@ export type LearningObjectUncheckedUpdateWithoutSessionsInput = {
   loFeedbacks?: Prisma.LearningObjectFeedbackUncheckedUpdateManyWithoutLearningObjectNestedInput
   studentQuestions?: Prisma.StudentQuestionUncheckedUpdateManyWithoutLearningObjectNestedInput
   blocks?: Prisma.BlockUncheckedUpdateManyWithoutLearningObjectNestedInput
+  teacherFeedbacks?: Prisma.TeacherAiFeedbackUncheckedUpdateManyWithoutLearningObjectNestedInput
 }
 
 export type LearningObjectCreateWithoutRelatedLosFromInput = {
@@ -1336,6 +1371,7 @@ export type LearningObjectCreateWithoutRelatedLosFromInput = {
   studentQuestions?: Prisma.StudentQuestionCreateNestedManyWithoutLearningObjectInput
   sessions?: Prisma.SessionCreateNestedManyWithoutLearningObjectInput
   blocks?: Prisma.BlockCreateNestedManyWithoutLearningObjectInput
+  teacherFeedbacks?: Prisma.TeacherAiFeedbackCreateNestedManyWithoutLearningObjectInput
 }
 
 export type LearningObjectUncheckedCreateWithoutRelatedLosFromInput = {
@@ -1362,6 +1398,7 @@ export type LearningObjectUncheckedCreateWithoutRelatedLosFromInput = {
   studentQuestions?: Prisma.StudentQuestionUncheckedCreateNestedManyWithoutLearningObjectInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutLearningObjectInput
   blocks?: Prisma.BlockUncheckedCreateNestedManyWithoutLearningObjectInput
+  teacherFeedbacks?: Prisma.TeacherAiFeedbackUncheckedCreateNestedManyWithoutLearningObjectInput
 }
 
 export type LearningObjectCreateOrConnectWithoutRelatedLosFromInput = {
@@ -1392,6 +1429,7 @@ export type LearningObjectCreateWithoutRelatedLosToInput = {
   studentQuestions?: Prisma.StudentQuestionCreateNestedManyWithoutLearningObjectInput
   sessions?: Prisma.SessionCreateNestedManyWithoutLearningObjectInput
   blocks?: Prisma.BlockCreateNestedManyWithoutLearningObjectInput
+  teacherFeedbacks?: Prisma.TeacherAiFeedbackCreateNestedManyWithoutLearningObjectInput
 }
 
 export type LearningObjectUncheckedCreateWithoutRelatedLosToInput = {
@@ -1418,6 +1456,7 @@ export type LearningObjectUncheckedCreateWithoutRelatedLosToInput = {
   studentQuestions?: Prisma.StudentQuestionUncheckedCreateNestedManyWithoutLearningObjectInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutLearningObjectInput
   blocks?: Prisma.BlockUncheckedCreateNestedManyWithoutLearningObjectInput
+  teacherFeedbacks?: Prisma.TeacherAiFeedbackUncheckedCreateNestedManyWithoutLearningObjectInput
 }
 
 export type LearningObjectCreateOrConnectWithoutRelatedLosToInput = {
@@ -1459,6 +1498,7 @@ export type LearningObjectUpdateWithoutRelatedLosFromInput = {
   studentQuestions?: Prisma.StudentQuestionUpdateManyWithoutLearningObjectNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutLearningObjectNestedInput
   blocks?: Prisma.BlockUpdateManyWithoutLearningObjectNestedInput
+  teacherFeedbacks?: Prisma.TeacherAiFeedbackUpdateManyWithoutLearningObjectNestedInput
 }
 
 export type LearningObjectUncheckedUpdateWithoutRelatedLosFromInput = {
@@ -1485,6 +1525,7 @@ export type LearningObjectUncheckedUpdateWithoutRelatedLosFromInput = {
   studentQuestions?: Prisma.StudentQuestionUncheckedUpdateManyWithoutLearningObjectNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutLearningObjectNestedInput
   blocks?: Prisma.BlockUncheckedUpdateManyWithoutLearningObjectNestedInput
+  teacherFeedbacks?: Prisma.TeacherAiFeedbackUncheckedUpdateManyWithoutLearningObjectNestedInput
 }
 
 export type LearningObjectUpsertWithoutRelatedLosToInput = {
@@ -1521,6 +1562,7 @@ export type LearningObjectUpdateWithoutRelatedLosToInput = {
   studentQuestions?: Prisma.StudentQuestionUpdateManyWithoutLearningObjectNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutLearningObjectNestedInput
   blocks?: Prisma.BlockUpdateManyWithoutLearningObjectNestedInput
+  teacherFeedbacks?: Prisma.TeacherAiFeedbackUpdateManyWithoutLearningObjectNestedInput
 }
 
 export type LearningObjectUncheckedUpdateWithoutRelatedLosToInput = {
@@ -1547,6 +1589,7 @@ export type LearningObjectUncheckedUpdateWithoutRelatedLosToInput = {
   studentQuestions?: Prisma.StudentQuestionUncheckedUpdateManyWithoutLearningObjectNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutLearningObjectNestedInput
   blocks?: Prisma.BlockUncheckedUpdateManyWithoutLearningObjectNestedInput
+  teacherFeedbacks?: Prisma.TeacherAiFeedbackUncheckedUpdateManyWithoutLearningObjectNestedInput
 }
 
 export type LearningObjectCreateWithoutConceptMentionsInput = {
@@ -1572,6 +1615,7 @@ export type LearningObjectCreateWithoutConceptMentionsInput = {
   studentQuestions?: Prisma.StudentQuestionCreateNestedManyWithoutLearningObjectInput
   sessions?: Prisma.SessionCreateNestedManyWithoutLearningObjectInput
   blocks?: Prisma.BlockCreateNestedManyWithoutLearningObjectInput
+  teacherFeedbacks?: Prisma.TeacherAiFeedbackCreateNestedManyWithoutLearningObjectInput
 }
 
 export type LearningObjectUncheckedCreateWithoutConceptMentionsInput = {
@@ -1598,6 +1642,7 @@ export type LearningObjectUncheckedCreateWithoutConceptMentionsInput = {
   studentQuestions?: Prisma.StudentQuestionUncheckedCreateNestedManyWithoutLearningObjectInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutLearningObjectInput
   blocks?: Prisma.BlockUncheckedCreateNestedManyWithoutLearningObjectInput
+  teacherFeedbacks?: Prisma.TeacherAiFeedbackUncheckedCreateNestedManyWithoutLearningObjectInput
 }
 
 export type LearningObjectCreateOrConnectWithoutConceptMentionsInput = {
@@ -1639,6 +1684,7 @@ export type LearningObjectUpdateWithoutConceptMentionsInput = {
   studentQuestions?: Prisma.StudentQuestionUpdateManyWithoutLearningObjectNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutLearningObjectNestedInput
   blocks?: Prisma.BlockUpdateManyWithoutLearningObjectNestedInput
+  teacherFeedbacks?: Prisma.TeacherAiFeedbackUpdateManyWithoutLearningObjectNestedInput
 }
 
 export type LearningObjectUncheckedUpdateWithoutConceptMentionsInput = {
@@ -1665,6 +1711,7 @@ export type LearningObjectUncheckedUpdateWithoutConceptMentionsInput = {
   studentQuestions?: Prisma.StudentQuestionUncheckedUpdateManyWithoutLearningObjectNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutLearningObjectNestedInput
   blocks?: Prisma.BlockUncheckedUpdateManyWithoutLearningObjectNestedInput
+  teacherFeedbacks?: Prisma.TeacherAiFeedbackUncheckedUpdateManyWithoutLearningObjectNestedInput
 }
 
 export type LearningObjectCreateWithoutActivitiesInput = {
@@ -1690,6 +1737,7 @@ export type LearningObjectCreateWithoutActivitiesInput = {
   studentQuestions?: Prisma.StudentQuestionCreateNestedManyWithoutLearningObjectInput
   sessions?: Prisma.SessionCreateNestedManyWithoutLearningObjectInput
   blocks?: Prisma.BlockCreateNestedManyWithoutLearningObjectInput
+  teacherFeedbacks?: Prisma.TeacherAiFeedbackCreateNestedManyWithoutLearningObjectInput
 }
 
 export type LearningObjectUncheckedCreateWithoutActivitiesInput = {
@@ -1716,6 +1764,7 @@ export type LearningObjectUncheckedCreateWithoutActivitiesInput = {
   studentQuestions?: Prisma.StudentQuestionUncheckedCreateNestedManyWithoutLearningObjectInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutLearningObjectInput
   blocks?: Prisma.BlockUncheckedCreateNestedManyWithoutLearningObjectInput
+  teacherFeedbacks?: Prisma.TeacherAiFeedbackUncheckedCreateNestedManyWithoutLearningObjectInput
 }
 
 export type LearningObjectCreateOrConnectWithoutActivitiesInput = {
@@ -1757,6 +1806,7 @@ export type LearningObjectUpdateWithoutActivitiesInput = {
   studentQuestions?: Prisma.StudentQuestionUpdateManyWithoutLearningObjectNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutLearningObjectNestedInput
   blocks?: Prisma.BlockUpdateManyWithoutLearningObjectNestedInput
+  teacherFeedbacks?: Prisma.TeacherAiFeedbackUpdateManyWithoutLearningObjectNestedInput
 }
 
 export type LearningObjectUncheckedUpdateWithoutActivitiesInput = {
@@ -1783,6 +1833,7 @@ export type LearningObjectUncheckedUpdateWithoutActivitiesInput = {
   studentQuestions?: Prisma.StudentQuestionUncheckedUpdateManyWithoutLearningObjectNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutLearningObjectNestedInput
   blocks?: Prisma.BlockUncheckedUpdateManyWithoutLearningObjectNestedInput
+  teacherFeedbacks?: Prisma.TeacherAiFeedbackUncheckedUpdateManyWithoutLearningObjectNestedInput
 }
 
 export type LearningObjectCreateWithoutLoFeedbacksInput = {
@@ -1808,6 +1859,7 @@ export type LearningObjectCreateWithoutLoFeedbacksInput = {
   studentQuestions?: Prisma.StudentQuestionCreateNestedManyWithoutLearningObjectInput
   sessions?: Prisma.SessionCreateNestedManyWithoutLearningObjectInput
   blocks?: Prisma.BlockCreateNestedManyWithoutLearningObjectInput
+  teacherFeedbacks?: Prisma.TeacherAiFeedbackCreateNestedManyWithoutLearningObjectInput
 }
 
 export type LearningObjectUncheckedCreateWithoutLoFeedbacksInput = {
@@ -1834,6 +1886,7 @@ export type LearningObjectUncheckedCreateWithoutLoFeedbacksInput = {
   studentQuestions?: Prisma.StudentQuestionUncheckedCreateNestedManyWithoutLearningObjectInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutLearningObjectInput
   blocks?: Prisma.BlockUncheckedCreateNestedManyWithoutLearningObjectInput
+  teacherFeedbacks?: Prisma.TeacherAiFeedbackUncheckedCreateNestedManyWithoutLearningObjectInput
 }
 
 export type LearningObjectCreateOrConnectWithoutLoFeedbacksInput = {
@@ -1875,6 +1928,7 @@ export type LearningObjectUpdateWithoutLoFeedbacksInput = {
   studentQuestions?: Prisma.StudentQuestionUpdateManyWithoutLearningObjectNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutLearningObjectNestedInput
   blocks?: Prisma.BlockUpdateManyWithoutLearningObjectNestedInput
+  teacherFeedbacks?: Prisma.TeacherAiFeedbackUpdateManyWithoutLearningObjectNestedInput
 }
 
 export type LearningObjectUncheckedUpdateWithoutLoFeedbacksInput = {
@@ -1901,6 +1955,7 @@ export type LearningObjectUncheckedUpdateWithoutLoFeedbacksInput = {
   studentQuestions?: Prisma.StudentQuestionUncheckedUpdateManyWithoutLearningObjectNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutLearningObjectNestedInput
   blocks?: Prisma.BlockUncheckedUpdateManyWithoutLearningObjectNestedInput
+  teacherFeedbacks?: Prisma.TeacherAiFeedbackUncheckedUpdateManyWithoutLearningObjectNestedInput
 }
 
 export type LearningObjectCreateWithoutNotesInput = {
@@ -1926,6 +1981,7 @@ export type LearningObjectCreateWithoutNotesInput = {
   studentQuestions?: Prisma.StudentQuestionCreateNestedManyWithoutLearningObjectInput
   sessions?: Prisma.SessionCreateNestedManyWithoutLearningObjectInput
   blocks?: Prisma.BlockCreateNestedManyWithoutLearningObjectInput
+  teacherFeedbacks?: Prisma.TeacherAiFeedbackCreateNestedManyWithoutLearningObjectInput
 }
 
 export type LearningObjectUncheckedCreateWithoutNotesInput = {
@@ -1952,6 +2008,7 @@ export type LearningObjectUncheckedCreateWithoutNotesInput = {
   studentQuestions?: Prisma.StudentQuestionUncheckedCreateNestedManyWithoutLearningObjectInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutLearningObjectInput
   blocks?: Prisma.BlockUncheckedCreateNestedManyWithoutLearningObjectInput
+  teacherFeedbacks?: Prisma.TeacherAiFeedbackUncheckedCreateNestedManyWithoutLearningObjectInput
 }
 
 export type LearningObjectCreateOrConnectWithoutNotesInput = {
@@ -1993,6 +2050,7 @@ export type LearningObjectUpdateWithoutNotesInput = {
   studentQuestions?: Prisma.StudentQuestionUpdateManyWithoutLearningObjectNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutLearningObjectNestedInput
   blocks?: Prisma.BlockUpdateManyWithoutLearningObjectNestedInput
+  teacherFeedbacks?: Prisma.TeacherAiFeedbackUpdateManyWithoutLearningObjectNestedInput
 }
 
 export type LearningObjectUncheckedUpdateWithoutNotesInput = {
@@ -2019,6 +2077,7 @@ export type LearningObjectUncheckedUpdateWithoutNotesInput = {
   studentQuestions?: Prisma.StudentQuestionUncheckedUpdateManyWithoutLearningObjectNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutLearningObjectNestedInput
   blocks?: Prisma.BlockUncheckedUpdateManyWithoutLearningObjectNestedInput
+  teacherFeedbacks?: Prisma.TeacherAiFeedbackUncheckedUpdateManyWithoutLearningObjectNestedInput
 }
 
 export type LearningObjectCreateWithoutStudentQuestionsInput = {
@@ -2044,6 +2103,7 @@ export type LearningObjectCreateWithoutStudentQuestionsInput = {
   loFeedbacks?: Prisma.LearningObjectFeedbackCreateNestedManyWithoutLearningObjectInput
   sessions?: Prisma.SessionCreateNestedManyWithoutLearningObjectInput
   blocks?: Prisma.BlockCreateNestedManyWithoutLearningObjectInput
+  teacherFeedbacks?: Prisma.TeacherAiFeedbackCreateNestedManyWithoutLearningObjectInput
 }
 
 export type LearningObjectUncheckedCreateWithoutStudentQuestionsInput = {
@@ -2070,6 +2130,7 @@ export type LearningObjectUncheckedCreateWithoutStudentQuestionsInput = {
   loFeedbacks?: Prisma.LearningObjectFeedbackUncheckedCreateNestedManyWithoutLearningObjectInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutLearningObjectInput
   blocks?: Prisma.BlockUncheckedCreateNestedManyWithoutLearningObjectInput
+  teacherFeedbacks?: Prisma.TeacherAiFeedbackUncheckedCreateNestedManyWithoutLearningObjectInput
 }
 
 export type LearningObjectCreateOrConnectWithoutStudentQuestionsInput = {
@@ -2111,6 +2172,7 @@ export type LearningObjectUpdateWithoutStudentQuestionsInput = {
   loFeedbacks?: Prisma.LearningObjectFeedbackUpdateManyWithoutLearningObjectNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutLearningObjectNestedInput
   blocks?: Prisma.BlockUpdateManyWithoutLearningObjectNestedInput
+  teacherFeedbacks?: Prisma.TeacherAiFeedbackUpdateManyWithoutLearningObjectNestedInput
 }
 
 export type LearningObjectUncheckedUpdateWithoutStudentQuestionsInput = {
@@ -2137,6 +2199,7 @@ export type LearningObjectUncheckedUpdateWithoutStudentQuestionsInput = {
   loFeedbacks?: Prisma.LearningObjectFeedbackUncheckedUpdateManyWithoutLearningObjectNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutLearningObjectNestedInput
   blocks?: Prisma.BlockUncheckedUpdateManyWithoutLearningObjectNestedInput
+  teacherFeedbacks?: Prisma.TeacherAiFeedbackUncheckedUpdateManyWithoutLearningObjectNestedInput
 }
 
 export type LearningObjectCreateWithoutPodcastsInput = {
@@ -2162,6 +2225,7 @@ export type LearningObjectCreateWithoutPodcastsInput = {
   studentQuestions?: Prisma.StudentQuestionCreateNestedManyWithoutLearningObjectInput
   sessions?: Prisma.SessionCreateNestedManyWithoutLearningObjectInput
   blocks?: Prisma.BlockCreateNestedManyWithoutLearningObjectInput
+  teacherFeedbacks?: Prisma.TeacherAiFeedbackCreateNestedManyWithoutLearningObjectInput
 }
 
 export type LearningObjectUncheckedCreateWithoutPodcastsInput = {
@@ -2188,6 +2252,7 @@ export type LearningObjectUncheckedCreateWithoutPodcastsInput = {
   studentQuestions?: Prisma.StudentQuestionUncheckedCreateNestedManyWithoutLearningObjectInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutLearningObjectInput
   blocks?: Prisma.BlockUncheckedCreateNestedManyWithoutLearningObjectInput
+  teacherFeedbacks?: Prisma.TeacherAiFeedbackUncheckedCreateNestedManyWithoutLearningObjectInput
 }
 
 export type LearningObjectCreateOrConnectWithoutPodcastsInput = {
@@ -2229,6 +2294,7 @@ export type LearningObjectUpdateWithoutPodcastsInput = {
   studentQuestions?: Prisma.StudentQuestionUpdateManyWithoutLearningObjectNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutLearningObjectNestedInput
   blocks?: Prisma.BlockUpdateManyWithoutLearningObjectNestedInput
+  teacherFeedbacks?: Prisma.TeacherAiFeedbackUpdateManyWithoutLearningObjectNestedInput
 }
 
 export type LearningObjectUncheckedUpdateWithoutPodcastsInput = {
@@ -2255,6 +2321,7 @@ export type LearningObjectUncheckedUpdateWithoutPodcastsInput = {
   studentQuestions?: Prisma.StudentQuestionUncheckedUpdateManyWithoutLearningObjectNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutLearningObjectNestedInput
   blocks?: Prisma.BlockUncheckedUpdateManyWithoutLearningObjectNestedInput
+  teacherFeedbacks?: Prisma.TeacherAiFeedbackUncheckedUpdateManyWithoutLearningObjectNestedInput
 }
 
 export type LearningObjectCreateWithoutMediaResourcesInput = {
@@ -2280,6 +2347,7 @@ export type LearningObjectCreateWithoutMediaResourcesInput = {
   studentQuestions?: Prisma.StudentQuestionCreateNestedManyWithoutLearningObjectInput
   sessions?: Prisma.SessionCreateNestedManyWithoutLearningObjectInput
   blocks?: Prisma.BlockCreateNestedManyWithoutLearningObjectInput
+  teacherFeedbacks?: Prisma.TeacherAiFeedbackCreateNestedManyWithoutLearningObjectInput
 }
 
 export type LearningObjectUncheckedCreateWithoutMediaResourcesInput = {
@@ -2306,6 +2374,7 @@ export type LearningObjectUncheckedCreateWithoutMediaResourcesInput = {
   studentQuestions?: Prisma.StudentQuestionUncheckedCreateNestedManyWithoutLearningObjectInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutLearningObjectInput
   blocks?: Prisma.BlockUncheckedCreateNestedManyWithoutLearningObjectInput
+  teacherFeedbacks?: Prisma.TeacherAiFeedbackUncheckedCreateNestedManyWithoutLearningObjectInput
 }
 
 export type LearningObjectCreateOrConnectWithoutMediaResourcesInput = {
@@ -2347,6 +2416,7 @@ export type LearningObjectUpdateWithoutMediaResourcesInput = {
   studentQuestions?: Prisma.StudentQuestionUpdateManyWithoutLearningObjectNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutLearningObjectNestedInput
   blocks?: Prisma.BlockUpdateManyWithoutLearningObjectNestedInput
+  teacherFeedbacks?: Prisma.TeacherAiFeedbackUpdateManyWithoutLearningObjectNestedInput
 }
 
 export type LearningObjectUncheckedUpdateWithoutMediaResourcesInput = {
@@ -2369,6 +2439,129 @@ export type LearningObjectUncheckedUpdateWithoutMediaResourcesInput = {
   conceptMentions?: Prisma.LearningObjectConceptUncheckedUpdateManyWithoutLearningObjectNestedInput
   notes?: Prisma.NoteUncheckedUpdateManyWithoutLearningObjectNestedInput
   podcasts?: Prisma.PodcastUncheckedUpdateManyWithoutLearningObjectNestedInput
+  loFeedbacks?: Prisma.LearningObjectFeedbackUncheckedUpdateManyWithoutLearningObjectNestedInput
+  studentQuestions?: Prisma.StudentQuestionUncheckedUpdateManyWithoutLearningObjectNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutLearningObjectNestedInput
+  blocks?: Prisma.BlockUncheckedUpdateManyWithoutLearningObjectNestedInput
+  teacherFeedbacks?: Prisma.TeacherAiFeedbackUncheckedUpdateManyWithoutLearningObjectNestedInput
+}
+
+export type LearningObjectCreateWithoutTeacherFeedbacksInput = {
+  title: string
+  orderIndex: number
+  keywords?: Prisma.LearningObjectCreatekeywordsInput | string[]
+  compiledContent?: string | null
+  isPublished?: boolean
+  aiResponseId?: string | null
+  hasManualEdits?: boolean
+  conceptsProcessed?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  type: Prisma.LearningObjectTypeCreateNestedOneWithoutLearningObjectsInput
+  module: Prisma.ModuleCreateNestedOneWithoutLearningObjectsInput
+  activities?: Prisma.ActivityCreateNestedManyWithoutLearningObjectInput
+  relatedLosFrom?: Prisma.LearningObjectRelationCreateNestedManyWithoutOriginLoInput
+  relatedLosTo?: Prisma.LearningObjectRelationCreateNestedManyWithoutRelatedLoInput
+  conceptMentions?: Prisma.LearningObjectConceptCreateNestedManyWithoutLearningObjectInput
+  notes?: Prisma.NoteCreateNestedManyWithoutLearningObjectInput
+  podcasts?: Prisma.PodcastCreateNestedManyWithoutLearningObjectInput
+  mediaResources?: Prisma.MediaResourceCreateNestedManyWithoutLearningObjectInput
+  loFeedbacks?: Prisma.LearningObjectFeedbackCreateNestedManyWithoutLearningObjectInput
+  studentQuestions?: Prisma.StudentQuestionCreateNestedManyWithoutLearningObjectInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutLearningObjectInput
+  blocks?: Prisma.BlockCreateNestedManyWithoutLearningObjectInput
+}
+
+export type LearningObjectUncheckedCreateWithoutTeacherFeedbacksInput = {
+  id?: number
+  moduleId: number
+  title: string
+  orderIndex: number
+  keywords?: Prisma.LearningObjectCreatekeywordsInput | string[]
+  compiledContent?: string | null
+  isPublished?: boolean
+  aiResponseId?: string | null
+  hasManualEdits?: boolean
+  conceptsProcessed?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  typeId: number
+  activities?: Prisma.ActivityUncheckedCreateNestedManyWithoutLearningObjectInput
+  relatedLosFrom?: Prisma.LearningObjectRelationUncheckedCreateNestedManyWithoutOriginLoInput
+  relatedLosTo?: Prisma.LearningObjectRelationUncheckedCreateNestedManyWithoutRelatedLoInput
+  conceptMentions?: Prisma.LearningObjectConceptUncheckedCreateNestedManyWithoutLearningObjectInput
+  notes?: Prisma.NoteUncheckedCreateNestedManyWithoutLearningObjectInput
+  podcasts?: Prisma.PodcastUncheckedCreateNestedManyWithoutLearningObjectInput
+  mediaResources?: Prisma.MediaResourceUncheckedCreateNestedManyWithoutLearningObjectInput
+  loFeedbacks?: Prisma.LearningObjectFeedbackUncheckedCreateNestedManyWithoutLearningObjectInput
+  studentQuestions?: Prisma.StudentQuestionUncheckedCreateNestedManyWithoutLearningObjectInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutLearningObjectInput
+  blocks?: Prisma.BlockUncheckedCreateNestedManyWithoutLearningObjectInput
+}
+
+export type LearningObjectCreateOrConnectWithoutTeacherFeedbacksInput = {
+  where: Prisma.LearningObjectWhereUniqueInput
+  create: Prisma.XOR<Prisma.LearningObjectCreateWithoutTeacherFeedbacksInput, Prisma.LearningObjectUncheckedCreateWithoutTeacherFeedbacksInput>
+}
+
+export type LearningObjectUpsertWithoutTeacherFeedbacksInput = {
+  update: Prisma.XOR<Prisma.LearningObjectUpdateWithoutTeacherFeedbacksInput, Prisma.LearningObjectUncheckedUpdateWithoutTeacherFeedbacksInput>
+  create: Prisma.XOR<Prisma.LearningObjectCreateWithoutTeacherFeedbacksInput, Prisma.LearningObjectUncheckedCreateWithoutTeacherFeedbacksInput>
+  where?: Prisma.LearningObjectWhereInput
+}
+
+export type LearningObjectUpdateToOneWithWhereWithoutTeacherFeedbacksInput = {
+  where?: Prisma.LearningObjectWhereInput
+  data: Prisma.XOR<Prisma.LearningObjectUpdateWithoutTeacherFeedbacksInput, Prisma.LearningObjectUncheckedUpdateWithoutTeacherFeedbacksInput>
+}
+
+export type LearningObjectUpdateWithoutTeacherFeedbacksInput = {
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
+  keywords?: Prisma.LearningObjectUpdatekeywordsInput | string[]
+  compiledContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  aiResponseId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  hasManualEdits?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  conceptsProcessed?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  type?: Prisma.LearningObjectTypeUpdateOneRequiredWithoutLearningObjectsNestedInput
+  module?: Prisma.ModuleUpdateOneRequiredWithoutLearningObjectsNestedInput
+  activities?: Prisma.ActivityUpdateManyWithoutLearningObjectNestedInput
+  relatedLosFrom?: Prisma.LearningObjectRelationUpdateManyWithoutOriginLoNestedInput
+  relatedLosTo?: Prisma.LearningObjectRelationUpdateManyWithoutRelatedLoNestedInput
+  conceptMentions?: Prisma.LearningObjectConceptUpdateManyWithoutLearningObjectNestedInput
+  notes?: Prisma.NoteUpdateManyWithoutLearningObjectNestedInput
+  podcasts?: Prisma.PodcastUpdateManyWithoutLearningObjectNestedInput
+  mediaResources?: Prisma.MediaResourceUpdateManyWithoutLearningObjectNestedInput
+  loFeedbacks?: Prisma.LearningObjectFeedbackUpdateManyWithoutLearningObjectNestedInput
+  studentQuestions?: Prisma.StudentQuestionUpdateManyWithoutLearningObjectNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutLearningObjectNestedInput
+  blocks?: Prisma.BlockUpdateManyWithoutLearningObjectNestedInput
+}
+
+export type LearningObjectUncheckedUpdateWithoutTeacherFeedbacksInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  moduleId?: Prisma.IntFieldUpdateOperationsInput | number
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
+  keywords?: Prisma.LearningObjectUpdatekeywordsInput | string[]
+  compiledContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  aiResponseId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  hasManualEdits?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  conceptsProcessed?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  typeId?: Prisma.IntFieldUpdateOperationsInput | number
+  activities?: Prisma.ActivityUncheckedUpdateManyWithoutLearningObjectNestedInput
+  relatedLosFrom?: Prisma.LearningObjectRelationUncheckedUpdateManyWithoutOriginLoNestedInput
+  relatedLosTo?: Prisma.LearningObjectRelationUncheckedUpdateManyWithoutRelatedLoNestedInput
+  conceptMentions?: Prisma.LearningObjectConceptUncheckedUpdateManyWithoutLearningObjectNestedInput
+  notes?: Prisma.NoteUncheckedUpdateManyWithoutLearningObjectNestedInput
+  podcasts?: Prisma.PodcastUncheckedUpdateManyWithoutLearningObjectNestedInput
+  mediaResources?: Prisma.MediaResourceUncheckedUpdateManyWithoutLearningObjectNestedInput
   loFeedbacks?: Prisma.LearningObjectFeedbackUncheckedUpdateManyWithoutLearningObjectNestedInput
   studentQuestions?: Prisma.StudentQuestionUncheckedUpdateManyWithoutLearningObjectNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutLearningObjectNestedInput
@@ -2413,6 +2606,7 @@ export type LearningObjectUpdateWithoutModuleInput = {
   studentQuestions?: Prisma.StudentQuestionUpdateManyWithoutLearningObjectNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutLearningObjectNestedInput
   blocks?: Prisma.BlockUpdateManyWithoutLearningObjectNestedInput
+  teacherFeedbacks?: Prisma.TeacherAiFeedbackUpdateManyWithoutLearningObjectNestedInput
 }
 
 export type LearningObjectUncheckedUpdateWithoutModuleInput = {
@@ -2439,6 +2633,7 @@ export type LearningObjectUncheckedUpdateWithoutModuleInput = {
   studentQuestions?: Prisma.StudentQuestionUncheckedUpdateManyWithoutLearningObjectNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutLearningObjectNestedInput
   blocks?: Prisma.BlockUncheckedUpdateManyWithoutLearningObjectNestedInput
+  teacherFeedbacks?: Prisma.TeacherAiFeedbackUncheckedUpdateManyWithoutLearningObjectNestedInput
 }
 
 export type LearningObjectUncheckedUpdateManyWithoutModuleInput = {
@@ -2494,6 +2689,7 @@ export type LearningObjectUpdateWithoutTypeInput = {
   studentQuestions?: Prisma.StudentQuestionUpdateManyWithoutLearningObjectNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutLearningObjectNestedInput
   blocks?: Prisma.BlockUpdateManyWithoutLearningObjectNestedInput
+  teacherFeedbacks?: Prisma.TeacherAiFeedbackUpdateManyWithoutLearningObjectNestedInput
 }
 
 export type LearningObjectUncheckedUpdateWithoutTypeInput = {
@@ -2520,6 +2716,7 @@ export type LearningObjectUncheckedUpdateWithoutTypeInput = {
   studentQuestions?: Prisma.StudentQuestionUncheckedUpdateManyWithoutLearningObjectNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutLearningObjectNestedInput
   blocks?: Prisma.BlockUncheckedUpdateManyWithoutLearningObjectNestedInput
+  teacherFeedbacks?: Prisma.TeacherAiFeedbackUncheckedUpdateManyWithoutLearningObjectNestedInput
 }
 
 export type LearningObjectUncheckedUpdateManyWithoutTypeInput = {
@@ -2554,6 +2751,7 @@ export type LearningObjectCountOutputType = {
   studentQuestions: number
   sessions: number
   blocks: number
+  teacherFeedbacks: number
 }
 
 export type LearningObjectCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -2568,6 +2766,7 @@ export type LearningObjectCountOutputTypeSelect<ExtArgs extends runtime.Types.Ex
   studentQuestions?: boolean | LearningObjectCountOutputTypeCountStudentQuestionsArgs
   sessions?: boolean | LearningObjectCountOutputTypeCountSessionsArgs
   blocks?: boolean | LearningObjectCountOutputTypeCountBlocksArgs
+  teacherFeedbacks?: boolean | LearningObjectCountOutputTypeCountTeacherFeedbacksArgs
 }
 
 /**
@@ -2657,6 +2856,13 @@ export type LearningObjectCountOutputTypeCountBlocksArgs<ExtArgs extends runtime
   where?: Prisma.BlockWhereInput
 }
 
+/**
+ * LearningObjectCountOutputType without action
+ */
+export type LearningObjectCountOutputTypeCountTeacherFeedbacksArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.TeacherAiFeedbackWhereInput
+}
+
 
 export type LearningObjectSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -2685,6 +2891,7 @@ export type LearningObjectSelect<ExtArgs extends runtime.Types.Extensions.Intern
   studentQuestions?: boolean | Prisma.LearningObject$studentQuestionsArgs<ExtArgs>
   sessions?: boolean | Prisma.LearningObject$sessionsArgs<ExtArgs>
   blocks?: boolean | Prisma.LearningObject$blocksArgs<ExtArgs>
+  teacherFeedbacks?: boolean | Prisma.LearningObject$teacherFeedbacksArgs<ExtArgs>
   _count?: boolean | Prisma.LearningObjectCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["learningObject"]>
 
@@ -2755,6 +2962,7 @@ export type LearningObjectInclude<ExtArgs extends runtime.Types.Extensions.Inter
   studentQuestions?: boolean | Prisma.LearningObject$studentQuestionsArgs<ExtArgs>
   sessions?: boolean | Prisma.LearningObject$sessionsArgs<ExtArgs>
   blocks?: boolean | Prisma.LearningObject$blocksArgs<ExtArgs>
+  teacherFeedbacks?: boolean | Prisma.LearningObject$teacherFeedbacksArgs<ExtArgs>
   _count?: boolean | Prisma.LearningObjectCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type LearningObjectIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -2782,6 +2990,7 @@ export type $LearningObjectPayload<ExtArgs extends runtime.Types.Extensions.Inte
     studentQuestions: Prisma.$StudentQuestionPayload<ExtArgs>[]
     sessions: Prisma.$SessionPayload<ExtArgs>[]
     blocks: Prisma.$BlockPayload<ExtArgs>[]
+    teacherFeedbacks: Prisma.$TeacherAiFeedbackPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
@@ -3204,6 +3413,7 @@ export interface Prisma__LearningObjectClient<T, Null = never, ExtArgs extends r
   studentQuestions<T extends Prisma.LearningObject$studentQuestionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.LearningObject$studentQuestionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$StudentQuestionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   sessions<T extends Prisma.LearningObject$sessionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.LearningObject$sessionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   blocks<T extends Prisma.LearningObject$blocksArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.LearningObject$blocksArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BlockPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  teacherFeedbacks<T extends Prisma.LearningObject$teacherFeedbacksArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.LearningObject$teacherFeedbacksArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TeacherAiFeedbackPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -3908,6 +4118,30 @@ export type LearningObject$blocksArgs<ExtArgs extends runtime.Types.Extensions.I
   take?: number
   skip?: number
   distinct?: Prisma.BlockScalarFieldEnum | Prisma.BlockScalarFieldEnum[]
+}
+
+/**
+ * LearningObject.teacherFeedbacks
+ */
+export type LearningObject$teacherFeedbacksArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the TeacherAiFeedback
+   */
+  select?: Prisma.TeacherAiFeedbackSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the TeacherAiFeedback
+   */
+  omit?: Prisma.TeacherAiFeedbackOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.TeacherAiFeedbackInclude<ExtArgs> | null
+  where?: Prisma.TeacherAiFeedbackWhereInput
+  orderBy?: Prisma.TeacherAiFeedbackOrderByWithRelationInput | Prisma.TeacherAiFeedbackOrderByWithRelationInput[]
+  cursor?: Prisma.TeacherAiFeedbackWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.TeacherAiFeedbackScalarFieldEnum | Prisma.TeacherAiFeedbackScalarFieldEnum[]
 }
 
 /**
