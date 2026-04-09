@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unnecessary-condition */
 import { Injectable, NotFoundException } from '@nestjs/common'
 import { DBService } from 'src/core/database/database.service'
 import { Activity, Prisma, type User } from 'src/core/database/generated/client'
@@ -54,13 +55,15 @@ export class ActivitiesService {
       orderBy: { orderIndex: 'desc' },
     })
 
+    const content = this.extractActivityContent(dto.type, dto.options)
+
     const created = await this.dbService.activity.create({
       data: {
         learningObjectId,
         type: dto.type,
-        question: dto.question,
+        question: content.question ?? '',
         options: JSON.stringify(dto.options),
-        explanation: dto.explanation ?? null,
+        explanation: content.explanation,
         difficulty: dto.difficulty ?? 1,
         orderIndex: last?.orderIndex ? last.orderIndex + 1 : 1,
         isApprovedByTeacher: dto.isApprovedByTeacher ?? false,
@@ -85,18 +88,29 @@ export class ActivitiesService {
       throw new NotFoundException('Actividad no encontrada')
     }
 
+    const updatedType = dto.type ?? existing.type
+    let updatedQuestion: string | undefined
+    let updatedExplanation: string | null | undefined
+
+    if (dto.options !== undefined && dto.options !== null) {
+      const content = this.extractActivityContent(updatedType, dto.options)
+      if (content.question !== null) updatedQuestion = content.question
+      updatedExplanation = content.explanation
+    }
+
     const updated = await this.dbService.activity.update({
       where: { id: activityId },
       data: {
         ...(dto.type !== undefined && { type: dto.type }),
-        ...(dto.question !== undefined && { question: dto.question }),
+        ...(updatedQuestion !== undefined && { question: updatedQuestion }),
         ...(dto.options !== undefined && {
-          options: dto.options === null ? Prisma.JsonNull : dto.options,
+          options:
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            dto.options === null ? Prisma.JsonNull : (dto.options as any),
         }),
-        ...(dto.correctAnswer !== undefined && {
-          correctAnswer: dto.correctAnswer,
+        ...(updatedExplanation !== undefined && {
+          explanation: updatedExplanation,
         }),
-        ...(dto.explanation !== undefined && { explanation: dto.explanation }),
         ...(dto.difficulty !== undefined && { difficulty: dto.difficulty }),
         ...(dto.isApprovedByTeacher !== undefined && {
           isApprovedByTeacher: dto.isApprovedByTeacher,
@@ -174,6 +188,39 @@ export class ActivitiesService {
       isCorrect: created.isCorrect,
       attemptNumber: created.attemptNumber,
       createdAt: created.createdAt,
+    }
+  }
+
+  private extractActivityContent(
+    type: ActivityType,
+    options: AiGeneratedActivity,
+  ): { question: string | null; explanation: string | null } {
+    if (!options) return { question: null, explanation: null }
+
+    switch (type) {
+      case ActivityType.MULTIPLE_CHOICE:
+        return {
+          question: (options as AiMultipleChoiceActivity).question ?? null,
+          explanation:
+            (options as AiMultipleChoiceActivity).explanation ?? null,
+        }
+      case ActivityType.TRUE_FALSE:
+        return {
+          question: (options as AiTrueFalseActivity).statement ?? null,
+          explanation: (options as AiTrueFalseActivity).explanation ?? null,
+        }
+      case ActivityType.FILL_BLANK:
+        return {
+          question: (options as AiFillBlankActivity).sentence ?? null,
+          explanation: (options as AiFillBlankActivity).explanation ?? null,
+        }
+      case ActivityType.MATCH:
+        return {
+          question: (options as AiGeneratedMatchActivity).instructions ?? null,
+          explanation: null,
+        }
+      default:
+        return { question: null, explanation: null }
     }
   }
 
