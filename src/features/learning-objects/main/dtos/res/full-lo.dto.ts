@@ -151,4 +151,19 @@ export class FullLoDto {
     nullable: true,
   })
   chatSessionId?: number | null
+
+  @ApiPropertyOptional({
+    description: 'ID del objeto de aprendizaje anterior (basado en orderIndex)',
+    example: 1,
+    nullable: true,
+  })
+  previousLoId?: number | null
+
+  @ApiPropertyOptional({
+    description:
+      'ID del objeto de aprendizaje siguiente (basado en orderIndex)',
+    example: 3,
+    nullable: true,
+  })
+  nextLoId?: number | null
 }

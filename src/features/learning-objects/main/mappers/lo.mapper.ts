@@ -39,6 +39,8 @@ export class LoMapper {
       blocks: Block[]
       sessions?: Session[]
     },
+    previousLoId?: number | null,
+    nextLoId?: number | null,
   ): FullLoDto {
     return {
       id: lo.id,
@@ -63,6 +65,8 @@ export class LoMapper {
         : null,
       chatSessionId: lo.sessions?.[0]?.id ?? null,
       blocks: lo.blocks.map((block) => BlocksMapper.mapToDto(block)),
+      previousLoId: previousLoId ?? null,
+      nextLoId: nextLoId ?? null,
     }
   }
 }
