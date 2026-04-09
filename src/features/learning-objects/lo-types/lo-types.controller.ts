@@ -9,7 +9,7 @@ import {
   ParseIntPipe,
   HttpStatus,
 } from '@nestjs/common'
-import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger'
+import { ApiTags, ApiOperation } from '@nestjs/swagger'
 import { LoTypesService } from './lo-types.service'
 import { CreateLoTypeDto } from './dtos/req/create-lo-type.dto'
 import { UpdateLoTypeDto } from './dtos/req/update-lo-type.dto'
@@ -35,8 +35,8 @@ export class LoTypesController {
   }
 
   @Get()
-  @ApiOperation({ summary: 'Listar todos los tipos de objetos de aprendizaje' })
-  @ApiStandardResponse([LoTypeDto])
+  @ApiOperation({ summary: 'Listar todos los tipos de objeto de aprendizaje' })
+  @ApiStandardResponse([LoTypeDto], HttpStatus.OK)
   findAll() {
     return this.loTypesService.findAll()
   }
