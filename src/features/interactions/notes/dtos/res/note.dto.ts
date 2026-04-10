@@ -8,11 +8,11 @@ export class NoteDto {
   id: number
 
   @ApiProperty({
-    description: 'ID de la página a la que pertenece la nota',
+    description: 'ID del objeto de aprendizaje al que pertenece la nota',
     example: 1,
     nullable: true,
   })
-  pageId: number | null
+  learningObjectId: number | null
 
   @ApiProperty({
     description: 'ID del usuario que creó la nota',

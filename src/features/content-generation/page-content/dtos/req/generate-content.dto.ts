@@ -16,12 +16,12 @@ import {
 
 export class GenerateContentDto {
   @ApiProperty({
-    description: 'ID de la página a generar contenido',
+    description: 'ID del objeto de aprendizaje a generar contenido',
     example: 1,
   })
   @IsInt()
   @Min(1)
-  pageId: number
+  learningObjectId: number
 
   @ApiPropertyOptional({
     description: 'Instrucciones específicas para la generación del contenido',

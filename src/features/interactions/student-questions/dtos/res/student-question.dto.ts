@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger'
 import { UserDto } from 'src/features/users/dtos/res/user.dto'
+import { QuestionReplyDto } from 'src/features/interactions/question-replies/dtos/res/question-reply.dto'
 
 export class StudentQuestionDto {
   @ApiProperty({
@@ -15,10 +16,10 @@ export class StudentQuestionDto {
   user: UserDto
 
   @ApiProperty({
-    description: 'ID de la página a la que pertenece la pregunta',
+    description: 'ID del objeto de aprendizaje al que pertenece la pregunta',
     example: 1,
   })
-  pageId: number
+  learningObjectId: number
 
   @ApiProperty({
     description: 'Pregunta del estudiante',
@@ -37,6 +38,13 @@ export class StudentQuestionDto {
     example: 10,
   })
   upvotes: number
+
+  @ApiProperty({
+    description: 'Lista de respuestas a la pregunta',
+    type: [QuestionReplyDto],
+    required: false,
+  })
+  replies?: QuestionReplyDto[]
 
   @ApiProperty({
     description: 'Fecha de creación de la pregunta',

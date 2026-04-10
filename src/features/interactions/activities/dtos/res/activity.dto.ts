@@ -4,20 +4,20 @@ import {
   getSchemaPath,
 } from '@nestjs/swagger'
 import { ActivityType } from 'src/core/database/generated/enums'
-import type { AiGeneratedActivity } from 'src/features/content-generation/activities/interfaces/ai-generated-activity.interface'
 import {
-  FillBlankAttempt,
-  MatchAttempt,
-  MultipleChoiceAttempt,
-  TrueFalseAttempt,
-} from '../../interfaces/activity-attempt.interface'
+  AiFillBlankActivity,
+  AiGeneratedMatchActivity,
+  AiMultipleChoiceActivity,
+  AiTrueFalseActivity,
+  type AiGeneratedActivity,
+} from 'src/features/content-generation/activities/interfaces/ai-generated-activity.interface'
 
 export class ActivityDto {
   @ApiProperty({ example: 1 })
   id: number
 
   @ApiProperty({ example: 1 })
-  pageId: number
+  learningObjectId: number
 
   @ApiProperty({ enum: ActivityType, example: ActivityType.MULTIPLE_CHOICE })
   type: ActivityType
@@ -28,10 +28,10 @@ export class ActivityDto {
   @ApiPropertyOptional({
     description: 'Opciones (JSON)',
     oneOf: [
-      { $ref: getSchemaPath(MultipleChoiceAttempt) },
-      { $ref: getSchemaPath(TrueFalseAttempt) },
-      { $ref: getSchemaPath(FillBlankAttempt) },
-      { $ref: getSchemaPath(MatchAttempt) },
+      { $ref: getSchemaPath(AiMultipleChoiceActivity) },
+      { $ref: getSchemaPath(AiTrueFalseActivity) },
+      { $ref: getSchemaPath(AiFillBlankActivity) },
+      { $ref: getSchemaPath(AiGeneratedMatchActivity) },
     ],
   })
   options: AiGeneratedActivity

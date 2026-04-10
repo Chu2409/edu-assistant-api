@@ -6,7 +6,7 @@ export class ChatMapper {
   static toSessionDto(session: Session): SessionDto {
     return {
       id: session.id,
-      pageId: session.pageId,
+      learningObjectId: session.learningObjectId,
       userId: session.userId,
       title: session.title,
       startedAt: session.startedAt,

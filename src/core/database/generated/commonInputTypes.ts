@@ -407,6 +407,13 @@ export type FloatFilter<$PrismaModel = never> = {
   not?: Prisma.NestedFloatFilter<$PrismaModel> | number
 }
 
+export type EnumRelationTypeFilter<$PrismaModel = never> = {
+  equals?: $Enums.RelationType | Prisma.EnumRelationTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.RelationType[] | Prisma.ListEnumRelationTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.RelationType[] | Prisma.ListEnumRelationTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumRelationTypeFilter<$PrismaModel> | $Enums.RelationType
+}
+
 export type FloatWithAggregatesFilter<$PrismaModel = never> = {
   equals?: number | Prisma.FloatFieldRefInput<$PrismaModel>
   in?: number[] | Prisma.ListFloatFieldRefInput<$PrismaModel>
@@ -421,13 +428,6 @@ export type FloatWithAggregatesFilter<$PrismaModel = never> = {
   _sum?: Prisma.NestedFloatFilter<$PrismaModel>
   _min?: Prisma.NestedFloatFilter<$PrismaModel>
   _max?: Prisma.NestedFloatFilter<$PrismaModel>
-}
-
-export type EnumRelationTypeFilter<$PrismaModel = never> = {
-  equals?: $Enums.RelationType | Prisma.EnumRelationTypeFieldRefInput<$PrismaModel>
-  in?: $Enums.RelationType[] | Prisma.ListEnumRelationTypeFieldRefInput<$PrismaModel>
-  notIn?: $Enums.RelationType[] | Prisma.ListEnumRelationTypeFieldRefInput<$PrismaModel>
-  not?: Prisma.NestedEnumRelationTypeFilter<$PrismaModel> | $Enums.RelationType
 }
 
 export type EnumRelationTypeWithAggregatesFilter<$PrismaModel = never> = {
@@ -859,6 +859,13 @@ export type NestedEnumMessageRoleWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedEnumMessageRoleFilter<$PrismaModel>
 }
 
+export type NestedEnumRelationTypeFilter<$PrismaModel = never> = {
+  equals?: $Enums.RelationType | Prisma.EnumRelationTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.RelationType[] | Prisma.ListEnumRelationTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.RelationType[] | Prisma.ListEnumRelationTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumRelationTypeFilter<$PrismaModel> | $Enums.RelationType
+}
+
 export type NestedFloatWithAggregatesFilter<$PrismaModel = never> = {
   equals?: number | Prisma.FloatFieldRefInput<$PrismaModel>
   in?: number[] | Prisma.ListFloatFieldRefInput<$PrismaModel>
@@ -873,13 +880,6 @@ export type NestedFloatWithAggregatesFilter<$PrismaModel = never> = {
   _sum?: Prisma.NestedFloatFilter<$PrismaModel>
   _min?: Prisma.NestedFloatFilter<$PrismaModel>
   _max?: Prisma.NestedFloatFilter<$PrismaModel>
-}
-
-export type NestedEnumRelationTypeFilter<$PrismaModel = never> = {
-  equals?: $Enums.RelationType | Prisma.EnumRelationTypeFieldRefInput<$PrismaModel>
-  in?: $Enums.RelationType[] | Prisma.ListEnumRelationTypeFieldRefInput<$PrismaModel>
-  notIn?: $Enums.RelationType[] | Prisma.ListEnumRelationTypeFieldRefInput<$PrismaModel>
-  not?: Prisma.NestedEnumRelationTypeFilter<$PrismaModel> | $Enums.RelationType
 }
 
 export type NestedEnumRelationTypeWithAggregatesFilter<$PrismaModel = never> = {

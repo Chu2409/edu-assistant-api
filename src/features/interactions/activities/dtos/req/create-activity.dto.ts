@@ -11,10 +11,8 @@ import {
   IsNotEmpty,
   IsObject,
   IsOptional,
-  IsString,
   Max,
   Min,
-  MinLength,
 } from 'class-validator'
 import { ActivityType } from 'src/core/database/generated/enums'
 import {
@@ -31,14 +29,6 @@ export class CreateActivityDto {
   type: ActivityType
 
   @ApiProperty({
-    description: 'Enunciado/pregunta',
-    example: '¿La respiración celular ocurre en las mitocondrias?',
-  })
-  @IsString()
-  @MinLength(1)
-  question: string
-
-  @ApiPropertyOptional({
     description:
       'Opciones (depende del tipo). Para MULTIPLE_CHOICE/MATCH normalmente va aquí.',
     oneOf: [
@@ -51,14 +41,6 @@ export class CreateActivityDto {
   @IsObject()
   @IsNotEmpty()
   options: AiGeneratedActivity
-
-  @ApiPropertyOptional({
-    description: 'Explicación de la respuesta',
-    example: 'Ocurre principalmente en la mitocondria.',
-  })
-  @IsOptional()
-  @IsString()
-  explanation?: string | null
 
   @ApiPropertyOptional({ description: 'Dificultad 1-5', example: 2 })
   @IsOptional()

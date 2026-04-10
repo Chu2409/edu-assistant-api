@@ -1,0 +1,51 @@
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger'
+import {
+  IsString,
+  IsOptional,
+  IsBoolean,
+  IsInt,
+  MinLength,
+  MaxLength,
+  Min,
+} from 'class-validator'
+import { Type } from 'class-transformer'
+
+export class CreateLoDto {
+  @ApiProperty({
+    description: 'ID del módulo al que pertenece el objeto de aprendizaje',
+    example: 1,
+  })
+  @Type(() => Number)
+  @IsInt()
+  @Min(1)
+  moduleId: number
+
+  @ApiProperty({
+    description: 'ID del tipo de objeto de aprendizaje',
+    example: 1,
+  })
+  @Type(() => Number)
+  @IsInt()
+  @Min(1)
+  typeId: number
+
+  @ApiProperty({
+    description: 'Título del objeto de aprendizaje',
+    example: 'Introducción a la Programación',
+    minLength: 3,
+    maxLength: 200,
+  })
+  @IsString()
+  @MinLength(3)
+  @MaxLength(200)
+  title: string
+
+  @ApiPropertyOptional({
+    description: 'Indica si el objeto de aprendizaje está publicado',
+    example: false,
+    default: false,
+  })
+  @IsOptional()
+  @IsBoolean()
+  isPublished?: boolean
+}

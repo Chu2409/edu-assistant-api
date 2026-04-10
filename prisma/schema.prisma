@@ -35,16 +35,14 @@ model User {
   updatedAt      DateTime  @updatedAt @map("updated_at")
 
   // Relations
-  modulesAsTeacher Module[]          @relation("TeacherModules")
+  modulesAsTeacher Module[]                 @relation("TeacherModules")
   enrollments      Enrollment[]
   generatedContent Note[]
   activityAttempts ActivityAttempt[]
   notifications    Notification[]
-  pageFeedbacks    PageFeedback[]
-  promptFeedbacks  Prompt[]
+  loFeedbacks      LearningObjectFeedback[]
   studentQuestions StudentQuestion[]
   questionReplies  QuestionReply[]
-  pageViews        PageView[]
   sessions         Session[]
 
   @@index([microsoftId])
@@ -70,7 +68,7 @@ model Module {
 
   // Relations
   teacher         User             @relation("TeacherModules", fields: [teacherId], references: [id], onDelete: Cascade)
-  pages           Page[]
+  learningObjects LearningObject[]
   enrollments     Enrollment[]
   aiConfiguration AiConfiguration?
   moduleMetrics   ModuleMetrics?
@@ -148,10 +146,26 @@ model Enrollment {
 }
 
 // ============================================
-// PAGES
+// LEARNING OBJECT TYPES
 // ============================================
 
-model Page {
+model LearningObjectType {
+  id          Int      @id @default(autoincrement())
+  name        String   @unique
+  description String?  @db.Text
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  learningObjects LearningObject[]
+
+  @@map("lo_types")
+}
+
+// ============================================
+// LEARNING OBJECTS
+// ============================================
+
+model LearningObject {
   id                Int                          @id @default(autoincrement())
   moduleId          Int                          @map("module_id")
   title             String
@@ -166,24 +180,26 @@ model Page {
   createdAt         DateTime                     @default(now()) @map("created_at")
   updatedAt         DateTime                     @updatedAt @map("updated_at")
 
-  module           Module            @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+  typeId Int                @map("type_id")
+  type   LearningObjectType @relation(fields: [typeId], references: [id])
+  module Module             @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+
   activities       Activity[]
-  relatedPagesFrom PageRelation[]    @relation("OriginPage")
-  relatedPagesTo   PageRelation[]    @relation("RelatedPage")
-  conceptMentions  PageConcept[]
+  relatedLosFrom   LearningObjectRelation[] @relation("OriginLo")
+  relatedLosTo     LearningObjectRelation[] @relation("RelatedLo")
+  conceptMentions  LearningObjectConcept[]
   notes            Note[]
   podcasts         Podcast[]
   mediaResources   MediaResource[]
-  pageFeedbacks    PageFeedback[]
-  promptFeedbacks  Prompt[]
+  loFeedbacks      LearningObjectFeedback[]
   studentQuestions StudentQuestion[]
-  pageViews        PageView[]
   sessions         Session[]
   blocks           Block[]
 
   @@unique([moduleId, orderIndex])
   @@index([moduleId])
-  @@map("pages")
+  @@index([typeId])
+  @@map("learning_objects")
 }
 
 enum BlockType {
@@ -194,36 +210,36 @@ enum BlockType {
 }
 
 model Block {
-  id            Int       @id @default(autoincrement())
-  pageId        Int       @map("page_id")
-  orderIndex    Int       @map("order_index")
-  type          BlockType @map("type")
-  content       Json      @map("content")
-  tipTapContent Json?     @map("tip_tap_content")
-  createdAt     DateTime  @default(now()) @map("created_at")
-  updatedAt     DateTime  @updatedAt @map("updated_at")
+  id               Int       @id @default(autoincrement())
+  learningObjectId Int       @map("learning_object_id")
+  orderIndex       Int       @map("order_index")
+  type             BlockType @map("type")
+  content          Json      @map("content")
+  tipTapContent    Json?     @map("tip_tap_content")
+  createdAt        DateTime  @default(now()) @map("created_at")
+  updatedAt        DateTime  @updatedAt @map("updated_at")
 
-  page Page @relation(fields: [pageId], references: [id], onDelete: Cascade)
+  learningObject LearningObject @relation(fields: [learningObjectId], references: [id], onDelete: Cascade)
 
-  @@unique([pageId, orderIndex])
+  @@unique([learningObjectId, orderIndex])
   @@map("blocks")
 }
 
 model Session {
-  id        Int      @id @default(autoincrement())
-  title     String   @map("title")
-  startedAt DateTime @default(now()) @map("started_at")
-  userId    Int      @map("user_id")
-  pageId    Int      @map("page_id")
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
+  id               Int      @id @default(autoincrement())
+  title            String   @map("title")
+  startedAt        DateTime @default(now()) @map("started_at")
+  userId           Int      @map("user_id")
+  learningObjectId Int      @map("learning_object_id")
+  createdAt        DateTime @default(now()) @map("created_at")
+  updatedAt        DateTime @updatedAt @map("updated_at")
 
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade, map: "sessions_user_id_fkey")
-  page Page @relation(fields: [pageId], references: [id], onDelete: Cascade, map: "sessions_page_id_fkey")
+  user           User           @relation(fields: [userId], references: [id], onDelete: Cascade, map: "sessions_user_id_fkey")
+  learningObject LearningObject @relation(fields: [learningObjectId], references: [id], onDelete: Cascade, map: "sessions_learning_object_id_fkey")
 
   messages Message[]
 
-  @@unique([userId, pageId])
+  @@unique([userId, learningObjectId])
   @@map("sessions")
 }
 
@@ -250,33 +266,7 @@ model Message {
 }
 
 // ============================================
-// PAGE VIEWS (Control de visualización de estudiantes)
-// ============================================
-
-model PageView {
-  id            Int      @id @default(autoincrement())
-  userId        Int      @map("user_id")
-  pageId        Int      @map("page_id")
-  firstViewedAt DateTime @default(now()) @map("first_viewed_at")
-  lastViewedAt  DateTime @updatedAt @map("last_viewed_at")
-  viewCount     Int      @default(1) @map("view_count") // número de veces que ha visto la página
-  timeSpent     Int      @default(0) @map("time_spent") // tiempo total en segundos
-  isCompleted   Boolean  @default(false) @map("is_completed") // si completó la visualización
-  progress      Float    @default(0) // porcentaje de progreso (0-100)
-
-  // Relations
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-  page Page @relation(fields: [pageId], references: [id], onDelete: Cascade)
-
-  @@unique([userId, pageId])
-  @@index([userId])
-  @@index([pageId])
-  @@index([isCompleted])
-  @@map("page_views")
-}
-
-// ============================================
-// PAGE RELATIONS (RF-6: contenidos relacionados)
+// LEARNING OBJECT RELATIONS (RF-6: contenidos relacionados)
 // ============================================
 
 enum RelationType {
@@ -287,10 +277,10 @@ enum RelationType {
   APPLIED_EXAMPLE // ejemplo aplicado
 }
 
-model PageRelation {
+model LearningObjectRelation {
   id              Int          @id @default(autoincrement())
-  originPageId    Int          @map("origin_page_id")
-  relatedPageId   Int          @map("related_page_id")
+  originLoId      Int          @map("origin_lo_id")
+  relatedLoId     Int          @map("related_lo_id")
   similarityScore Float        @map("similarity_score")
   relationType    RelationType @map("relation_type")
   mentionText     String       @map("mention_text") // Texto exacto enlazado: "respiración celular"
@@ -300,32 +290,32 @@ model PageRelation {
   calculatedAt    DateTime     @default(now()) @map("calculated_at")
   createdAt       DateTime     @default(now()) @map("created_at")
 
-  originPage  Page @relation("OriginPage", fields: [originPageId], references: [id], onDelete: Cascade)
-  relatedPage Page @relation("RelatedPage", fields: [relatedPageId], references: [id], onDelete: Cascade)
+  originLo  LearningObject @relation("OriginLo", fields: [originLoId], references: [id], onDelete: Cascade)
+  relatedLo LearningObject @relation("RelatedLo", fields: [relatedLoId], references: [id], onDelete: Cascade)
 
-  @@unique([originPageId, relatedPageId])
-  @@index([originPageId])
-  @@index([relatedPageId])
+  @@unique([originLoId, relatedLoId])
+  @@index([originLoId])
+  @@index([relatedLoId])
   @@index([isEmbedded]) // NEW: filtrar las que faltan incrustar
-  @@map("page_relations")
+  @@map("lo_relations")
 }
 
 // ============================================
 // MODULE CONCEPTS (RF-7)
 // ============================================
-model PageConcept {
-  id         Int      @id @default(autoincrement())
-  pageId     Int      @map("page_id")
-  term       String
-  definition String   @db.Text
-  createdAt  DateTime @default(now()) @map("created_at")
-  updatedAt  DateTime @updatedAt @map("updated_at")
+model LearningObjectConcept {
+  id               Int      @id @default(autoincrement())
+  learningObjectId Int      @map("learning_object_id")
+  term             String
+  definition       String   @db.Text
+  createdAt        DateTime @default(now()) @map("created_at")
+  updatedAt        DateTime @updatedAt @map("updated_at")
 
-  page Page @relation(fields: [pageId], references: [id], onDelete: Cascade)
+  learningObject LearningObject @relation(fields: [learningObjectId], references: [id], onDelete: Cascade)
 
-  @@unique([pageId, term])
-  @@index([pageId])
-  @@map("page_concepts")
+  @@unique([learningObjectId, term])
+  @@index([learningObjectId])
+  @@map("lo_concepts")
 }
 
 // ============================================
@@ -341,7 +331,7 @@ enum ActivityType {
 
 model Activity {
   id                  Int          @id @default(autoincrement())
-  pageId              Int          @map("page_id")
+  learningObjectId    Int          @map("learning_object_id")
   type                ActivityType
   question            String       @db.Text
   options             Json? // para multiple choice, matching, etc.
@@ -355,12 +345,12 @@ model Activity {
   updatedAt           DateTime     @updatedAt @map("updated_at")
 
   // Relations
-  page                Page              @relation(fields: [pageId], references: [id], onDelete: Cascade)
+  learningObject      LearningObject    @relation(fields: [learningObjectId], references: [id], onDelete: Cascade)
   generatedFrom       Activity?         @relation("GeneratedActivities", fields: [generatedFromId], references: [id], onDelete: SetNull)
   generatedActivities Activity[]        @relation("GeneratedActivities")
   attempts            ActivityAttempt[]
 
-  @@index([pageId])
+  @@index([learningObjectId])
   @@index([isApprovedByTeacher])
   @@index([usedAsExample])
   @@map("activities")
@@ -389,42 +379,22 @@ model ActivityAttempt {
   @@map("activity_attempts")
 }
 
-// ============================================
-// GENERATED CONTENT (RF-4, RF-5)
-// ============================================
-model Prompt {
-  id        Int      @id @default(autoincrement())
-  pageId    Int?     @map("page_id")
-  userId    Int      @map("user_id") // quien solicitó la generación
-  prompt    String   @db.Text
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
-
-  // Relations
-  page Page? @relation(fields: [pageId], references: [id], onDelete: Cascade)
-  user User  @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@index([pageId])
-  @@index([userId])
-  @@map("prompts")
-}
-
-model PageFeedback {
-  id     Int  @id @default(autoincrement())
-  pageId Int? @map("page_id")
-  userId Int  @map("user_id") // quien solicitó la generación
+model LearningObjectFeedback {
+  id               Int  @id @default(autoincrement())
+  learningObjectId Int? @map("learning_object_id")
+  userId           Int  @map("user_id") // quien solicitó la generación
 
   feedback  String   @db.Text
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
   // Relations
-  page Page? @relation(fields: [pageId], references: [id], onDelete: Cascade)
-  user User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  learningObject LearningObject? @relation(fields: [learningObjectId], references: [id], onDelete: Cascade)
+  user           User            @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  @@index([pageId])
+  @@index([learningObjectId])
   @@index([userId])
-  @@map("page_feedback")
+  @@map("lo_feedbacks")
 }
 
 enum ContentType {
@@ -438,17 +408,17 @@ enum ContentType {
 }
 
 model Note {
-  id        Int      @id @default(autoincrement())
-  pageId    Int?     @map("page_id")
-  userId    Int      @map("user_id") // quien solicitó la generación
-  content   String   @db.Text
-  createdAt DateTime @default(now()) @map("created_at")
+  id               Int      @id @default(autoincrement())
+  learningObjectId Int?     @map("learning_object_id")
+  userId           Int      @map("user_id") // quien solicitó la generación
+  content          String   @db.Text
+  createdAt        DateTime @default(now()) @map("created_at")
 
   // Relations
-  page Page? @relation(fields: [pageId], references: [id], onDelete: Cascade)
-  user User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  learningObject LearningObject? @relation(fields: [learningObjectId], references: [id], onDelete: Cascade)
+  user           User            @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  @@index([pageId])
+  @@index([learningObjectId])
   @@index([userId])
   @@map("notes")
 }
@@ -458,22 +428,22 @@ model Note {
 // ============================================
 
 model StudentQuestion {
-  id        Int      @id @default(autoincrement())
-  userId    Int      @map("user_id")
-  pageId    Int      @map("page_id")
-  question  String   @map("question") @db.Text
-  isPublic  Boolean  @default(true) @map("is_public") // visible en foro
-  upvotes   Int      @default(0) // para priorizar en foro
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
+  id               Int      @id @default(autoincrement())
+  userId           Int      @map("user_id")
+  learningObjectId Int      @map("learning_object_id")
+  question         String   @map("question") @db.Text
+  isPublic         Boolean  @default(true) @map("is_public") // visible en foro
+  upvotes          Int      @default(0) // para priorizar en foro
+  createdAt        DateTime @default(now()) @map("created_at")
+  updatedAt        DateTime @updatedAt @map("updated_at")
 
   // Relations
-  user    User            @relation(fields: [userId], references: [id], onDelete: Cascade)
-  page    Page            @relation(fields: [pageId], references: [id], onDelete: Cascade)
-  replies QuestionReply[]
+  user           User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  learningObject LearningObject  @relation(fields: [learningObjectId], references: [id], onDelete: Cascade)
+  replies        QuestionReply[]
 
   @@index([userId])
-  @@index([pageId])
+  @@index([learningObjectId])
   @@index([isPublic])
   @@map("student_questions")
 }
@@ -535,21 +505,21 @@ model Notification {
 // ============================================
 
 model Podcast {
-  id            Int      @id @default(autoincrement())
-  pageId        Int?     @map("page_id")
-  title         String
-  description   String?  @db.Text
-  audioUrl      String   @map("audio_url") // URL externa (S3, Cloudinary, etc.)
-  duration      Int? // duración en segundos
-  scriptContent String?  @map("script_content") @db.Text // guión generado
-  isPublished   Boolean  @default(false) @map("is_published")
-  createdAt     DateTime @default(now()) @map("created_at")
-  updatedAt     DateTime @updatedAt @map("updated_at")
+  id               Int      @id @default(autoincrement())
+  learningObjectId Int?     @map("learning_object_id")
+  title            String
+  description      String?  @db.Text
+  audioUrl         String   @map("audio_url") // URL externa (S3, Cloudinary, etc.)
+  duration         Int? // duración en segundos
+  scriptContent    String?  @map("script_content") @db.Text // guión generado
+  isPublished      Boolean  @default(false) @map("is_published")
+  createdAt        DateTime @default(now()) @map("created_at")
+  updatedAt        DateTime @updatedAt @map("updated_at")
 
   // Relations
-  page Page? @relation(fields: [pageId], references: [id], onDelete: Cascade)
+  learningObject LearningObject? @relation(fields: [learningObjectId], references: [id], onDelete: Cascade)
 
-  @@index([pageId])
+  @@index([learningObjectId])
   @@map("podcasts")
 }
 
@@ -566,20 +536,20 @@ enum MediaType {
 }
 
 model MediaResource {
-  id           Int       @id @default(autoincrement())
-  pageId       Int?      @map("page_id")
-  type         MediaType
-  title        String?
-  url          String // URL externa
-  thumbnailUrl String?   @map("thumbnail_url")
-  fileSize     Int?      @map("file_size") // bytes
-  mimeType     String?   @map("mime_type")
-  createdAt    DateTime  @default(now()) @map("created_at")
+  id               Int       @id @default(autoincrement())
+  learningObjectId Int?      @map("learning_object_id")
+  type             MediaType
+  title            String?
+  url              String // URL externa
+  thumbnailUrl     String?   @map("thumbnail_url")
+  fileSize         Int?      @map("file_size") // bytes
+  mimeType         String?   @map("mime_type")
+  createdAt        DateTime  @default(now()) @map("created_at")
 
   // Relations
-  page Page? @relation(fields: [pageId], references: [id], onDelete: Cascade)
+  learningObject LearningObject? @relation(fields: [learningObjectId], references: [id], onDelete: Cascade)
 
-  @@index([pageId])
+  @@index([learningObjectId])
   @@index([type])
   @@map("media_resources")
 }
@@ -594,7 +564,7 @@ model ModuleMetrics {
   totalViews            Int      @default(0) @map("total_views")
   totalStudents         Int      @default(0) @map("total_students")
   averageCompletionRate Float    @default(0) @map("average_completion_rate")
-  mostViewedPageId      Int?     @map("most_viewed_page_id")
+  mostViewedLoId        Int?     @map("most_viewed_lo_id")
   lastCalculatedAt      DateTime @default(now()) @map("last_calculated_at")
 
   // Relations
@@ -609,7 +579,7 @@ model ModuleMetrics {
 
 model SystemSetting {
   key         String   @id // Ej: "AI_MODELS", "TEACHER_EMAILS"
-  value       Json     // Valor en formato JSON (soporta arrays, objetos, strings)
+  value       Json // Valor en formato JSON (soporta arrays, objetos, strings)
   description String?  @db.Text // (Opcional) Descripción interna
   updatedAt   DateTime @updatedAt @map("updated_at")
 

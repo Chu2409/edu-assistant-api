@@ -38,10 +38,15 @@ export type AiConfiguration = Prisma.AiConfigurationModel
  */
 export type Enrollment = Prisma.EnrollmentModel
 /**
- * Model Page
+ * Model LearningObjectType
  * 
  */
-export type Page = Prisma.PageModel
+export type LearningObjectType = Prisma.LearningObjectTypeModel
+/**
+ * Model LearningObject
+ * 
+ */
+export type LearningObject = Prisma.LearningObjectModel
 /**
  * Model Block
  * 
@@ -58,20 +63,15 @@ export type Session = Prisma.SessionModel
  */
 export type Message = Prisma.MessageModel
 /**
- * Model PageView
+ * Model LearningObjectRelation
  * 
  */
-export type PageView = Prisma.PageViewModel
+export type LearningObjectRelation = Prisma.LearningObjectRelationModel
 /**
- * Model PageRelation
+ * Model LearningObjectConcept
  * 
  */
-export type PageRelation = Prisma.PageRelationModel
-/**
- * Model PageConcept
- * 
- */
-export type PageConcept = Prisma.PageConceptModel
+export type LearningObjectConcept = Prisma.LearningObjectConceptModel
 /**
  * Model Activity
  * 
@@ -83,15 +83,10 @@ export type Activity = Prisma.ActivityModel
  */
 export type ActivityAttempt = Prisma.ActivityAttemptModel
 /**
- * Model Prompt
+ * Model LearningObjectFeedback
  * 
  */
-export type Prompt = Prisma.PromptModel
-/**
- * Model PageFeedback
- * 
- */
-export type PageFeedback = Prisma.PageFeedbackModel
+export type LearningObjectFeedback = Prisma.LearningObjectFeedbackModel
 /**
  * Model Note
  * 

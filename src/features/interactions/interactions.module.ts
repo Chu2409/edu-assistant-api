@@ -1,33 +1,33 @@
 import { Module } from '@nestjs/common'
-import { PagesActivitiesController } from './activities/pages-activities.controller'
+import { LoActivitiesController } from './activities/lo-activities.controller'
 import { ActivityAttemptsController } from './activities/activity-attempts.controller'
 import { ActivitiesService } from './activities/activities.service'
-import { PageFeedbacksController } from './page-feedbacks/page-feedbacks.controller'
-import { PageFeedbacksService } from './page-feedbacks/page-feedbacks.service'
+import { LoFeedbacksController } from './lo-feedbacks/lo-feedbacks.controller'
+import { LoFeedbacksService } from './lo-feedbacks/lo-feedbacks.service'
 import { QuestionRepliesController } from './question-replies/question-replies.controller'
 import { QuestionRepliesService } from './question-replies/question-replies.service'
 import { StudentQuestionsController } from './student-questions/student-questions.controller'
 import { StudentQuestionsService } from './student-questions/student-questions.service'
-import { PageNotesController } from './notes/page-notes.controller'
-import { PageNotesService } from './notes/page-notes.service'
-import { PagesModule } from '../pages/pages.module'
+import { LoNotesController } from './notes/lo-notes.controller'
+import { LoNotesService } from './notes/lo-notes.service'
+import { LearningObjectsModule } from '../learning-objects/learning-objects.module'
 
 @Module({
-  imports: [PagesModule],
+  imports: [LearningObjectsModule],
   controllers: [
-    PagesActivitiesController,
+    LoActivitiesController,
     ActivityAttemptsController,
-    PageFeedbacksController,
+    LoFeedbacksController,
     QuestionRepliesController,
     StudentQuestionsController,
-    PageNotesController,
+    LoNotesController,
   ],
   providers: [
     ActivitiesService,
-    PageFeedbacksService,
+    LoFeedbacksService,
     QuestionRepliesService,
     StudentQuestionsService,
-    PageNotesService,
+    LoNotesService,
   ],
   exports: [],
 })

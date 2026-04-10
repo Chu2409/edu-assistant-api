@@ -14,13 +14,14 @@ import { ActivityType } from 'src/core/database/generated/enums'
 
 export class GenerateActivityDto {
   @ApiProperty({
-    description: 'ID de la página a partir de la cual generar la actividad',
+    description:
+      'ID del objeto de aprendizaje a partir de la cual generar la actividad',
     example: 1,
   })
   @Type(() => Number)
   @IsInt()
   @Min(1)
-  pageId: number
+  learningObjectId: number
 
   @ApiProperty({
     enum: ActivityType,

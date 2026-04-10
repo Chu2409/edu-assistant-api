@@ -9,7 +9,7 @@ import { GenerateContentDto } from './dtos/req/generate-content.dto'
 import { RegenerateContentDto } from './dtos/req/regenerate-content.dto'
 import { RegenerateBlockDto } from './dtos/req/regenerate-block.dto'
 import { ExpandContentDto } from './dtos/req/expand-content.dto'
-import { GeneratedPageContent } from './dtos/res/generated-page-content.dto'
+import { GeneratedLoContent } from './dtos/res/generated-lo-content.dto'
 import { RegeneratedBlockDto } from './dtos/res/regenerated-block.dto'
 import { ExpandedContentDto } from './dtos/res/expanded-content.dto'
 import type { AiContent } from '../shared/interfaces/ai-generated-content.interface'
@@ -32,16 +32,18 @@ export class PageContentService {
 
   async generatePageContent(
     data: GenerateContentDto,
-  ): Promise<GeneratedPageContent> {
+  ): Promise<GeneratedLoContent> {
     this.logger.log('Generating page content')
 
-    const page = await this.dbService.page.findUnique({
-      where: { id: data.pageId },
+    const page = await this.dbService.learningObject.findUnique({
+      where: { id: data.learningObjectId },
       include: { module: { include: { aiConfiguration: true } } },
     })
 
     if (!page) {
-      throw new NotFoundException(`Page with id ${data.pageId} not found`)
+      throw new NotFoundException(
+        `Page with id ${data.learningObjectId} not found`,
+      )
     }
 
     const prompt = generatePageContentPrompt({
@@ -58,18 +60,18 @@ export class PageContentService {
       },
     })
     const aiResponse =
-      await this.openAiService.getResponse<GeneratedPageContent>(prompt)
+      await this.openAiService.getResponse<GeneratedLoContent>(prompt)
 
     return validateAiResponse(aiResponse.content, generatedPageContentSchema)
   }
 
   async regeneratePageContent(
     data: RegenerateContentDto,
-  ): Promise<GeneratedPageContent> {
+  ): Promise<GeneratedLoContent> {
     this.logger.log('Regenerating page content')
 
-    const page = await this.dbService.page.findUnique({
-      where: { id: data.pageId },
+    const page = await this.dbService.learningObject.findUnique({
+      where: { id: data.learningObjectId },
       include: {
         blocks: {
           orderBy: {
@@ -81,7 +83,9 @@ export class PageContentService {
     })
 
     if (!page) {
-      throw new NotFoundException(`Page with id ${data.pageId} not found`)
+      throw new NotFoundException(
+        `Page with id ${data.learningObjectId} not found`,
+      )
     }
 
     const blocks = page.blocks.map((b) => ({
@@ -105,7 +109,7 @@ export class PageContentService {
     })
 
     const aiResponse =
-      await this.openAiService.getResponse<GeneratedPageContent>(prompt)
+      await this.openAiService.getResponse<GeneratedLoContent>(prompt)
 
     return validateAiResponse(aiResponse.content, generatedPageContentSchema)
   }
@@ -115,8 +119,8 @@ export class PageContentService {
   ): Promise<RegeneratedBlockDto> {
     this.logger.log('Regenerating block')
 
-    const page = await this.dbService.page.findUnique({
-      where: { id: data.pageId },
+    const page = await this.dbService.learningObject.findUnique({
+      where: { id: data.learningObjectId },
       include: {
         blocks: { orderBy: { orderIndex: 'asc' } },
         module: { include: { aiConfiguration: true } },
@@ -124,7 +128,9 @@ export class PageContentService {
     })
 
     if (!page) {
-      throw new NotFoundException(`Page with id ${data.pageId} not found`)
+      throw new NotFoundException(
+        `Page with id ${data.learningObjectId} not found`,
+      )
     }
 
     const blockIndex = page.blocks.findIndex(
@@ -133,7 +139,7 @@ export class PageContentService {
 
     if (blockIndex === -1) {
       throw new NotFoundException(
-        `Block with orderIndex ${data.orderIndex} not found in page ${data.pageId}`,
+        `Block with orderIndex ${data.orderIndex} not found in page ${data.learningObjectId}`,
       )
     }
 
@@ -191,8 +197,8 @@ export class PageContentService {
   async expandContent(data: ExpandContentDto): Promise<ExpandedContentDto> {
     this.logger.log('Expanding content')
 
-    const page = await this.dbService.page.findUnique({
-      where: { id: data.pageId },
+    const page = await this.dbService.learningObject.findUnique({
+      where: { id: data.learningObjectId },
       include: {
         blocks: { orderBy: { orderIndex: 'asc' } },
         module: { include: { aiConfiguration: true } },
@@ -200,7 +206,9 @@ export class PageContentService {
     })
 
     if (!page) {
-      throw new NotFoundException(`Page with id ${data.pageId} not found`)
+      throw new NotFoundException(
+        `Page with id ${data.learningObjectId} not found`,
+      )
     }
 
     let targetBlockIndex: number | undefined = undefined

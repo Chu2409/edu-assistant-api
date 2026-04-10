@@ -8,7 +8,7 @@ export const QUEUE_NAMES = {
   EMBEDDINGS: {
     NAME: 'embeddings',
     JOBS: {
-      PROCESS_PAGE: 'process-page-embedding',
+      PROCESS_LO: 'process-lo-embedding',
     },
   },
 } as const satisfies Record<

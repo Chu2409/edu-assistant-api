@@ -7,7 +7,7 @@ export class ActivitiesMapper {
   static mapToDto(activity: Activity): ActivityDto {
     return {
       id: activity.id,
-      pageId: activity.pageId,
+      learningObjectId: activity.learningObjectId,
       type: activity.type,
       question: activity.question,
       options: parseJsonField<AiGeneratedActivity>(activity.options),

@@ -5,7 +5,7 @@ import {
 } from '@nestjs/common'
 import { DBService } from 'src/core/database/database.service'
 import { OpenaiService } from 'src/providers/ai/services/openai.service'
-import { PagesHelperService } from 'src/features/pages/main/pages-helper.service'
+import { LoHelperService } from 'src/features/learning-objects/main/lo-helper.service'
 import { MessageRole, type User } from 'src/core/database/generated/client'
 import { CreateOrGetSessionDto } from './dtos/req/create-or-get-session.dto'
 import { SendMessageDto } from './dtos/req/send-message.dto'
@@ -16,7 +16,7 @@ import { ChatMessageCreatedDto } from './dtos/res/chat-message-created.dto'
 import { parseJsonField } from 'src/providers/ai/helpers/utils'
 import { chatSessionPrompt } from './prompts/chat-session.prompt'
 import { ChatMapper } from './mappers/chat.mapper'
-import { compileBlocksToText } from 'src/features/pages/blocks/helpers/compile-blocks'
+import { compileBlocksToText } from 'src/features/learning-objects/blocks/helpers/compile-blocks'
 import { BaseParamsReqDto } from 'src/shared/dtos/req/base-params.dto'
 
 type StoredAiMetadata = {
@@ -28,18 +28,23 @@ export class ChatService {
   constructor(
     private readonly dbService: DBService,
     private readonly openAiService: OpenaiService,
-    private readonly pagesHelperService: PagesHelperService,
+    private readonly loHelperService: LoHelperService,
   ) {}
 
   async createOrGetSession(
-    pageId: number,
+    learningObjectId: number,
     dto: CreateOrGetSessionDto,
     user: User,
   ): Promise<SessionDto> {
-    const page = await this.pagesHelperService.getPageForRead(pageId, user)
+    const lo = await this.loHelperService.getLoForRead(learningObjectId, user)
 
     const existing = await this.dbService.session.findUnique({
-      where: { userId_pageId: { userId: user.id, pageId } },
+      where: {
+        userId_learningObjectId: {
+          userId: user.id,
+          learningObjectId,
+        },
+      },
     })
     if (existing) {
       return ChatMapper.toSessionDto(existing)
@@ -47,9 +52,9 @@ export class ChatService {
 
     const created = await this.dbService.session.create({
       data: {
-        pageId,
+        learningObjectId,
         userId: user.id,
-        title: dto.title ?? `Chat: ${page.title}`,
+        title: dto.title ?? `Chat: ${lo.title}`,
       },
     })
 
@@ -64,7 +69,9 @@ export class ChatService {
     const session = await this.dbService.session.findUnique({
       where: { id: sessionId },
       include: {
-        page: { include: { module: { include: { enrollments: true } } } },
+        learningObject: {
+          include: { module: { include: { enrollments: true } } },
+        },
       },
     })
 
@@ -76,8 +83,8 @@ export class ChatService {
       throw new ForbiddenException('No tienes permisos para ver esta sesión')
     }
 
-    // valida acceso a la página (por si cambió publicación/matrícula)
-    await this.pagesHelperService.getPageForRead(session.pageId, user)
+    // valida acceso al objeto de aprendizaje (por si cambió publicación/matrícula)
+    await this.loHelperService.getLoForRead(session.learningObjectId, user)
 
     const skip = (query.page - 1) * query.limit
 
@@ -122,7 +129,7 @@ export class ChatService {
     const session = await this.dbService.session.findUnique({
       where: { id: sessionId },
       include: {
-        page: {
+        learningObject: {
           include: {
             blocks: true,
             module: { include: { enrollments: true, aiConfiguration: true } },
@@ -143,8 +150,8 @@ export class ChatService {
       throw new ForbiddenException('No tienes permisos para usar esta sesión')
     }
 
-    const page = await this.pagesHelperService.getPageForRead(
-      session.pageId,
+    const lo = await this.loHelperService.getLoForRead(
+      session.learningObjectId,
       user,
     )
 
@@ -152,14 +159,14 @@ export class ChatService {
 
     const isFirstMessage = !previousResponseId
     const lessonContext = isFirstMessage
-      ? compileBlocksToText(session.page.blocks)
+      ? compileBlocksToText(session.learningObject.blocks)
       : undefined
 
-    const language = page.module.aiConfiguration?.language ?? 'es'
+    const language = lo.module.aiConfiguration?.language ?? 'es'
 
     const prompt = chatSessionPrompt({
       language,
-      lessonTitle: page.title,
+      lessonTitle: lo.title,
       lessonContext,
       userMessage: dto.message,
       isFirstMessage,

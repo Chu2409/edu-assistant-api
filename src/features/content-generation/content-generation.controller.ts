@@ -17,7 +17,7 @@ import { RegenerateContentDto } from './page-content/dtos/req/regenerate-content
 import { RegenerateBlockDto } from './page-content/dtos/req/regenerate-block.dto'
 import { ExpandContentDto } from './page-content/dtos/req/expand-content.dto'
 import { GenerateImageDto } from './page-content/dtos/req/generate-image.dto'
-import { GeneratedPageContent } from './page-content/dtos/res/generated-page-content.dto'
+import { GeneratedLoContent } from './page-content/dtos/res/generated-lo-content.dto'
 import { RegeneratedBlockDto } from './page-content/dtos/res/regenerated-block.dto'
 import { ExpandedContentDto } from './page-content/dtos/res/expanded-content.dto'
 import { GeneratedImageDto } from './page-content/dtos/res/generated-image.dto'
@@ -61,7 +61,7 @@ export class ContentGenerationController {
     description:
       'Genera contenido educativo usando IA para un módulo. Solo disponible para profesores.',
   })
-  @ApiStandardResponse(GeneratedPageContent)
+  @ApiStandardResponse(GeneratedLoContent)
   @ApiResponse({ status: 401, description: 'No autorizado' })
   @ApiResponse({
     status: 403,
@@ -80,9 +80,9 @@ export class ContentGenerationController {
   @ApiOperation({
     summary: 'Regenerar/refinar contenido con IA',
     description:
-      'Refina el contenido actual de la página según una instrucción. Devuelve bloques sugeridos (no persiste). Solo disponible para profesores.',
+      'Refina el contenido actual del objeto de aprendizaje según una instrucción. Devuelve bloques sugeridos (no persiste). Solo disponible para profesores.',
   })
-  @ApiStandardResponse(GeneratedPageContent, HttpStatus.CREATED)
+  @ApiStandardResponse(GeneratedLoContent, HttpStatus.CREATED)
   @ApiResponse({ status: 401, description: 'No autorizado' })
   @ApiResponse({
     status: 403,
@@ -96,7 +96,7 @@ export class ContentGenerationController {
   @ApiOperation({
     summary: 'Regenerar bloque con IA',
     description:
-      'Modifica un bloque específico de la página según las instrucciones del profesor. Devuelve el bloque sugerido (no persiste). Solo disponible para profesores.',
+      'Modifica un bloque específico del objeto de aprendizaje según las instrucciones del profesor. Devuelve el bloque sugerido (no persiste). Solo disponible para profesores.',
   })
   @ApiStandardResponse(RegeneratedBlockDto, HttpStatus.CREATED)
   @ApiResponse({ status: 401, description: 'No autorizado' })
@@ -104,7 +104,10 @@ export class ContentGenerationController {
     status: 403,
     description: 'Solo profesores pueden regenerar bloques',
   })
-  @ApiResponse({ status: 404, description: 'Página no encontrada' })
+  @ApiResponse({
+    status: 404,
+    description: 'Objeto de aprendizaje no encontrado',
+  })
   @ApiResponse({
     status: 400,
     description: 'Datos inválidos o bloque no encontrado por su orden',
@@ -125,7 +128,10 @@ export class ContentGenerationController {
     status: 403,
     description: 'Solo profesores pueden expandir contenido',
   })
-  @ApiResponse({ status: 404, description: 'Página no encontrada' })
+  @ApiResponse({
+    status: 404,
+    description: 'Objeto de aprendizaje no encontrado',
+  })
   @ApiResponse({
     status: 400,
     description: 'Datos inválidos o bloque no encontrado por su orden',
@@ -136,8 +142,8 @@ export class ContentGenerationController {
 
   @Post('extract-concepts')
   @ApiOperation({
-    summary: 'Extraer conceptos de la página',
-    description: 'Extrae conceptos de la página usando IA',
+    summary: 'Extraer conceptos del objeto de aprendizaje',
+    description: 'Extrae conceptos del objeto de aprendizaje usando IA',
   })
   @ApiStandardResponse(PageConceptsExtractedDto, HttpStatus.CREATED)
   @ApiResponse({ status: 401, description: 'No autorizado' })
@@ -146,7 +152,7 @@ export class ContentGenerationController {
     description: 'Solo profesores pueden extraer conceptos',
   })
   extractConcepts(@Body() dto: ExtractConceptsDto) {
-    return this.conceptsService.extractPageConcepts(dto)
+    return this.conceptsService.extractLoConcepts(dto)
   }
 
   @Post('generate-image')
@@ -173,7 +179,7 @@ export class ContentGenerationController {
   @ApiOperation({
     summary: 'Generar definición de concepto con IA',
     description:
-      'Genera una definición educativa para un término seleccionado, usando el contexto de la página donde aparece.',
+      'Genera una definición educativa para un término seleccionado, usando el contexto del objeto de aprendizaje donde aparece.',
   })
   @ApiStandardResponse(GeneratedConceptDto, HttpStatus.CREATED)
   @ApiResponse({ status: 401, description: 'No autorizado' })
@@ -188,9 +194,9 @@ export class ContentGenerationController {
 
   @Post('generate-relations')
   @ApiOperation({
-    summary: 'Generar relaciones entre páginas con IA',
+    summary: 'Generar relaciones entre objetos de aprendizaje con IA',
     description:
-      'Identifica frases en la página actual que enlazan naturalmente a otras páginas del módulo. Primero procesa el embedding de la página y busca similares por similitud semántica.',
+      'Identifica frases en el objeto de aprendizaje actual que enlazan naturalmente a otros objetos de aprendizaje del módulo. Primero procesa el embedding del objeto de aprendizaje y busca similares por similitud semántica.',
   })
   @ApiStandardResponse(GeneratedRelationsDto, HttpStatus.CREATED)
   @ApiResponse({ status: 401, description: 'No autorizado' })
@@ -198,10 +204,13 @@ export class ContentGenerationController {
     status: 403,
     description: 'Solo profesores pueden generar relaciones',
   })
-  @ApiResponse({ status: 404, description: 'Página no encontrada' })
+  @ApiResponse({
+    status: 404,
+    description: 'Objeto de aprendizaje no encontrado',
+  })
   @ApiResponse({ status: 400, description: 'Datos inválidos o sin bloques' })
   generateRelations(@Body() dto: GenerateRelationsDto) {
-    return this.relationsService.generatePageRelations(dto)
+    return this.relationsService.generateLoRelations(dto)
   }
 
   @Post('generate-activity')

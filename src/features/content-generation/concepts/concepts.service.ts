@@ -6,7 +6,7 @@ import {
 } from '@nestjs/common'
 import { DBService } from 'src/core/database/database.service'
 import { OpenaiService } from 'src/providers/ai/services/openai.service'
-import { extractPageConceptsPrompt } from './prompts/extract-page-concepts.prompt'
+import { extractLoConceptsPrompt } from './prompts/extract-lo-concepts.prompt'
 import { generateConceptDefinitionPrompt } from './prompts/generate-concept.prompt'
 import { ExtractConceptsDto } from './dtos/req/extract-concepts.dto'
 import { GenerateConceptDto } from './dtos/req/generate-concept.dto'
@@ -26,31 +26,33 @@ export class ConceptsService {
     private readonly openAiService: OpenaiService,
   ) {}
 
-  async extractPageConcepts(
+  async extractLoConcepts(
     data: ExtractConceptsDto,
   ): Promise<PageConceptsExtractedDto> {
-    this.logger.log('Extracting page concepts')
-    const page = await this.dbService.page.findUnique({
-      where: { id: data.pageId },
+    this.logger.log('Extracting learning object concepts')
+    const lo = await this.dbService.learningObject.findUnique({
+      where: { id: data.learningObjectId },
       include: { blocks: true, module: { include: { aiConfiguration: true } } },
     })
 
-    if (!page) {
-      throw new NotFoundException(`Page with id ${data.pageId} not found`)
+    if (!lo) {
+      throw new NotFoundException(
+        `Learning Object with id ${data.learningObjectId} not found`,
+      )
     }
 
-    if (page.blocks.length === 0) {
-      throw new BadRequestException('Page has no blocks')
+    if (lo.blocks.length === 0) {
+      throw new BadRequestException('Learning Object has no blocks')
     }
 
-    const prompt = extractPageConceptsPrompt({
-      blocks: page.blocks
+    const prompt = extractLoConceptsPrompt({
+      blocks: lo.blocks
         .filter((b) => b.type === BlockType.TEXT)
         .map((b) => ({
           markdown: parseJsonField<{ markdown: string }>(b.content).markdown,
         })),
       config: {
-        language: page.module.aiConfiguration!.language,
+        language: lo.module.aiConfiguration!.language,
       },
     })
 
@@ -70,7 +72,7 @@ export class ConceptsService {
 
     const block = await this.dbService.block.findUnique({
       where: { id: data.blockId },
-      include: { page: true },
+      include: { learningObject: true },
     })
 
     if (!block) {
@@ -82,7 +84,7 @@ export class ConceptsService {
       context: {
         surroundingText: parseJsonField<{ markdown: string }>(block.content)
           .markdown,
-        pageTitle: block.page.title,
+        pageTitle: block.learningObject.title,
       },
       config: {
         language: data.language ?? 'es',

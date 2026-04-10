@@ -24,7 +24,7 @@ import { ChatMessageCreatedDto } from './dtos/res/chat-message-created.dto'
 import { ChatRateLimitGuard } from './guards/chat-rate-limit.guard'
 import { BaseParamsReqDto } from 'src/shared/dtos/req/base-params.dto'
 
-@ApiTags('Page Chat')
+@ApiTags('Learning Object Chat')
 @Controller('sessions')
 export class SessionMessagesController {
   constructor(private readonly chatService: ChatService) {}
