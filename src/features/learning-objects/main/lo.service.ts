@@ -245,13 +245,41 @@ export class LoService {
   }
 
   async findOne(id: number, user: User): Promise<FullLoDto> {
+    let lo
+    let isStudentView = false
+
     if (user.role === Role.STUDENT) {
-      const lo = await this.findOneToStudent(id, user)
-      return LoMapper.mapToFullLoDto(lo)
+      lo = await this.findOneToStudent(id, user)
+      isStudentView = true
+    } else {
+      lo = await this.findOneToTeacher(id, user)
     }
 
-    const lo = await this.findOneToTeacher(id, user)
-    return LoMapper.mapToFullLoDto(lo)
+    const previousLo = await this.dbService.learningObject.findFirst({
+      where: {
+        moduleId: lo.moduleId,
+        orderIndex: { lt: lo.orderIndex },
+        ...(isStudentView ? { isPublished: true } : {}),
+      },
+      orderBy: { orderIndex: 'desc' },
+      select: { id: true },
+    })
+
+    const nextLo = await this.dbService.learningObject.findFirst({
+      where: {
+        moduleId: lo.moduleId,
+        orderIndex: { gt: lo.orderIndex },
+        ...(isStudentView ? { isPublished: true } : {}),
+      },
+      orderBy: { orderIndex: 'asc' },
+      select: { id: true },
+    })
+
+    return LoMapper.mapToFullLoDto(
+      lo,
+      previousLo?.id ?? null,
+      nextLo?.id ?? null,
+    )
   }
 
   async update(

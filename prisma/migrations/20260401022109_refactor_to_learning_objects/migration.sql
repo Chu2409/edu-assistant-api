@@ -171,6 +171,7 @@ CREATE TABLE "lo_types" (
 );
 
 INSERT INTO "lo_types" ("name", "updated_at") VALUES ('PAGE', NOW());
+INSERT INTO "lo_types" ("name", "updated_at") VALUES ('VIDEO', NOW());
 
 -- 4. Add type_id to learning_objects
 ALTER TABLE "learning_objects" ADD COLUMN "type_id" INTEGER;
