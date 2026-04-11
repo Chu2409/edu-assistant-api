@@ -6,7 +6,6 @@ import { QUEUE_NAMES } from 'src/shared/constants/queues'
 import { TeacherFeedbackController } from './teacher-feedback.controller'
 import { TeacherFeedbackService } from './teacher-feedback.service'
 import { FeedbackDataCollectorService } from './services/feedback-data-collector.service'
-import { TeacherFeedbackWorker } from './workers/teacher-feedback.worker'
 import { FEEDBACK_CRON_INTERVAL_MS } from './constants/thresholds'
 
 @Module({
@@ -17,11 +16,7 @@ import { FEEDBACK_CRON_INTERVAL_MS } from './constants/thresholds'
     }),
   ],
   controllers: [TeacherFeedbackController],
-  providers: [
-    TeacherFeedbackService,
-    FeedbackDataCollectorService,
-    TeacherFeedbackWorker,
-  ],
+  providers: [TeacherFeedbackService, FeedbackDataCollectorService],
   exports: [TeacherFeedbackService],
 })
 export class TeacherFeedbackModule implements OnModuleInit {
