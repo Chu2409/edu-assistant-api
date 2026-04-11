@@ -16,6 +16,8 @@ export class TeacherFeedbackWorker extends WorkerHost {
     switch (job.name) {
       case QUEUE_NAMES.TEACHER_FEEDBACK.JOBS.GENERATE_ALL:
         return this.handleGenerateAll()
+      case QUEUE_NAMES.TEACHER_FEEDBACK.JOBS.GENERATE_MODULE:
+        return this.handleGenerateModule(job.data.moduleId)
       default:
         this.logger.warn(`Unknown job name: ${job.name}`)
     }
@@ -31,6 +33,26 @@ export class TeacherFeedbackWorker extends WorkerHost {
     } catch (error) {
       this.logger.error(
         'Error en la generación automática de feedback pedagógico:',
+        error,
+      )
+      throw error
+    }
+  }
+
+  private async handleGenerateModule(moduleId: number) {
+    this.logger.log(
+      `Iniciando generación de feedback para módulo ${moduleId}...`,
+    )
+
+    try {
+      await this.teacherFeedbackService.generateForModule(moduleId)
+      this.logger.log(
+        `Generación de feedback para módulo ${moduleId} completada`,
+      )
+      return { success: true, moduleId }
+    } catch (error) {
+      this.logger.error(
+        `Error generando feedback para módulo ${moduleId}:`,
         error,
       )
       throw error

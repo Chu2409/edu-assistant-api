@@ -15,6 +15,7 @@ export const QUEUE_NAMES = {
     NAME: 'teacher-feedback',
     JOBS: {
       GENERATE_ALL: 'generate-all-feedbacks',
+      GENERATE_MODULE: 'generate-module-feedback',
     },
   },
 } as const satisfies Record<

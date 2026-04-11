@@ -1,4 +1,5 @@
 import {
+  ConflictException,
   Controller,
   Get,
   Param,
@@ -13,9 +14,12 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger'
+import { InjectQueue } from '@nestjs/bullmq'
+import { Queue } from 'bullmq'
 import { GetUser } from 'src/features/auth/decorators/get-user.decorator'
 import { JwtAuth } from 'src/features/auth/decorators/jwt-auth.decorator'
 import { Role } from 'src/core/database/generated/enums'
+import { QUEUE_NAMES } from 'src/shared/constants/queues'
 import { TeacherFeedbackService } from './teacher-feedback.service'
 import { TeacherFeedbackDto } from './dtos/res/teacher-feedback.dto'
 import { ListTeacherFeedbackDto } from './dtos/req/list-teacher-feedback.dto'
@@ -26,6 +30,8 @@ import { ListTeacherFeedbackDto } from './dtos/req/list-teacher-feedback.dto'
 export class TeacherFeedbackController {
   constructor(
     private readonly teacherFeedbackService: TeacherFeedbackService,
+    @InjectQueue(QUEUE_NAMES.TEACHER_FEEDBACK.NAME)
+    private readonly feedbackQueue: Queue,
   ) {}
 
   @Get()
@@ -59,11 +65,39 @@ export class TeacherFeedbackController {
   @ApiOperation({
     summary: 'Generar feedback pedagógico manualmente para un módulo',
   })
-  @ApiResponse({ status: 201, description: 'Generación iniciada' })
+  @ApiResponse({ status: 202, description: 'Generación iniciada' })
   @ApiForbiddenResponse({ description: 'No eres el profesor de este módulo' })
-  async generate(@Param('moduleId', ParseIntPipe) moduleId: number) {
-    // Validar ownership antes de generar
-    await this.teacherFeedbackService.generateForModule(moduleId)
-    return { message: 'Feedback generado correctamente' }
+  async generate(
+    @Param('moduleId', ParseIntPipe) moduleId: number,
+    @GetUser('id') teacherId: number,
+  ) {
+    // Validar ownership antes de encolar
+    await this.teacherFeedbackService.validateModuleOwnership(
+      moduleId,
+      teacherId,
+    )
+
+    // Encolar con jobId único por módulo para evitar ejecuciones concurrentes
+    const jobId = `generate-module-${moduleId}`
+
+    const existingJob = await this.feedbackQueue.getJob(jobId)
+    if (existingJob) {
+      const state = await existingJob.getState()
+      if (state === 'active' || state === 'waiting' || state === 'delayed') {
+        throw new ConflictException(
+          `Ya existe una generación de feedback en progreso para el módulo ${moduleId}`,
+        )
+      }
+      // Si completó o falló, eliminar para poder encolar uno nuevo
+      await existingJob.remove()
+    }
+
+    await this.feedbackQueue.add(
+      QUEUE_NAMES.TEACHER_FEEDBACK.JOBS.GENERATE_MODULE,
+      { moduleId },
+      { jobId },
+    )
+
+    return { message: 'Generación de feedback iniciada' }
   }
 }

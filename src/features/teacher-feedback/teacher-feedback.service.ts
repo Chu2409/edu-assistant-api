@@ -12,7 +12,10 @@ import { TeacherFeedbackDto } from './dtos/res/teacher-feedback.dto'
 import { ListTeacherFeedbackDto } from './dtos/req/list-teacher-feedback.dto'
 import { loFeedbackPrompt } from './prompts/lo-feedback.prompt'
 import { moduleFeedbackPrompt } from './prompts/module-feedback.prompt'
-import { MIN_STUDENTS_FOR_LO_FEEDBACK } from './constants/thresholds'
+import {
+  MIN_STUDENTS_FOR_LO_FEEDBACK,
+  MIN_INTERACTIONS_FOR_FEEDBACK,
+} from './constants/thresholds'
 import type { AiFeedbackContent } from './interfaces/feedback-data.interface'
 import type { ApiPaginatedRes } from 'src/shared/dtos/res/api-response.dto'
 import { TeacherFeedbackScope } from 'src/core/database/generated/enums'
@@ -82,8 +85,6 @@ export class TeacherFeedbackService {
     return TeacherFeedbackMapper.toDto(feedback)
   }
 
-  // ─── Generación ───────────────────────────────────────────
-
   /**
    * Genera feedbacks para un módulo específico: primero por cada LO y luego uno global.
    */
@@ -130,10 +131,6 @@ export class TeacherFeedbackService {
     }
   }
 
-  /**
-   * Genera feedback para todos los módulos activos.
-   * Usado por el cron job.
-   */
   async generateForAllModules(): Promise<void> {
     const modules = await this.dbService.module.findMany({
       where: { isActive: true },
@@ -158,19 +155,34 @@ export class TeacherFeedbackService {
     this.logger.log('Generación de feedback completada')
   }
 
-  // ─── Helpers internos ─────────────────────────────────────
-
-  /**
-   * Genera feedback para un LO individual.
-   * Retorna el summary si se generó, null si no hubo suficientes datos.
-   */
   private async generateLoFeedback(
     learningObjectId: number,
     language: string,
   ): Promise<string | null> {
+    const lastFeedback = await this.dbService.teacherAiFeedback.findFirst({
+      where: {
+        learningObjectId,
+        scope: TeacherFeedbackScope.LEARNING_OBJECT,
+      },
+      orderBy: { createdAt: 'desc' },
+      select: { createdAt: true },
+    })
+
+    if (lastFeedback) {
+      const hasNew = await this.dataCollector.hasNewDataSince(
+        learningObjectId,
+        lastFeedback.createdAt,
+      )
+      if (!hasNew) {
+        this.logger.log(
+          `LO ${learningObjectId}: sin datos nuevos desde el último feedback (${lastFeedback.createdAt.toISOString()}). Se omite.`,
+        )
+        return null
+      }
+    }
+
     const data = await this.dataCollector.collectLoData(learningObjectId)
 
-    // Verificar umbral mínimo
     if (data.totalStudentsInteracted < MIN_STUDENTS_FOR_LO_FEEDBACK) {
       this.logger.log(
         `LO ${learningObjectId} ("${data.loTitle}") tiene ${data.totalStudentsInteracted} estudiantes (mínimo: ${MIN_STUDENTS_FOR_LO_FEEDBACK}). Se omite.`,
@@ -178,7 +190,26 @@ export class TeacherFeedbackService {
       return null
     }
 
-    // Obtener el moduleId del LO
+    const hasConcreteData =
+      data.chatMessages.length > 0 ||
+      data.activityResults.some((a) => a.totalAttempts > 0) ||
+      data.studentFeedbacks.length > 0 ||
+      data.forumQuestions.length > 0
+
+    if (!hasConcreteData) {
+      this.logger.log(
+        `LO ${learningObjectId} ("${data.loTitle}") tiene estudiantes pero sin datos concretos de interacción. Se omite.`,
+      )
+      return null
+    }
+
+    if (data.totalInteractions < MIN_INTERACTIONS_FOR_FEEDBACK) {
+      this.logger.log(
+        `LO ${learningObjectId} ("${data.loTitle}") tiene ${data.totalInteractions} interacciones (mínimo: ${MIN_INTERACTIONS_FOR_FEEDBACK}). Se omite.`,
+      )
+      return null
+    }
+
     const lo = await this.dbService.learningObject.findUniqueOrThrow({
       where: { id: learningObjectId },
       select: { moduleId: true },
@@ -234,7 +265,7 @@ export class TeacherFeedbackService {
     })
   }
 
-  private async validateModuleOwnership(
+  async validateModuleOwnership(
     moduleId: number,
     teacherId: number,
   ): Promise<void> {

@@ -7,6 +7,7 @@ import {
 } from '../interfaces/feedback-data.interface'
 import {
   MAX_CHAT_MESSAGES_PER_LO,
+  MAX_FEEDBACKS_PER_LO,
   MAX_FORUM_QUESTIONS_PER_LO,
   MAX_STUDENT_NOTES_PER_LO,
 } from '../constants/thresholds'
@@ -27,70 +28,73 @@ export class FeedbackDataCollectorService {
       include: { blocks: { orderBy: { orderIndex: 'asc' } } },
     })
 
-    const [
-      chatSessions,
-      activities,
-      feedbacks,
-      questions,
-      notes,
-      distinctStudents,
-    ] = await Promise.all([
-      // Chat anónimo: traemos mensajes sin userId
-      this.dbService.session.findMany({
-        where: { learningObjectId },
-        include: {
-          messages: {
-            orderBy: { createdAt: 'asc' },
-            take: MAX_CHAT_MESSAGES_PER_LO,
-            select: { role: true, content: true },
-            where: {
-              role: 'user',
+    const [chatSessions, activities, feedbacks, questions, notes] =
+      await Promise.all([
+        // Chat: traemos userId para conteo de estudiantes + mensajes
+        this.dbService.session.findMany({
+          where: { learningObjectId },
+          select: {
+            userId: true,
+            messages: {
+              orderBy: { createdAt: 'desc' },
+              take: MAX_CHAT_MESSAGES_PER_LO,
+              select: { role: true, content: true },
+              where: { role: 'user' },
             },
           },
-        },
-      }),
+        }),
 
-      // Actividades con sus intentos agregados
-      this.dbService.activity.findMany({
-        where: { learningObjectId },
-        include: {
-          attempts: {
-            select: { isCorrect: true },
+        // Actividades con intentos (incluye userId para conteo)
+        this.dbService.activity.findMany({
+          where: { learningObjectId },
+          include: {
+            attempts: {
+              select: { isCorrect: true, userId: true },
+            },
           },
-        },
-      }),
+        }),
 
-      // Feedbacks de estudiantes
-      this.dbService.learningObjectFeedback.findMany({
-        where: { learningObjectId },
-        select: { feedback: true },
-        take: MAX_STUDENT_NOTES_PER_LO,
-        orderBy: { createdAt: 'desc' },
-      }),
+        // Feedbacks de estudiantes (incluye userId para conteo)
+        this.dbService.learningObjectFeedback.findMany({
+          where: { learningObjectId },
+          select: { feedback: true, userId: true },
+          take: MAX_FEEDBACKS_PER_LO,
+          orderBy: { createdAt: 'desc' },
+        }),
 
-      // Preguntas del foro
-      this.dbService.studentQuestion.findMany({
-        where: { learningObjectId },
-        include: {
-          _count: { select: { replies: true } },
-        },
-        orderBy: { upvotes: 'desc' },
-        take: MAX_FORUM_QUESTIONS_PER_LO,
-      }),
+        // Preguntas del foro (incluye userId para conteo)
+        this.dbService.studentQuestion.findMany({
+          where: { learningObjectId },
+          select: {
+            question: true,
+            upvotes: true,
+            userId: true,
+            _count: { select: { replies: true } },
+          },
+          orderBy: { upvotes: 'desc' },
+          take: MAX_FORUM_QUESTIONS_PER_LO,
+        }),
 
-      // Notas de estudiantes
-      this.dbService.note.findMany({
-        where: { learningObjectId },
-        select: { content: true },
-        take: MAX_STUDENT_NOTES_PER_LO,
-        orderBy: { createdAt: 'desc' },
-      }),
+        // Notas de estudiantes (incluye userId para conteo)
+        this.dbService.note.findMany({
+          where: { learningObjectId },
+          select: { content: true, userId: true },
+          take: MAX_STUDENT_NOTES_PER_LO,
+          orderBy: { createdAt: 'desc' },
+        }),
+      ])
 
-      // Cantidad de estudiantes distintos que interactuaron
-      this.getDistinctStudentCount(learningObjectId),
-    ])
+    // Conteo de estudiantes distintos directamente de los datos ya obtenidos
+    const studentIds = new Set<number>()
+    for (const s of chatSessions) studentIds.add(s.userId)
+    for (const f of feedbacks) studentIds.add(f.userId)
+    for (const n of notes) studentIds.add(n.userId)
+    for (const q of questions) studentIds.add(q.userId)
+    for (const a of activities) {
+      for (const att of a.attempts) studentIds.add(att.userId)
+    }
 
-    // Aplanar todos los mensajes del chat (anónimo)
+    // Aplanar mensajes del chat (anónimo, más recientes primero)
     const chatMessages = chatSessions.flatMap((s) =>
       s.messages.map((m) => ({
         role: m.role,
@@ -130,7 +134,7 @@ export class FeedbackDataCollectorService {
         repliesCount: q._count.replies,
       })),
       studentNotes: notes.map((n) => n.content),
-      totalStudentsInteracted: distinctStudents,
+      totalStudentsInteracted: studentIds.size,
       totalInteractions,
     }
   }
@@ -183,45 +187,47 @@ export class FeedbackDataCollectorService {
   }
 
   /**
-   * Cuenta estudiantes distintos que han interactuado con un LO.
-   * Unifica: chat sessions, feedbacks, notas, preguntas, intentos de actividad.
+   * Verifica si hay datos nuevos de interacción para un LO desde una fecha dada.
+   * Usa queries de conteo ligeras para evitar cargar datos innecesarios.
    */
-  private async getDistinctStudentCount(
+  async hasNewDataSince(
     learningObjectId: number,
-  ): Promise<number> {
-    const studentIds = new Set<number>()
+    since: Date,
+  ): Promise<boolean> {
+    const dateFilter = { createdAt: { gt: since } }
 
-    const [sessions, feedbacks, notes, questions, attempts] = await Promise.all(
-      [
-        this.dbService.session.findMany({
-          where: { learningObjectId },
-          select: { userId: true },
+    const [newMessages, newAttempts, newFeedbacks, newQuestions, newNotes] =
+      await Promise.all([
+        this.dbService.message.count({
+          where: {
+            session: { learningObjectId },
+            ...dateFilter,
+          },
         }),
-        this.dbService.learningObjectFeedback.findMany({
-          where: { learningObjectId },
-          select: { userId: true },
+        this.dbService.activityAttempt.count({
+          where: {
+            activity: { learningObjectId },
+            ...dateFilter,
+          },
         }),
-        this.dbService.note.findMany({
-          where: { learningObjectId },
-          select: { userId: true },
+        this.dbService.learningObjectFeedback.count({
+          where: { learningObjectId, ...dateFilter },
         }),
-        this.dbService.studentQuestion.findMany({
-          where: { learningObjectId },
-          select: { userId: true },
+        this.dbService.studentQuestion.count({
+          where: { learningObjectId, ...dateFilter },
         }),
-        this.dbService.activityAttempt.findMany({
-          where: { activity: { learningObjectId } },
-          select: { userId: true },
+        this.dbService.note.count({
+          where: { learningObjectId, ...dateFilter },
         }),
-      ],
+      ])
+
+    const totalNew =
+      newMessages + newAttempts + newFeedbacks + newQuestions + newNotes
+
+    this.logger.log(
+      `LO ${learningObjectId}: ${totalNew} interacciones nuevas desde ${since.toISOString()}`,
     )
 
-    for (const s of sessions) studentIds.add(s.userId)
-    for (const f of feedbacks) studentIds.add(f.userId)
-    for (const n of notes) studentIds.add(n.userId)
-    for (const q of questions) studentIds.add(q.userId)
-    for (const a of attempts) studentIds.add(a.userId)
-
-    return studentIds.size
+    return totalNew > 0
   }
 }
