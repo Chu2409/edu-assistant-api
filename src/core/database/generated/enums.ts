@@ -58,10 +58,33 @@ export const BlockType = {
   TEXT: 'TEXT',
   CODE: 'CODE',
   IMAGE: 'IMAGE',
-  IMAGE_SUGGESTION: 'IMAGE_SUGGESTION'
+  IMAGE_SUGGESTION: 'IMAGE_SUGGESTION',
+  SUMMARY: 'SUMMARY',
+  FLASHCARDS: 'FLASHCARDS',
+  QUIZ: 'QUIZ',
+  GLOSSARY: 'GLOSSARY'
 } as const
 
 export type BlockType = (typeof BlockType)[keyof typeof BlockType]
+
+
+export const SourceKind = {
+  YOUTUBE_URL: 'YOUTUBE_URL',
+  VIDEO_FILE: 'VIDEO_FILE'
+} as const
+
+export type SourceKind = (typeof SourceKind)[keyof typeof SourceKind]
+
+
+export const IngestionStatus = {
+  PENDING: 'PENDING',
+  EXTRACTING: 'EXTRACTING',
+  GENERATING: 'GENERATING',
+  COMPLETED: 'COMPLETED',
+  FAILED: 'FAILED'
+} as const
+
+export type IngestionStatus = (typeof IngestionStatus)[keyof typeof IngestionStatus]
 
 
 export const MessageRole = {

@@ -1,0 +1,2 @@
+- [Project Architecture](project-architecture.md) — NestJS structure, config, exceptions
+- [Dependencies Available](dependencies.md) — youtube-transcript, nodejs-whisper, yt-dlp

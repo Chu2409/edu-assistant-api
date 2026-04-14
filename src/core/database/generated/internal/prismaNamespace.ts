@@ -406,7 +406,9 @@ export const ModelName = {
   MediaResource: 'MediaResource',
   ModuleMetrics: 'ModuleMetrics',
   SystemSetting: 'SystemSetting',
-  TeacherAiFeedback: 'TeacherAiFeedback'
+  TeacherAiFeedback: 'TeacherAiFeedback',
+  ContentSource: 'ContentSource',
+  GenerationAttempt: 'GenerationAttempt'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -422,7 +424,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "module" | "aiConfiguration" | "enrollment" | "learningObjectType" | "learningObject" | "block" | "session" | "message" | "learningObjectRelation" | "learningObjectConcept" | "activity" | "activityAttempt" | "learningObjectFeedback" | "note" | "studentQuestion" | "questionReply" | "notification" | "podcast" | "mediaResource" | "moduleMetrics" | "systemSetting" | "teacherAiFeedback"
+    modelProps: "user" | "module" | "aiConfiguration" | "enrollment" | "learningObjectType" | "learningObject" | "block" | "session" | "message" | "learningObjectRelation" | "learningObjectConcept" | "activity" | "activityAttempt" | "learningObjectFeedback" | "note" | "studentQuestion" | "questionReply" | "notification" | "podcast" | "mediaResource" | "moduleMetrics" | "systemSetting" | "teacherAiFeedback" | "contentSource" | "generationAttempt"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -2128,6 +2130,154 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    ContentSource: {
+      payload: Prisma.$ContentSourcePayload<ExtArgs>
+      fields: Prisma.ContentSourceFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.ContentSourceFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ContentSourcePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.ContentSourceFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ContentSourcePayload>
+        }
+        findFirst: {
+          args: Prisma.ContentSourceFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ContentSourcePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.ContentSourceFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ContentSourcePayload>
+        }
+        findMany: {
+          args: Prisma.ContentSourceFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ContentSourcePayload>[]
+        }
+        create: {
+          args: Prisma.ContentSourceCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ContentSourcePayload>
+        }
+        createMany: {
+          args: Prisma.ContentSourceCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.ContentSourceCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ContentSourcePayload>[]
+        }
+        delete: {
+          args: Prisma.ContentSourceDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ContentSourcePayload>
+        }
+        update: {
+          args: Prisma.ContentSourceUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ContentSourcePayload>
+        }
+        deleteMany: {
+          args: Prisma.ContentSourceDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.ContentSourceUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.ContentSourceUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ContentSourcePayload>[]
+        }
+        upsert: {
+          args: Prisma.ContentSourceUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ContentSourcePayload>
+        }
+        aggregate: {
+          args: Prisma.ContentSourceAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateContentSource>
+        }
+        groupBy: {
+          args: Prisma.ContentSourceGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ContentSourceGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.ContentSourceCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ContentSourceCountAggregateOutputType> | number
+        }
+      }
+    }
+    GenerationAttempt: {
+      payload: Prisma.$GenerationAttemptPayload<ExtArgs>
+      fields: Prisma.GenerationAttemptFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.GenerationAttemptFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GenerationAttemptPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.GenerationAttemptFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GenerationAttemptPayload>
+        }
+        findFirst: {
+          args: Prisma.GenerationAttemptFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GenerationAttemptPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.GenerationAttemptFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GenerationAttemptPayload>
+        }
+        findMany: {
+          args: Prisma.GenerationAttemptFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GenerationAttemptPayload>[]
+        }
+        create: {
+          args: Prisma.GenerationAttemptCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GenerationAttemptPayload>
+        }
+        createMany: {
+          args: Prisma.GenerationAttemptCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.GenerationAttemptCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GenerationAttemptPayload>[]
+        }
+        delete: {
+          args: Prisma.GenerationAttemptDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GenerationAttemptPayload>
+        }
+        update: {
+          args: Prisma.GenerationAttemptUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GenerationAttemptPayload>
+        }
+        deleteMany: {
+          args: Prisma.GenerationAttemptDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.GenerationAttemptUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.GenerationAttemptUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GenerationAttemptPayload>[]
+        }
+        upsert: {
+          args: Prisma.GenerationAttemptUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GenerationAttemptPayload>
+        }
+        aggregate: {
+          args: Prisma.GenerationAttemptAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateGenerationAttempt>
+        }
+        groupBy: {
+          args: Prisma.GenerationAttemptGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.GenerationAttemptGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.GenerationAttemptCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.GenerationAttemptCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -2491,6 +2641,44 @@ export const TeacherAiFeedbackScalarFieldEnum = {
 export type TeacherAiFeedbackScalarFieldEnum = (typeof TeacherAiFeedbackScalarFieldEnum)[keyof typeof TeacherAiFeedbackScalarFieldEnum]
 
 
+export const ContentSourceScalarFieldEnum = {
+  id: 'id',
+  learningObjectId: 'learningObjectId',
+  kind: 'kind',
+  sourceUrl: 'sourceUrl',
+  status: 'status',
+  outputLanguage: 'outputLanguage',
+  rawText: 'rawText',
+  detectedLanguage: 'detectedLanguage',
+  durationSeconds: 'durationSeconds',
+  errorMessage: 'errorMessage',
+  metadata: 'metadata',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ContentSourceScalarFieldEnum = (typeof ContentSourceScalarFieldEnum)[keyof typeof ContentSourceScalarFieldEnum]
+
+
+export const GenerationAttemptScalarFieldEnum = {
+  id: 'id',
+  learningObjectId: 'learningObjectId',
+  provider: 'provider',
+  model: 'model',
+  requestedTypes: 'requestedTypes',
+  completedTypes: 'completedTypes',
+  failedTypes: 'failedTypes',
+  tokensInput: 'tokensInput',
+  tokensOutput: 'tokensOutput',
+  processingTimeMs: 'processingTimeMs',
+  qualityMetrics: 'qualityMetrics',
+  startedAt: 'startedAt',
+  completedAt: 'completedAt'
+} as const
+
+export type GenerationAttemptScalarFieldEnum = (typeof GenerationAttemptScalarFieldEnum)[keyof typeof GenerationAttemptScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -2789,6 +2977,34 @@ export type EnumTeacherFeedbackScopeFieldRefInput<$PrismaModel> = FieldRefInputT
 export type ListEnumTeacherFeedbackScopeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TeacherFeedbackScope[]'>
     
 
+
+/**
+ * Reference to a field of type 'SourceKind'
+ */
+export type EnumSourceKindFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SourceKind'>
+    
+
+
+/**
+ * Reference to a field of type 'SourceKind[]'
+ */
+export type ListEnumSourceKindFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SourceKind[]'>
+    
+
+
+/**
+ * Reference to a field of type 'IngestionStatus'
+ */
+export type EnumIngestionStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'IngestionStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'IngestionStatus[]'
+ */
+export type ListEnumIngestionStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'IngestionStatus[]'>
+    
+
 /**
  * Batch Payload for updateMany & deleteMany & createMany
  */
@@ -2907,6 +3123,8 @@ export type GlobalOmitConfig = {
   moduleMetrics?: Prisma.ModuleMetricsOmit
   systemSetting?: Prisma.SystemSettingOmit
   teacherAiFeedback?: Prisma.TeacherAiFeedbackOmit
+  contentSource?: Prisma.ContentSourceOmit
+  generationAttempt?: Prisma.GenerationAttemptOmit
 }
 
 /* Types for Logging */

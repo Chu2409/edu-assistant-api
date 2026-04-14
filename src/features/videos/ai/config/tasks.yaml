@@ -1,0 +1,105 @@
+summary_task:
+  temperature: 0.3
+  max_tokens: 3000
+  description: |
+    Create a structured educational summary of the following video transcription.
+    {title_context}
+    <transcription>
+    {transcription}
+    </transcription>
+
+    Respond with a JSON object containing EXACTLY these keys:
+
+    - "title": A specific, descriptive title that reflects the actual content covered (string)
+    - "whatYouLearn": Array of 3-5 concrete skills or knowledge the viewer gains — use action verbs, be specific to this video's content (strings)
+    - "keyConcepts": Array of 3-5 core ideas, terms, or principles introduced — each must be a concept name plus a one-line explanation (strings)
+    - "examples": Array of 2-4 original illustrative examples CREATED BY YOU to clarify the key concepts. These must be grounded in the video's topic and content but written as fresh, clear illustrations — not descriptions of what the speaker did or said (strings)
+    - "summary": A 2-3 sentence paragraph that captures what this specific video covers, what makes it useful, and who it's for (string)
+
+    {language_instruction}
+
+    Rules:
+    - Ground ALL content in the transcription. Never introduce topics not covered in the video.
+    - "examples" must be ORIGINAL sentences or mini-scenarios you generate — not paraphrases of what the speaker said.
+    - "whatYouLearn" must describe viewer outcomes, not video contents (use "Use X to do Y" not "The video covers X").
+    - "keyConcepts" must each include a brief definition or explanation, not just a label.
+    - "summary" must be specific enough that it couldn't describe any other video on the same topic.
+
+flashcard_task:
+  temperature: 0.7
+  max_tokens: 2500
+  description: |
+    Create {max_cards} flashcards for DEFINITIONS and BASIC RECALL from this video transcription.
+    A separate quiz will handle application and scenarios — your job is ONLY definitions and terminology.
+    {title_context}
+    <transcription>
+    {transcription}
+    </transcription>
+
+    Respond with a JSON object with key "items".
+    Each item has "front" and "back" keys.
+
+    {language_instruction}
+
+    Rules:
+    - Create EXACTLY {max_cards} flashcards, each covering a DISTINCT concept
+    - ONLY use definition-style questions: "What is X?", "Define Y", "What are the N types of X?"
+    - Do NOT create scenario, example, or analysis questions (those belong to the quiz)
+    - Ground all content in the video.
+
+quiz_task:
+  temperature: 0.5
+  max_tokens: 4000
+  description: |
+    Create {max_questions} multiple-choice quiz questions that are DIFFERENT from the flashcards.
+    Flashcards already cover definitions — you must test APPLICATION, ANALYSIS, and SCENARIOS.
+    {title_context}
+    <transcription>
+    {transcription}
+    </transcription>
+
+    Respond with a JSON object with key "questions".
+    Each question has: "question" (string), "options" (array of exactly 4 strings), "correctAnswer" (integer 0-3), "explanation" (string, optional).
+
+    CRITICAL — options array rules:
+    - "options" MUST be a JSON array with EXACTLY 4 separate string elements.
+    - Each option is its own independent string element in the array.
+    - NEVER put multiple options inside a single string.
+
+    CRITICAL — correctAnswer indexing rules:
+    - correctAnswer is the 0-based index of the correct option in the options array.
+    - correctAnswer MUST be exactly one of: 0, 1, 2, 3.
+
+    {language_instruction}
+
+    Rules:
+    - Create EXACTLY {max_questions} questions, each testing a DIFFERENT concept than the flashcards
+    - Use scenarios grounded in the video's own examples. NEVER introduce external examples.
+    - Distribute correctAnswer values across 0, 1, 2, and 3.
+
+glossary_task:
+  temperature: 0.2
+  max_tokens: 2500
+  description: |
+    Extract a glossary of technical and domain-specific terms from this video transcription.
+    {title_context}
+    <transcription>
+    {transcription}
+    </transcription>
+
+    Respond with a JSON object with key "terms".
+    Each item in "terms" MUST have EXACTLY two keys: "term" and "definition".
+
+    CRITICAL — object structure rules:
+    - Every object in "terms" MUST contain BOTH "term" AND "definition".
+    - NEVER output an object with only "term" and no "definition".
+    - If you cannot define a term, skip it entirely rather than omitting the "definition" key.
+
+    {language_instruction}
+
+    Rules:
+    - Extract between 5 and 15 terms that are specific to the subject matter discussed in the video.
+    - ONLY include terms that are explicitly mentioned or explained in the transcription.
+    - Definitions must be based exclusively on how the video explains the term — do NOT add external knowledge.
+    - Prefer technical terminology, acronyms, proper nouns, and specialized concepts over common words.
+    - Every entry MUST have both "term" and "definition" — incomplete entries are invalid.

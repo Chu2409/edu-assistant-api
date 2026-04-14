@@ -73,7 +73,9 @@ export const ModelName = {
   MediaResource: 'MediaResource',
   ModuleMetrics: 'ModuleMetrics',
   SystemSetting: 'SystemSetting',
-  TeacherAiFeedback: 'TeacherAiFeedback'
+  TeacherAiFeedback: 'TeacherAiFeedback',
+  ContentSource: 'ContentSource',
+  GenerationAttempt: 'GenerationAttempt'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -414,6 +416,44 @@ export const TeacherAiFeedbackScalarFieldEnum = {
 } as const
 
 export type TeacherAiFeedbackScalarFieldEnum = (typeof TeacherAiFeedbackScalarFieldEnum)[keyof typeof TeacherAiFeedbackScalarFieldEnum]
+
+
+export const ContentSourceScalarFieldEnum = {
+  id: 'id',
+  learningObjectId: 'learningObjectId',
+  kind: 'kind',
+  sourceUrl: 'sourceUrl',
+  status: 'status',
+  outputLanguage: 'outputLanguage',
+  rawText: 'rawText',
+  detectedLanguage: 'detectedLanguage',
+  durationSeconds: 'durationSeconds',
+  errorMessage: 'errorMessage',
+  metadata: 'metadata',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ContentSourceScalarFieldEnum = (typeof ContentSourceScalarFieldEnum)[keyof typeof ContentSourceScalarFieldEnum]
+
+
+export const GenerationAttemptScalarFieldEnum = {
+  id: 'id',
+  learningObjectId: 'learningObjectId',
+  provider: 'provider',
+  model: 'model',
+  requestedTypes: 'requestedTypes',
+  completedTypes: 'completedTypes',
+  failedTypes: 'failedTypes',
+  tokensInput: 'tokensInput',
+  tokensOutput: 'tokensOutput',
+  processingTimeMs: 'processingTimeMs',
+  qualityMetrics: 'qualityMetrics',
+  startedAt: 'startedAt',
+  completedAt: 'completedAt'
+} as const
+
+export type GenerationAttemptScalarFieldEnum = (typeof GenerationAttemptScalarFieldEnum)[keyof typeof GenerationAttemptScalarFieldEnum]
 
 
 export const SortOrder = {
