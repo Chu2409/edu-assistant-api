@@ -2,6 +2,7 @@ import {
   Injectable,
   NotFoundException,
   ForbiddenException,
+  ConflictException,
 } from '@nestjs/common'
 import { DBService } from 'src/core/database/database.service'
 import { CreateModuleDto } from './dtos/req/create-module.dto'
@@ -30,10 +31,35 @@ import { convertToFilterWhere } from 'src/shared/utils/converters'
 export class ModulesService {
   constructor(private readonly dbService: DBService) {}
 
+  private async validateUniqueTitle(
+    title: string,
+    teacherId: number,
+    excludeModuleId?: number,
+  ): Promise<void> {
+    const existingModule = await this.dbService.module.findFirst({
+      where: {
+        title: {
+          equals: title,
+          mode: 'insensitive',
+        },
+        teacherId,
+        ...(excludeModuleId && { id: { not: excludeModuleId } }),
+      },
+    })
+
+    if (existingModule) {
+      throw new ConflictException(
+        `Ya tienes un módulo con el título "${title}"`,
+      )
+    }
+  }
+
   async create(
     createModuleDto: CreateModuleDto,
     user: User,
   ): Promise<ModuleDto> {
+    await this.validateUniqueTitle(createModuleDto.title, user.id)
+
     const module = await this.dbService.module.create({
       data: {
         title: createModuleDto.title,
@@ -125,7 +151,6 @@ export class ModulesService {
     where.isPublic = true
     where.isActive = true
     where.teacherId = { in: convertToFilterWhere(params.teacherId) }
-    // Excluir módulos donde el estudiante ya está enrolado
     where.enrollments = {
       none: { userId: user.id },
     }
@@ -146,6 +171,9 @@ export class ModulesService {
         take: params.limit,
         orderBy: {
           createdAt: 'desc',
+        },
+        include: {
+          aiConfiguration: true,
         },
       }),
       this.dbService.module.count({
@@ -175,14 +203,12 @@ export class ModulesService {
       throw new NotFoundException(`Módulo con ID ${id} no encontrado`)
     }
 
-    // Si el módulo no está activo, solo el profesor propietario puede acceder
     if (!module.isActive && module.teacherId !== user.id) {
       throw new ForbiddenException(
         'No tienes permisos para acceder a este módulo',
       )
     }
 
-    // Verificar permisos: solo el profesor, módulos públicos o estudiantes inscritos
     if (
       module.teacherId !== user.id &&
       !module.isPublic &&
@@ -201,7 +227,6 @@ export class ModulesService {
     updateModuleDto: UpdateModuleDto,
     user: User,
   ): Promise<ModuleDto> {
-    // Verificar que el módulo existe y pertenece al usuario
     const existingModule = await this.dbService.module.findUnique({
       where: { id },
       include: {
@@ -219,10 +244,12 @@ export class ModulesService {
       )
     }
 
-    // Preparar datos de actualización del módulo (sin aiConfiguration)
+    if (updateModuleDto.title) {
+      await this.validateUniqueTitle(updateModuleDto.title, user.id, id)
+    }
+
     const { aiConfiguration, ...moduleData } = updateModuleDto
 
-    // Construir datos de actualización con nested write para aiConfiguration
     const updateData: {
       title?: string
       description?: string
@@ -250,7 +277,6 @@ export class ModulesService {
 
     if (aiConfiguration !== undefined) {
       if (existingModule.aiConfiguration) {
-        // Si existe, actualizar
         updateData.aiConfiguration = {
           update: {
             ...(aiConfiguration.language !== undefined && {
@@ -271,7 +297,6 @@ export class ModulesService {
           },
         }
       } else {
-        // Si no existe, crear
         updateData.aiConfiguration = {
           create: {
             language: aiConfiguration.language ?? 'es',
@@ -297,7 +322,6 @@ export class ModulesService {
   }
 
   async toggleActive(id: number, user: User): Promise<ModuleDto> {
-    // Verificar que el módulo existe y pertenece al usuario
     const existingModule = await this.dbService.module.findUnique({
       where: { id },
       include: {
@@ -315,7 +339,6 @@ export class ModulesService {
       )
     }
 
-    // Alternar el estado de isActive
     const module = await this.dbService.module.update({
       where: { id },
       data: {
