@@ -149,3 +149,8 @@ export type ModuleMetrics = Prisma.ModuleMetricsModel
  * 
  */
 export type SystemSetting = Prisma.SystemSettingModel
+/**
+ * Model TeacherAiFeedback
+ * 
+ */
+export type TeacherAiFeedback = Prisma.TeacherAiFeedbackModel

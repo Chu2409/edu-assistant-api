@@ -2,9 +2,11 @@ import { CoreModule } from './core/core.module'
 import { LearningObjectsModule } from './features/learning-objects/learning-objects.module'
 import { Module } from '@nestjs/common'
 import { EmbeddingsWorker } from './features/learning-objects/main/workers/embeddings.worker'
+import { TeacherFeedbackModule } from './features/teacher-feedback/teacher-feedback.module'
+import { TeacherFeedbackWorker } from './features/teacher-feedback/workers/teacher-feedback.worker'
 
 @Module({
-  imports: [CoreModule, LearningObjectsModule],
-  providers: [EmbeddingsWorker],
+  imports: [CoreModule, LearningObjectsModule, TeacherFeedbackModule],
+  providers: [EmbeddingsWorker, TeacherFeedbackWorker],
 })
 export class WorkerModule {}

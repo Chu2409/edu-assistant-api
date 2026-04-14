@@ -12,6 +12,7 @@ import { FilesModule } from './providers/files/files.module'
 import { InteractionsModule } from './features/interactions/interactions.module'
 import { ChatModule } from './features/chat/chat.module'
 import { ContentGenerationModule } from './features/content-generation/content-generation.module'
+import { TeacherFeedbackModule } from './features/teacher-feedback/teacher-feedback.module'
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { ContentGenerationModule } from './features/content-generation/content-g
     InteractionsModule,
     ChatModule,
     ContentGenerationModule,
+    TeacherFeedbackModule,
   ],
   controllers: [HealthController],
   providers: [
