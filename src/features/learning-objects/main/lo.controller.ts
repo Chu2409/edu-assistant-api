@@ -129,15 +129,19 @@ export class LoController {
 
   @Patch('reorder')
   @ApiOperation({
-    summary: 'Reordenar objetos de aprendizaje',
+    summary: 'Mover objeto de aprendizaje (Surgical Shift)',
     description:
-      'Actualiza los índices de orden de múltiples objetos de aprendizaje. Solo el profesor propietario puede reordenar objetos de aprendizaje',
+      'Desplaza un objeto de aprendizaje a un nuevo índice absoluto y ajusta los demás automáticamente. Solo el profesor propietario puede reordenar.',
   })
   @ApiStandardResponse(undefined, HttpStatus.NO_CONTENT)
   @ApiResponse({ status: 401, description: 'No autorizado' })
   @ApiResponse({
     status: 404,
-    description: 'Uno o más objetos de aprendizaje no encontrados',
+    description: 'Objeto de aprendizaje no encontrado',
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Índice de orden fuera de límites',
   })
   @ApiResponse({
     status: 403,
@@ -146,10 +150,10 @@ export class LoController {
   })
   @JwtAuth(Role.TEACHER)
   async reorder(
-    @Body() reorderLosDto: ReorderLoDto,
+    @Body() reorderLoDto: ReorderLoDto,
     @GetUser() user: User,
   ): Promise<void> {
-    return this.loService.reorder(reorderLosDto, user)
+    return this.loService.reorder(reorderLoDto, user)
   }
 
   @Patch(':id')

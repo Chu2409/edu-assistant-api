@@ -2,6 +2,7 @@ import {
   Injectable,
   NotFoundException,
   ForbiddenException,
+  BadRequestException,
 } from '@nestjs/common'
 import { InjectQueue } from '@nestjs/bullmq'
 import { Queue } from 'bullmq'
@@ -437,67 +438,69 @@ export class LoService {
     return LoMapper.mapToDto(updatedLo!)
   }
 
-  async reorder(reorderLosDto: ReorderLoDto, user: User): Promise<void> {
-    if (reorderLosDto.los.length === 0) {
+  async reorder(dto: ReorderLoDto, user: User): Promise<void> {
+    const lo = await this.dbService.learningObject.findUnique({
+      where: { id: dto.id },
+      include: { module: true },
+    })
+
+    if (!lo) {
+      throw new NotFoundException(
+        `Objeto de aprendizaje con ID ${dto.id} no encontrado`,
+      )
+    }
+
+    if (lo.module.teacherId !== user.id) {
+      throw new ForbiddenException(
+        'Solo el profesor propietario puede reordenar objetos de aprendizaje en este módulo',
+      )
+    }
+
+    const oldIndex = lo.orderIndex
+    const newIndex = dto.orderIndex
+
+    if (oldIndex === newIndex) {
       return
     }
 
-    // Validar que los índices de orden sean únicos
-    const orderIndices = reorderLosDto.los.map((p) => p.orderIndex)
-    const uniqueOrderIndices = new Set(orderIndices)
-    if (orderIndices.length !== uniqueOrderIndices.size) {
-      const duplicates = orderIndices.filter(
-        (index, i) => orderIndices.indexOf(index) !== i,
-      )
-      throw new ForbiddenException(
-        `Los índices de orden deben ser únicos. Índices duplicados: ${[...new Set(duplicates)].join(', ')}`,
-      )
-    }
-
-    // Obtener todos los objetos de aprendizaje a actualizar para verificar permisos
-    const loIds = reorderLosDto.los.map((p) => p.id)
-    const los = await this.dbService.learningObject.findMany({
-      where: {
-        id: { in: loIds },
-      },
-      include: {
-        module: true,
-      },
+    const totalLos = await this.dbService.learningObject.count({
+      where: { moduleId: lo.moduleId },
     })
 
-    if (los.length !== loIds.length) {
-      const foundIds = los.map((p) => p.id)
-      const missingIds = loIds.filter((id) => !foundIds.includes(id))
-      throw new NotFoundException(
-        `Objetos de aprendizaje con IDs ${missingIds.join(', ')} no encontrados`,
+    if (newIndex < 1 || newIndex > totalLos) {
+      throw new BadRequestException(
+        `El nuevo índice ${newIndex} está fuera de los límites [1, ${totalLos}]`,
       )
     }
 
-    // Verificar que todos los objetos de aprendizaje pertenecen al mismo módulo
-    const moduleIds = [...new Set(los.map((p) => p.moduleId))]
-    if (moduleIds.length > 1) {
-      throw new ForbiddenException(
-        'Todos los objetos de aprendizaje deben pertenecer al mismo módulo',
-      )
-    }
+    await this.dbService.$transaction(async (prisma) => {
+      await prisma.learningObject.update({
+        where: { id: lo.id },
+        data: { orderIndex: -1 },
+      })
 
-    const module = los[0].module
+      if (newIndex < oldIndex) {
+        await prisma.learningObject.updateMany({
+          where: {
+            moduleId: lo.moduleId,
+            orderIndex: { gte: newIndex, lt: oldIndex },
+          },
+          data: { orderIndex: { increment: 1 } },
+        })
+      } else {
+        await prisma.learningObject.updateMany({
+          where: {
+            moduleId: lo.moduleId,
+            orderIndex: { gt: oldIndex, lte: newIndex },
+          },
+          data: { orderIndex: { decrement: 1 } },
+        })
+      }
 
-    // Solo el profesor propietario puede reordenar objetos de aprendizaje
-    if (module.teacherId !== user.id) {
-      throw new ForbiddenException(
-        'Solo el profesor propietario puede reordenar los objetos de aprendizaje de este módulo',
-      )
-    }
-
-    // Actualizar los orderIndex de todos los objetos de aprendizaje en una transacción
-    await this.dbService.$transaction(
-      reorderLosDto.los.map((loReorder) =>
-        this.dbService.learningObject.update({
-          where: { id: loReorder.id },
-          data: { orderIndex: loReorder.orderIndex },
-        }),
-      ),
-    )
+      await prisma.learningObject.update({
+        where: { id: lo.id },
+        data: { orderIndex: newIndex },
+      })
+    })
   }
 }
