@@ -7,7 +7,7 @@ import {
   MaxLength,
   ValidateNested,
 } from 'class-validator'
-import { Type } from 'class-transformer'
+import { Type, Transform } from 'class-transformer'
 import { CreateAiConfigurationDto } from 'src/features/modules/ai-configurations/dtos/req/create-ai-configuration.dto'
 
 export class CreateModuleDto {
@@ -17,6 +17,7 @@ export class CreateModuleDto {
     minLength: 3,
     maxLength: 200,
   })
+  @Transform(({ value }) => (typeof value === 'string' ? value.trim() : value))
   @IsString()
   @MinLength(3)
   @MaxLength(200)
