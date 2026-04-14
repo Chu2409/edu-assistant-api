@@ -7,6 +7,7 @@ import { createUser1, createUser2 } from './data/users'
 import { createModule1 } from './data/modules'
 import { createEnrollment1 } from './data/enrollments'
 import { createAiConfiguration1 } from './data/ai-configuration'
+import { seedLoTypes } from './data/lo-types'
 
 const adapter = new PrismaPg({
   connectionString: process.env.DB_URL,
@@ -21,6 +22,8 @@ const main = async () => {
   // await createEnrollment1(prisma, student.id, module.id)
 
   // await createAiConfiguration1(prisma, module.id)
+
+  await seedLoTypes(prisma)
   Logger.log('Seed data created successfully')
 }
 

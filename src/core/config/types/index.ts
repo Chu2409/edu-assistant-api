@@ -16,4 +16,17 @@ export interface IConfig {
   REDIS_PORT: number
 
   OPENAI_API_KEY: string
+
+  VIDEO_AI_PROVIDER: string
+  VIDEO_AI_MODEL: string
+  GROQ_API_KEY: string
+  GOOGLE_GENERATIVE_AI_API_KEY: string
+  OLLAMA_BASE_URL: string
+  VIDEO_AI_REQUEST_TIMEOUT: number
+
+  WHISPER_MODEL: string
+  WHISPER_LANGUAGE: string
+
+  MAX_VIDEO_DURATION_MINUTES: number
+  MAX_VIDEO_FILE_SIZE_MB: number
 }
