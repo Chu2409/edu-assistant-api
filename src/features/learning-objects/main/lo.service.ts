@@ -33,7 +33,6 @@ export class LoService {
   ) {}
 
   async create(dto: CreateLoDto, user: User): Promise<LoDto> {
-    // Verificar que el módulo existe
     const module = await this.dbService.module.findUnique({
       where: { id: dto.moduleId },
       include: { aiConfiguration: true },
@@ -42,7 +41,6 @@ export class LoService {
     if (!module) {
       throw new NotFoundException(`Módulo con ID ${dto.moduleId} no encontrado`)
     }
-    // Solo el profesor propietario puede crear objetos de aprendizaje
     if (module.teacherId !== user.id) {
       throw new ForbiddenException(
         'Solo el profesor propietario puede crear objetos de aprendizaje en este módulo',
@@ -73,7 +71,6 @@ export class LoService {
     params: LoFiltersDto,
     user: User,
   ): Promise<ApiPaginatedRes<LoDto>> {
-    // Verificar que el módulo existe
     const module = await this.dbService.module.findUnique({
       where: { id: moduleId },
       include: {
@@ -85,7 +82,6 @@ export class LoService {
       throw new NotFoundException(`Módulo con ID ${moduleId} no encontrado`)
     }
 
-    // Verificar permisos: solo el profesor, módulos públicos o estudiantes inscritos
     if (
       module.teacherId !== user.id &&
       !module.isPublic &&
@@ -96,7 +92,6 @@ export class LoService {
       )
     }
 
-    // Construir filtro de búsqueda
     const where: Prisma.LearningObjectWhereInput = {
       moduleId,
     }
@@ -109,7 +104,6 @@ export class LoService {
       where.OR = [{ title: { contains: params.search, mode: 'insensitive' } }]
     }
 
-    // Si es estudiante, solo mostrar objetos de aprendizaje publicados
     if (user.role === Role.STUDENT && module.teacherId !== user.id) {
       where.isPublished = true
     }
@@ -288,7 +282,6 @@ export class LoService {
     updateLoDto: UpdateLoDto,
     user: User,
   ): Promise<LoDto> {
-    // Verificar que el objeto de aprendizaje existe
     const existingLo = await this.dbService.learningObject.findUnique({
       where: { id },
       include: {
@@ -302,7 +295,6 @@ export class LoService {
       )
     }
 
-    // Solo el profesor propietario puede actualizar objetos de aprendizaje
     if (existingLo.module.teacherId !== user.id) {
       throw new ForbiddenException(
         'Solo el profesor propietario puede actualizar este objeto de aprendizaje',
@@ -332,7 +324,6 @@ export class LoService {
       include: { type: true },
     })
 
-    // Al publicar el objeto de aprendizaje, encolar procesamiento de embeddings
     if (updateLoDto.isPublished === true) {
       await this.embeddingsQueue.add(
         QUEUE_NAMES.EMBEDDINGS.JOBS.PROCESS_LO,
@@ -349,7 +340,6 @@ export class LoService {
     updateLoContentDto: UpdateLoContentDto,
     user: User,
   ): Promise<LoDto> {
-    // Verificar que el objeto de aprendizaje existe
     const existingLo = await this.dbService.learningObject.findUnique({
       where: { id },
       include: {
@@ -364,21 +354,17 @@ export class LoService {
       )
     }
 
-    // Solo el profesor propietario puede actualizar el contenido
     if (existingLo.module.teacherId !== user.id) {
       throw new ForbiddenException(
         'Solo el profesor propietario puede actualizar el contenido de este objeto de aprendizaje',
       )
     }
 
-    // Ejecutar actualización de bloques en una transacción
     await this.dbService.$transaction(async (prisma) => {
-      // Obtener los IDs de los bloques que se van a mantener/actualizar
       const blockIdsToKeep = updateLoContentDto.blocks
         .filter((block) => block.id !== undefined)
         .map((block) => block.id!)
 
-      // Eliminar bloques que no están en la lista
       await prisma.block.deleteMany({
         where: {
           learningObjectId: id,
@@ -388,14 +374,11 @@ export class LoService {
         },
       })
 
-      // Actualizar o crear bloques
       for (let index = 0; index < updateLoContentDto.blocks.length; index++) {
         const blockDto = updateLoContentDto.blocks[index]
-        // El orden del array es la fuente de verdad; orderIndex es 0-based
         const orderIndex = index
 
         if (blockDto.id) {
-          // Actualizar bloque existente
           await prisma.block.update({
             where: { id: blockDto.id },
             data: {
@@ -406,7 +389,6 @@ export class LoService {
             },
           })
         } else {
-          // Crear nuevo bloque
           await prisma.block.create({
             data: {
               learningObjectId: id,
@@ -419,7 +401,6 @@ export class LoService {
         }
       }
 
-      // Marcar el objeto de aprendizaje como editado manualmente
       await prisma.learningObject.update({
         where: { id },
         data: {
@@ -429,7 +410,6 @@ export class LoService {
       })
     })
 
-    // Obtener y retornar el objeto de aprendizaje actualizado
     const updatedLo = await this.dbService.learningObject.findUnique({
       where: { id },
       include: { type: true },
@@ -479,13 +459,22 @@ export class LoService {
         data: { orderIndex: -1 },
       })
 
+      const OFFSET = 1000000
       if (newIndex < oldIndex) {
         await prisma.learningObject.updateMany({
           where: {
             moduleId: lo.moduleId,
             orderIndex: { gte: newIndex, lt: oldIndex },
           },
-          data: { orderIndex: { increment: 1 } },
+          data: { orderIndex: { decrement: OFFSET } },
+        })
+
+        await prisma.learningObject.updateMany({
+          where: {
+            moduleId: lo.moduleId,
+            orderIndex: { lt: 0 },
+          },
+          data: { orderIndex: { increment: OFFSET + 1 } },
         })
       } else {
         await prisma.learningObject.updateMany({
@@ -493,7 +482,15 @@ export class LoService {
             moduleId: lo.moduleId,
             orderIndex: { gt: oldIndex, lte: newIndex },
           },
-          data: { orderIndex: { decrement: 1 } },
+          data: { orderIndex: { decrement: OFFSET } },
+        })
+
+        await prisma.learningObject.updateMany({
+          where: {
+            moduleId: lo.moduleId,
+            orderIndex: { lt: 0 },
+          },
+          data: { orderIndex: { increment: OFFSET - 1 } },
         })
       }
 
