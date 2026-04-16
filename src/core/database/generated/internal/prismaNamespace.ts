@@ -405,7 +405,8 @@ export const ModelName = {
   Podcast: 'Podcast',
   MediaResource: 'MediaResource',
   ModuleMetrics: 'ModuleMetrics',
-  SystemSetting: 'SystemSetting'
+  SystemSetting: 'SystemSetting',
+  TeacherAiFeedback: 'TeacherAiFeedback'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -421,7 +422,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "module" | "aiConfiguration" | "enrollment" | "learningObjectType" | "learningObject" | "block" | "session" | "message" | "learningObjectRelation" | "learningObjectConcept" | "activity" | "activityAttempt" | "learningObjectFeedback" | "note" | "studentQuestion" | "questionReply" | "notification" | "podcast" | "mediaResource" | "moduleMetrics" | "systemSetting"
+    modelProps: "user" | "module" | "aiConfiguration" | "enrollment" | "learningObjectType" | "learningObject" | "block" | "session" | "message" | "learningObjectRelation" | "learningObjectConcept" | "activity" | "activityAttempt" | "learningObjectFeedback" | "note" | "studentQuestion" | "questionReply" | "notification" | "podcast" | "mediaResource" | "moduleMetrics" | "systemSetting" | "teacherAiFeedback"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -2053,6 +2054,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    TeacherAiFeedback: {
+      payload: Prisma.$TeacherAiFeedbackPayload<ExtArgs>
+      fields: Prisma.TeacherAiFeedbackFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.TeacherAiFeedbackFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TeacherAiFeedbackPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.TeacherAiFeedbackFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TeacherAiFeedbackPayload>
+        }
+        findFirst: {
+          args: Prisma.TeacherAiFeedbackFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TeacherAiFeedbackPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.TeacherAiFeedbackFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TeacherAiFeedbackPayload>
+        }
+        findMany: {
+          args: Prisma.TeacherAiFeedbackFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TeacherAiFeedbackPayload>[]
+        }
+        create: {
+          args: Prisma.TeacherAiFeedbackCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TeacherAiFeedbackPayload>
+        }
+        createMany: {
+          args: Prisma.TeacherAiFeedbackCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.TeacherAiFeedbackCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TeacherAiFeedbackPayload>[]
+        }
+        delete: {
+          args: Prisma.TeacherAiFeedbackDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TeacherAiFeedbackPayload>
+        }
+        update: {
+          args: Prisma.TeacherAiFeedbackUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TeacherAiFeedbackPayload>
+        }
+        deleteMany: {
+          args: Prisma.TeacherAiFeedbackDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.TeacherAiFeedbackUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.TeacherAiFeedbackUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TeacherAiFeedbackPayload>[]
+        }
+        upsert: {
+          args: Prisma.TeacherAiFeedbackUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TeacherAiFeedbackPayload>
+        }
+        aggregate: {
+          args: Prisma.TeacherAiFeedbackAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateTeacherAiFeedback>
+        }
+        groupBy: {
+          args: Prisma.TeacherAiFeedbackGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.TeacherAiFeedbackGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.TeacherAiFeedbackCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.TeacherAiFeedbackCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -2404,6 +2479,18 @@ export const SystemSettingScalarFieldEnum = {
 export type SystemSettingScalarFieldEnum = (typeof SystemSettingScalarFieldEnum)[keyof typeof SystemSettingScalarFieldEnum]
 
 
+export const TeacherAiFeedbackScalarFieldEnum = {
+  id: 'id',
+  scope: 'scope',
+  moduleId: 'moduleId',
+  learningObjectId: 'learningObjectId',
+  content: 'content',
+  createdAt: 'createdAt'
+} as const
+
+export type TeacherAiFeedbackScalarFieldEnum = (typeof TeacherAiFeedbackScalarFieldEnum)[keyof typeof TeacherAiFeedbackScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -2688,6 +2775,20 @@ export type EnumMediaTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$Prisma
 export type ListEnumMediaTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'MediaType[]'>
     
 
+
+/**
+ * Reference to a field of type 'TeacherFeedbackScope'
+ */
+export type EnumTeacherFeedbackScopeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TeacherFeedbackScope'>
+    
+
+
+/**
+ * Reference to a field of type 'TeacherFeedbackScope[]'
+ */
+export type ListEnumTeacherFeedbackScopeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TeacherFeedbackScope[]'>
+    
+
 /**
  * Batch Payload for updateMany & deleteMany & createMany
  */
@@ -2805,6 +2906,7 @@ export type GlobalOmitConfig = {
   mediaResource?: Prisma.MediaResourceOmit
   moduleMetrics?: Prisma.ModuleMetricsOmit
   systemSetting?: Prisma.SystemSettingOmit
+  teacherAiFeedback?: Prisma.TeacherAiFeedbackOmit
 }
 
 /* Types for Logging */

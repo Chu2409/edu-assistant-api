@@ -7,7 +7,7 @@ import {
   MaxLength,
   ValidateNested,
 } from 'class-validator'
-import { Type } from 'class-transformer'
+import { Type, Transform } from 'class-transformer'
 import { UpdateAiConfigurationDto } from 'src/features/modules/ai-configurations/dtos/req/update-ai-configuration.dto'
 
 export class UpdateModuleDto {
@@ -18,6 +18,7 @@ export class UpdateModuleDto {
     maxLength: 200,
   })
   @IsOptional()
+  @Transform(({ value }) => (typeof value === 'string' ? value.trim() : value))
   @IsString()
   @MinLength(3)
   @MaxLength(200)

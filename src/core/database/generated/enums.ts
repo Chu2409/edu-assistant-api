@@ -132,3 +132,11 @@ export const MediaType = {
 } as const
 
 export type MediaType = (typeof MediaType)[keyof typeof MediaType]
+
+
+export const TeacherFeedbackScope = {
+  LEARNING_OBJECT: 'LEARNING_OBJECT',
+  MODULE: 'MODULE'
+} as const
+
+export type TeacherFeedbackScope = (typeof TeacherFeedbackScope)[keyof typeof TeacherFeedbackScope]

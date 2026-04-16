@@ -40,6 +40,10 @@ export class ModulesController {
   @ApiStandardResponse(ModuleDto, HttpStatus.CREATED)
   @ApiResponse({ status: 401, description: 'No autorizado' })
   @ApiResponse({ status: 400, description: 'Datos inválidos' })
+  @ApiResponse({
+    status: 409,
+    description: 'Ya existe un módulo con ese título para este profesor',
+  })
   @JwtAuth(Role.TEACHER)
   create(
     @Body() createModuleDto: CreateModuleDto,
@@ -121,6 +125,10 @@ export class ModulesController {
   @ApiResponse({
     status: 403,
     description: 'Solo el profesor propietario puede actualizar',
+  })
+  @ApiResponse({
+    status: 409,
+    description: 'Ya existe otro módulo con ese título para este profesor',
   })
   @JwtAuth(Role.TEACHER)
   update(
