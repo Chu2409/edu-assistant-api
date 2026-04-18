@@ -208,7 +208,7 @@ export class VideosService {
 
     await this.videosQueue.add(
       QUEUE_NAMES.VIDEOS.JOBS.RETRY,
-      { videoId: id, contentTypes },
+      { videoId: id, contentTypes, instruction: dto.instruction },
       { removeOnComplete: { count: 100 }, removeOnFail: { count: 50 } },
     )
 
