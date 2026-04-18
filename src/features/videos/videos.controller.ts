@@ -2,6 +2,7 @@ import {
   Controller,
   Get,
   Post,
+  Patch,
   Delete,
   Body,
   Param,
@@ -28,6 +29,7 @@ import { VideosService } from './main/videos.service'
 import { CreateVideoFromUrlDto } from './main/dtos/req/create-video-from-url.dto'
 import { UploadVideoFileDto } from './main/dtos/req/upload-video-file.dto'
 import { RetryVideoContentDto } from './main/dtos/req/retry-video-content.dto'
+import { UpdateVideoContentDto } from './main/dtos/req/update-video-content.dto'
 import { VideoFiltersDto } from './main/dtos/req/video-filters.dto'
 import { VideoDto } from './main/dtos/res/video.dto'
 import { FullVideoDto } from './main/dtos/res/full-video.dto'
@@ -132,6 +134,23 @@ export class VideosController {
     @GetUser() user: User,
   ): Promise<VideoStatusDto> {
     return this.videosService.retry(id, dto, user)
+  }
+
+  @Patch(':id/content')
+  @ApiOperation({
+    summary: 'Manually update video blocks (full replace)',
+    description:
+      'Teacher-driven form edit. Replaces all blocks for the video: sent blocks with id get updated, without id get created, any existing block not present is deleted. Marks the video as having manual edits.',
+  })
+  @ApiParam({ name: 'id', example: 1 })
+  @ApiStandardResponse(FullVideoDto)
+  @JwtAuth(Role.TEACHER)
+  updateContent(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() dto: UpdateVideoContentDto,
+    @GetUser() user: User,
+  ): Promise<FullVideoDto> {
+    return this.videosService.updateContent(id, dto, user)
   }
 
   @Delete(':id')
