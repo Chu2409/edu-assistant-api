@@ -1,9 +1,14 @@
 import { Processor, WorkerHost } from '@nestjs/bullmq'
 import { Logger } from '@nestjs/common'
 import { Job } from 'bullmq'
+import { unlink } from 'node:fs/promises'
 import { QUEUE_NAMES } from 'src/shared/constants/queues'
 import { DBService } from 'src/core/database/database.service'
-import { IngestionStatus, Prisma } from 'src/core/database/generated/client'
+import {
+  IngestionStatus,
+  Prisma,
+  SourceKind,
+} from 'src/core/database/generated/client'
 import { VideoIngestionService } from '../main/video-ingestion.service'
 import { TranscriptionService } from '../transcription/transcription.service'
 import { VideoContentGeneratorService } from '../ai/video-content-generator.service'
@@ -46,6 +51,8 @@ export class VideoProcessingWorker extends WorkerHost {
 
     this.logger.log(`Processing video ${videoId}...`)
 
+    let uploadedVideoPath: string | null = null
+
     try {
       await this.ingestionService.transition(
         videoId,
@@ -53,6 +60,10 @@ export class VideoProcessingWorker extends WorkerHost {
       )
 
       const loData = await this.ingestionService.loadForProcessing(videoId)
+
+      if (loData.kind === SourceKind.VIDEO_FILE) {
+        uploadedVideoPath = loData.sourceUrl
+      }
 
       const transcription = await this.transcriptionService.transcribe({
         kind: loData.kind,
@@ -89,6 +100,16 @@ export class VideoProcessingWorker extends WorkerHost {
         errorMessage: error instanceof Error ? error.message : 'Unknown error',
       })
       throw error
+    } finally {
+      if (uploadedVideoPath) {
+        try {
+          await unlink(uploadedVideoPath)
+        } catch (err) {
+          this.logger.warn(
+            `Failed to remove uploaded video file ${uploadedVideoPath}: ${err instanceof Error ? err.message : String(err)}`,
+          )
+        }
+      }
     }
   }
 
