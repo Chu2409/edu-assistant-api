@@ -1,8 +1,8 @@
 import {
-  Injectable,
-  NotFoundException,
   ForbiddenException,
   HttpStatus,
+  Injectable,
+  NotFoundException,
 } from '@nestjs/common'
 import { InjectQueue } from '@nestjs/bullmq'
 import { Queue } from 'bullmq'
@@ -16,6 +16,8 @@ import {
   type User,
 } from 'src/core/database/generated/client'
 import { BusinessException } from 'src/shared/exceptions/business.exception'
+import { ApiPaginatedRes } from 'src/shared/dtos/res/api-response.dto'
+import { LoHelperService } from 'src/features/learning-objects/main/lo-helper.service'
 import { CreateVideoFromUrlDto } from './dtos/req/create-video-from-url.dto'
 import { UploadVideoFileDto } from './dtos/req/upload-video-file.dto'
 import { RetryVideoContentDto } from './dtos/req/retry-video-content.dto'
@@ -24,16 +26,23 @@ import { VideoDto } from './dtos/res/video.dto'
 import { FullVideoDto } from './dtos/res/full-video.dto'
 import { VideoStatusDto } from './dtos/res/video-status.dto'
 import { VideoMapper } from './mappers/video.mapper'
-import { ApiPaginatedRes } from 'src/shared/dtos/res/api-response.dto'
 import {
   GENERATED_BLOCK_TYPES,
   VIDEO_LO_TYPE_NAME,
 } from '../constants/video.constants'
 
+type VideoSource = {
+  kind: SourceKind
+  sourceUrl: string
+  outputLanguage: string
+  metadata?: Prisma.InputJsonValue
+}
+
 @Injectable()
 export class VideosService {
   constructor(
     private readonly dbService: DBService,
+    private readonly loHelper: LoHelperService,
     @InjectQueue(QUEUE_NAMES.VIDEOS.NAME)
     private readonly videosQueue: Queue,
   ) {}
@@ -42,39 +51,11 @@ export class VideosService {
     dto: CreateVideoFromUrlDto,
     user: User,
   ): Promise<VideoDto> {
-    const module = await this.findModuleOrFail(dto.moduleId, user)
-
-    const lastLo = await this.dbService.learningObject.findFirst({
-      where: { moduleId: module.id },
-      orderBy: { orderIndex: 'desc' },
+    return this.createVideoLo(dto.moduleId, dto.title, user, {
+      kind: SourceKind.YOUTUBE_URL,
+      sourceUrl: dto.url,
+      outputLanguage: dto.outputLanguage,
     })
-
-    const videoType = await this.findLoTypeOrFail(VIDEO_LO_TYPE_NAME)
-
-    const lo = await this.dbService.learningObject.create({
-      data: {
-        moduleId: module.id,
-        typeId: videoType.id,
-        title: dto.title,
-        isPublished: false,
-        orderIndex: lastLo ? lastLo.orderIndex + 1 : 1,
-        video: {
-          create: {
-            kind: SourceKind.YOUTUBE_URL,
-            sourceUrl: dto.url,
-            status: IngestionStatus.PENDING,
-            outputLanguage: dto.outputLanguage,
-          },
-        },
-      },
-      include: { video: true },
-    })
-
-    await this.enqueueProcessing(lo.id)
-
-    return VideoMapper.toDto(
-      lo as typeof lo & { video: NonNullable<typeof lo.video> },
-    )
   }
 
   async uploadFile(
@@ -82,40 +63,15 @@ export class VideosService {
     dto: UploadVideoFileDto,
     user: User,
   ): Promise<VideoDto> {
-    const module = await this.findModuleOrFail(dto.moduleId, user)
-
-    const lastLo = await this.dbService.learningObject.findFirst({
-      where: { moduleId: module.id },
-      orderBy: { orderIndex: 'desc' },
+    return this.createVideoLo(dto.moduleId, dto.title, user, {
+      kind: SourceKind.VIDEO_FILE,
+      sourceUrl: file.path,
+      outputLanguage: dto.outputLanguage,
+      metadata: {
+        fileName: file.originalname,
+        mimeType: file.mimetype,
+      } satisfies Prisma.InputJsonValue,
     })
-
-    const videoType = await this.findLoTypeOrFail(VIDEO_LO_TYPE_NAME)
-
-    const lo = await this.dbService.learningObject.create({
-      data: {
-        moduleId: module.id,
-        typeId: videoType.id,
-        title: dto.title,
-        isPublished: false,
-        orderIndex: lastLo ? lastLo.orderIndex + 1 : 1,
-        video: {
-          create: {
-            kind: SourceKind.VIDEO_FILE,
-            sourceUrl: file.path,
-            status: IngestionStatus.PENDING,
-            outputLanguage: dto.outputLanguage,
-            metadata: { fileName: file.originalname, mimeType: file.mimetype },
-          },
-        },
-      },
-      include: { video: true },
-    })
-
-    await this.enqueueProcessing(lo.id)
-
-    return VideoMapper.toDto(
-      lo as typeof lo & { video: NonNullable<typeof lo.video> },
-    )
   }
 
   async findAll(
@@ -169,9 +125,7 @@ export class VideosService {
       .filter((lo) => lo.video !== null)
       .map((lo) =>
         VideoMapper.toDto(
-          lo as typeof lo & {
-            video: NonNullable<typeof lo.video>
-          },
+          lo as typeof lo & { video: NonNullable<typeof lo.video> },
         ),
       )
 
@@ -185,20 +139,19 @@ export class VideosService {
   }
 
   async findOne(id: number, user: User): Promise<FullVideoDto> {
-    const lo = await this.dbService.learningObject.findFirst({
-      where: { video: { learningObjectId: id } },
+    await this.loHelper.getLoForRead(id, user)
+
+    const lo = await this.dbService.learningObject.findUniqueOrThrow({
+      where: { id },
       include: {
         video: true,
         blocks: { orderBy: { orderIndex: 'asc' } },
-        module: { include: { enrollments: true } },
       },
     })
 
-    if (!lo?.video) {
+    if (!lo.video) {
       throw new NotFoundException(`Video with ID ${id} not found`)
     }
-
-    this.checkReadPermission(lo.module, user, lo.isPublished)
 
     return VideoMapper.toFullDto(
       lo as typeof lo & { video: NonNullable<typeof lo.video> },
@@ -225,19 +178,15 @@ export class VideosService {
     dto: RetryVideoContentDto,
     user: User,
   ): Promise<VideoStatusDto> {
-    const lo = await this.dbService.learningObject.findFirst({
-      where: { video: { learningObjectId: id } },
-      include: { video: true, module: true },
+    await this.loHelper.getLoForWrite(id, user)
+
+    const lo = await this.dbService.learningObject.findUniqueOrThrow({
+      where: { id },
+      include: { video: true },
     })
 
-    if (!lo?.video) {
+    if (!lo.video) {
       throw new NotFoundException(`Video with ID ${id} not found`)
-    }
-
-    if (lo.module.teacherId !== user.id) {
-      throw new ForbiddenException(
-        'Only the module owner can retry content generation',
-      )
     }
 
     if (
@@ -259,40 +208,31 @@ export class VideosService {
 
     await this.videosQueue.add(
       QUEUE_NAMES.VIDEOS.JOBS.RETRY,
-      { videoId: lo.id, contentTypes },
+      { videoId: id, contentTypes },
       { removeOnComplete: { count: 100 }, removeOnFail: { count: 50 } },
     )
 
-    const updatedLo = await this.dbService.learningObject.findUniqueOrThrow({
-      where: { id: lo.id },
+    const updated = await this.dbService.learningObject.findUniqueOrThrow({
+      where: { id },
       include: { video: true },
     })
 
     return VideoMapper.toStatusDto(
-      updatedLo as typeof updatedLo & {
-        video: NonNullable<typeof updatedLo.video>
-      },
+      updated as typeof updated & { video: NonNullable<typeof updated.video> },
     )
   }
 
   async remove(id: number, user: User): Promise<void> {
-    const lo = await this.dbService.learningObject.findFirst({
-      where: { video: { learningObjectId: id } },
-      include: { video: true, module: true },
-    })
-
-    if (!lo?.video) {
-      throw new NotFoundException(`Video with ID ${id} not found`)
-    }
-
-    if (lo.module.teacherId !== user.id) {
-      throw new ForbiddenException('Only the module owner can delete videos')
-    }
-
-    await this.dbService.learningObject.delete({ where: { id: lo.id } })
+    await this.loHelper.getLoForWrite(id, user)
+    await this.dbService.learningObject.delete({ where: { id } })
   }
 
-  private async findModuleOrFail(moduleId: number, user: User) {
+  private async createVideoLo(
+    moduleId: number,
+    title: string,
+    user: User,
+    source: VideoSource,
+  ): Promise<VideoDto> {
     const module = await this.dbService.module.findUnique({
       where: { id: moduleId },
     })
@@ -305,7 +245,34 @@ export class VideosService {
       throw new ForbiddenException('Only the module owner can create videos')
     }
 
-    return module
+    const videoType = await this.findLoTypeOrFail(VIDEO_LO_TYPE_NAME)
+    const orderIndex = await this.loHelper.getNextOrderIndex(moduleId)
+
+    const lo = await this.dbService.learningObject.create({
+      data: {
+        moduleId,
+        typeId: videoType.id,
+        title,
+        isPublished: false,
+        orderIndex,
+        video: {
+          create: {
+            kind: source.kind,
+            sourceUrl: source.sourceUrl,
+            status: IngestionStatus.PENDING,
+            outputLanguage: source.outputLanguage,
+            metadata: source.metadata,
+          },
+        },
+      },
+      include: { video: true },
+    })
+
+    await this.enqueueProcessing(lo.id)
+
+    return VideoMapper.toDto(
+      lo as typeof lo & { video: NonNullable<typeof lo.video> },
+    )
   }
 
   private async findLoTypeOrFail(name: string) {
@@ -323,33 +290,10 @@ export class VideosService {
     return loType
   }
 
-  private checkReadPermission(
-    module: {
-      teacherId: number
-      isPublic: boolean
-      enrollments?: { userId: number }[]
-    },
-    user: User,
-    isPublished: boolean,
-  ): void {
-    if (module.teacherId === user.id) return
-
-    if (user.role === Role.STUDENT && !isPublished) {
-      throw new ForbiddenException('This video is not published yet')
-    }
-
-    if (
-      !module.isPublic &&
-      !module.enrollments?.some((e) => e.userId === user.id)
-    ) {
-      throw new ForbiddenException('No permission to access this video')
-    }
-  }
-
-  private async enqueueProcessing(learningObjectId: number): Promise<void> {
+  private async enqueueProcessing(videoId: number): Promise<void> {
     await this.videosQueue.add(
       QUEUE_NAMES.VIDEOS.JOBS.PROCESS,
-      { videoId: learningObjectId },
+      { videoId },
       {
         removeOnComplete: { count: 100 },
         removeOnFail: { count: 50 },

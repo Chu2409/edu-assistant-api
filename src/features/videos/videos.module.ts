@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common'
 import { BullModule } from '@nestjs/bullmq'
 import { QUEUE_NAMES } from 'src/shared/constants/queues'
+import { LearningObjectsModule } from 'src/features/learning-objects/learning-objects.module'
 import { VideosController } from './videos.controller'
 import { VideosService } from './main/videos.service'
 import { VideoIngestionService } from './main/video-ingestion.service'
@@ -20,7 +21,10 @@ import { QuizAgent } from './ai/agents/quiz.agent'
 import { GlossaryAgent } from './ai/agents/glossary.agent'
 
 @Module({
-  imports: [BullModule.registerQueue({ name: QUEUE_NAMES.VIDEOS.NAME })],
+  imports: [
+    BullModule.registerQueue({ name: QUEUE_NAMES.VIDEOS.NAME }),
+    LearningObjectsModule,
+  ],
   controllers: [VideosController],
   providers: [
     VideosService,
