@@ -12,6 +12,10 @@ export class GenerationAttemptService {
     requestedTypes: BlockType[],
     generated: GenerationResult,
     processingTimeMs: number,
+    audit?: {
+      instruction?: string
+      previousContent?: Record<string, unknown>
+    },
   ): Promise<void> {
     const completedTypes = requestedTypes.filter(
       (t) => !generated.errors.some((e) => e.type === t),
@@ -31,6 +35,12 @@ export class GenerationAttemptService {
         tokensInput: generated.totalTokens.input,
         tokensOutput: generated.totalTokens.output,
         processingTimeMs,
+        instruction: audit?.instruction,
+        previousContent:
+          audit?.previousContent &&
+          Object.keys(audit.previousContent).length > 0
+            ? (audit.previousContent as Prisma.InputJsonValue)
+            : undefined,
         completedAt: new Date(),
       },
     })

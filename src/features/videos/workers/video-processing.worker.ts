@@ -93,11 +93,11 @@ export class VideoProcessingWorker extends WorkerHost {
   }
 
   private async handleRetry(job: Job<RetryJobData>) {
-    const { videoId, contentTypes } = job.data
+    const { videoId, contentTypes, instruction } = job.data
     const startedAt = Date.now()
 
     this.logger.log(
-      `Retrying content generation for video ${videoId}: ${contentTypes.join(', ')}`,
+      `Retrying content generation for video ${videoId}: ${contentTypes.join(', ')}${instruction ? ' (with instruction)' : ''}`,
     )
 
     try {
@@ -107,13 +107,33 @@ export class VideoProcessingWorker extends WorkerHost {
         throw new Error('No transcription available for retry')
       }
 
+      const previousBlocks = await this.dbService.block.findMany({
+        where: {
+          learningObjectId: videoId,
+          type: { in: contentTypes },
+        },
+        select: { type: true, content: true },
+      })
+
+      const previousContent: Record<string, unknown> = {}
+      for (const block of previousBlocks) {
+        previousContent[block.type] = block.content
+      }
+
       const generated = await this.contentGenerator.regenerate(contentTypes, {
         transcription: loData.rawText,
         language: loData.outputLanguage,
         videoTitle: loData.title,
+        instruction,
       })
 
-      await this.persistAndFinalize(videoId, contentTypes, generated, startedAt)
+      await this.persistAndFinalize(
+        videoId,
+        contentTypes,
+        generated,
+        startedAt,
+        { instruction, previousContent },
+      )
 
       this.logger.log(`Retry completed for video ${videoId}`)
       return { videoId, success: true }
@@ -131,6 +151,10 @@ export class VideoProcessingWorker extends WorkerHost {
     requestedTypes: RetryJobData['contentTypes'],
     generated: GenerationResult,
     startedAt: number,
+    audit?: {
+      instruction?: string
+      previousContent?: Record<string, unknown>
+    },
   ): Promise<void> {
     await this.dbService.$transaction(async (tx) => {
       await this.ingestionService.persistGeneratedContent(
@@ -146,6 +170,7 @@ export class VideoProcessingWorker extends WorkerHost {
       requestedTypes,
       generated,
       Date.now() - startedAt,
+      audit,
     )
   }
 }
