@@ -11,6 +11,9 @@ export class VideoDto {
   @ApiProperty({ example: 'Introduction to Algorithms' })
   title: string
 
+  @ApiProperty({ example: 1 })
+  orderIndex: number
+
   @ApiProperty({ enum: SourceKind, example: SourceKind.YOUTUBE_URL })
   sourceKind: SourceKind
 

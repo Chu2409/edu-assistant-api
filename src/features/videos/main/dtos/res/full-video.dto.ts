@@ -12,6 +12,9 @@ export class FullVideoDto {
   @ApiProperty({ example: 'Introduction to Algorithms' })
   title: string
 
+  @ApiProperty({ example: 1 })
+  orderIndex: number
+
   @ApiProperty({ enum: SourceKind })
   sourceKind: SourceKind
 
