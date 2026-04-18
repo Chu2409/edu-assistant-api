@@ -14,6 +14,10 @@ import { ContentAgentRegistry } from './ai/content-agent.registry'
 import { PromptLoaderService } from './ai/config/prompt-loader.service'
 import { GenerationAttemptService } from './ai/generation-attempt.service'
 import { VideoStateService } from './main/video-state.service'
+import { SummaryAgent } from './ai/agents/summary.agent'
+import { FlashcardsAgent } from './ai/agents/flashcards.agent'
+import { QuizAgent } from './ai/agents/quiz.agent'
+import { GlossaryAgent } from './ai/agents/glossary.agent'
 
 @Module({
   imports: [BullModule.registerQueue({ name: QUEUE_NAMES.VIDEOS.NAME })],
@@ -31,6 +35,10 @@ import { VideoStateService } from './main/video-state.service'
     PromptLoaderService,
     GenerationAttemptService,
     VideoStateService,
+    SummaryAgent,
+    FlashcardsAgent,
+    QuizAgent,
+    GlossaryAgent,
   ],
   exports: [
     VideosService,
