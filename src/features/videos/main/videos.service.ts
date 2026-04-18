@@ -21,6 +21,7 @@ import { LoHelperService } from 'src/features/learning-objects/main/lo-helper.se
 import { CreateVideoFromUrlDto } from './dtos/req/create-video-from-url.dto'
 import { UploadVideoFileDto } from './dtos/req/upload-video-file.dto'
 import { RetryVideoContentDto } from './dtos/req/retry-video-content.dto'
+import { UpdateVideoContentDto } from './dtos/req/update-video-content.dto'
 import { VideoFiltersDto } from './dtos/req/video-filters.dto'
 import { VideoDto } from './dtos/res/video.dto'
 import { FullVideoDto } from './dtos/res/full-video.dto'
@@ -218,6 +219,80 @@ export class VideosService {
     })
 
     return VideoMapper.toStatusDto(
+      updated as typeof updated & { video: NonNullable<typeof updated.video> },
+    )
+  }
+
+  async updateContent(
+    id: number,
+    dto: UpdateVideoContentDto,
+    user: User,
+  ): Promise<FullVideoDto> {
+    await this.loHelper.getLoForWrite(id, user)
+
+    const lo = await this.dbService.learningObject.findUniqueOrThrow({
+      where: { id },
+      include: { video: true },
+    })
+
+    if (!lo.video) {
+      throw new NotFoundException(`Video with ID ${id} not found`)
+    }
+
+    await this.dbService.$transaction(async (tx) => {
+      const blockIdsToKeep = dto.blocks
+        .filter((block) => block.id !== undefined)
+        .map((block) => block.id!)
+
+      await tx.block.deleteMany({
+        where: {
+          learningObjectId: id,
+          id: { notIn: blockIdsToKeep.length > 0 ? blockIdsToKeep : [-1] },
+        },
+      })
+
+      for (let index = 0; index < dto.blocks.length; index++) {
+        const blockDto = dto.blocks[index]
+        const orderIndex = index
+
+        if (blockDto.id) {
+          await tx.block.update({
+            where: { id: blockDto.id },
+            data: {
+              type: blockDto.type,
+              content: blockDto.content,
+              tipTapContent: blockDto.tipTapContent,
+              orderIndex,
+            },
+          })
+        } else {
+          await tx.block.create({
+            data: {
+              learningObjectId: id,
+              type: blockDto.type,
+              content: blockDto.content,
+              tipTapContent: blockDto.tipTapContent,
+              orderIndex,
+            },
+          })
+        }
+      }
+
+      await tx.video.update({
+        where: { learningObjectId: id },
+        data: { hasManualEdits: true },
+      })
+    })
+
+    const updated = await this.dbService.learningObject.findUniqueOrThrow({
+      where: { id },
+      include: {
+        video: true,
+        blocks: { orderBy: { orderIndex: 'asc' } },
+      },
+    })
+
+    return VideoMapper.toFullDto(
       updated as typeof updated & { video: NonNullable<typeof updated.video> },
     )
   }
