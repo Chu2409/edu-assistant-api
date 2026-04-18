@@ -5,10 +5,10 @@ import {
   Prisma,
 } from 'src/core/database/generated/client'
 import { DBService } from 'src/core/database/database.service'
-import { TranscriptionResult } from './transcription/interfaces/transcription-result.interface'
-import { GenerationResult } from './ai/interfaces/generation-result.interface'
-import { GENERATED_BLOCK_TYPES } from './constants/video.constants'
-import { VideoStateService } from './main/video-state.service'
+import { TranscriptionResult } from '../transcription/interfaces/transcription-result.interface'
+import { GenerationResult } from '../ai/interfaces/generation-result.interface'
+import { GENERATED_BLOCK_TYPES } from '../constants/video.constants'
+import { VideoStateService } from './video-state.service'
 
 @Injectable()
 export class VideoIngestionService {

@@ -24,14 +24,14 @@ import {
   ApiStandardResponse,
 } from 'src/shared/decorators/api-standard-response.decorator'
 import { ApiPaginatedRes } from 'src/shared/dtos/res/api-response.dto'
-import { VideosService } from './videos.service'
-import { CreateVideoFromUrlDto } from './dtos/req/create-video-from-url.dto'
-import { UploadVideoFileDto } from './dtos/req/upload-video-file.dto'
-import { RetryVideoContentDto } from './dtos/req/retry-video-content.dto'
-import { VideoFiltersDto } from './dtos/req/video-filters.dto'
-import { VideoDto } from './dtos/res/video.dto'
-import { FullVideoDto } from './dtos/res/full-video.dto'
-import { VideoStatusDto } from './dtos/res/video-status.dto'
+import { VideosService } from './main/videos.service'
+import { CreateVideoFromUrlDto } from './main/dtos/req/create-video-from-url.dto'
+import { UploadVideoFileDto } from './main/dtos/req/upload-video-file.dto'
+import { RetryVideoContentDto } from './main/dtos/req/retry-video-content.dto'
+import { VideoFiltersDto } from './main/dtos/req/video-filters.dto'
+import { VideoDto } from './main/dtos/res/video.dto'
+import { FullVideoDto } from './main/dtos/res/full-video.dto'
+import { VideoStatusDto } from './main/dtos/res/video-status.dto'
 import {
   VIDEO_FILE_MAX_SIZE_BYTES,
   VIDEO_MIME_TYPES,

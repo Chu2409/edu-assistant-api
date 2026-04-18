@@ -28,7 +28,7 @@ import { ApiPaginatedRes } from 'src/shared/dtos/res/api-response.dto'
 import {
   GENERATED_BLOCK_TYPES,
   VIDEO_LO_TYPE_NAME,
-} from './constants/video.constants'
+} from '../constants/video.constants'
 
 @Injectable()
 export class VideosService {
