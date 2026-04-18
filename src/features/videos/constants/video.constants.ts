@@ -1,3 +1,12 @@
+import { BlockType } from 'src/core/database/generated/client'
+
+export const GENERATED_BLOCK_TYPES = [
+  BlockType.SUMMARY,
+  BlockType.FLASHCARDS,
+  BlockType.QUIZ,
+  BlockType.GLOSSARY,
+] as const
+
 export const MAX_FLASHCARDS = 10
 
 export const MAX_QUIZ_QUESTIONS = 5

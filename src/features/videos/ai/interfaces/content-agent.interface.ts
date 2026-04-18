@@ -1,8 +1,9 @@
 import { z } from 'zod'
 import { BlockType } from 'src/core/database/generated/client'
+import { TaskName } from '../config/task-name.type'
 
 export interface ContentAgent {
   blockType: BlockType
-  taskName: 'summary_task' | 'flashcard_task' | 'quiz_task' | 'glossary_task'
+  taskName: TaskName
   schema: z.ZodType
 }

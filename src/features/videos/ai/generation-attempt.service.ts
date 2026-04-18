@@ -1,0 +1,38 @@
+import { Injectable } from '@nestjs/common'
+import { BlockType, Prisma } from 'src/core/database/generated/client'
+import { DBService } from 'src/core/database/database.service'
+import { GenerationResult } from './interfaces/generation-result.interface'
+
+@Injectable()
+export class GenerationAttemptService {
+  constructor(private readonly dbService: DBService) {}
+
+  async record(
+    learningObjectId: number,
+    requestedTypes: BlockType[],
+    generated: GenerationResult,
+    processingTimeMs: number,
+  ): Promise<void> {
+    const completedTypes = requestedTypes.filter(
+      (t) => !generated.errors.some((e) => e.type === t),
+    )
+
+    await this.dbService.generationAttempt.create({
+      data: {
+        learningObjectId,
+        provider: generated.provider ?? 'unknown',
+        model: generated.model ?? 'unknown',
+        requestedTypes,
+        completedTypes,
+        failedTypes:
+          generated.errors.length > 0
+            ? (generated.errors as unknown as Prisma.InputJsonValue)
+            : undefined,
+        tokensInput: generated.totalTokens.input,
+        tokensOutput: generated.totalTokens.output,
+        processingTimeMs,
+        completedAt: new Date(),
+      },
+    })
+  }
+}

@@ -2,23 +2,13 @@ import { Injectable } from '@nestjs/common'
 import { readFileSync } from 'fs'
 import { join } from 'path'
 import * as yaml from 'js-yaml'
-import { GenerationInput } from '../interfaces/generation.interface'
+import { GenerationInput } from '../interfaces/generation-input.interface'
+import { TaskConfig } from './task-config.interface'
+import { TaskName } from './task-name.type'
 import {
   MAX_FLASHCARDS,
   MAX_QUIZ_QUESTIONS,
 } from '../../constants/video.constants'
-
-interface TaskConfig {
-  temperature: number
-  max_tokens: number
-  description: string
-}
-
-type TaskName =
-  | 'summary_task'
-  | 'flashcard_task'
-  | 'quiz_task'
-  | 'glossary_task'
 
 @Injectable()
 export class PromptLoaderService {

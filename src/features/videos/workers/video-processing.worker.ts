@@ -3,34 +3,33 @@ import { Logger } from '@nestjs/common'
 import { Job } from 'bullmq'
 import { QUEUE_NAMES } from 'src/shared/constants/queues'
 import { DBService } from 'src/core/database/database.service'
-import { BlockType, IngestionStatus } from 'src/core/database/generated/client'
-import { VideosService } from '../videos.service'
+import { IngestionStatus } from 'src/core/database/generated/client'
+import { VideoIngestionService } from '../video-ingestion.service'
 import { TranscriptionService } from '../transcription/transcription.service'
 import { VideoContentGeneratorService } from '../ai/video-content-generator.service'
-
-interface ProcessJobData {
-  learningObjectId: number
-}
-
-interface RetryJobData {
-  learningObjectId: number
-  contentTypes: BlockType[]
-}
+import { GenerationAttemptService } from '../ai/generation-attempt.service'
+import { GenerationResult } from '../ai/interfaces/generation-result.interface'
+import { GENERATED_BLOCK_TYPES } from '../constants/video.constants'
+import { ProcessJobData } from './process-job-data.interface'
+import { RetryJobData } from './retry-job-data.interface'
 
 @Processor(QUEUE_NAMES.VIDEOS.NAME)
 export class VideoProcessingWorker extends WorkerHost {
   private readonly logger = new Logger(VideoProcessingWorker.name)
 
   constructor(
-    private readonly videosService: VideosService,
+    private readonly ingestionService: VideoIngestionService,
     private readonly transcriptionService: TranscriptionService,
     private readonly contentGenerator: VideoContentGeneratorService,
+    private readonly attemptService: GenerationAttemptService,
     private readonly dbService: DBService,
   ) {
     super()
   }
 
-  async process(job: Job): Promise<unknown> {
+  async process(
+    job: Job,
+  ): Promise<{ learningObjectId: number; success: boolean } | void> {
     switch (job.name) {
       case QUEUE_NAMES.VIDEOS.JOBS.PROCESS:
         return this.handleProcess(job as Job<ProcessJobData>)
@@ -48,13 +47,13 @@ export class VideoProcessingWorker extends WorkerHost {
     this.logger.log(`Processing video for LO ${learningObjectId}...`)
 
     try {
-      await this.videosService.updateStatus(
+      await this.ingestionService.updateStatus(
         learningObjectId,
         IngestionStatus.EXTRACTING,
       )
 
       const loData =
-        await this.videosService.loadForProcessing(learningObjectId)
+        await this.ingestionService.loadForProcessing(learningObjectId)
 
       const transcription = await this.transcriptionService.transcribe({
         kind: loData.kind,
@@ -63,12 +62,12 @@ export class VideoProcessingWorker extends WorkerHost {
         language: loData.outputLanguage,
       })
 
-      await this.videosService.persistTranscription(
+      await this.ingestionService.persistTranscription(
         learningObjectId,
         transcription,
       )
 
-      await this.videosService.updateStatus(
+      await this.ingestionService.updateStatus(
         learningObjectId,
         IngestionStatus.GENERATING,
       )
@@ -79,64 +78,12 @@ export class VideoProcessingWorker extends WorkerHost {
         videoTitle: loData.title,
       })
 
-      await this.dbService.$transaction(async (tx) => {
-        await this.videosService.persistGeneratedContent(
-          learningObjectId,
-          generated,
-          tx,
-        )
-      })
-
-      const processingTimeMs = Date.now() - startedAt
-
-      await this.dbService.generationAttempt.create({
-        data: {
-          learningObjectId,
-          provider: generated.provider ?? 'unknown',
-          model: generated.model ?? 'unknown',
-          requestedTypes: [
-            BlockType.SUMMARY,
-            BlockType.FLASHCARDS,
-            BlockType.QUIZ,
-            BlockType.GLOSSARY,
-          ],
-          completedTypes:
-            generated.errors.length === 0
-              ? [
-                  BlockType.SUMMARY,
-                  BlockType.FLASHCARDS,
-                  BlockType.QUIZ,
-                  BlockType.GLOSSARY,
-                ]
-              : [
-                  BlockType.SUMMARY,
-                  BlockType.FLASHCARDS,
-                  BlockType.QUIZ,
-                  BlockType.GLOSSARY,
-                ].filter((t) => !generated.errors.some((e) => e.type === t)),
-          failedTypes:
-            generated.errors.length > 0 ? generated.errors : undefined,
-          tokensInput: generated.totalTokens.input,
-          tokensOutput: generated.totalTokens.output,
-          processingTimeMs,
-          completedAt: new Date(),
-        },
-      })
-
-      if (generated.errors.length > 0) {
-        await this.videosService.updateStatus(
-          learningObjectId,
-          IngestionStatus.FAILED,
-          {
-            errorMessage: `Failed to generate: ${generated.errors.map((e) => e.type).join(', ')}`,
-          },
-        )
-      } else {
-        await this.videosService.updateStatus(
-          learningObjectId,
-          IngestionStatus.COMPLETED,
-        )
-      }
+      await this.persistAndFinalize(
+        learningObjectId,
+        [...GENERATED_BLOCK_TYPES],
+        generated,
+        startedAt,
+      )
 
       this.logger.log(`Video processing completed for LO ${learningObjectId}`)
       return { learningObjectId, success: true }
@@ -145,7 +92,7 @@ export class VideoProcessingWorker extends WorkerHost {
         `Video processing failed for LO ${learningObjectId}:`,
         error,
       )
-      await this.videosService.updateStatus(
+      await this.ingestionService.updateStatus(
         learningObjectId,
         IngestionStatus.FAILED,
         {
@@ -167,7 +114,7 @@ export class VideoProcessingWorker extends WorkerHost {
 
     try {
       const loData =
-        await this.videosService.loadForProcessing(learningObjectId)
+        await this.ingestionService.loadForProcessing(learningObjectId)
 
       if (!loData.rawText) {
         throw new Error('No transcription available for retry')
@@ -179,54 +126,18 @@ export class VideoProcessingWorker extends WorkerHost {
         videoTitle: loData.title,
       })
 
-      await this.dbService.$transaction(async (tx) => {
-        await this.videosService.persistGeneratedContent(
-          learningObjectId,
-          generated,
-          tx,
-        )
-      })
-
-      const processingTimeMs = Date.now() - startedAt
-
-      await this.dbService.generationAttempt.create({
-        data: {
-          learningObjectId,
-          provider: generated.provider ?? 'unknown',
-          model: generated.model ?? 'unknown',
-          requestedTypes: contentTypes,
-          completedTypes: contentTypes.filter(
-            (t) => !generated.errors.some((e) => e.type === t),
-          ),
-          failedTypes:
-            generated.errors.length > 0 ? generated.errors : undefined,
-          tokensInput: generated.totalTokens.input,
-          tokensOutput: generated.totalTokens.output,
-          processingTimeMs,
-          completedAt: new Date(),
-        },
-      })
-
-      if (generated.errors.length > 0) {
-        await this.videosService.updateStatus(
-          learningObjectId,
-          IngestionStatus.FAILED,
-          {
-            errorMessage: `Retry failed for: ${generated.errors.map((e) => e.type).join(', ')}`,
-          },
-        )
-      } else {
-        await this.videosService.updateStatus(
-          learningObjectId,
-          IngestionStatus.COMPLETED,
-        )
-      }
+      await this.persistAndFinalize(
+        learningObjectId,
+        contentTypes,
+        generated,
+        startedAt,
+      )
 
       this.logger.log(`Retry completed for LO ${learningObjectId}`)
       return { learningObjectId, success: true }
     } catch (error) {
       this.logger.error(`Retry failed for LO ${learningObjectId}:`, error)
-      await this.videosService.updateStatus(
+      await this.ingestionService.updateStatus(
         learningObjectId,
         IngestionStatus.FAILED,
         {
@@ -236,5 +147,29 @@ export class VideoProcessingWorker extends WorkerHost {
       )
       throw error
     }
+  }
+
+  private async persistAndFinalize(
+    learningObjectId: number,
+    requestedTypes: RetryJobData['contentTypes'],
+    generated: GenerationResult,
+    startedAt: number,
+  ): Promise<void> {
+    await this.dbService.$transaction(async (tx) => {
+      await this.ingestionService.persistGeneratedContent(
+        learningObjectId,
+        generated,
+        tx,
+      )
+    })
+
+    await this.attemptService.record(
+      learningObjectId,
+      requestedTypes,
+      generated,
+      Date.now() - startedAt,
+    )
+
+    await this.ingestionService.finalizeGeneration(learningObjectId, generated)
   }
 }

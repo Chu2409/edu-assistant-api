@@ -3,13 +3,12 @@ import { ConfigService } from '@nestjs/config'
 import { createGroq } from '@ai-sdk/groq'
 import { createOpenAI } from '@ai-sdk/openai'
 import { createGoogleGenerativeAI } from '@ai-sdk/google'
-import { createOllama } from 'ollama-ai-provider'
-import { type generateObject } from 'ai'
+import { createOpenAICompatible } from '@ai-sdk/openai-compatible'
+import { type LanguageModel } from 'ai'
 import { BusinessException } from 'src/shared/exceptions/business.exception'
 import { IConfig } from 'src/core/config/types'
 
-type AiModel = Parameters<typeof generateObject>[0]['model']
-type ProviderFactory = (modelName: string) => AiModel
+type ProviderFactory = (modelName: string) => LanguageModel
 
 @Injectable()
 export class VideoAiProviderService {
@@ -29,7 +28,7 @@ export class VideoAiProviderService {
         (model) =>
           createOpenAI({
             apiKey: this.configService.get<string>('APP.OPENAI_API_KEY'),
-          })(model),
+          }).chat(model),
       ],
       [
         'google',
@@ -41,16 +40,28 @@ export class VideoAiProviderService {
           })(model),
       ],
       [
+        'nvidia',
+        (model) =>
+          createOpenAICompatible({
+            name: 'nim',
+            baseURL: this.configService.get<string>('APP.NVIDIA_BASE_URL')!,
+            headers: {
+              Authorization: `Bearer ${this.configService.get<string>('APP.NVIDIA_API_KEY')}`,
+            },
+          }).chatModel(model),
+      ],
+      [
         'ollama',
         (model) =>
-          createOllama({
-            baseURL: this.configService.get<string>('APP.OLLAMA_BASE_URL'),
-          })(model) as unknown as AiModel,
+          createOpenAICompatible({
+            name: 'ollama',
+            baseURL: `${this.configService.get<string>('APP.OLLAMA_BASE_URL')}/v1`,
+          }).chatModel(model),
       ],
     ])
   }
 
-  getModel(): AiModel {
+  getModel(): LanguageModel {
     const provider = this.configService.get<IConfig['VIDEO_AI_PROVIDER']>(
       'APP.VIDEO_AI_PROVIDER',
     )!

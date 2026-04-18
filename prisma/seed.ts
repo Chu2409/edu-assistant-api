@@ -3,7 +3,7 @@ import { PrismaClient } from 'src/core/database/generated/client'
 import { PrismaPg } from '@prisma/adapter-pg'
 
 import 'dotenv/config'
-import { createUser1, createUser2 } from './data/users'
+import { createUser1, createUser2, createUser3 } from './data/users'
 import { createModule1 } from './data/modules'
 import { createEnrollment1 } from './data/enrollments'
 import { createAiConfiguration1 } from './data/ai-configuration'
@@ -17,6 +17,7 @@ const prisma = new PrismaClient({ adapter })
 const main = async () => {
   const teacher = await createUser1(prisma)
   const student = await createUser2(prisma)
+  await createUser3(prisma)
 
   // const module = await createModule1(prisma, teacher.id)
   // await createEnrollment1(prisma, student.id, module.id)

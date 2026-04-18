@@ -21,6 +21,8 @@ export interface IConfig {
   VIDEO_AI_MODEL: string
   GROQ_API_KEY: string
   GOOGLE_GENERATIVE_AI_API_KEY: string
+  NVIDIA_API_KEY: string
+  NVIDIA_BASE_URL: string
   OLLAMA_BASE_URL: string
   VIDEO_AI_REQUEST_TIMEOUT: number
 

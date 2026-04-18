@@ -8,7 +8,6 @@ import { Queue } from 'bullmq'
 import { DBService } from 'src/core/database/database.service'
 import { QUEUE_NAMES } from 'src/shared/constants/queues'
 import {
-  BlockType,
   IngestionStatus,
   Prisma,
   Role,
@@ -27,15 +26,7 @@ import { VideoStatusDto } from './dtos/res/video-status.dto'
 import { VideoMapper } from './mappers/video.mapper'
 import { ApiPaginatedRes } from 'src/shared/dtos/res/api-response.dto'
 import { isYoutubeUrl } from './transcription/utils/youtube-url.util'
-import { TranscriptionResult } from './transcription/interfaces/transcription-result.interface'
-import { GenerationResult } from './ai/interfaces/generation.interface'
-
-const GENERATED_BLOCK_TYPES = [
-  BlockType.SUMMARY,
-  BlockType.FLASHCARDS,
-  BlockType.QUIZ,
-  BlockType.GLOSSARY,
-]
+import { GENERATED_BLOCK_TYPES } from './constants/video.constants'
 
 @Injectable()
 export class VideosService {
@@ -261,7 +252,7 @@ export class VideosService {
       )
     }
 
-    const contentTypes = dto.contentTypes ?? GENERATED_BLOCK_TYPES
+    const contentTypes = dto.contentTypes ?? [...GENERATED_BLOCK_TYPES]
 
     await this.dbService.contentSource.update({
       where: { id },
@@ -294,105 +285,6 @@ export class VideosService {
     }
 
     await this.dbService.learningObject.delete({ where: { id: lo.id } })
-  }
-
-  async updateStatus(
-    learningObjectId: number,
-    status: IngestionStatus,
-    extra?: { errorMessage?: string },
-  ): Promise<void> {
-    await this.dbService.contentSource.update({
-      where: { learningObjectId },
-      data: { status, errorMessage: extra?.errorMessage },
-    })
-  }
-
-  async persistTranscription(
-    learningObjectId: number,
-    result: TranscriptionResult,
-  ): Promise<void> {
-    await this.dbService.contentSource.update({
-      where: { learningObjectId },
-      data: {
-        rawText: result.text,
-        detectedLanguage: result.language,
-        durationSeconds: result.durationSeconds,
-      },
-    })
-  }
-
-  async persistGeneratedContent(
-    learningObjectId: number,
-    generated: GenerationResult,
-    tx: Prisma.TransactionClient,
-  ): Promise<void> {
-    await tx.block.deleteMany({
-      where: {
-        learningObjectId,
-        type: { in: GENERATED_BLOCK_TYPES },
-      },
-    })
-
-    let orderIndex = 0
-    const blocks: Prisma.BlockCreateManyInput[] = []
-
-    if (generated.summary) {
-      blocks.push({
-        learningObjectId,
-        type: BlockType.SUMMARY,
-        content: generated.summary as unknown as Prisma.InputJsonValue,
-        orderIndex: orderIndex++,
-      })
-    }
-    if (generated.flashcards) {
-      blocks.push({
-        learningObjectId,
-        type: BlockType.FLASHCARDS,
-        content: generated.flashcards as unknown as Prisma.InputJsonValue,
-        orderIndex: orderIndex++,
-      })
-    }
-    if (generated.quiz) {
-      blocks.push({
-        learningObjectId,
-        type: BlockType.QUIZ,
-        content: generated.quiz as unknown as Prisma.InputJsonValue,
-        orderIndex: orderIndex++,
-      })
-    }
-    if (generated.glossary) {
-      blocks.push({
-        learningObjectId,
-        type: BlockType.GLOSSARY,
-        content: generated.glossary as unknown as Prisma.InputJsonValue,
-        orderIndex: orderIndex++,
-      })
-    }
-
-    if (blocks.length > 0) {
-      await tx.block.createMany({ data: blocks })
-    }
-  }
-
-  async loadForProcessing(learningObjectId: number) {
-    const lo = await this.dbService.learningObject.findUnique({
-      where: { id: learningObjectId },
-      include: { contentSource: true },
-    })
-
-    if (!lo?.contentSource) {
-      throw new NotFoundException(
-        `LearningObject ${learningObjectId} has no content source`,
-      )
-    }
-
-    return {
-      title: lo.title,
-      kind: lo.contentSource.kind,
-      sourceUrl: lo.contentSource.sourceUrl,
-      outputLanguage: lo.contentSource.outputLanguage,
-      rawText: lo.contentSource.rawText,
-    }
   }
 
   private async findModuleOrFail(moduleId: number, user: User) {

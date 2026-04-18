@@ -3,6 +3,7 @@ import { BullModule } from '@nestjs/bullmq'
 import { QUEUE_NAMES } from 'src/shared/constants/queues'
 import { VideosController } from './videos.controller'
 import { VideosService } from './videos.service'
+import { VideoIngestionService } from './video-ingestion.service'
 import { TranscriptionService } from './transcription/transcription.service'
 import { YoutubeTranscriptStrategy } from './transcription/strategies/youtube-transcript.strategy'
 import { WhisperStrategy } from './transcription/strategies/whisper.strategy'
@@ -11,12 +12,14 @@ import { VideoAiProviderService } from './ai/video-ai-provider.service'
 import { VideoContentGeneratorService } from './ai/video-content-generator.service'
 import { ContentAgentFactory } from './ai/content-agent.factory'
 import { PromptLoaderService } from './ai/config/prompt-loader.service'
+import { GenerationAttemptService } from './ai/generation-attempt.service'
 
 @Module({
   imports: [BullModule.registerQueue({ name: QUEUE_NAMES.VIDEOS.NAME })],
   controllers: [VideosController],
   providers: [
     VideosService,
+    VideoIngestionService,
     TranscriptionService,
     YoutubeTranscriptStrategy,
     WhisperStrategy,
@@ -25,7 +28,14 @@ import { PromptLoaderService } from './ai/config/prompt-loader.service'
     VideoContentGeneratorService,
     ContentAgentFactory,
     PromptLoaderService,
+    GenerationAttemptService,
   ],
-  exports: [VideosService],
+  exports: [
+    VideosService,
+    VideoIngestionService,
+    TranscriptionService,
+    VideoContentGeneratorService,
+    GenerationAttemptService,
+  ],
 })
 export class VideosModule {}

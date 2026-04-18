@@ -28,6 +28,9 @@ export const config = (): { APP: IConfig } => ({
     GROQ_API_KEY: process.env.GROQ_API_KEY || '',
     GOOGLE_GENERATIVE_AI_API_KEY:
       process.env.GOOGLE_GENERATIVE_AI_API_KEY || '',
+    NVIDIA_API_KEY: process.env.NVIDIA_API_KEY || '',
+    NVIDIA_BASE_URL:
+      process.env.NVIDIA_BASE_URL || 'https://integrate.api.nvidia.com/v1',
     OLLAMA_BASE_URL: process.env.OLLAMA_BASE_URL || 'http://localhost:11434',
     VIDEO_AI_REQUEST_TIMEOUT: process.env.VIDEO_AI_REQUEST_TIMEOUT
       ? parseInt(process.env.VIDEO_AI_REQUEST_TIMEOUT, 10)
@@ -74,11 +77,15 @@ export const configValidationSchema = Joi.object<IConfig>({
   OPENAI_API_KEY: Joi.string(),
 
   VIDEO_AI_PROVIDER: Joi.string()
-    .valid('groq', 'openai', 'google', 'ollama')
+    .valid('groq', 'openai', 'google', 'nvidia', 'ollama')
     .default('groq'),
   VIDEO_AI_MODEL: Joi.string().default('llama-3.3-70b-versatile'),
   GROQ_API_KEY: Joi.string().allow('').default(''),
   GOOGLE_GENERATIVE_AI_API_KEY: Joi.string().allow('').default(''),
+  NVIDIA_API_KEY: Joi.string().allow('').default(''),
+  NVIDIA_BASE_URL: Joi.string()
+    .uri()
+    .default('https://integrate.api.nvidia.com/v1'),
   OLLAMA_BASE_URL: Joi.string().uri().default('http://localhost:11434'),
   VIDEO_AI_REQUEST_TIMEOUT: Joi.number().default(120000),
 

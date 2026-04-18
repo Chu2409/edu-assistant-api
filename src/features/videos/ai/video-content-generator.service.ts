@@ -1,16 +1,14 @@
 import { Injectable, Logger } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
-import { generateObject } from 'ai'
+import { generateText, Output, type LanguageModel } from 'ai'
 import { BlockType } from 'src/core/database/generated/client'
 import { IConfig } from 'src/core/config/types'
 import { VideoAiProviderService } from './video-ai-provider.service'
 import { PromptLoaderService } from './config/prompt-loader.service'
 import { ContentAgentFactory } from './content-agent.factory'
 import { ContentAgent } from './interfaces/content-agent.interface'
-import {
-  GenerationInput,
-  GenerationResult,
-} from './interfaces/generation.interface'
+import { GenerationInput } from './interfaces/generation-input.interface'
+import { GenerationResult } from './interfaces/generation-result.interface'
 
 @Injectable()
 export class VideoContentGeneratorService {
@@ -61,7 +59,11 @@ export class VideoContentGeneratorService {
       const agent = agents[i]
 
       if (entry.status === 'fulfilled') {
-        this.assignResult(result, agent.blockType, entry.value.data)
+        this.assignResult(
+          result,
+          agent.blockType,
+          entry.value.data as Record<string, unknown>,
+        )
         result.totalTokens.input += entry.value.tokens.inputTokens ?? 0
         result.totalTokens.output += entry.value.tokens.outputTokens ?? 0
       } else {
@@ -81,7 +83,7 @@ export class VideoContentGeneratorService {
 
   private async executeAgent(
     agent: ContentAgent,
-    model: Parameters<typeof generateObject>[0]['model'],
+    model: LanguageModel,
     input: GenerationInput,
     timeout: number,
   ) {
@@ -89,33 +91,44 @@ export class VideoContentGeneratorService {
     const temperature = this.promptLoader.getTemperature(agent.taskName)
     const maxOutputTokens = this.promptLoader.getMaxTokens(agent.taskName)
 
-    const result = await generateObject({
+    this.logger.debug(
+      `Calling AI: model=${String((model as { modelId?: string }).modelId ?? 'unknown')} task=${agent.taskName}`,
+    )
+
+    const result = await generateText({
       model,
-      schema: agent.schema,
+      output: Output.object({ schema: agent.schema }),
       prompt,
       temperature,
       maxOutputTokens,
       abortSignal: AbortSignal.timeout(timeout),
     })
 
-    return { data: result.object, tokens: result.usage }
+    this.logger.debug(
+      `AI response: task=${agent.taskName} finishReason=${result.finishReason} hasOutput=${!!result.output}`,
+    )
+
+    return { data: result.output, tokens: result.usage }
   }
 
   private assignResult(
     result: GenerationResult,
     blockType: BlockType,
-    data: unknown,
+    data: Record<string, unknown>,
   ): void {
-    const keyMap = new Map<BlockType, keyof GenerationResult>([
-      [BlockType.SUMMARY, 'summary'],
-      [BlockType.FLASHCARDS, 'flashcards'],
-      [BlockType.QUIZ, 'quiz'],
-      [BlockType.GLOSSARY, 'glossary'],
-    ])
-
-    const key = keyMap.get(blockType)
-    if (key) {
-      ;(result as unknown as Record<string, unknown>)[key] = data
+    switch (blockType) {
+      case BlockType.SUMMARY:
+        result.summary = data as GenerationResult['summary']
+        break
+      case BlockType.FLASHCARDS:
+        result.flashcards = data as GenerationResult['flashcards']
+        break
+      case BlockType.QUIZ:
+        result.quiz = data as GenerationResult['quiz']
+        break
+      case BlockType.GLOSSARY:
+        result.glossary = data as GenerationResult['glossary']
+        break
     }
   }
 }
