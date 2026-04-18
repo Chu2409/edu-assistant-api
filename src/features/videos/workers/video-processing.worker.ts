@@ -3,7 +3,7 @@ import { Logger } from '@nestjs/common'
 import { Job } from 'bullmq'
 import { QUEUE_NAMES } from 'src/shared/constants/queues'
 import { DBService } from 'src/core/database/database.service'
-import { IngestionStatus } from 'src/core/database/generated/client'
+import { IngestionStatus, Prisma } from 'src/core/database/generated/client'
 import { VideoIngestionService } from '../main/video-ingestion.service'
 import { TranscriptionService } from '../transcription/transcription.service'
 import { VideoContentGeneratorService } from '../ai/video-content-generator.service'
@@ -115,9 +115,9 @@ export class VideoProcessingWorker extends WorkerHost {
         select: { type: true, content: true },
       })
 
-      const previousContent: Record<string, unknown> = {}
+      const previousContent: Record<string, Prisma.InputJsonValue> = {}
       for (const block of previousBlocks) {
-        previousContent[block.type] = block.content
+        previousContent[block.type] = block.content as Prisma.InputJsonValue
       }
 
       const generated = await this.contentGenerator.regenerate(contentTypes, {
@@ -153,7 +153,7 @@ export class VideoProcessingWorker extends WorkerHost {
     startedAt: number,
     audit?: {
       instruction?: string
-      previousContent?: Record<string, unknown>
+      previousContent?: Record<string, Prisma.InputJsonValue>
     },
   ): Promise<void> {
     await this.dbService.$transaction(async (tx) => {

@@ -14,7 +14,7 @@ export class GenerationAttemptService {
     processingTimeMs: number,
     audit?: {
       instruction?: string
-      previousContent?: Record<string, unknown>
+      previousContent?: Record<string, Prisma.InputJsonValue>
     },
   ): Promise<void> {
     const completedTypes = requestedTypes.filter(
@@ -39,7 +39,7 @@ export class GenerationAttemptService {
         previousContent:
           audit?.previousContent &&
           Object.keys(audit.previousContent).length > 0
-            ? (audit.previousContent as Prisma.InputJsonValue)
+            ? audit.previousContent
             : undefined,
         completedAt: new Date(),
       },
