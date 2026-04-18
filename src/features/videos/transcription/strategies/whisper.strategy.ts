@@ -19,7 +19,7 @@ export class WhisperStrategy implements ITranscriptionStrategy {
     const result = await nodewhisper(filePath, {
       modelName,
       autoDownloadModelName: modelName,
-      removeWavFileAfterTranscription: false,
+      removeWavFileAfterTranscription: true,
     })
 
     const text = typeof result === 'string' ? result : String(result)
