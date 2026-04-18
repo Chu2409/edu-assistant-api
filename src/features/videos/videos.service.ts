@@ -26,7 +26,10 @@ import { VideoStatusDto } from './dtos/res/video-status.dto'
 import { VideoMapper } from './mappers/video.mapper'
 import { ApiPaginatedRes } from 'src/shared/dtos/res/api-response.dto'
 import { isYoutubeUrl } from './transcription/utils/youtube-url.util'
-import { GENERATED_BLOCK_TYPES } from './constants/video.constants'
+import {
+  GENERATED_BLOCK_TYPES,
+  VIDEO_LO_TYPE_NAME,
+} from './constants/video.constants'
 
 @Injectable()
 export class VideosService {
@@ -54,7 +57,7 @@ export class VideosService {
       orderBy: { orderIndex: 'desc' },
     })
 
-    const videoType = await this.findLoTypeOrFail('VIDEO')
+    const videoType = await this.findLoTypeOrFail(VIDEO_LO_TYPE_NAME)
 
     const lo = await this.dbService.learningObject.create({
       data: {
@@ -94,7 +97,7 @@ export class VideosService {
       orderBy: { orderIndex: 'desc' },
     })
 
-    const videoType = await this.findLoTypeOrFail('VIDEO')
+    const videoType = await this.findLoTypeOrFail(VIDEO_LO_TYPE_NAME)
 
     const lo = await this.dbService.learningObject.create({
       data: {

@@ -23,3 +23,5 @@ export const VIDEO_MIME_TYPES = [
   'video/x-matroska',
   'video/mp2t',
 ]
+
+export const VIDEO_LO_TYPE_NAME = 'VIDEO'

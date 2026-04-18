@@ -1,17 +1,11 @@
 import { ApiPropertyOptional } from '@nestjs/swagger'
 import { IsEnum, IsOptional } from 'class-validator'
 import { BlockType } from 'src/core/database/generated/client'
-
-const RETRYABLE_BLOCK_TYPES = [
-  BlockType.SUMMARY,
-  BlockType.FLASHCARDS,
-  BlockType.QUIZ,
-  BlockType.GLOSSARY,
-] as const
+import { GENERATED_BLOCK_TYPES } from '../../constants/video.constants'
 
 export class RetryVideoContentDto {
   @ApiPropertyOptional({
-    enum: RETRYABLE_BLOCK_TYPES,
+    enum: GENERATED_BLOCK_TYPES,
     isArray: true,
     example: ['SUMMARY', 'QUIZ'],
   })
