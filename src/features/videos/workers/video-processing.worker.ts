@@ -5,7 +5,6 @@ import { unlink } from 'node:fs/promises'
 import { QUEUE_NAMES } from 'src/shared/constants/queues'
 import { DBService } from 'src/core/database/database.service'
 import {
-  BlockType,
   IngestionStatus,
   Prisma,
   SourceKind,
@@ -134,14 +133,12 @@ export class VideoProcessingWorker extends WorkerHost {
           learningObjectId: videoId,
           type: { in: contentTypes },
         },
-        select: { type: true, content: true, orderIndex: true },
+        select: { type: true, content: true },
       })
 
       const previousContent: Record<string, Prisma.InputJsonValue> = {}
-      const orderIndexByType: Partial<Record<BlockType, number>> = {}
       for (const block of previousBlocks) {
         previousContent[block.type] = block.content as Prisma.InputJsonValue
-        orderIndexByType[block.type] = block.orderIndex
       }
 
       const generated = await this.contentGenerator.regenerate(contentTypes, {
@@ -156,7 +153,7 @@ export class VideoProcessingWorker extends WorkerHost {
         contentTypes,
         generated,
         startedAt,
-        { instruction, previousContent, orderIndexByType },
+        { instruction, previousContent },
       )
 
       this.logger.log(`Retry completed for video ${videoId}`)
@@ -178,7 +175,6 @@ export class VideoProcessingWorker extends WorkerHost {
     audit?: {
       instruction?: string
       previousContent?: Record<string, Prisma.InputJsonValue>
-      orderIndexByType?: Partial<Record<BlockType, number>>
     },
   ): Promise<void> {
     await this.dbService.$transaction(async (tx) => {
@@ -187,7 +183,6 @@ export class VideoProcessingWorker extends WorkerHost {
         generated,
         requestedTypes,
         tx,
-        audit?.orderIndexByType,
       )
       await this.ingestionService.finalizeGeneration(videoId, generated, tx)
     })
