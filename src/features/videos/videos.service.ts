@@ -2,6 +2,7 @@ import {
   Injectable,
   NotFoundException,
   ForbiddenException,
+  HttpStatus,
 } from '@nestjs/common'
 import { InjectQueue } from '@nestjs/bullmq'
 import { Queue } from 'bullmq'
@@ -14,7 +15,6 @@ import {
   SourceKind,
   type User,
 } from 'src/core/database/generated/client'
-import { HttpStatus } from '@nestjs/common'
 import { BusinessException } from 'src/shared/exceptions/business.exception'
 import { CreateVideoFromUrlDto } from './dtos/req/create-video-from-url.dto'
 import { UploadVideoFileDto } from './dtos/req/upload-video-file.dto'
@@ -25,7 +25,6 @@ import { FullVideoDto } from './dtos/res/full-video.dto'
 import { VideoStatusDto } from './dtos/res/video-status.dto'
 import { VideoMapper } from './mappers/video.mapper'
 import { ApiPaginatedRes } from 'src/shared/dtos/res/api-response.dto'
-import { isYoutubeUrl } from './transcription/utils/youtube-url.util'
 import {
   GENERATED_BLOCK_TYPES,
   VIDEO_LO_TYPE_NAME,
@@ -43,13 +42,6 @@ export class VideosService {
     dto: CreateVideoFromUrlDto,
     user: User,
   ): Promise<VideoDto> {
-    if (!isYoutubeUrl(dto.url)) {
-      throw new BusinessException(
-        'The provided URL is not a valid YouTube URL',
-        HttpStatus.BAD_REQUEST,
-      )
-    }
-
     const module = await this.findModuleOrFail(dto.moduleId, user)
 
     const lastLo = await this.dbService.learningObject.findFirst({

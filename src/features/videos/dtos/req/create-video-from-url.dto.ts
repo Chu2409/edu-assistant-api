@@ -1,13 +1,7 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger'
 import { Type } from 'class-transformer'
-import {
-  IsInt,
-  IsString,
-  IsUrl,
-  MaxLength,
-  Min,
-  MinLength,
-} from 'class-validator'
+import { IsInt, IsString, MaxLength, Min, MinLength } from 'class-validator'
+import { IsYoutubeUrl } from '../../validators/is-youtube-url.validator'
 
 export class CreateVideoFromUrlDto {
   @ApiProperty({ example: 1 })
@@ -24,7 +18,7 @@ export class CreateVideoFromUrlDto {
 
   @ApiProperty({ example: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ' })
   @IsString()
-  @IsUrl()
+  @IsYoutubeUrl()
   url: string
 
   @ApiPropertyOptional({ example: 'auto', default: 'auto' })
