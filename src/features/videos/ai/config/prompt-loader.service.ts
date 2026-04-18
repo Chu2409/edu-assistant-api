@@ -13,6 +13,9 @@ import {
 @Injectable()
 export class PromptLoaderService {
   private readonly tasks: Record<TaskName, TaskConfig>
+  private readonly languageNames = new Intl.DisplayNames(['en'], {
+    type: 'language',
+  })
 
   constructor() {
     const filePath = join(
@@ -31,10 +34,8 @@ export class PromptLoaderService {
   getPrompt(taskName: TaskName, input: GenerationInput): string {
     const task = this.tasks[taskName]
     const titleContext = `The video title is: "${input.videoTitle}".`
-    const languageInstruction =
-      input.language === 'auto'
-        ? 'Respond in the same language as the transcription.'
-        : `Respond entirely in ${input.language}.`
+    const languageName = this.resolveLanguageName(input.language)
+    const languageInstruction = `Respond entirely in ${languageName}. All output fields MUST be written in ${languageName}.`
 
     const instructionBlock = input.instruction
       ? `\nTeacher feedback — adjust the output accordingly:\n<instruction>\n${input.instruction.replace(/</g, '&lt;').replace(/>/g, '&gt;')}\n</instruction>\n`
@@ -45,6 +46,7 @@ export class PromptLoaderService {
       .replace(/{title_context}/g, titleContext)
       .replace(/{language_instruction}/g, languageInstruction)
       .replace(/{instruction_block}/g, instructionBlock)
+      .replace(/{language_name}/g, languageName)
       .replace(/{max_cards}/g, String(MAX_FLASHCARDS))
       .replace(/{max_questions}/g, String(MAX_QUIZ_QUESTIONS))
   }
@@ -55,5 +57,13 @@ export class PromptLoaderService {
 
   getMaxTokens(taskName: TaskName): number {
     return this.tasks[taskName].max_tokens
+  }
+
+  private resolveLanguageName(code: string): string {
+    try {
+      return this.languageNames.of(code) ?? code
+    } catch {
+      return code
+    }
   }
 }

@@ -141,9 +141,14 @@ export class VideoProcessingWorker extends WorkerHost {
         previousContent[block.type] = block.content as Prisma.InputJsonValue
       }
 
+      const resolvedLanguage =
+        loData.outputLanguage === 'auto'
+          ? (loData.detectedLanguage ?? 'en')
+          : loData.outputLanguage
+
       const generated = await this.contentGenerator.regenerate(contentTypes, {
         transcription: loData.rawText,
-        language: loData.outputLanguage,
+        language: resolvedLanguage,
         videoTitle: loData.title,
         instruction,
       })

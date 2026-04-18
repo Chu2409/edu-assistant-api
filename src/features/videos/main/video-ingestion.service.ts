@@ -78,6 +78,7 @@ export class VideoIngestionService {
       kind: lo.video.kind,
       sourceUrl: lo.video.sourceUrl,
       outputLanguage: lo.video.outputLanguage,
+      detectedLanguage: lo.video.detectedLanguage,
       rawText: lo.video.rawText,
     }
   }

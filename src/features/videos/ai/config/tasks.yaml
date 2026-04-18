@@ -81,10 +81,13 @@ quiz_task:
     - Distribute correctAnswer values across 0, 1, 2, and 3.
 
 glossary_task:
-  temperature: 0.2
+  temperature: 0.3
   max_tokens: 2500
   description: |
     Extract a glossary of technical and domain-specific terms from this video transcription.
+
+    {language_instruction}
+
     {title_context}
     <transcription>
     {transcription}
@@ -97,11 +100,10 @@ glossary_task:
     - Every object in "terms" MUST contain BOTH "term" AND "definition".
     - NEVER output an object with only "term" and no "definition".
     - If you cannot define a term, skip it entirely rather than omitting the "definition" key.
-
-    {language_instruction}
     {instruction_block}
 
     Rules:
+    - Write BOTH the "term" and the "definition" entirely in {language_name}. Never mix languages. Never switch mid-response to another language.
     - Extract between 5 and 15 terms that are specific to the subject matter discussed in the video.
     - ONLY include terms that are explicitly mentioned or explained in the transcription.
     - Definitions must be based exclusively on how the video explains the term — do NOT add external knowledge.
