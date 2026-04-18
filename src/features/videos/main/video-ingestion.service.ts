@@ -44,16 +44,18 @@ export class VideoIngestionService {
   async persistGeneratedContent(
     videoId: number,
     generated: GenerationResult,
+    contentTypes: BlockType[],
     tx: Prisma.TransactionClient,
+    orderIndexByType?: Partial<Record<BlockType, number>>,
   ): Promise<void> {
     await tx.block.deleteMany({
       where: {
         learningObjectId: videoId,
-        type: { in: [...GENERATED_BLOCK_TYPES] },
+        type: { in: contentTypes },
       },
     })
 
-    const blocks = this.buildBlockInputs(videoId, generated)
+    const blocks = this.buildBlockInputs(videoId, generated, orderIndexByType)
 
     if (blocks.length > 0) {
       await tx.block.createMany({ data: blocks })
@@ -108,9 +110,9 @@ export class VideoIngestionService {
   private buildBlockInputs(
     videoId: number,
     generated: GenerationResult,
+    orderIndexByType?: Partial<Record<BlockType, number>>,
   ): Prisma.BlockCreateManyInput[] {
     const blocks: Prisma.BlockCreateManyInput[] = []
-    let orderIndex = 0
 
     const entries: Array<{
       type: BlockType
@@ -133,11 +135,16 @@ export class VideoIngestionService {
 
     for (const entry of entries) {
       if (entry.data) {
+        const orderIndex =
+          orderIndexByType?.[entry.type] ??
+          GENERATED_BLOCK_TYPES.indexOf(
+            entry.type as (typeof GENERATED_BLOCK_TYPES)[number],
+          )
         blocks.push({
           learningObjectId: videoId,
           type: entry.type,
           content: entry.data,
-          orderIndex: orderIndex++,
+          orderIndex,
         })
       }
     }
