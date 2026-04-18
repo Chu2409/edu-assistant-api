@@ -646,6 +646,8 @@ model Video {
   errorMessage     String? @map("error_message") @db.Text
   metadata         Json?
 
+  hasManualEdits Boolean @default(false) @map("has_manual_edits")
+
   updatedAt DateTime @updatedAt @map("updated_at")
 
   learningObject     LearningObject           @relation(fields: [learningObjectId], references: [id], onDelete: Cascade)
@@ -671,6 +673,9 @@ model VideoGenerationAttempt {
   tokensOutput     Int?  @map("tokens_output")
   processingTimeMs Int?  @map("processing_time_ms")
   qualityMetrics   Json? @map("quality_metrics")
+
+  instruction     String? @map("instruction") @db.Text
+  previousContent Json?   @map("previous_content")
 
   startedAt   DateTime  @default(now()) @map("started_at")
   completedAt DateTime? @map("completed_at")
