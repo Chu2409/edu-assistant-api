@@ -3,17 +3,8 @@ import { summarySchema } from '../schemas/summary.schema'
 import { flashcardsSchema } from '../schemas/flashcards.schema'
 import { quizSchema } from '../schemas/quiz.schema'
 import { glossarySchema } from '../schemas/glossary.schema'
-
-export interface GenerationError {
-  type: string
-  error: string
-  rawSnippet?: string
-}
-
-export interface TokenUsage {
-  input: number
-  output: number
-}
+import { GenerationError } from './generation-error.interface'
+import { TokenUsage } from './token-usage.interface'
 
 export interface GenerationResult {
   summary?: z.infer<typeof summarySchema>
