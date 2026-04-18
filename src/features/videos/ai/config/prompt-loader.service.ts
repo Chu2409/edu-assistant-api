@@ -37,7 +37,7 @@ export class PromptLoaderService {
         : `Respond entirely in ${input.language}.`
 
     const instructionBlock = input.instruction
-      ? `\nTeacher feedback — adjust the output accordingly:\n<instruction>\n${input.instruction}\n</instruction>\n`
+      ? `\nTeacher feedback — adjust the output accordingly:\n<instruction>\n${input.instruction.replace(/</g, '&lt;').replace(/>/g, '&gt;')}\n</instruction>\n`
       : ''
 
     return task.description
