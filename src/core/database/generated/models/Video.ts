@@ -46,6 +46,7 @@ export type VideoMinAggregateOutputType = {
   detectedLanguage: string | null
   durationSeconds: number | null
   errorMessage: string | null
+  hasManualEdits: boolean | null
   updatedAt: Date | null
 }
 
@@ -59,6 +60,7 @@ export type VideoMaxAggregateOutputType = {
   detectedLanguage: string | null
   durationSeconds: number | null
   errorMessage: string | null
+  hasManualEdits: boolean | null
   updatedAt: Date | null
 }
 
@@ -73,6 +75,7 @@ export type VideoCountAggregateOutputType = {
   durationSeconds: number
   errorMessage: number
   metadata: number
+  hasManualEdits: number
   updatedAt: number
   _all: number
 }
@@ -98,6 +101,7 @@ export type VideoMinAggregateInputType = {
   detectedLanguage?: true
   durationSeconds?: true
   errorMessage?: true
+  hasManualEdits?: true
   updatedAt?: true
 }
 
@@ -111,6 +115,7 @@ export type VideoMaxAggregateInputType = {
   detectedLanguage?: true
   durationSeconds?: true
   errorMessage?: true
+  hasManualEdits?: true
   updatedAt?: true
 }
 
@@ -125,6 +130,7 @@ export type VideoCountAggregateInputType = {
   durationSeconds?: true
   errorMessage?: true
   metadata?: true
+  hasManualEdits?: true
   updatedAt?: true
   _all?: true
 }
@@ -226,6 +232,7 @@ export type VideoGroupByOutputType = {
   durationSeconds: number | null
   errorMessage: string | null
   metadata: runtime.JsonValue | null
+  hasManualEdits: boolean
   updatedAt: Date
   _count: VideoCountAggregateOutputType | null
   _avg: VideoAvgAggregateOutputType | null
@@ -263,6 +270,7 @@ export type VideoWhereInput = {
   durationSeconds?: Prisma.FloatNullableFilter<"Video"> | number | null
   errorMessage?: Prisma.StringNullableFilter<"Video"> | string | null
   metadata?: Prisma.JsonNullableFilter<"Video">
+  hasManualEdits?: Prisma.BoolFilter<"Video"> | boolean
   updatedAt?: Prisma.DateTimeFilter<"Video"> | Date | string
   learningObject?: Prisma.XOR<Prisma.LearningObjectScalarRelationFilter, Prisma.LearningObjectWhereInput>
   generationAttempts?: Prisma.VideoGenerationAttemptListRelationFilter
@@ -279,6 +287,7 @@ export type VideoOrderByWithRelationInput = {
   durationSeconds?: Prisma.SortOrderInput | Prisma.SortOrder
   errorMessage?: Prisma.SortOrderInput | Prisma.SortOrder
   metadata?: Prisma.SortOrderInput | Prisma.SortOrder
+  hasManualEdits?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   learningObject?: Prisma.LearningObjectOrderByWithRelationInput
   generationAttempts?: Prisma.VideoGenerationAttemptOrderByRelationAggregateInput
@@ -298,6 +307,7 @@ export type VideoWhereUniqueInput = Prisma.AtLeast<{
   durationSeconds?: Prisma.FloatNullableFilter<"Video"> | number | null
   errorMessage?: Prisma.StringNullableFilter<"Video"> | string | null
   metadata?: Prisma.JsonNullableFilter<"Video">
+  hasManualEdits?: Prisma.BoolFilter<"Video"> | boolean
   updatedAt?: Prisma.DateTimeFilter<"Video"> | Date | string
   learningObject?: Prisma.XOR<Prisma.LearningObjectScalarRelationFilter, Prisma.LearningObjectWhereInput>
   generationAttempts?: Prisma.VideoGenerationAttemptListRelationFilter
@@ -314,6 +324,7 @@ export type VideoOrderByWithAggregationInput = {
   durationSeconds?: Prisma.SortOrderInput | Prisma.SortOrder
   errorMessage?: Prisma.SortOrderInput | Prisma.SortOrder
   metadata?: Prisma.SortOrderInput | Prisma.SortOrder
+  hasManualEdits?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.VideoCountOrderByAggregateInput
   _avg?: Prisma.VideoAvgOrderByAggregateInput
@@ -336,6 +347,7 @@ export type VideoScalarWhereWithAggregatesInput = {
   durationSeconds?: Prisma.FloatNullableWithAggregatesFilter<"Video"> | number | null
   errorMessage?: Prisma.StringNullableWithAggregatesFilter<"Video"> | string | null
   metadata?: Prisma.JsonNullableWithAggregatesFilter<"Video">
+  hasManualEdits?: Prisma.BoolWithAggregatesFilter<"Video"> | boolean
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Video"> | Date | string
 }
 
@@ -349,6 +361,7 @@ export type VideoCreateInput = {
   durationSeconds?: number | null
   errorMessage?: string | null
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  hasManualEdits?: boolean
   updatedAt?: Date | string
   learningObject: Prisma.LearningObjectCreateNestedOneWithoutVideoInput
   generationAttempts?: Prisma.VideoGenerationAttemptCreateNestedManyWithoutVideoInput
@@ -365,6 +378,7 @@ export type VideoUncheckedCreateInput = {
   durationSeconds?: number | null
   errorMessage?: string | null
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  hasManualEdits?: boolean
   updatedAt?: Date | string
   generationAttempts?: Prisma.VideoGenerationAttemptUncheckedCreateNestedManyWithoutVideoInput
 }
@@ -379,6 +393,7 @@ export type VideoUpdateInput = {
   durationSeconds?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   errorMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  hasManualEdits?: Prisma.BoolFieldUpdateOperationsInput | boolean
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   learningObject?: Prisma.LearningObjectUpdateOneRequiredWithoutVideoNestedInput
   generationAttempts?: Prisma.VideoGenerationAttemptUpdateManyWithoutVideoNestedInput
@@ -395,6 +410,7 @@ export type VideoUncheckedUpdateInput = {
   durationSeconds?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   errorMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  hasManualEdits?: Prisma.BoolFieldUpdateOperationsInput | boolean
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   generationAttempts?: Prisma.VideoGenerationAttemptUncheckedUpdateManyWithoutVideoNestedInput
 }
@@ -410,6 +426,7 @@ export type VideoCreateManyInput = {
   durationSeconds?: number | null
   errorMessage?: string | null
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  hasManualEdits?: boolean
   updatedAt?: Date | string
 }
 
@@ -423,6 +440,7 @@ export type VideoUpdateManyMutationInput = {
   durationSeconds?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   errorMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  hasManualEdits?: Prisma.BoolFieldUpdateOperationsInput | boolean
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -437,6 +455,7 @@ export type VideoUncheckedUpdateManyInput = {
   durationSeconds?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   errorMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  hasManualEdits?: Prisma.BoolFieldUpdateOperationsInput | boolean
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -456,6 +475,7 @@ export type VideoCountOrderByAggregateInput = {
   durationSeconds?: Prisma.SortOrder
   errorMessage?: Prisma.SortOrder
   metadata?: Prisma.SortOrder
+  hasManualEdits?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
 
@@ -474,6 +494,7 @@ export type VideoMaxOrderByAggregateInput = {
   detectedLanguage?: Prisma.SortOrder
   durationSeconds?: Prisma.SortOrder
   errorMessage?: Prisma.SortOrder
+  hasManualEdits?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
 
@@ -487,6 +508,7 @@ export type VideoMinOrderByAggregateInput = {
   detectedLanguage?: Prisma.SortOrder
   durationSeconds?: Prisma.SortOrder
   errorMessage?: Prisma.SortOrder
+  hasManualEdits?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
 
@@ -572,6 +594,7 @@ export type VideoCreateWithoutLearningObjectInput = {
   durationSeconds?: number | null
   errorMessage?: string | null
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  hasManualEdits?: boolean
   updatedAt?: Date | string
   generationAttempts?: Prisma.VideoGenerationAttemptCreateNestedManyWithoutVideoInput
 }
@@ -586,6 +609,7 @@ export type VideoUncheckedCreateWithoutLearningObjectInput = {
   durationSeconds?: number | null
   errorMessage?: string | null
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  hasManualEdits?: boolean
   updatedAt?: Date | string
   generationAttempts?: Prisma.VideoGenerationAttemptUncheckedCreateNestedManyWithoutVideoInput
 }
@@ -616,6 +640,7 @@ export type VideoUpdateWithoutLearningObjectInput = {
   durationSeconds?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   errorMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  hasManualEdits?: Prisma.BoolFieldUpdateOperationsInput | boolean
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   generationAttempts?: Prisma.VideoGenerationAttemptUpdateManyWithoutVideoNestedInput
 }
@@ -630,6 +655,7 @@ export type VideoUncheckedUpdateWithoutLearningObjectInput = {
   durationSeconds?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   errorMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  hasManualEdits?: Prisma.BoolFieldUpdateOperationsInput | boolean
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   generationAttempts?: Prisma.VideoGenerationAttemptUncheckedUpdateManyWithoutVideoNestedInput
 }
@@ -644,6 +670,7 @@ export type VideoCreateWithoutGenerationAttemptsInput = {
   durationSeconds?: number | null
   errorMessage?: string | null
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  hasManualEdits?: boolean
   updatedAt?: Date | string
   learningObject: Prisma.LearningObjectCreateNestedOneWithoutVideoInput
 }
@@ -659,6 +686,7 @@ export type VideoUncheckedCreateWithoutGenerationAttemptsInput = {
   durationSeconds?: number | null
   errorMessage?: string | null
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  hasManualEdits?: boolean
   updatedAt?: Date | string
 }
 
@@ -688,6 +716,7 @@ export type VideoUpdateWithoutGenerationAttemptsInput = {
   durationSeconds?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   errorMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  hasManualEdits?: Prisma.BoolFieldUpdateOperationsInput | boolean
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   learningObject?: Prisma.LearningObjectUpdateOneRequiredWithoutVideoNestedInput
 }
@@ -703,6 +732,7 @@ export type VideoUncheckedUpdateWithoutGenerationAttemptsInput = {
   durationSeconds?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   errorMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  hasManualEdits?: Prisma.BoolFieldUpdateOperationsInput | boolean
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -748,6 +778,7 @@ export type VideoSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   durationSeconds?: boolean
   errorMessage?: boolean
   metadata?: boolean
+  hasManualEdits?: boolean
   updatedAt?: boolean
   learningObject?: boolean | Prisma.LearningObjectDefaultArgs<ExtArgs>
   generationAttempts?: boolean | Prisma.Video$generationAttemptsArgs<ExtArgs>
@@ -765,6 +796,7 @@ export type VideoSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   durationSeconds?: boolean
   errorMessage?: boolean
   metadata?: boolean
+  hasManualEdits?: boolean
   updatedAt?: boolean
   learningObject?: boolean | Prisma.LearningObjectDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["video"]>
@@ -780,6 +812,7 @@ export type VideoSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   durationSeconds?: boolean
   errorMessage?: boolean
   metadata?: boolean
+  hasManualEdits?: boolean
   updatedAt?: boolean
   learningObject?: boolean | Prisma.LearningObjectDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["video"]>
@@ -795,10 +828,11 @@ export type VideoSelectScalar = {
   durationSeconds?: boolean
   errorMessage?: boolean
   metadata?: boolean
+  hasManualEdits?: boolean
   updatedAt?: boolean
 }
 
-export type VideoOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"learningObjectId" | "kind" | "sourceUrl" | "status" | "outputLanguage" | "rawText" | "detectedLanguage" | "durationSeconds" | "errorMessage" | "metadata" | "updatedAt", ExtArgs["result"]["video"]>
+export type VideoOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"learningObjectId" | "kind" | "sourceUrl" | "status" | "outputLanguage" | "rawText" | "detectedLanguage" | "durationSeconds" | "errorMessage" | "metadata" | "hasManualEdits" | "updatedAt", ExtArgs["result"]["video"]>
 export type VideoInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   learningObject?: boolean | Prisma.LearningObjectDefaultArgs<ExtArgs>
   generationAttempts?: boolean | Prisma.Video$generationAttemptsArgs<ExtArgs>
@@ -828,6 +862,7 @@ export type $VideoPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     durationSeconds: number | null
     errorMessage: string | null
     metadata: runtime.JsonValue | null
+    hasManualEdits: boolean
     updatedAt: Date
   }, ExtArgs["result"]["video"]>
   composites: {}
@@ -1264,6 +1299,7 @@ export interface VideoFieldRefs {
   readonly durationSeconds: Prisma.FieldRef<"Video", 'Float'>
   readonly errorMessage: Prisma.FieldRef<"Video", 'String'>
   readonly metadata: Prisma.FieldRef<"Video", 'Json'>
+  readonly hasManualEdits: Prisma.FieldRef<"Video", 'Boolean'>
   readonly updatedAt: Prisma.FieldRef<"Video", 'DateTime'>
 }
     

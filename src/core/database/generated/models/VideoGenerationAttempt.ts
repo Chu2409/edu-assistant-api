@@ -50,6 +50,7 @@ export type VideoGenerationAttemptMinAggregateOutputType = {
   tokensInput: number | null
   tokensOutput: number | null
   processingTimeMs: number | null
+  instruction: string | null
   startedAt: Date | null
   completedAt: Date | null
 }
@@ -62,6 +63,7 @@ export type VideoGenerationAttemptMaxAggregateOutputType = {
   tokensInput: number | null
   tokensOutput: number | null
   processingTimeMs: number | null
+  instruction: string | null
   startedAt: Date | null
   completedAt: Date | null
 }
@@ -78,6 +80,8 @@ export type VideoGenerationAttemptCountAggregateOutputType = {
   tokensOutput: number
   processingTimeMs: number
   qualityMetrics: number
+  instruction: number
+  previousContent: number
   startedAt: number
   completedAt: number
   _all: number
@@ -108,6 +112,7 @@ export type VideoGenerationAttemptMinAggregateInputType = {
   tokensInput?: true
   tokensOutput?: true
   processingTimeMs?: true
+  instruction?: true
   startedAt?: true
   completedAt?: true
 }
@@ -120,6 +125,7 @@ export type VideoGenerationAttemptMaxAggregateInputType = {
   tokensInput?: true
   tokensOutput?: true
   processingTimeMs?: true
+  instruction?: true
   startedAt?: true
   completedAt?: true
 }
@@ -136,6 +142,8 @@ export type VideoGenerationAttemptCountAggregateInputType = {
   tokensOutput?: true
   processingTimeMs?: true
   qualityMetrics?: true
+  instruction?: true
+  previousContent?: true
   startedAt?: true
   completedAt?: true
   _all?: true
@@ -239,6 +247,8 @@ export type VideoGenerationAttemptGroupByOutputType = {
   tokensOutput: number | null
   processingTimeMs: number | null
   qualityMetrics: runtime.JsonValue | null
+  instruction: string | null
+  previousContent: runtime.JsonValue | null
   startedAt: Date
   completedAt: Date | null
   _count: VideoGenerationAttemptCountAggregateOutputType | null
@@ -278,6 +288,8 @@ export type VideoGenerationAttemptWhereInput = {
   tokensOutput?: Prisma.IntNullableFilter<"VideoGenerationAttempt"> | number | null
   processingTimeMs?: Prisma.IntNullableFilter<"VideoGenerationAttempt"> | number | null
   qualityMetrics?: Prisma.JsonNullableFilter<"VideoGenerationAttempt">
+  instruction?: Prisma.StringNullableFilter<"VideoGenerationAttempt"> | string | null
+  previousContent?: Prisma.JsonNullableFilter<"VideoGenerationAttempt">
   startedAt?: Prisma.DateTimeFilter<"VideoGenerationAttempt"> | Date | string
   completedAt?: Prisma.DateTimeNullableFilter<"VideoGenerationAttempt"> | Date | string | null
   video?: Prisma.XOR<Prisma.VideoScalarRelationFilter, Prisma.VideoWhereInput>
@@ -295,6 +307,8 @@ export type VideoGenerationAttemptOrderByWithRelationInput = {
   tokensOutput?: Prisma.SortOrderInput | Prisma.SortOrder
   processingTimeMs?: Prisma.SortOrderInput | Prisma.SortOrder
   qualityMetrics?: Prisma.SortOrderInput | Prisma.SortOrder
+  instruction?: Prisma.SortOrderInput | Prisma.SortOrder
+  previousContent?: Prisma.SortOrderInput | Prisma.SortOrder
   startedAt?: Prisma.SortOrder
   completedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   video?: Prisma.VideoOrderByWithRelationInput
@@ -315,6 +329,8 @@ export type VideoGenerationAttemptWhereUniqueInput = Prisma.AtLeast<{
   tokensOutput?: Prisma.IntNullableFilter<"VideoGenerationAttempt"> | number | null
   processingTimeMs?: Prisma.IntNullableFilter<"VideoGenerationAttempt"> | number | null
   qualityMetrics?: Prisma.JsonNullableFilter<"VideoGenerationAttempt">
+  instruction?: Prisma.StringNullableFilter<"VideoGenerationAttempt"> | string | null
+  previousContent?: Prisma.JsonNullableFilter<"VideoGenerationAttempt">
   startedAt?: Prisma.DateTimeFilter<"VideoGenerationAttempt"> | Date | string
   completedAt?: Prisma.DateTimeNullableFilter<"VideoGenerationAttempt"> | Date | string | null
   video?: Prisma.XOR<Prisma.VideoScalarRelationFilter, Prisma.VideoWhereInput>
@@ -332,6 +348,8 @@ export type VideoGenerationAttemptOrderByWithAggregationInput = {
   tokensOutput?: Prisma.SortOrderInput | Prisma.SortOrder
   processingTimeMs?: Prisma.SortOrderInput | Prisma.SortOrder
   qualityMetrics?: Prisma.SortOrderInput | Prisma.SortOrder
+  instruction?: Prisma.SortOrderInput | Prisma.SortOrder
+  previousContent?: Prisma.SortOrderInput | Prisma.SortOrder
   startedAt?: Prisma.SortOrder
   completedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.VideoGenerationAttemptCountOrderByAggregateInput
@@ -356,6 +374,8 @@ export type VideoGenerationAttemptScalarWhereWithAggregatesInput = {
   tokensOutput?: Prisma.IntNullableWithAggregatesFilter<"VideoGenerationAttempt"> | number | null
   processingTimeMs?: Prisma.IntNullableWithAggregatesFilter<"VideoGenerationAttempt"> | number | null
   qualityMetrics?: Prisma.JsonNullableWithAggregatesFilter<"VideoGenerationAttempt">
+  instruction?: Prisma.StringNullableWithAggregatesFilter<"VideoGenerationAttempt"> | string | null
+  previousContent?: Prisma.JsonNullableWithAggregatesFilter<"VideoGenerationAttempt">
   startedAt?: Prisma.DateTimeWithAggregatesFilter<"VideoGenerationAttempt"> | Date | string
   completedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"VideoGenerationAttempt"> | Date | string | null
 }
@@ -370,6 +390,8 @@ export type VideoGenerationAttemptCreateInput = {
   tokensOutput?: number | null
   processingTimeMs?: number | null
   qualityMetrics?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  instruction?: string | null
+  previousContent?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   startedAt?: Date | string
   completedAt?: Date | string | null
   video: Prisma.VideoCreateNestedOneWithoutGenerationAttemptsInput
@@ -387,6 +409,8 @@ export type VideoGenerationAttemptUncheckedCreateInput = {
   tokensOutput?: number | null
   processingTimeMs?: number | null
   qualityMetrics?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  instruction?: string | null
+  previousContent?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   startedAt?: Date | string
   completedAt?: Date | string | null
 }
@@ -401,6 +425,8 @@ export type VideoGenerationAttemptUpdateInput = {
   tokensOutput?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   processingTimeMs?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   qualityMetrics?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  instruction?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  previousContent?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   startedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   video?: Prisma.VideoUpdateOneRequiredWithoutGenerationAttemptsNestedInput
@@ -418,6 +444,8 @@ export type VideoGenerationAttemptUncheckedUpdateInput = {
   tokensOutput?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   processingTimeMs?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   qualityMetrics?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  instruction?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  previousContent?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   startedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
@@ -434,6 +462,8 @@ export type VideoGenerationAttemptCreateManyInput = {
   tokensOutput?: number | null
   processingTimeMs?: number | null
   qualityMetrics?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  instruction?: string | null
+  previousContent?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   startedAt?: Date | string
   completedAt?: Date | string | null
 }
@@ -448,6 +478,8 @@ export type VideoGenerationAttemptUpdateManyMutationInput = {
   tokensOutput?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   processingTimeMs?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   qualityMetrics?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  instruction?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  previousContent?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   startedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
@@ -464,6 +496,8 @@ export type VideoGenerationAttemptUncheckedUpdateManyInput = {
   tokensOutput?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   processingTimeMs?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   qualityMetrics?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  instruction?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  previousContent?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   startedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
@@ -498,6 +532,8 @@ export type VideoGenerationAttemptCountOrderByAggregateInput = {
   tokensOutput?: Prisma.SortOrder
   processingTimeMs?: Prisma.SortOrder
   qualityMetrics?: Prisma.SortOrder
+  instruction?: Prisma.SortOrder
+  previousContent?: Prisma.SortOrder
   startedAt?: Prisma.SortOrder
   completedAt?: Prisma.SortOrder
 }
@@ -518,6 +554,7 @@ export type VideoGenerationAttemptMaxOrderByAggregateInput = {
   tokensInput?: Prisma.SortOrder
   tokensOutput?: Prisma.SortOrder
   processingTimeMs?: Prisma.SortOrder
+  instruction?: Prisma.SortOrder
   startedAt?: Prisma.SortOrder
   completedAt?: Prisma.SortOrder
 }
@@ -530,6 +567,7 @@ export type VideoGenerationAttemptMinOrderByAggregateInput = {
   tokensInput?: Prisma.SortOrder
   tokensOutput?: Prisma.SortOrder
   processingTimeMs?: Prisma.SortOrder
+  instruction?: Prisma.SortOrder
   startedAt?: Prisma.SortOrder
   completedAt?: Prisma.SortOrder
 }
@@ -612,6 +650,8 @@ export type VideoGenerationAttemptCreateWithoutVideoInput = {
   tokensOutput?: number | null
   processingTimeMs?: number | null
   qualityMetrics?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  instruction?: string | null
+  previousContent?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   startedAt?: Date | string
   completedAt?: Date | string | null
 }
@@ -627,6 +667,8 @@ export type VideoGenerationAttemptUncheckedCreateWithoutVideoInput = {
   tokensOutput?: number | null
   processingTimeMs?: number | null
   qualityMetrics?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  instruction?: string | null
+  previousContent?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   startedAt?: Date | string
   completedAt?: Date | string | null
 }
@@ -672,6 +714,8 @@ export type VideoGenerationAttemptScalarWhereInput = {
   tokensOutput?: Prisma.IntNullableFilter<"VideoGenerationAttempt"> | number | null
   processingTimeMs?: Prisma.IntNullableFilter<"VideoGenerationAttempt"> | number | null
   qualityMetrics?: Prisma.JsonNullableFilter<"VideoGenerationAttempt">
+  instruction?: Prisma.StringNullableFilter<"VideoGenerationAttempt"> | string | null
+  previousContent?: Prisma.JsonNullableFilter<"VideoGenerationAttempt">
   startedAt?: Prisma.DateTimeFilter<"VideoGenerationAttempt"> | Date | string
   completedAt?: Prisma.DateTimeNullableFilter<"VideoGenerationAttempt"> | Date | string | null
 }
@@ -687,6 +731,8 @@ export type VideoGenerationAttemptCreateManyVideoInput = {
   tokensOutput?: number | null
   processingTimeMs?: number | null
   qualityMetrics?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  instruction?: string | null
+  previousContent?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   startedAt?: Date | string
   completedAt?: Date | string | null
 }
@@ -701,6 +747,8 @@ export type VideoGenerationAttemptUpdateWithoutVideoInput = {
   tokensOutput?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   processingTimeMs?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   qualityMetrics?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  instruction?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  previousContent?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   startedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
@@ -716,6 +764,8 @@ export type VideoGenerationAttemptUncheckedUpdateWithoutVideoInput = {
   tokensOutput?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   processingTimeMs?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   qualityMetrics?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  instruction?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  previousContent?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   startedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
@@ -731,6 +781,8 @@ export type VideoGenerationAttemptUncheckedUpdateManyWithoutVideoInput = {
   tokensOutput?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   processingTimeMs?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   qualityMetrics?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  instruction?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  previousContent?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   startedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
@@ -749,6 +801,8 @@ export type VideoGenerationAttemptSelect<ExtArgs extends runtime.Types.Extension
   tokensOutput?: boolean
   processingTimeMs?: boolean
   qualityMetrics?: boolean
+  instruction?: boolean
+  previousContent?: boolean
   startedAt?: boolean
   completedAt?: boolean
   video?: boolean | Prisma.VideoDefaultArgs<ExtArgs>
@@ -766,6 +820,8 @@ export type VideoGenerationAttemptSelectCreateManyAndReturn<ExtArgs extends runt
   tokensOutput?: boolean
   processingTimeMs?: boolean
   qualityMetrics?: boolean
+  instruction?: boolean
+  previousContent?: boolean
   startedAt?: boolean
   completedAt?: boolean
   video?: boolean | Prisma.VideoDefaultArgs<ExtArgs>
@@ -783,6 +839,8 @@ export type VideoGenerationAttemptSelectUpdateManyAndReturn<ExtArgs extends runt
   tokensOutput?: boolean
   processingTimeMs?: boolean
   qualityMetrics?: boolean
+  instruction?: boolean
+  previousContent?: boolean
   startedAt?: boolean
   completedAt?: boolean
   video?: boolean | Prisma.VideoDefaultArgs<ExtArgs>
@@ -800,11 +858,13 @@ export type VideoGenerationAttemptSelectScalar = {
   tokensOutput?: boolean
   processingTimeMs?: boolean
   qualityMetrics?: boolean
+  instruction?: boolean
+  previousContent?: boolean
   startedAt?: boolean
   completedAt?: boolean
 }
 
-export type VideoGenerationAttemptOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "videoId" | "provider" | "model" | "requestedTypes" | "completedTypes" | "failedTypes" | "tokensInput" | "tokensOutput" | "processingTimeMs" | "qualityMetrics" | "startedAt" | "completedAt", ExtArgs["result"]["videoGenerationAttempt"]>
+export type VideoGenerationAttemptOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "videoId" | "provider" | "model" | "requestedTypes" | "completedTypes" | "failedTypes" | "tokensInput" | "tokensOutput" | "processingTimeMs" | "qualityMetrics" | "instruction" | "previousContent" | "startedAt" | "completedAt", ExtArgs["result"]["videoGenerationAttempt"]>
 export type VideoGenerationAttemptInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   video?: boolean | Prisma.VideoDefaultArgs<ExtArgs>
 }
@@ -832,6 +892,8 @@ export type $VideoGenerationAttemptPayload<ExtArgs extends runtime.Types.Extensi
     tokensOutput: number | null
     processingTimeMs: number | null
     qualityMetrics: runtime.JsonValue | null
+    instruction: string | null
+    previousContent: runtime.JsonValue | null
     startedAt: Date
     completedAt: Date | null
   }, ExtArgs["result"]["videoGenerationAttempt"]>
@@ -1269,6 +1331,8 @@ export interface VideoGenerationAttemptFieldRefs {
   readonly tokensOutput: Prisma.FieldRef<"VideoGenerationAttempt", 'Int'>
   readonly processingTimeMs: Prisma.FieldRef<"VideoGenerationAttempt", 'Int'>
   readonly qualityMetrics: Prisma.FieldRef<"VideoGenerationAttempt", 'Json'>
+  readonly instruction: Prisma.FieldRef<"VideoGenerationAttempt", 'String'>
+  readonly previousContent: Prisma.FieldRef<"VideoGenerationAttempt", 'Json'>
   readonly startedAt: Prisma.FieldRef<"VideoGenerationAttempt", 'DateTime'>
   readonly completedAt: Prisma.FieldRef<"VideoGenerationAttempt", 'DateTime'>
 }

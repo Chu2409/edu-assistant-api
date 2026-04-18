@@ -429,6 +429,7 @@ export const VideoScalarFieldEnum = {
   durationSeconds: 'durationSeconds',
   errorMessage: 'errorMessage',
   metadata: 'metadata',
+  hasManualEdits: 'hasManualEdits',
   updatedAt: 'updatedAt'
 } as const
 
@@ -447,6 +448,8 @@ export const VideoGenerationAttemptScalarFieldEnum = {
   tokensOutput: 'tokensOutput',
   processingTimeMs: 'processingTimeMs',
   qualityMetrics: 'qualityMetrics',
+  instruction: 'instruction',
+  previousContent: 'previousContent',
   startedAt: 'startedAt',
   completedAt: 'completedAt'
 } as const
