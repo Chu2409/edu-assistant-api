@@ -30,9 +30,6 @@ export class FullVideoDto {
   @ApiPropertyOptional()
   detectedLanguage?: string | null
 
-  @ApiPropertyOptional()
-  transcription?: string | null
-
   @ApiProperty({ example: false })
   isPublished: boolean
 

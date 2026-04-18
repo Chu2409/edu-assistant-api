@@ -41,7 +41,6 @@ export class VideoMapper {
       outputLanguage: v.outputLanguage,
       durationSeconds: v.durationSeconds,
       detectedLanguage: v.detectedLanguage,
-      transcription: v.rawText,
       isPublished: lo.isPublished,
       errorMessage: v.errorMessage,
       metadata: v.metadata as Record<string, unknown> | null,
