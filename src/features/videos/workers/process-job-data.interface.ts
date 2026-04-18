@@ -1,3 +1,3 @@
 export interface ProcessJobData {
-  learningObjectId: number
+  videoId: number
 }

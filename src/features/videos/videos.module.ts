@@ -13,6 +13,7 @@ import { VideoContentGeneratorService } from './ai/video-content-generator.servi
 import { ContentAgentRegistry } from './ai/content-agent.registry'
 import { PromptLoaderService } from './ai/config/prompt-loader.service'
 import { GenerationAttemptService } from './ai/generation-attempt.service'
+import { VideoStateService } from './main/video-state.service'
 
 @Module({
   imports: [BullModule.registerQueue({ name: QUEUE_NAMES.VIDEOS.NAME })],
@@ -29,6 +30,7 @@ import { GenerationAttemptService } from './ai/generation-attempt.service'
     ContentAgentRegistry,
     PromptLoaderService,
     GenerationAttemptService,
+    VideoStateService,
   ],
   exports: [
     VideosService,
@@ -36,6 +38,7 @@ import { GenerationAttemptService } from './ai/generation-attempt.service'
     TranscriptionService,
     VideoContentGeneratorService,
     GenerationAttemptService,
+    VideoStateService,
   ],
 })
 export class VideosModule {}

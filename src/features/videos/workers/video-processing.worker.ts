@@ -29,7 +29,7 @@ export class VideoProcessingWorker extends WorkerHost {
 
   async process(
     job: Job,
-  ): Promise<{ learningObjectId: number; success: boolean } | void> {
+  ): Promise<{ videoId: number; success: boolean } | void> {
     switch (job.name) {
       case QUEUE_NAMES.VIDEOS.JOBS.PROCESS:
         return this.handleProcess(job as Job<ProcessJobData>)
@@ -41,19 +41,18 @@ export class VideoProcessingWorker extends WorkerHost {
   }
 
   private async handleProcess(job: Job<ProcessJobData>) {
-    const { learningObjectId } = job.data
+    const { videoId } = job.data
     const startedAt = Date.now()
 
-    this.logger.log(`Processing video for LO ${learningObjectId}...`)
+    this.logger.log(`Processing video ${videoId}...`)
 
     try {
-      await this.ingestionService.updateStatus(
-        learningObjectId,
+      await this.ingestionService.transition(
+        videoId,
         IngestionStatus.EXTRACTING,
       )
 
-      const loData =
-        await this.ingestionService.loadForProcessing(learningObjectId)
+      const loData = await this.ingestionService.loadForProcessing(videoId)
 
       const transcription = await this.transcriptionService.transcribe({
         kind: loData.kind,
@@ -62,13 +61,10 @@ export class VideoProcessingWorker extends WorkerHost {
         language: loData.outputLanguage,
       })
 
-      await this.ingestionService.persistTranscription(
-        learningObjectId,
-        transcription,
-      )
+      await this.ingestionService.persistTranscription(videoId, transcription)
 
-      await this.ingestionService.updateStatus(
-        learningObjectId,
+      await this.ingestionService.transition(
+        videoId,
         IngestionStatus.GENERATING,
       )
 
@@ -79,42 +75,33 @@ export class VideoProcessingWorker extends WorkerHost {
       })
 
       await this.persistAndFinalize(
-        learningObjectId,
+        videoId,
         [...GENERATED_BLOCK_TYPES],
         generated,
         startedAt,
       )
 
-      this.logger.log(`Video processing completed for LO ${learningObjectId}`)
-      return { learningObjectId, success: true }
+      this.logger.log(`Video processing completed for ${videoId}`)
+      return { videoId, success: true }
     } catch (error) {
-      this.logger.error(
-        `Video processing failed for LO ${learningObjectId}:`,
-        error,
-      )
-      await this.ingestionService.updateStatus(
-        learningObjectId,
-        IngestionStatus.FAILED,
-        {
-          errorMessage:
-            error instanceof Error ? error.message : 'Unknown error',
-        },
-      )
+      this.logger.error(`Video processing failed for ${videoId}:`, error)
+      await this.ingestionService.transition(videoId, IngestionStatus.FAILED, {
+        errorMessage: error instanceof Error ? error.message : 'Unknown error',
+      })
       throw error
     }
   }
 
   private async handleRetry(job: Job<RetryJobData>) {
-    const { learningObjectId, contentTypes } = job.data
+    const { videoId, contentTypes } = job.data
     const startedAt = Date.now()
 
     this.logger.log(
-      `Retrying content generation for LO ${learningObjectId}: ${contentTypes.join(', ')}`,
+      `Retrying content generation for video ${videoId}: ${contentTypes.join(', ')}`,
     )
 
     try {
-      const loData =
-        await this.ingestionService.loadForProcessing(learningObjectId)
+      const loData = await this.ingestionService.loadForProcessing(videoId)
 
       if (!loData.rawText) {
         throw new Error('No transcription available for retry')
@@ -126,50 +113,39 @@ export class VideoProcessingWorker extends WorkerHost {
         videoTitle: loData.title,
       })
 
-      await this.persistAndFinalize(
-        learningObjectId,
-        contentTypes,
-        generated,
-        startedAt,
-      )
+      await this.persistAndFinalize(videoId, contentTypes, generated, startedAt)
 
-      this.logger.log(`Retry completed for LO ${learningObjectId}`)
-      return { learningObjectId, success: true }
+      this.logger.log(`Retry completed for video ${videoId}`)
+      return { videoId, success: true }
     } catch (error) {
-      this.logger.error(`Retry failed for LO ${learningObjectId}:`, error)
-      await this.ingestionService.updateStatus(
-        learningObjectId,
-        IngestionStatus.FAILED,
-        {
-          errorMessage:
-            error instanceof Error ? error.message : 'Unknown error',
-        },
-      )
+      this.logger.error(`Retry failed for video ${videoId}:`, error)
+      await this.ingestionService.transition(videoId, IngestionStatus.FAILED, {
+        errorMessage: error instanceof Error ? error.message : 'Unknown error',
+      })
       throw error
     }
   }
 
   private async persistAndFinalize(
-    learningObjectId: number,
+    videoId: number,
     requestedTypes: RetryJobData['contentTypes'],
     generated: GenerationResult,
     startedAt: number,
   ): Promise<void> {
     await this.dbService.$transaction(async (tx) => {
       await this.ingestionService.persistGeneratedContent(
-        learningObjectId,
+        videoId,
         generated,
         tx,
       )
+      await this.ingestionService.finalizeGeneration(videoId, generated, tx)
     })
 
     await this.attemptService.record(
-      learningObjectId,
+      videoId,
       requestedTypes,
       generated,
       Date.now() - startedAt,
     )
-
-    await this.ingestionService.finalizeGeneration(learningObjectId, generated)
   }
 }

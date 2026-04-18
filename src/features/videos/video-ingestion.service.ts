@@ -8,30 +8,31 @@ import { DBService } from 'src/core/database/database.service'
 import { TranscriptionResult } from './transcription/interfaces/transcription-result.interface'
 import { GenerationResult } from './ai/interfaces/generation-result.interface'
 import { GENERATED_BLOCK_TYPES } from './constants/video.constants'
+import { VideoStateService } from './main/video-state.service'
 
 @Injectable()
 export class VideoIngestionService {
   private readonly logger = new Logger(VideoIngestionService.name)
 
-  constructor(private readonly dbService: DBService) {}
+  constructor(
+    private readonly dbService: DBService,
+    private readonly stateService: VideoStateService,
+  ) {}
 
-  async updateStatus(
-    learningObjectId: number,
+  async transition(
+    videoId: number,
     status: IngestionStatus,
-    extra?: { errorMessage?: string },
+    extra?: { errorMessage?: string | null },
   ): Promise<void> {
-    await this.dbService.video.update({
-      where: { learningObjectId },
-      data: { status, errorMessage: extra?.errorMessage },
-    })
+    await this.stateService.transition(videoId, status, extra)
   }
 
   async persistTranscription(
-    learningObjectId: number,
+    videoId: number,
     result: TranscriptionResult,
   ): Promise<void> {
     await this.dbService.video.update({
-      where: { learningObjectId },
+      where: { learningObjectId: videoId },
       data: {
         rawText: result.text,
         detectedLanguage: result.language,
@@ -41,33 +42,33 @@ export class VideoIngestionService {
   }
 
   async persistGeneratedContent(
-    learningObjectId: number,
+    videoId: number,
     generated: GenerationResult,
     tx: Prisma.TransactionClient,
   ): Promise<void> {
     await tx.block.deleteMany({
       where: {
-        learningObjectId,
+        learningObjectId: videoId,
         type: { in: [...GENERATED_BLOCK_TYPES] },
       },
     })
 
-    const blocks = this.buildBlockInputs(learningObjectId, generated)
+    const blocks = this.buildBlockInputs(videoId, generated)
 
     if (blocks.length > 0) {
       await tx.block.createMany({ data: blocks })
     }
   }
 
-  async loadForProcessing(learningObjectId: number) {
+  async loadForProcessing(videoId: number) {
     const lo = await this.dbService.learningObject.findUnique({
-      where: { id: learningObjectId },
+      where: { id: videoId },
       include: { video: true },
     })
 
     if (!lo?.video) {
       throw new NotFoundException(
-        `LearningObject ${learningObjectId} has no content source`,
+        `LearningObject ${videoId} has no video source`,
       )
     }
 
@@ -81,21 +82,31 @@ export class VideoIngestionService {
   }
 
   async finalizeGeneration(
-    learningObjectId: number,
+    videoId: number,
     generated: GenerationResult,
+    tx?: Prisma.TransactionClient,
   ): Promise<void> {
+    const client = tx || this.dbService
     if (generated.errors.length > 0) {
       const failedTypes = generated.errors.map((e) => e.type).join(', ')
-      await this.updateStatus(learningObjectId, IngestionStatus.FAILED, {
-        errorMessage: `Failed to generate: ${failedTypes}`,
-      })
+      await this.stateService.transition(
+        videoId,
+        IngestionStatus.FAILED,
+        { errorMessage: `Failed to generate: ${failedTypes}` },
+        client,
+      )
     } else {
-      await this.updateStatus(learningObjectId, IngestionStatus.COMPLETED)
+      await this.stateService.transition(
+        videoId,
+        IngestionStatus.COMPLETED,
+        undefined,
+        client,
+      )
     }
   }
 
   private buildBlockInputs(
-    learningObjectId: number,
+    videoId: number,
     generated: GenerationResult,
   ): Prisma.BlockCreateManyInput[] {
     const blocks: Prisma.BlockCreateManyInput[] = []
@@ -123,7 +134,7 @@ export class VideoIngestionService {
     for (const entry of entries) {
       if (entry.data) {
         blocks.push({
-          learningObjectId,
+          learningObjectId: videoId,
           type: entry.type,
           content: entry.data,
           orderIndex: orderIndex++,

@@ -259,7 +259,7 @@ export class VideosService {
 
     await this.videosQueue.add(
       QUEUE_NAMES.VIDEOS.JOBS.RETRY,
-      { learningObjectId: lo.id, contentTypes },
+      { videoId: lo.id, contentTypes },
       { removeOnComplete: { count: 100 }, removeOnFail: { count: 50 } },
     )
 
@@ -349,7 +349,7 @@ export class VideosService {
   private async enqueueProcessing(learningObjectId: number): Promise<void> {
     await this.videosQueue.add(
       QUEUE_NAMES.VIDEOS.JOBS.PROCESS,
-      { learningObjectId },
+      { videoId: learningObjectId },
       {
         removeOnComplete: { count: 100 },
         removeOnFail: { count: 50 },
