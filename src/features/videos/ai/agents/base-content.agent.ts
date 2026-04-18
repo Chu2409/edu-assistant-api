@@ -4,12 +4,11 @@ import { generateText, LanguageModel, Output } from 'ai'
 import { BlockType } from 'src/core/database/generated/client'
 import { PromptLoaderService } from '../config/prompt-loader.service'
 import { TaskName } from '../config/task-name.type'
-import { ContentAgent } from '../interfaces/content-agent.interface'
 import { GenerationInput } from '../interfaces/generation-input.interface'
 import { GenerationResult } from '../interfaces/generation-result.interface'
 import { AgentExecutionResult } from '../interfaces/agent-execution-result.interface'
 
-export abstract class BaseContentAgent implements ContentAgent {
+export abstract class BaseContentAgent {
   protected readonly logger = new Logger(this.constructor.name)
 
   abstract readonly blockType: BlockType
