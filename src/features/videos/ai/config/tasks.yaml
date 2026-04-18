@@ -17,6 +17,7 @@ summary_task:
     - "summary": A 2-3 sentence paragraph that captures what this specific video covers, what makes it useful, and who it's for (string)
 
     {language_instruction}
+    {instruction_block}
 
     Rules:
     - Ground ALL content in the transcription. Never introduce topics not covered in the video.
@@ -40,6 +41,7 @@ flashcard_task:
     Each item has "front" and "back" keys.
 
     {language_instruction}
+    {instruction_block}
 
     Rules:
     - Create EXACTLY {max_cards} flashcards, each covering a DISTINCT concept
@@ -71,6 +73,7 @@ quiz_task:
     - correctAnswer MUST be exactly one of: 0, 1, 2, 3.
 
     {language_instruction}
+    {instruction_block}
 
     Rules:
     - Create EXACTLY {max_questions} questions, each testing a DIFFERENT concept than the flashcards
@@ -96,6 +99,7 @@ glossary_task:
     - If you cannot define a term, skip it entirely rather than omitting the "definition" key.
 
     {language_instruction}
+    {instruction_block}
 
     Rules:
     - Extract between 5 and 15 terms that are specific to the subject matter discussed in the video.

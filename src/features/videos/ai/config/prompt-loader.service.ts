@@ -36,10 +36,15 @@ export class PromptLoaderService {
         ? 'Respond in the same language as the transcription.'
         : `Respond entirely in ${input.language}.`
 
+    const instructionBlock = input.instruction
+      ? `\nTeacher feedback — adjust the output accordingly:\n<instruction>\n${input.instruction}\n</instruction>\n`
+      : ''
+
     return task.description
       .replace(/{transcription}/g, input.transcription)
       .replace(/{title_context}/g, titleContext)
       .replace(/{language_instruction}/g, languageInstruction)
+      .replace(/{instruction_block}/g, instructionBlock)
       .replace(/{max_cards}/g, String(MAX_FLASHCARDS))
       .replace(/{max_questions}/g, String(MAX_QUIZ_QUESTIONS))
   }
