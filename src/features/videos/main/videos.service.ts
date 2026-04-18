@@ -254,6 +254,10 @@ export class VideosService {
       for (let index = 0; index < dto.blocks.length; index++) {
         const blockDto = dto.blocks[index]
         const orderIndex = index
+        const tipTapContent =
+          blockDto.tipTapContent === null
+            ? Prisma.JsonNull
+            : blockDto.tipTapContent
 
         if (blockDto.id) {
           await tx.block.update({
@@ -261,7 +265,7 @@ export class VideosService {
             data: {
               type: blockDto.type,
               content: blockDto.content,
-              tipTapContent: blockDto.tipTapContent,
+              tipTapContent,
               orderIndex,
             },
           })
@@ -271,7 +275,7 @@ export class VideosService {
               learningObjectId: id,
               type: blockDto.type,
               content: blockDto.content,
-              tipTapContent: blockDto.tipTapContent,
+              tipTapContent,
               orderIndex,
             },
           })

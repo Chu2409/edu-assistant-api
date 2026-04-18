@@ -44,14 +44,14 @@ export class UpsertBlockDto {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   content: Record<string, any>
 
-  @ApiProperty({
+  @ApiPropertyOptional({
     description:
-      'Contenido TipTap en formato JSON. Debe enviarse siempre (puede ser null).',
+      'Contenido TipTap en formato JSON. Opcional — puede omitirse o enviarse como null cuando el bloque no usa editor rich text (p. ej. bloques de video).',
     example: { type: 'doc', content: [] },
     nullable: true,
   })
+  @IsOptional()
   @IsObject()
-  @IsNotEmpty()
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  tipTapContent: Record<string, any>
+  tipTapContent?: Record<string, any> | null
 }
