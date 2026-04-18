@@ -86,10 +86,24 @@ export class VideoIngestionService {
   async finalizeGeneration(
     videoId: number,
     generated: GenerationResult,
+    requestedTypes: BlockType[],
     tx?: Prisma.TransactionClient,
   ): Promise<void> {
     const client = tx || this.dbService
-    if (generated.errors.length > 0) {
+    const failedCount = generated.errors.length
+    const requestedCount = requestedTypes.length
+
+    if (failedCount === 0) {
+      await this.stateService.transition(
+        videoId,
+        IngestionStatus.COMPLETED,
+        { errorMessage: null },
+        client,
+      )
+      return
+    }
+
+    if (failedCount === requestedCount) {
       const failedTypes = generated.errors.map((e) => e.type).join(', ')
       await this.stateService.transition(
         videoId,
@@ -97,14 +111,16 @@ export class VideoIngestionService {
         { errorMessage: `Failed to generate: ${failedTypes}` },
         client,
       )
-    } else {
-      await this.stateService.transition(
-        videoId,
-        IngestionStatus.COMPLETED,
-        undefined,
-        client,
-      )
+      return
     }
+
+    const failedTypes = generated.errors.map((e) => e.type).join(', ')
+    await this.stateService.transition(
+      videoId,
+      IngestionStatus.COMPLETED,
+      { errorMessage: `Partial: ${failedTypes}` },
+      client,
+    )
   }
 
   private buildBlockInputs(
@@ -133,16 +149,24 @@ export class VideoIngestionService {
     ]
 
     for (const entry of entries) {
-      if (entry.data) {
-        blocks.push({
-          learningObjectId: videoId,
-          type: entry.type,
-          content: entry.data,
-          orderIndex: GENERATED_BLOCK_TYPES.indexOf(
-            entry.type as (typeof GENERATED_BLOCK_TYPES)[number],
-          ),
-        })
-      }
+      if (!entry.data) continue
+
+      const needsReview = generated.needsReview[entry.type] === true
+      const content = needsReview
+        ? {
+            ...(entry.data as Record<string, unknown>),
+            meta: { needsReview: true },
+          }
+        : entry.data
+
+      blocks.push({
+        learningObjectId: videoId,
+        type: entry.type,
+        content: content as Prisma.InputJsonValue,
+        orderIndex: GENERATED_BLOCK_TYPES.indexOf(
+          entry.type as (typeof GENERATED_BLOCK_TYPES)[number],
+        ),
+      })
     }
 
     return blocks

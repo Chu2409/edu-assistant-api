@@ -189,7 +189,12 @@ export class VideoProcessingWorker extends WorkerHost {
         requestedTypes,
         tx,
       )
-      await this.ingestionService.finalizeGeneration(videoId, generated, tx)
+      await this.ingestionService.finalizeGeneration(
+        videoId,
+        generated,
+        requestedTypes,
+        tx,
+      )
     })
 
     await this.attemptService.record(
