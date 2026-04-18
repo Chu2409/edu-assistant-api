@@ -15,8 +15,9 @@ function decodeHtmlEntities(input: string): string {
     .replace(/&#x([0-9a-fA-F]+);/g, (_, hex: string) =>
       String.fromCodePoint(parseInt(hex, 16)),
     )
-    .replace(/&([a-zA-Z]+);/g, (match, name: string) =>
-      NAMED_ENTITIES[name.toLowerCase()] ?? match,
+    .replace(
+      /&([a-zA-Z]+);/g,
+      (match, name: string) => NAMED_ENTITIES[name.toLowerCase()] ?? match,
     )
 }
 
@@ -25,7 +26,10 @@ function stripMusicAndSoundTags(input: string): string {
 }
 
 function collapseWhitespace(input: string): string {
-  return input.replace(/[ \t]+/g, ' ').replace(/\n{3,}/g, '\n\n').trim()
+  return input
+    .replace(/[ \t]+/g, ' ')
+    .replace(/\n{3,}/g, '\n\n')
+    .trim()
 }
 
 export function cleanTranscript(input: string): string {

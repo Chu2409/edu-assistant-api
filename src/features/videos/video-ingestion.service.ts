@@ -105,10 +105,19 @@ export class VideoIngestionService {
       type: BlockType
       data: Prisma.InputJsonValue | undefined
     }> = [
-      { type: BlockType.SUMMARY, data: generated.summary as Prisma.InputJsonValue },
-      { type: BlockType.FLASHCARDS, data: generated.flashcards as Prisma.InputJsonValue },
+      {
+        type: BlockType.SUMMARY,
+        data: generated.summary as Prisma.InputJsonValue,
+      },
+      {
+        type: BlockType.FLASHCARDS,
+        data: generated.flashcards as Prisma.InputJsonValue,
+      },
       { type: BlockType.QUIZ, data: generated.quiz as Prisma.InputJsonValue },
-      { type: BlockType.GLOSSARY, data: generated.glossary as Prisma.InputJsonValue },
+      {
+        type: BlockType.GLOSSARY,
+        data: generated.glossary as Prisma.InputJsonValue,
+      },
     ]
 
     for (const entry of entries) {
