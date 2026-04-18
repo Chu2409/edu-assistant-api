@@ -407,8 +407,8 @@ export const ModelName = {
   ModuleMetrics: 'ModuleMetrics',
   SystemSetting: 'SystemSetting',
   TeacherAiFeedback: 'TeacherAiFeedback',
-  ContentSource: 'ContentSource',
-  GenerationAttempt: 'GenerationAttempt'
+  Video: 'Video',
+  VideoGenerationAttempt: 'VideoGenerationAttempt'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -424,7 +424,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "module" | "aiConfiguration" | "enrollment" | "learningObjectType" | "learningObject" | "block" | "session" | "message" | "learningObjectRelation" | "learningObjectConcept" | "activity" | "activityAttempt" | "learningObjectFeedback" | "note" | "studentQuestion" | "questionReply" | "notification" | "podcast" | "mediaResource" | "moduleMetrics" | "systemSetting" | "teacherAiFeedback" | "contentSource" | "generationAttempt"
+    modelProps: "user" | "module" | "aiConfiguration" | "enrollment" | "learningObjectType" | "learningObject" | "block" | "session" | "message" | "learningObjectRelation" | "learningObjectConcept" | "activity" | "activityAttempt" | "learningObjectFeedback" | "note" | "studentQuestion" | "questionReply" | "notification" | "podcast" | "mediaResource" | "moduleMetrics" | "systemSetting" | "teacherAiFeedback" | "video" | "videoGenerationAttempt"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -2130,151 +2130,151 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
-    ContentSource: {
-      payload: Prisma.$ContentSourcePayload<ExtArgs>
-      fields: Prisma.ContentSourceFieldRefs
+    Video: {
+      payload: Prisma.$VideoPayload<ExtArgs>
+      fields: Prisma.VideoFieldRefs
       operations: {
         findUnique: {
-          args: Prisma.ContentSourceFindUniqueArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ContentSourcePayload> | null
+          args: Prisma.VideoFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VideoPayload> | null
         }
         findUniqueOrThrow: {
-          args: Prisma.ContentSourceFindUniqueOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ContentSourcePayload>
+          args: Prisma.VideoFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VideoPayload>
         }
         findFirst: {
-          args: Prisma.ContentSourceFindFirstArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ContentSourcePayload> | null
+          args: Prisma.VideoFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VideoPayload> | null
         }
         findFirstOrThrow: {
-          args: Prisma.ContentSourceFindFirstOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ContentSourcePayload>
+          args: Prisma.VideoFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VideoPayload>
         }
         findMany: {
-          args: Prisma.ContentSourceFindManyArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ContentSourcePayload>[]
+          args: Prisma.VideoFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VideoPayload>[]
         }
         create: {
-          args: Prisma.ContentSourceCreateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ContentSourcePayload>
+          args: Prisma.VideoCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VideoPayload>
         }
         createMany: {
-          args: Prisma.ContentSourceCreateManyArgs<ExtArgs>
+          args: Prisma.VideoCreateManyArgs<ExtArgs>
           result: BatchPayload
         }
         createManyAndReturn: {
-          args: Prisma.ContentSourceCreateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ContentSourcePayload>[]
+          args: Prisma.VideoCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VideoPayload>[]
         }
         delete: {
-          args: Prisma.ContentSourceDeleteArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ContentSourcePayload>
+          args: Prisma.VideoDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VideoPayload>
         }
         update: {
-          args: Prisma.ContentSourceUpdateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ContentSourcePayload>
+          args: Prisma.VideoUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VideoPayload>
         }
         deleteMany: {
-          args: Prisma.ContentSourceDeleteManyArgs<ExtArgs>
+          args: Prisma.VideoDeleteManyArgs<ExtArgs>
           result: BatchPayload
         }
         updateMany: {
-          args: Prisma.ContentSourceUpdateManyArgs<ExtArgs>
+          args: Prisma.VideoUpdateManyArgs<ExtArgs>
           result: BatchPayload
         }
         updateManyAndReturn: {
-          args: Prisma.ContentSourceUpdateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ContentSourcePayload>[]
+          args: Prisma.VideoUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VideoPayload>[]
         }
         upsert: {
-          args: Prisma.ContentSourceUpsertArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ContentSourcePayload>
+          args: Prisma.VideoUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VideoPayload>
         }
         aggregate: {
-          args: Prisma.ContentSourceAggregateArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.AggregateContentSource>
+          args: Prisma.VideoAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateVideo>
         }
         groupBy: {
-          args: Prisma.ContentSourceGroupByArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.ContentSourceGroupByOutputType>[]
+          args: Prisma.VideoGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.VideoGroupByOutputType>[]
         }
         count: {
-          args: Prisma.ContentSourceCountArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.ContentSourceCountAggregateOutputType> | number
+          args: Prisma.VideoCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.VideoCountAggregateOutputType> | number
         }
       }
     }
-    GenerationAttempt: {
-      payload: Prisma.$GenerationAttemptPayload<ExtArgs>
-      fields: Prisma.GenerationAttemptFieldRefs
+    VideoGenerationAttempt: {
+      payload: Prisma.$VideoGenerationAttemptPayload<ExtArgs>
+      fields: Prisma.VideoGenerationAttemptFieldRefs
       operations: {
         findUnique: {
-          args: Prisma.GenerationAttemptFindUniqueArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$GenerationAttemptPayload> | null
+          args: Prisma.VideoGenerationAttemptFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VideoGenerationAttemptPayload> | null
         }
         findUniqueOrThrow: {
-          args: Prisma.GenerationAttemptFindUniqueOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$GenerationAttemptPayload>
+          args: Prisma.VideoGenerationAttemptFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VideoGenerationAttemptPayload>
         }
         findFirst: {
-          args: Prisma.GenerationAttemptFindFirstArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$GenerationAttemptPayload> | null
+          args: Prisma.VideoGenerationAttemptFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VideoGenerationAttemptPayload> | null
         }
         findFirstOrThrow: {
-          args: Prisma.GenerationAttemptFindFirstOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$GenerationAttemptPayload>
+          args: Prisma.VideoGenerationAttemptFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VideoGenerationAttemptPayload>
         }
         findMany: {
-          args: Prisma.GenerationAttemptFindManyArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$GenerationAttemptPayload>[]
+          args: Prisma.VideoGenerationAttemptFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VideoGenerationAttemptPayload>[]
         }
         create: {
-          args: Prisma.GenerationAttemptCreateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$GenerationAttemptPayload>
+          args: Prisma.VideoGenerationAttemptCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VideoGenerationAttemptPayload>
         }
         createMany: {
-          args: Prisma.GenerationAttemptCreateManyArgs<ExtArgs>
+          args: Prisma.VideoGenerationAttemptCreateManyArgs<ExtArgs>
           result: BatchPayload
         }
         createManyAndReturn: {
-          args: Prisma.GenerationAttemptCreateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$GenerationAttemptPayload>[]
+          args: Prisma.VideoGenerationAttemptCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VideoGenerationAttemptPayload>[]
         }
         delete: {
-          args: Prisma.GenerationAttemptDeleteArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$GenerationAttemptPayload>
+          args: Prisma.VideoGenerationAttemptDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VideoGenerationAttemptPayload>
         }
         update: {
-          args: Prisma.GenerationAttemptUpdateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$GenerationAttemptPayload>
+          args: Prisma.VideoGenerationAttemptUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VideoGenerationAttemptPayload>
         }
         deleteMany: {
-          args: Prisma.GenerationAttemptDeleteManyArgs<ExtArgs>
+          args: Prisma.VideoGenerationAttemptDeleteManyArgs<ExtArgs>
           result: BatchPayload
         }
         updateMany: {
-          args: Prisma.GenerationAttemptUpdateManyArgs<ExtArgs>
+          args: Prisma.VideoGenerationAttemptUpdateManyArgs<ExtArgs>
           result: BatchPayload
         }
         updateManyAndReturn: {
-          args: Prisma.GenerationAttemptUpdateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$GenerationAttemptPayload>[]
+          args: Prisma.VideoGenerationAttemptUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VideoGenerationAttemptPayload>[]
         }
         upsert: {
-          args: Prisma.GenerationAttemptUpsertArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$GenerationAttemptPayload>
+          args: Prisma.VideoGenerationAttemptUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VideoGenerationAttemptPayload>
         }
         aggregate: {
-          args: Prisma.GenerationAttemptAggregateArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.AggregateGenerationAttempt>
+          args: Prisma.VideoGenerationAttemptAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateVideoGenerationAttempt>
         }
         groupBy: {
-          args: Prisma.GenerationAttemptGroupByArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.GenerationAttemptGroupByOutputType>[]
+          args: Prisma.VideoGenerationAttemptGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.VideoGenerationAttemptGroupByOutputType>[]
         }
         count: {
-          args: Prisma.GenerationAttemptCountArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.GenerationAttemptCountAggregateOutputType> | number
+          args: Prisma.VideoGenerationAttemptCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.VideoGenerationAttemptCountAggregateOutputType> | number
         }
       }
     }
@@ -2641,8 +2641,7 @@ export const TeacherAiFeedbackScalarFieldEnum = {
 export type TeacherAiFeedbackScalarFieldEnum = (typeof TeacherAiFeedbackScalarFieldEnum)[keyof typeof TeacherAiFeedbackScalarFieldEnum]
 
 
-export const ContentSourceScalarFieldEnum = {
-  id: 'id',
+export const VideoScalarFieldEnum = {
   learningObjectId: 'learningObjectId',
   kind: 'kind',
   sourceUrl: 'sourceUrl',
@@ -2653,16 +2652,15 @@ export const ContentSourceScalarFieldEnum = {
   durationSeconds: 'durationSeconds',
   errorMessage: 'errorMessage',
   metadata: 'metadata',
-  createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
 
-export type ContentSourceScalarFieldEnum = (typeof ContentSourceScalarFieldEnum)[keyof typeof ContentSourceScalarFieldEnum]
+export type VideoScalarFieldEnum = (typeof VideoScalarFieldEnum)[keyof typeof VideoScalarFieldEnum]
 
 
-export const GenerationAttemptScalarFieldEnum = {
+export const VideoGenerationAttemptScalarFieldEnum = {
   id: 'id',
-  learningObjectId: 'learningObjectId',
+  videoId: 'videoId',
   provider: 'provider',
   model: 'model',
   requestedTypes: 'requestedTypes',
@@ -2676,7 +2674,7 @@ export const GenerationAttemptScalarFieldEnum = {
   completedAt: 'completedAt'
 } as const
 
-export type GenerationAttemptScalarFieldEnum = (typeof GenerationAttemptScalarFieldEnum)[keyof typeof GenerationAttemptScalarFieldEnum]
+export type VideoGenerationAttemptScalarFieldEnum = (typeof VideoGenerationAttemptScalarFieldEnum)[keyof typeof VideoGenerationAttemptScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -3123,8 +3121,8 @@ export type GlobalOmitConfig = {
   moduleMetrics?: Prisma.ModuleMetricsOmit
   systemSetting?: Prisma.SystemSettingOmit
   teacherAiFeedback?: Prisma.TeacherAiFeedbackOmit
-  contentSource?: Prisma.ContentSourceOmit
-  generationAttempt?: Prisma.GenerationAttemptOmit
+  video?: Prisma.VideoOmit
+  videoGenerationAttempt?: Prisma.VideoGenerationAttemptOmit
 }
 
 /* Types for Logging */

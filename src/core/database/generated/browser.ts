@@ -133,12 +133,12 @@ export type SystemSetting = Prisma.SystemSettingModel
  */
 export type TeacherAiFeedback = Prisma.TeacherAiFeedbackModel
 /**
- * Model ContentSource
+ * Model Video
  * 
  */
-export type ContentSource = Prisma.ContentSourceModel
+export type Video = Prisma.VideoModel
 /**
- * Model GenerationAttempt
+ * Model VideoGenerationAttempt
  * 
  */
-export type GenerationAttempt = Prisma.GenerationAttemptModel
+export type VideoGenerationAttempt = Prisma.VideoGenerationAttemptModel

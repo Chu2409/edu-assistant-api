@@ -8,7 +8,7 @@ export class GenerationAttemptService {
   constructor(private readonly dbService: DBService) {}
 
   async record(
-    learningObjectId: number,
+    videoId: number,
     requestedTypes: BlockType[],
     generated: GenerationResult,
     processingTimeMs: number,
@@ -17,9 +17,9 @@ export class GenerationAttemptService {
       (t) => !generated.errors.some((e) => e.type === t),
     )
 
-    await this.dbService.generationAttempt.create({
+    await this.dbService.videoGenerationAttempt.create({
       data: {
-        learningObjectId,
+        videoId,
         provider: generated.provider ?? 'unknown',
         model: generated.model ?? 'unknown',
         requestedTypes,

@@ -20,7 +20,7 @@ export class VideoIngestionService {
     status: IngestionStatus,
     extra?: { errorMessage?: string },
   ): Promise<void> {
-    await this.dbService.contentSource.update({
+    await this.dbService.video.update({
       where: { learningObjectId },
       data: { status, errorMessage: extra?.errorMessage },
     })
@@ -30,7 +30,7 @@ export class VideoIngestionService {
     learningObjectId: number,
     result: TranscriptionResult,
   ): Promise<void> {
-    await this.dbService.contentSource.update({
+    await this.dbService.video.update({
       where: { learningObjectId },
       data: {
         rawText: result.text,
@@ -62,10 +62,10 @@ export class VideoIngestionService {
   async loadForProcessing(learningObjectId: number) {
     const lo = await this.dbService.learningObject.findUnique({
       where: { id: learningObjectId },
-      include: { contentSource: true },
+      include: { video: true },
     })
 
-    if (!lo?.contentSource) {
+    if (!lo?.video) {
       throw new NotFoundException(
         `LearningObject ${learningObjectId} has no content source`,
       )
@@ -73,10 +73,10 @@ export class VideoIngestionService {
 
     return {
       title: lo.title,
-      kind: lo.contentSource.kind,
-      sourceUrl: lo.contentSource.sourceUrl,
-      outputLanguage: lo.contentSource.outputLanguage,
-      rawText: lo.contentSource.rawText,
+      kind: lo.video.kind,
+      sourceUrl: lo.video.sourceUrl,
+      outputLanguage: lo.video.outputLanguage,
+      rawText: lo.video.rawText,
     }
   }
 

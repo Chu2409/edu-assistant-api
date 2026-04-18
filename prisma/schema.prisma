@@ -195,10 +195,9 @@ model LearningObject {
   loFeedbacks      LearningObjectFeedback[]
   studentQuestions StudentQuestion[]
   sessions         Session[]
-  blocks               Block[]
-  teacherFeedbacks     TeacherAiFeedback[]
-  contentSource        ContentSource?
-  generationAttempts   GenerationAttempt[]
+  blocks           Block[]
+  teacherFeedbacks TeacherAiFeedback[]
+  video            Video?
 
   @@unique([moduleId, orderIndex])
   @@index([moduleId])
@@ -634,52 +633,51 @@ model TeacherAiFeedback {
   @@map("teacher_ai_feedbacks")
 }
 
-model ContentSource {
-  id               Int             @id @default(autoincrement())
-  learningObjectId Int             @unique @map("learning_object_id")
+model Video {
+  learningObjectId Int             @id @map("learning_object_id")
   kind             SourceKind
-  sourceUrl        String          @db.VarChar(1000) @map("source_url")
+  sourceUrl        String          @map("source_url") @db.VarChar(1000)
   status           IngestionStatus @default(PENDING)
   outputLanguage   String          @default("auto") @map("output_language") @db.VarChar(10)
 
-  rawText          String?         @db.Text @map("raw_text")
-  detectedLanguage String?         @map("detected_language") @db.VarChar(10)
-  durationSeconds  Float?          @map("duration_seconds")
-  errorMessage     String?         @db.Text @map("error_message")
+  rawText          String? @map("raw_text") @db.Text
+  detectedLanguage String? @map("detected_language") @db.VarChar(10)
+  durationSeconds  Float?  @map("duration_seconds")
+  errorMessage     String? @map("error_message") @db.Text
   metadata         Json?
 
-  createdAt        DateTime        @default(now()) @map("created_at")
-  updatedAt        DateTime        @updatedAt @map("updated_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
 
-  learningObject LearningObject @relation(fields: [learningObjectId], references: [id], onDelete: Cascade)
+  learningObject     LearningObject           @relation(fields: [learningObjectId], references: [id], onDelete: Cascade)
+  generationAttempts VideoGenerationAttempt[]
 
   @@index([status])
   @@index([kind])
-  @@map("content_sources")
+  @@map("videos")
 }
 
-model GenerationAttempt {
-  id               Int       @id @default(autoincrement())
-  learningObjectId Int       @map("learning_object_id")
+model VideoGenerationAttempt {
+  id      Int @id @default(autoincrement())
+  videoId Int @map("video_id")
 
-  provider         String    @db.VarChar(20)
-  model            String    @db.VarChar(100)
+  provider String @db.VarChar(20)
+  model    String @db.VarChar(100)
 
-  requestedTypes   BlockType[] @map("requested_types")
-  completedTypes   BlockType[] @map("completed_types")
-  failedTypes      Json?       @map("failed_types")
+  requestedTypes BlockType[] @map("requested_types")
+  completedTypes BlockType[] @map("completed_types")
+  failedTypes    Json?       @map("failed_types")
 
-  tokensInput      Int?      @map("tokens_input")
-  tokensOutput     Int?      @map("tokens_output")
-  processingTimeMs Int?      @map("processing_time_ms")
-  qualityMetrics   Json?     @map("quality_metrics")
+  tokensInput      Int?  @map("tokens_input")
+  tokensOutput     Int?  @map("tokens_output")
+  processingTimeMs Int?  @map("processing_time_ms")
+  qualityMetrics   Json? @map("quality_metrics")
 
-  startedAt        DateTime  @default(now()) @map("started_at")
-  completedAt      DateTime? @map("completed_at")
+  startedAt   DateTime  @default(now()) @map("started_at")
+  completedAt DateTime? @map("completed_at")
 
-  learningObject LearningObject @relation(fields: [learningObjectId], references: [id], onDelete: Cascade)
+  video Video @relation(fields: [videoId], references: [learningObjectId], onDelete: Cascade)
 
-  @@index([learningObjectId])
+  @@index([videoId])
   @@index([provider])
-  @@map("generation_attempts")
+  @@map("video_generation_attempts")
 }

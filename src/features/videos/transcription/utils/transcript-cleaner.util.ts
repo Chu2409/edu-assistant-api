@@ -3,6 +3,7 @@ const NAMED_ENTITIES: Record<string, string> = {
   lt: '<',
   gt: '>',
   quot: '"',
+  // eslint-disable-next-line quotes
   apos: "'",
   nbsp: ' ',
 }

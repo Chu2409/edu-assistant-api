@@ -74,8 +74,8 @@ export const ModelName = {
   ModuleMetrics: 'ModuleMetrics',
   SystemSetting: 'SystemSetting',
   TeacherAiFeedback: 'TeacherAiFeedback',
-  ContentSource: 'ContentSource',
-  GenerationAttempt: 'GenerationAttempt'
+  Video: 'Video',
+  VideoGenerationAttempt: 'VideoGenerationAttempt'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -418,8 +418,7 @@ export const TeacherAiFeedbackScalarFieldEnum = {
 export type TeacherAiFeedbackScalarFieldEnum = (typeof TeacherAiFeedbackScalarFieldEnum)[keyof typeof TeacherAiFeedbackScalarFieldEnum]
 
 
-export const ContentSourceScalarFieldEnum = {
-  id: 'id',
+export const VideoScalarFieldEnum = {
   learningObjectId: 'learningObjectId',
   kind: 'kind',
   sourceUrl: 'sourceUrl',
@@ -430,16 +429,15 @@ export const ContentSourceScalarFieldEnum = {
   durationSeconds: 'durationSeconds',
   errorMessage: 'errorMessage',
   metadata: 'metadata',
-  createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
 
-export type ContentSourceScalarFieldEnum = (typeof ContentSourceScalarFieldEnum)[keyof typeof ContentSourceScalarFieldEnum]
+export type VideoScalarFieldEnum = (typeof VideoScalarFieldEnum)[keyof typeof VideoScalarFieldEnum]
 
 
-export const GenerationAttemptScalarFieldEnum = {
+export const VideoGenerationAttemptScalarFieldEnum = {
   id: 'id',
-  learningObjectId: 'learningObjectId',
+  videoId: 'videoId',
   provider: 'provider',
   model: 'model',
   requestedTypes: 'requestedTypes',
@@ -453,7 +451,7 @@ export const GenerationAttemptScalarFieldEnum = {
   completedAt: 'completedAt'
 } as const
 
-export type GenerationAttemptScalarFieldEnum = (typeof GenerationAttemptScalarFieldEnum)[keyof typeof GenerationAttemptScalarFieldEnum]
+export type VideoGenerationAttemptScalarFieldEnum = (typeof VideoGenerationAttemptScalarFieldEnum)[keyof typeof VideoGenerationAttemptScalarFieldEnum]
 
 
 export const SortOrder = {

@@ -63,7 +63,7 @@ export class VideosService {
         title: dto.title,
         isPublished: false,
         orderIndex: lastLo ? lastLo.orderIndex + 1 : 1,
-        contentSource: {
+        video: {
           create: {
             kind: SourceKind.YOUTUBE_URL,
             sourceUrl: dto.url,
@@ -72,13 +72,13 @@ export class VideosService {
           },
         },
       },
-      include: { contentSource: true },
+      include: { video: true },
     })
 
     await this.enqueueProcessing(lo.id)
 
     return VideoMapper.toDto(
-      lo as typeof lo & { contentSource: NonNullable<typeof lo.contentSource> },
+      lo as typeof lo & { video: NonNullable<typeof lo.video> },
     )
   }
 
@@ -103,7 +103,7 @@ export class VideosService {
         title: dto.title,
         isPublished: false,
         orderIndex: lastLo ? lastLo.orderIndex + 1 : 1,
-        contentSource: {
+        video: {
           create: {
             kind: SourceKind.VIDEO_FILE,
             sourceUrl: file.path,
@@ -113,13 +113,13 @@ export class VideosService {
           },
         },
       },
-      include: { contentSource: true },
+      include: { video: true },
     })
 
     await this.enqueueProcessing(lo.id)
 
     return VideoMapper.toDto(
-      lo as typeof lo & { contentSource: NonNullable<typeof lo.contentSource> },
+      lo as typeof lo & { video: NonNullable<typeof lo.video> },
     )
   }
 
@@ -148,9 +148,7 @@ export class VideosService {
     const where: Prisma.LearningObjectWhereInput = {
       moduleId,
       type: { name: 'VIDEO' },
-      contentSource: params.status
-        ? { status: params.status }
-        : { isNot: null },
+      video: params.status ? { status: params.status } : { isNot: null },
     }
 
     if (params.search) {
@@ -167,17 +165,17 @@ export class VideosService {
         skip: (params.page - 1) * params.limit,
         take: params.limit,
         orderBy: { orderIndex: 'asc' },
-        include: { contentSource: true },
+        include: { video: true },
       }),
       this.dbService.learningObject.count({ where }),
     ])
 
     const records = entities
-      .filter((lo) => lo.contentSource !== null)
+      .filter((lo) => lo.video !== null)
       .map((lo) =>
         VideoMapper.toDto(
           lo as typeof lo & {
-            contentSource: NonNullable<typeof lo.contentSource>
+            video: NonNullable<typeof lo.video>
           },
         ),
       )
@@ -193,33 +191,38 @@ export class VideosService {
 
   async findOne(id: number, user: User): Promise<FullVideoDto> {
     const lo = await this.dbService.learningObject.findFirst({
-      where: { contentSource: { id } },
+      where: { video: { learningObjectId: id } },
       include: {
-        contentSource: true,
+        video: true,
         blocks: { orderBy: { orderIndex: 'asc' } },
         module: { include: { enrollments: true } },
       },
     })
 
-    if (!lo?.contentSource) {
+    if (!lo?.video) {
       throw new NotFoundException(`Video with ID ${id} not found`)
     }
 
     this.checkReadPermission(lo.module, user, lo.isPublished)
 
     return VideoMapper.toFullDto(
-      lo as typeof lo & { contentSource: NonNullable<typeof lo.contentSource> },
+      lo as typeof lo & { video: NonNullable<typeof lo.video> },
     )
   }
 
   async getStatus(id: number): Promise<VideoStatusDto> {
-    const cs = await this.dbService.contentSource.findUnique({ where: { id } })
+    const lo = await this.dbService.learningObject.findUnique({
+      where: { id },
+      include: { video: true },
+    })
 
-    if (!cs) {
+    if (!lo?.video) {
       throw new NotFoundException(`Video with ID ${id} not found`)
     }
 
-    return VideoMapper.toStatusDto(cs)
+    return VideoMapper.toStatusDto(
+      lo as typeof lo & { video: NonNullable<typeof lo.video> },
+    )
   }
 
   async retry(
@@ -228,11 +231,11 @@ export class VideosService {
     user: User,
   ): Promise<VideoStatusDto> {
     const lo = await this.dbService.learningObject.findFirst({
-      where: { contentSource: { id } },
-      include: { contentSource: true, module: true },
+      where: { video: { learningObjectId: id } },
+      include: { video: true, module: true },
     })
 
-    if (!lo?.contentSource) {
+    if (!lo?.video) {
       throw new NotFoundException(`Video with ID ${id} not found`)
     }
 
@@ -243,8 +246,8 @@ export class VideosService {
     }
 
     if (
-      lo.contentSource.status !== IngestionStatus.FAILED &&
-      lo.contentSource.status !== IngestionStatus.COMPLETED
+      lo.video.status !== IngestionStatus.FAILED &&
+      lo.video.status !== IngestionStatus.COMPLETED
     ) {
       throw new BusinessException(
         'Can only retry videos that have completed or failed',
@@ -254,8 +257,8 @@ export class VideosService {
 
     const contentTypes = dto.contentTypes ?? [...GENERATED_BLOCK_TYPES]
 
-    await this.dbService.contentSource.update({
-      where: { id },
+    await this.dbService.video.update({
+      where: { learningObjectId: id },
       data: { status: IngestionStatus.GENERATING, errorMessage: null },
     })
 
@@ -265,18 +268,25 @@ export class VideosService {
       { removeOnComplete: { count: 100 }, removeOnFail: { count: 50 } },
     )
 
+    const updatedLo = await this.dbService.learningObject.findUniqueOrThrow({
+      where: { id: lo.id },
+      include: { video: true },
+    })
+
     return VideoMapper.toStatusDto(
-      await this.dbService.contentSource.findUniqueOrThrow({ where: { id } }),
+      updatedLo as typeof updatedLo & {
+        video: NonNullable<typeof updatedLo.video>
+      },
     )
   }
 
   async remove(id: number, user: User): Promise<void> {
     const lo = await this.dbService.learningObject.findFirst({
-      where: { contentSource: { id } },
-      include: { contentSource: true, module: true },
+      where: { video: { learningObjectId: id } },
+      include: { video: true, module: true },
     })
 
-    if (!lo?.contentSource) {
+    if (!lo?.video) {
       throw new NotFoundException(`Video with ID ${id} not found`)
     }
 
