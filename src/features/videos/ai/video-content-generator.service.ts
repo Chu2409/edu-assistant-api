@@ -44,6 +44,7 @@ export class VideoContentGeneratorService {
 
     const result: GenerationResult = {
       errors: [],
+      needsReview: {},
       totalTokens: { input: 0, output: 0 },
       provider: this.aiProvider.getProviderName(),
       model: this.aiProvider.getModelName(),
@@ -55,8 +56,15 @@ export class VideoContentGeneratorService {
 
       if (entry.status === 'fulfilled') {
         agent.assignTo(result, entry.value.data)
+        result.needsReview[agent.blockType] = entry.value.needsReview
         result.totalTokens.input += entry.value.inputTokens
         result.totalTokens.output += entry.value.outputTokens
+
+        if (entry.value.needsReview) {
+          this.logger.warn(
+            `Generation for ${agent.blockType} flagged needsReview=true (lenient fallback)`,
+          )
+        }
       } else {
         const errorMessage =
           entry.reason instanceof Error

@@ -1,6 +1,6 @@
 import { Logger } from '@nestjs/common'
 import { z } from 'zod'
-import { generateText, LanguageModel, Output } from 'ai'
+import { generateText, LanguageModel, NoObjectGeneratedError, Output } from 'ai'
 import { BlockType } from 'src/core/database/generated/client'
 import { PromptLoaderService } from '../config/prompt-loader.service'
 import { TaskName } from '../config/task-name.type'
@@ -14,6 +14,8 @@ export abstract class BaseContentAgent {
   abstract readonly blockType: BlockType
   abstract readonly taskName: TaskName
   abstract readonly schema: z.ZodType
+  readonly lenientSchema?: z.ZodType
+  protected normalize?(data: unknown): unknown | null
 
   constructor(protected readonly promptLoader: PromptLoaderService) {}
 
@@ -30,9 +32,73 @@ export abstract class BaseContentAgent {
       `Calling AI: task=${this.taskName} modelId=${String((model as { modelId?: string }).modelId ?? 'unknown')}`,
     )
 
+    let strictInputTokens = 0
+    let strictOutputTokens = 0
+
+    try {
+      const result = await generateText({
+        model,
+        output: Output.object({ schema: this.schema }),
+        prompt,
+        temperature,
+        maxOutputTokens,
+        abortSignal: AbortSignal.timeout(timeout),
+      })
+
+      strictInputTokens = result.usage.inputTokens ?? 0
+      strictOutputTokens = result.usage.outputTokens ?? 0
+
+      this.logger.debug(
+        `AI response (strict): task=${this.taskName} finishReason=${result.finishReason} hasOutput=${!!result.output}`,
+      )
+
+      return {
+        data: result.output,
+        inputTokens: strictInputTokens,
+        outputTokens: strictOutputTokens,
+        needsReview: false,
+      }
+    } catch (error) {
+      if (!this.canFallback(error)) throw error
+
+      this.logger.warn(
+        `Strict schema failed for task=${this.taskName}, attempting lenient fallback: ${error instanceof Error ? error.message : String(error)}`,
+      )
+
+      return this.executeLenient(
+        model,
+        prompt,
+        temperature,
+        maxOutputTokens,
+        timeout,
+        strictInputTokens,
+        strictOutputTokens,
+        error,
+      )
+    }
+  }
+
+  private canFallback(error: unknown): boolean {
+    if (!this.lenientSchema || !this.normalize) return false
+    return NoObjectGeneratedError.isInstance(error)
+  }
+
+  private async executeLenient(
+    model: LanguageModel,
+    prompt: string,
+    temperature: number,
+    maxOutputTokens: number,
+    timeout: number,
+    strictInputTokens: number,
+    strictOutputTokens: number,
+    originalError: unknown,
+  ): Promise<AgentExecutionResult> {
+    const lenientSchema = this.lenientSchema!
+    const normalize = this.normalize!.bind(this)
+
     const result = await generateText({
       model,
-      output: Output.object({ schema: this.schema }),
+      output: Output.object({ schema: lenientSchema }),
       prompt,
       temperature,
       maxOutputTokens,
@@ -40,13 +106,25 @@ export abstract class BaseContentAgent {
     })
 
     this.logger.debug(
-      `AI response: task=${this.taskName} finishReason=${result.finishReason} hasOutput=${!!result.output}`,
+      `AI response (lenient): task=${this.taskName} finishReason=${result.finishReason} hasOutput=${!!result.output}`,
     )
 
+    const normalized = normalize(result.output)
+    const lenientInputTokens = result.usage.inputTokens ?? 0
+    const lenientOutputTokens = result.usage.outputTokens ?? 0
+
+    if (normalized === null) {
+      this.logger.warn(
+        `Lenient normalization returned null for task=${this.taskName} — treating as failure`,
+      )
+      throw originalError
+    }
+
     return {
-      data: result.output,
-      inputTokens: result.usage.inputTokens ?? 0,
-      outputTokens: result.usage.outputTokens ?? 0,
+      data: normalized,
+      inputTokens: strictInputTokens + lenientInputTokens,
+      outputTokens: strictOutputTokens + lenientOutputTokens,
+      needsReview: true,
     }
   }
 
