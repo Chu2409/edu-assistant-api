@@ -6,9 +6,6 @@ export class VideoDto {
   id: number
 
   @ApiProperty({ example: 1 })
-  learningObjectId: number
-
-  @ApiProperty({ example: 1 })
   moduleId: number
 
   @ApiProperty({ example: 'Introduction to Algorithms' })

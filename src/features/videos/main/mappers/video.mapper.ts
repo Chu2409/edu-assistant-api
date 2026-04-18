@@ -16,7 +16,6 @@ export class VideoMapper {
     const v = lo.video
     return {
       id: lo.id,
-      learningObjectId: lo.id,
       moduleId: lo.moduleId,
       title: lo.title,
       sourceKind: v.kind,
@@ -34,7 +33,6 @@ export class VideoMapper {
     const v = lo.video
     return {
       id: lo.id,
-      learningObjectId: lo.id,
       moduleId: lo.moduleId,
       title: lo.title,
       sourceKind: v.kind,
