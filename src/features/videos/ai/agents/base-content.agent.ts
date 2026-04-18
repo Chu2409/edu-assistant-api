@@ -7,6 +7,13 @@ import { TaskName } from '../config/task-name.type'
 import { GenerationInput } from '../interfaces/generation-input.interface'
 import { GenerationResult } from '../interfaces/generation-result.interface'
 import { AgentExecutionResult } from '../interfaces/agent-execution-result.interface'
+import { ProviderOptionsBuilder } from '../video-ai-provider.service'
+
+type GenerateTextProviderOptions = Parameters<
+  typeof generateText
+>[0]['providerOptions']
+
+const NOOP_PROVIDER_OPTIONS: ProviderOptionsBuilder = () => undefined
 
 export abstract class BaseContentAgent {
   protected readonly logger = new Logger(this.constructor.name)
@@ -15,7 +22,7 @@ export abstract class BaseContentAgent {
   abstract readonly taskName: TaskName
   abstract readonly schema: z.ZodType
   readonly lenientSchema?: z.ZodType
-  protected normalize?(data: unknown): unknown | null
+  protected normalize?(data: unknown): unknown
 
   constructor(protected readonly promptLoader: PromptLoaderService) {}
 
@@ -23,6 +30,7 @@ export abstract class BaseContentAgent {
     model: LanguageModel,
     input: GenerationInput,
     timeout: number,
+    buildProviderOptions: ProviderOptionsBuilder = NOOP_PROVIDER_OPTIONS,
   ): Promise<AgentExecutionResult> {
     const prompt = this.promptLoader.getPrompt(this.taskName, input)
     const temperature = this.promptLoader.getTemperature(this.taskName)
@@ -43,6 +51,9 @@ export abstract class BaseContentAgent {
         temperature,
         maxOutputTokens,
         abortSignal: AbortSignal.timeout(timeout),
+        providerOptions: buildProviderOptions(
+          this.schema,
+        ) as GenerateTextProviderOptions,
       })
 
       strictInputTokens = result.usage.inputTokens ?? 0
@@ -74,6 +85,7 @@ export abstract class BaseContentAgent {
         strictInputTokens,
         strictOutputTokens,
         error,
+        buildProviderOptions,
       )
     }
   }
@@ -92,6 +104,7 @@ export abstract class BaseContentAgent {
     strictInputTokens: number,
     strictOutputTokens: number,
     originalError: unknown,
+    buildProviderOptions: ProviderOptionsBuilder,
   ): Promise<AgentExecutionResult> {
     const lenientSchema = this.lenientSchema!
     const normalize = this.normalize!.bind(this)
@@ -103,6 +116,9 @@ export abstract class BaseContentAgent {
       temperature,
       maxOutputTokens,
       abortSignal: AbortSignal.timeout(timeout),
+      providerOptions: buildProviderOptions(
+        lenientSchema,
+      ) as GenerateTextProviderOptions,
     })
 
     this.logger.debug(

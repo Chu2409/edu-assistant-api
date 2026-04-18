@@ -5,8 +5,10 @@ type Flashcards = z.infer<typeof flashcardsSchema>
 
 function coerceString(value: unknown): string {
   if (typeof value === 'string') return value.trim()
-  if (value == null) return ''
-  return String(value).trim()
+  if (typeof value === 'number' || typeof value === 'boolean') {
+    return String(value).trim()
+  }
+  return ''
 }
 
 export function normalizeFlashcards(raw: unknown): Flashcards | null {

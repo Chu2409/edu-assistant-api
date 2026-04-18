@@ -18,7 +18,7 @@ export class FlashcardsAgent extends BaseContentAgent {
     super(promptLoader)
   }
 
-  protected normalize(data: unknown): unknown | null {
+  protected normalize(data: unknown): unknown {
     return normalizeFlashcards(data)
   }
 

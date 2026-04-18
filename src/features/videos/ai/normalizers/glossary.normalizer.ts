@@ -5,8 +5,10 @@ type Glossary = z.infer<typeof glossarySchema>
 
 function coerceString(value: unknown): string {
   if (typeof value === 'string') return value.trim()
-  if (value == null) return ''
-  return String(value).trim()
+  if (typeof value === 'number' || typeof value === 'boolean') {
+    return String(value).trim()
+  }
+  return ''
 }
 
 export function normalizeGlossary(raw: unknown): Glossary | null {

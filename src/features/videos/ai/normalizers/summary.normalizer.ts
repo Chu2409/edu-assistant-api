@@ -6,15 +6,23 @@ type Summary = z.infer<typeof summarySchema>
 function coerceStringArray(value: unknown): string[] {
   if (!Array.isArray(value)) return []
   return value
-    .map((entry) => (typeof entry === 'string' ? entry : String(entry ?? '')))
+    .map((entry) => {
+      if (typeof entry === 'string') return entry
+      if (typeof entry === 'number' || typeof entry === 'boolean') {
+        return String(entry)
+      }
+      return ''
+    })
     .map((entry) => entry.trim())
     .filter((entry) => entry.length > 0)
 }
 
 function coerceString(value: unknown): string {
   if (typeof value === 'string') return value.trim()
-  if (value == null) return ''
-  return String(value).trim()
+  if (typeof value === 'number' || typeof value === 'boolean') {
+    return String(value).trim()
+  }
+  return ''
 }
 
 export function normalizeSummary(raw: unknown): Summary | null {

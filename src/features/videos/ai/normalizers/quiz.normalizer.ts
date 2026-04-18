@@ -9,8 +9,10 @@ const MAX_ANSWER_INDEX = OPTIONS_COUNT - 1
 
 function coerceString(value: unknown): string {
   if (typeof value === 'string') return value.trim()
-  if (value == null) return ''
-  return String(value).trim()
+  if (typeof value === 'number' || typeof value === 'boolean') {
+    return String(value).trim()
+  }
+  return ''
 }
 
 function coerceOptions(value: unknown): string[] | null {
