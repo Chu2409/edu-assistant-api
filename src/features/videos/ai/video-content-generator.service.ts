@@ -5,7 +5,7 @@ import { BlockType } from 'src/core/database/generated/client'
 import { IConfig } from 'src/core/config/types'
 import { VideoAiProviderService } from './video-ai-provider.service'
 import { PromptLoaderService } from './config/prompt-loader.service'
-import { ContentAgentFactory } from './content-agent.factory'
+import { ContentAgentRegistry } from './content-agent.registry'
 import { ContentAgent } from './interfaces/content-agent.interface'
 import { GenerationInput } from './interfaces/generation-input.interface'
 import { GenerationResult } from './interfaces/generation-result.interface'
@@ -17,12 +17,12 @@ export class VideoContentGeneratorService {
   constructor(
     private readonly aiProvider: VideoAiProviderService,
     private readonly promptLoader: PromptLoaderService,
-    private readonly agentFactory: ContentAgentFactory,
+    private readonly agentRegistry: ContentAgentRegistry,
     private readonly configService: ConfigService,
   ) {}
 
   async generateAll(input: GenerationInput): Promise<GenerationResult> {
-    const types = this.agentFactory.getSupportedTypes()
+    const types = this.agentRegistry.getSupportedTypes()
     return this.runAgents(types, input)
   }
 
@@ -41,7 +41,7 @@ export class VideoContentGeneratorService {
     const timeout = this.configService.get<IConfig['VIDEO_AI_REQUEST_TIMEOUT']>(
       'APP.VIDEO_AI_REQUEST_TIMEOUT',
     )!
-    const agents = types.map((type) => this.agentFactory.create(type))
+    const agents = types.map((type) => this.agentRegistry.get(type))
 
     const settled = await Promise.allSettled(
       agents.map((agent) => this.executeAgent(agent, model, input, timeout)),

@@ -1,6 +1,5 @@
-import { Injectable } from '@nestjs/common'
+import { Injectable, HttpStatus } from '@nestjs/common'
 import { BlockType } from 'src/core/database/generated/client'
-import { HttpStatus } from '@nestjs/common'
 import { BusinessException } from 'src/shared/exceptions/business.exception'
 import { ContentAgent } from './interfaces/content-agent.interface'
 import { summarySchema } from './schemas/summary.schema'
@@ -9,7 +8,7 @@ import { quizSchema } from './schemas/quiz.schema'
 import { glossarySchema } from './schemas/glossary.schema'
 
 @Injectable()
-export class ContentAgentFactory {
+export class ContentAgentRegistry {
   private readonly registry = new Map<BlockType, ContentAgent>([
     [
       BlockType.SUMMARY,
@@ -41,7 +40,7 @@ export class ContentAgentFactory {
     ],
   ])
 
-  create(blockType: BlockType): ContentAgent {
+  get(blockType: BlockType): ContentAgent {
     const agent = this.registry.get(blockType)
     if (!agent) {
       throw new BusinessException(

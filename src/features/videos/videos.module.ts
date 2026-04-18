@@ -10,7 +10,7 @@ import { WhisperStrategy } from './transcription/strategies/whisper.strategy'
 import { YoutubeFallbackStrategy } from './transcription/strategies/youtube-fallback.strategy'
 import { VideoAiProviderService } from './ai/video-ai-provider.service'
 import { VideoContentGeneratorService } from './ai/video-content-generator.service'
-import { ContentAgentFactory } from './ai/content-agent.factory'
+import { ContentAgentRegistry } from './ai/content-agent.registry'
 import { PromptLoaderService } from './ai/config/prompt-loader.service'
 import { GenerationAttemptService } from './ai/generation-attempt.service'
 
@@ -26,7 +26,7 @@ import { GenerationAttemptService } from './ai/generation-attempt.service'
     YoutubeFallbackStrategy,
     VideoAiProviderService,
     VideoContentGeneratorService,
-    ContentAgentFactory,
+    ContentAgentRegistry,
     PromptLoaderService,
     GenerationAttemptService,
   ],
