@@ -150,7 +150,7 @@ export class VideosService {
 
     const where: Prisma.LearningObjectWhereInput = {
       moduleId,
-      type: { name: 'VIDEO' },
+      type: { name: VIDEO_LO_TYPE_NAME },
       video: params.status ? { status: params.status } : { isNot: null },
     }
 
