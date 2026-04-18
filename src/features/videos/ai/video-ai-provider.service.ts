@@ -5,10 +5,17 @@ import { createOpenAI } from '@ai-sdk/openai'
 import { createGoogleGenerativeAI } from '@ai-sdk/google'
 import { createOpenAICompatible } from '@ai-sdk/openai-compatible'
 import { type LanguageModel } from 'ai'
+import { z } from 'zod'
 import { BusinessException } from 'src/shared/exceptions/business.exception'
 import { IConfig } from 'src/core/config/types'
 
 type ProviderFactory = (modelName: string) => LanguageModel
+
+const NVIDIA_PROVIDER_KEY = 'nim'
+
+export type ProviderOptionsBuilder = (
+  schema: z.ZodType,
+) => Record<string, Record<string, unknown>> | undefined
 
 @Injectable()
 export class VideoAiProviderService {
@@ -85,5 +92,17 @@ export class VideoAiProviderService {
 
   getModelName(): string {
     return this.configService.get<string>('APP.VIDEO_AI_MODEL')!
+  }
+
+  buildStrictJsonOptions: ProviderOptionsBuilder = (schema) => {
+    if (this.getProviderName() !== 'nvidia') return undefined
+
+    return {
+      [NVIDIA_PROVIDER_KEY]: {
+        nvext: {
+          guided_json: z.toJSONSchema(schema, { target: 'draft-7' }),
+        },
+      },
+    }
   }
 }

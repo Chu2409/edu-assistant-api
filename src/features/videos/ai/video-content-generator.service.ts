@@ -39,7 +39,14 @@ export class VideoContentGeneratorService {
     const agents = types.map((type) => this.agentRegistry.get(type))
 
     const settled = await Promise.allSettled(
-      agents.map((agent) => agent.execute(model, input, timeout)),
+      agents.map((agent) =>
+        agent.execute(
+          model,
+          input,
+          timeout,
+          this.aiProvider.buildStrictJsonOptions,
+        ),
+      ),
     )
 
     const result: GenerationResult = {
