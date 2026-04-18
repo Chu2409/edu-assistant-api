@@ -32,7 +32,7 @@ export class YoutubeTranscriptStrategy implements ITranscriptionStrategy {
 
     const text = items.map((item) => item.text).join(' ')
     const lastItem = items[items.length - 1]
-    const durationSeconds = (lastItem.offset + lastItem.duration) / 1000
+    const durationSeconds = lastItem.offset + lastItem.duration
     const detectedLang =
       items[0].lang ??
       (input.language === 'auto' ? 'en' : (input.language ?? 'en'))
@@ -42,8 +42,8 @@ export class YoutubeTranscriptStrategy implements ITranscriptionStrategy {
     )
 
     const segments = items.map((item) => ({
-      start: item.offset / 1000,
-      end: (item.offset + item.duration) / 1000,
+      start: item.offset,
+      end: item.offset + item.duration,
       text: item.text,
     }))
 
