@@ -77,4 +77,14 @@ export class LoHelperService {
 
     return lo
   }
+
+  async getNextOrderIndex(moduleId: number): Promise<number> {
+    const last = await this.dbService.learningObject.findFirst({
+      where: { moduleId },
+      orderBy: { orderIndex: 'desc' },
+      select: { orderIndex: true },
+    })
+
+    return last ? last.orderIndex + 1 : 1
+  }
 }
