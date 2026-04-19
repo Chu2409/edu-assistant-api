@@ -44,6 +44,7 @@
     "dotenv": "^17.3.1",
     "joi": "^18.0.2",
     "js-yaml": "^4.1.1",
+    "jsonrepair": "^3.14.0",
     "nodejs-whisper": "^0.3.0",
     "openai": "^6.25.0",
     "passport": "^0.7.0",

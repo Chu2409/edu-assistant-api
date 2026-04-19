@@ -31,6 +31,7 @@ export const config = (): { APP: IConfig } => ({
     NVIDIA_API_KEY: process.env.NVIDIA_API_KEY || '',
     NVIDIA_BASE_URL:
       process.env.NVIDIA_BASE_URL || 'https://integrate.api.nvidia.com/v1',
+    NVIDIA_ENABLE_THINKING: process.env.NVIDIA_ENABLE_THINKING === 'true',
     OLLAMA_BASE_URL: process.env.OLLAMA_BASE_URL || 'http://localhost:11434',
     VIDEO_AI_REQUEST_TIMEOUT: process.env.VIDEO_AI_REQUEST_TIMEOUT
       ? parseInt(process.env.VIDEO_AI_REQUEST_TIMEOUT, 10)
@@ -38,6 +39,7 @@ export const config = (): { APP: IConfig } => ({
 
     WHISPER_MODEL: process.env.WHISPER_MODEL || 'base',
     WHISPER_LANGUAGE: process.env.WHISPER_LANGUAGE || 'auto',
+    WHISPER_MODELS_DIR: process.env.WHISPER_MODELS_DIR || '',
 
     MAX_VIDEO_DURATION_MINUTES: process.env.MAX_VIDEO_DURATION_MINUTES
       ? parseInt(process.env.MAX_VIDEO_DURATION_MINUTES, 10)
@@ -86,6 +88,7 @@ export const configValidationSchema = Joi.object<IConfig>({
   NVIDIA_BASE_URL: Joi.string()
     .uri()
     .default('https://integrate.api.nvidia.com/v1'),
+  NVIDIA_ENABLE_THINKING: Joi.boolean().default(false),
   OLLAMA_BASE_URL: Joi.string().uri().default('http://localhost:11434'),
   VIDEO_AI_REQUEST_TIMEOUT: Joi.number().default(120000),
 
@@ -93,6 +96,7 @@ export const configValidationSchema = Joi.object<IConfig>({
     .valid('tiny', 'base', 'small', 'medium', 'large-v3')
     .default('base'),
   WHISPER_LANGUAGE: Joi.string().default('auto'),
+  WHISPER_MODELS_DIR: Joi.string().allow('').default(''),
 
   MAX_VIDEO_DURATION_MINUTES: Joi.number().min(1).default(30),
   MAX_VIDEO_FILE_SIZE_MB: Joi.number().min(1).default(500),

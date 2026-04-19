@@ -23,11 +23,13 @@ export interface IConfig {
   GOOGLE_GENERATIVE_AI_API_KEY: string
   NVIDIA_API_KEY: string
   NVIDIA_BASE_URL: string
+  NVIDIA_ENABLE_THINKING: boolean
   OLLAMA_BASE_URL: string
   VIDEO_AI_REQUEST_TIMEOUT: number
 
   WHISPER_MODEL: string
   WHISPER_LANGUAGE: string
+  WHISPER_MODELS_DIR: string
 
   MAX_VIDEO_DURATION_MINUTES: number
   MAX_VIDEO_FILE_SIZE_MB: number

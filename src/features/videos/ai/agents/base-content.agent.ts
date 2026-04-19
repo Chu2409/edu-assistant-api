@@ -70,6 +70,8 @@ export abstract class BaseContentAgent {
         needsReview: false,
       }
     } catch (error) {
+      this.logRawResponse('strict', error)
+
       if (!this.canFallback(error)) throw error
 
       this.logger.warn(
@@ -88,6 +90,17 @@ export abstract class BaseContentAgent {
         buildProviderOptions,
       )
     }
+  }
+
+  private logRawResponse(stage: 'strict' | 'lenient', error: unknown): void {
+    if (!NoObjectGeneratedError.isInstance(error)) return
+    const text = error.text ?? '(empty)'
+    const finishReason = error.finishReason ?? 'unknown'
+    const modelId = error.response?.modelId ?? 'unknown'
+    const cause = error.cause instanceof Error ? error.cause.message : undefined
+    this.logger.error(
+      `Raw response [${stage}] task=${this.taskName} model=${modelId} finishReason=${finishReason}${cause ? ` cause=${cause}` : ''}\n---\n${text}\n---`,
+    )
   }
 
   private canFallback(error: unknown): boolean {
@@ -109,17 +122,23 @@ export abstract class BaseContentAgent {
     const lenientSchema = this.lenientSchema!
     const normalize = this.normalize!.bind(this)
 
-    const result = await generateText({
-      model,
-      output: Output.object({ schema: lenientSchema }),
-      prompt,
-      temperature,
-      maxOutputTokens,
-      abortSignal: AbortSignal.timeout(timeout),
-      providerOptions: buildProviderOptions(
-        lenientSchema,
-      ) as GenerateTextProviderOptions,
-    })
+    let result: Awaited<ReturnType<typeof generateText>>
+    try {
+      result = await generateText({
+        model,
+        output: Output.object({ schema: lenientSchema }),
+        prompt,
+        temperature,
+        maxOutputTokens,
+        abortSignal: AbortSignal.timeout(timeout),
+        providerOptions: buildProviderOptions(
+          lenientSchema,
+        ) as GenerateTextProviderOptions,
+      })
+    } catch (lenientError) {
+      this.logRawResponse('lenient', lenientError)
+      throw lenientError
+    }
 
     this.logger.debug(
       `AI response (lenient): task=${this.taskName} finishReason=${result.finishReason} hasOutput=${!!result.output}`,

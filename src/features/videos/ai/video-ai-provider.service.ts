@@ -4,10 +4,17 @@ import { createGroq } from '@ai-sdk/groq'
 import { createOpenAI } from '@ai-sdk/openai'
 import { createGoogleGenerativeAI } from '@ai-sdk/google'
 import { createOpenAICompatible } from '@ai-sdk/openai-compatible'
-import { type LanguageModel } from 'ai'
+import {
+  extractJsonMiddleware,
+  wrapLanguageModel,
+  type LanguageModel,
+} from 'ai'
 import { z } from 'zod'
 import { BusinessException } from 'src/shared/exceptions/business.exception'
 import { IConfig } from 'src/core/config/types'
+import { extractJsonTransform } from './helpers/extract-json-transform'
+import { reasoningContentFallbackMiddleware } from './helpers/reasoning-content-fallback.middleware'
+import { loggingFetch } from './helpers/logging-fetch'
 
 type ProviderFactory = (modelName: string) => LanguageModel
 
@@ -49,21 +56,34 @@ export class VideoAiProviderService {
       [
         'nvidia',
         (model) =>
-          createOpenAICompatible({
-            name: 'nim',
-            baseURL: this.configService.get<string>('APP.NVIDIA_BASE_URL')!,
-            headers: {
-              Authorization: `Bearer ${this.configService.get<string>('APP.NVIDIA_API_KEY')}`,
-            },
-          }).chatModel(model),
+          wrapLanguageModel({
+            model: createOpenAICompatible({
+              name: 'nim',
+              baseURL: this.configService.get<string>('APP.NVIDIA_BASE_URL')!,
+              headers: {
+                Authorization: `Bearer ${this.configService.get<string>('APP.NVIDIA_API_KEY')}`,
+              },
+              fetch: loggingFetch,
+            }).chatModel(model),
+            middleware: [
+              extractJsonMiddleware({ transform: extractJsonTransform }),
+              reasoningContentFallbackMiddleware,
+            ],
+          }),
       ],
       [
         'ollama',
         (model) =>
-          createOpenAICompatible({
-            name: 'ollama',
-            baseURL: `${this.configService.get<string>('APP.OLLAMA_BASE_URL')}/v1`,
-          }).chatModel(model),
+          wrapLanguageModel({
+            model: createOpenAICompatible({
+              name: 'ollama',
+              baseURL: `${this.configService.get<string>('APP.OLLAMA_BASE_URL')}/v1`,
+            }).chatModel(model),
+            middleware: [
+              extractJsonMiddleware({ transform: extractJsonTransform }),
+              reasoningContentFallbackMiddleware,
+            ],
+          }),
       ],
     ])
   }
@@ -97,10 +117,17 @@ export class VideoAiProviderService {
   buildStrictJsonOptions: ProviderOptionsBuilder = (schema) => {
     if (this.getProviderName() !== 'nvidia') return undefined
 
+    const enableThinking = this.configService.get<boolean>(
+      'APP.NVIDIA_ENABLE_THINKING',
+    )
+
     return {
       [NVIDIA_PROVIDER_KEY]: {
         nvext: {
           guided_json: z.toJSONSchema(schema, { target: 'draft-7' }),
+        },
+        chat_template_kwargs: {
+          enable_thinking: enableThinking,
         },
       },
     }
