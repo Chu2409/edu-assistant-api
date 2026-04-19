@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common'
-import { readFileSync } from 'fs'
+import { existsSync, readFileSync } from 'fs'
 import { join } from 'path'
 import * as yaml from 'js-yaml'
 import { GenerationInput } from '../interfaces/generation-input.interface'
@@ -18,17 +18,39 @@ export class PromptLoaderService {
   })
 
   constructor() {
-    const filePath = join(
-      process.cwd(),
-      'dist',
-      'features',
-      'videos',
-      'ai',
-      'config',
-      'tasks.yaml',
-    )
+    const filePath = this.resolveTasksPath()
     const raw = readFileSync(filePath, 'utf-8')
     this.tasks = yaml.load(raw) as Record<TaskName, TaskConfig>
+  }
+
+  private resolveTasksPath(): string {
+    const candidates = [
+      join(__dirname, 'tasks.yaml'),
+      join(
+        process.cwd(),
+        'dist',
+        'features',
+        'videos',
+        'ai',
+        'config',
+        'tasks.yaml',
+      ),
+      join(
+        process.cwd(),
+        'src',
+        'features',
+        'videos',
+        'ai',
+        'config',
+        'tasks.yaml',
+      ),
+    ]
+
+    const found = candidates.find((p) => existsSync(p))
+    if (!found) {
+      throw new Error(`tasks.yaml not found. Checked: ${candidates.join(', ')}`)
+    }
+    return found
   }
 
   getPrompt(taskName: TaskName, input: GenerationInput): string {

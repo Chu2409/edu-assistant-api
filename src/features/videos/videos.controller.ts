@@ -15,7 +15,11 @@ import {
 import { FileInterceptor } from '@nestjs/platform-express'
 import { diskStorage } from 'multer'
 import { extname } from 'path'
+import { mkdirSync } from 'fs'
 import { v4 as uuidv4 } from 'uuid'
+import { VIDEO_UPLOAD_DIR } from './constants/video.constants'
+
+mkdirSync(VIDEO_UPLOAD_DIR, { recursive: true })
 import { ApiTags, ApiOperation, ApiParam, ApiConsumes } from '@nestjs/swagger'
 import { Role, type User } from 'src/core/database/generated/client'
 import { JwtAuth } from 'src/features/auth/decorators/jwt-auth.decorator'
@@ -64,7 +68,7 @@ export class VideosController {
   @UseInterceptors(
     FileInterceptor('file', {
       storage: diskStorage({
-        destination: './uploads/videos',
+        destination: VIDEO_UPLOAD_DIR,
         filename: (_req, file, cb) =>
           cb(null, `${uuidv4()}${extname(file.originalname)}`),
       }),

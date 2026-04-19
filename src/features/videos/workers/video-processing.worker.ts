@@ -92,24 +92,37 @@ export class VideoProcessingWorker extends WorkerHost {
         startedAt,
       )
 
+      await this.safeUnlink(uploadedVideoPath)
+
       this.logger.log(`Video processing completed for ${videoId}`)
       return { videoId, success: true }
     } catch (error) {
       this.logger.error(`Video processing failed for ${videoId}:`, error)
+
       await this.ingestionService.transition(videoId, IngestionStatus.FAILED, {
         errorMessage: error instanceof Error ? error.message : 'Unknown error',
       })
-      throw error
-    } finally {
-      if (uploadedVideoPath) {
-        try {
-          await unlink(uploadedVideoPath)
-        } catch (err) {
-          this.logger.warn(
-            `Failed to remove uploaded video file ${uploadedVideoPath}: ${err instanceof Error ? err.message : String(err)}`,
-          )
-        }
+
+      const attemptsMade = job.attemptsMade + 1
+      const maxAttempts = job.opts.attempts ?? 1
+      const isLastAttempt = attemptsMade >= maxAttempts
+
+      if (isLastAttempt) {
+        await this.safeUnlink(uploadedVideoPath)
       }
+
+      throw error
+    }
+  }
+
+  private async safeUnlink(filePath: string | null): Promise<void> {
+    if (!filePath) return
+    try {
+      await unlink(filePath)
+    } catch (err) {
+      this.logger.warn(
+        `Failed to remove uploaded video file ${filePath}: ${err instanceof Error ? err.message : String(err)}`,
+      )
     }
   }
 

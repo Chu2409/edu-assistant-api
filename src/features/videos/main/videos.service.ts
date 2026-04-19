@@ -255,7 +255,7 @@ export class VideosService {
         const blockDto = dto.blocks[index]
         const orderIndex = index
         const tipTapContent =
-          blockDto.tipTapContent === null
+          blockDto.tipTapContent == null
             ? Prisma.JsonNull
             : blockDto.tipTapContent
 

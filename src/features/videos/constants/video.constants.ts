@@ -25,3 +25,5 @@ export const VIDEO_MIME_TYPES = [
 ]
 
 export const VIDEO_LO_TYPE_NAME = 'VIDEO'
+
+export const VIDEO_UPLOAD_DIR = './uploads/videos'
