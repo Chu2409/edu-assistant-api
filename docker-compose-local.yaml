@@ -76,6 +76,9 @@ services:
         condition: service_healthy
     networks:
       - edu-assistant-network
+    volumes:
+      - ./uploads:/app/uploads
+      - ${WHISPER_MODELS_HOST_DIR:-./whisper-models}:/models
 
 volumes:
   postgres-data:
