@@ -1,8 +1,5 @@
-import {
-  ForbiddenException,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common'
+import { HttpStatus, Injectable, NotFoundException } from '@nestjs/common'
+import { BusinessException } from 'src/shared/exceptions/business.exception'
 import { DBService } from 'src/core/database/database.service'
 import { OpenaiService } from 'src/providers/ai/services/openai.service'
 import { LoHelperService } from 'src/features/learning-objects/main/lo-helper.service'
@@ -80,7 +77,10 @@ export class ChatService {
     }
 
     if (session.userId !== user.id) {
-      throw new ForbiddenException('No tienes permisos para ver esta sesión')
+      throw new BusinessException(
+        'No tienes permisos para ver esta sesión',
+        HttpStatus.FORBIDDEN,
+      )
     }
 
     // valida acceso al objeto de aprendizaje (por si cambió publicación/matrícula)
@@ -147,7 +147,10 @@ export class ChatService {
     }
 
     if (session.userId !== user.id) {
-      throw new ForbiddenException('No tienes permisos para usar esta sesión')
+      throw new BusinessException(
+        'No tienes permisos para usar esta sesión',
+        HttpStatus.FORBIDDEN,
+      )
     }
 
     const lo = await this.loHelperService.getLoForRead(

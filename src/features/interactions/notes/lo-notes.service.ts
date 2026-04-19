@@ -1,4 +1,5 @@
-import { ForbiddenException, Injectable } from '@nestjs/common'
+import { HttpStatus, Injectable } from '@nestjs/common'
+import { BusinessException } from 'src/shared/exceptions/business.exception'
 import { DBService } from 'src/core/database/database.service'
 import { CreateLoNoteDto } from './dtos/req/create-lo-note.dto'
 import { UpdateLoNoteDto } from './dtos/req/update-lo-note.dto'
@@ -32,7 +33,10 @@ export class LoNotesService {
     })
 
     if (!existingNote || existingNote.userId !== userId) {
-      throw new ForbiddenException('You are not allowed to update this note.')
+      throw new BusinessException(
+        'No tienes permiso para actualizar esta nota.',
+        HttpStatus.FORBIDDEN,
+      )
     }
 
     const updatedNote = await this.dbService.note.update({
@@ -51,7 +55,10 @@ export class LoNotesService {
     })
 
     if (!existingNote || existingNote.userId !== userId) {
-      throw new ForbiddenException('You are not allowed to delete this note.')
+      throw new BusinessException(
+        'No tienes permiso para eliminar esta nota.',
+        HttpStatus.FORBIDDEN,
+      )
     }
 
     await this.dbService.note.delete({

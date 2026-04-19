@@ -1,9 +1,5 @@
-import {
-  Injectable,
-  NotFoundException,
-  ForbiddenException,
-  BadRequestException,
-} from '@nestjs/common'
+import { HttpStatus, Injectable, NotFoundException } from '@nestjs/common'
+import { BusinessException } from 'src/shared/exceptions/business.exception'
 import { InjectQueue } from '@nestjs/bullmq'
 import { Queue } from 'bullmq'
 import { DBService } from 'src/core/database/database.service'
@@ -42,8 +38,9 @@ export class LoService {
       throw new NotFoundException(`Módulo con ID ${dto.moduleId} no encontrado`)
     }
     if (module.teacherId !== user.id) {
-      throw new ForbiddenException(
+      throw new BusinessException(
         'Solo el profesor propietario puede crear objetos de aprendizaje en este módulo',
+        HttpStatus.FORBIDDEN,
       )
     }
 
@@ -87,8 +84,9 @@ export class LoService {
       !module.isPublic &&
       !module.enrollments.some((enrollment) => enrollment.userId === user.id)
     ) {
-      throw new ForbiddenException(
+      throw new BusinessException(
         'No tienes permisos para ver los objetos de aprendizaje de este módulo',
+        HttpStatus.FORBIDDEN,
       )
     }
 
@@ -166,8 +164,9 @@ export class LoService {
     }
 
     if (lo.module.teacherId !== user.id) {
-      throw new ForbiddenException(
+      throw new BusinessException(
         'No tienes permisos para ver este objeto de aprendizaje',
+        HttpStatus.FORBIDDEN,
       )
     }
 
@@ -225,14 +224,16 @@ export class LoService {
           enrollment.userId === user.id && enrollment.isActive,
       )
     ) {
-      throw new ForbiddenException(
+      throw new BusinessException(
         'No tienes permisos para ver este objeto de aprendizaje',
+        HttpStatus.FORBIDDEN,
       )
     }
 
     if (!lo.isPublished) {
-      throw new ForbiddenException(
+      throw new BusinessException(
         'Este objeto de aprendizaje no está publicado aún',
+        HttpStatus.FORBIDDEN,
       )
     }
 
@@ -296,8 +297,9 @@ export class LoService {
     }
 
     if (existingLo.module.teacherId !== user.id) {
-      throw new ForbiddenException(
+      throw new BusinessException(
         'Solo el profesor propietario puede actualizar este objeto de aprendizaje',
+        HttpStatus.FORBIDDEN,
       )
     }
 
@@ -355,8 +357,9 @@ export class LoService {
     }
 
     if (existingLo.module.teacherId !== user.id) {
-      throw new ForbiddenException(
+      throw new BusinessException(
         'Solo el profesor propietario puede actualizar el contenido de este objeto de aprendizaje',
+        HttpStatus.FORBIDDEN,
       )
     }
 
@@ -431,8 +434,9 @@ export class LoService {
     }
 
     if (lo.module.teacherId !== user.id) {
-      throw new ForbiddenException(
+      throw new BusinessException(
         'Solo el profesor propietario puede reordenar objetos de aprendizaje en este módulo',
+        HttpStatus.FORBIDDEN,
       )
     }
 
@@ -448,8 +452,9 @@ export class LoService {
     })
 
     if (newIndex < 1 || newIndex > totalLos) {
-      throw new BadRequestException(
+      throw new BusinessException(
         `El nuevo índice ${newIndex} está fuera de los límites [1, ${totalLos}]`,
+        HttpStatus.BAD_REQUEST,
       )
     }
 

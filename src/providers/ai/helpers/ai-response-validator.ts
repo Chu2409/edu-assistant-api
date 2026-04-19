@@ -16,8 +16,8 @@ export function validateAiResponse<T>(data: unknown, schema: ZodSchema<T>): T {
         .map((i) => `${i.path.join('.')}: ${i.message}`)
         .join('; ')
 
-      logger.error(`AI response validation failed: ${issues}`)
-      logger.debug('Invalid AI response data:', JSON.stringify(data))
+      logger.error(`Validación de respuesta de IA fallida: ${issues}`)
+      logger.debug('Datos de respuesta de IA inválidos:', JSON.stringify(data))
 
       throw new Error(
         'La respuesta de la IA no tiene el formato esperado. Intenta generar de nuevo.',

@@ -1,8 +1,5 @@
-import {
-  ForbiddenException,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common'
+import { HttpStatus, Injectable, NotFoundException } from '@nestjs/common'
+import { BusinessException } from 'src/shared/exceptions/business.exception'
 import { DBService } from 'src/core/database/database.service'
 import { Prisma, type User } from 'src/core/database/generated/client'
 import { CreateLoConceptDto } from './dtos/req/create-lo-concept.dto'
@@ -40,8 +37,9 @@ export class LoConceptsService {
         e instanceof Prisma.PrismaClientKnownRequestError &&
         e.code === 'P2002'
       ) {
-        throw new ForbiddenException(
+        throw new BusinessException(
           'Ya existe un concepto con ese término en este objeto de aprendizaje',
+          HttpStatus.CONFLICT,
         )
       }
       throw e

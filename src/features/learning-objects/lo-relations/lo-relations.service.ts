@@ -1,8 +1,5 @@
-import {
-  ForbiddenException,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common'
+import { HttpStatus, Injectable, NotFoundException } from '@nestjs/common'
+import { BusinessException } from 'src/shared/exceptions/business.exception'
 import { DBService } from 'src/core/database/database.service'
 import { OpenaiService } from 'src/providers/ai/services/openai.service'
 import { Prisma, type User } from 'src/core/database/generated/client'
@@ -47,8 +44,9 @@ export class LoRelationsService {
         `Objeto de aprendizaje con ID ${learningObjectId} no encontrado`,
       )
     if (related.moduleId !== origin.moduleId) {
-      throw new ForbiddenException(
+      throw new BusinessException(
         'El objeto de aprendizaje relacionado debe pertenecer al mismo módulo',
+        HttpStatus.FORBIDDEN,
       )
     }
 
@@ -88,8 +86,9 @@ export class LoRelationsService {
         e instanceof Prisma.PrismaClientKnownRequestError &&
         e.code === 'P2002'
       ) {
-        throw new ForbiddenException(
+        throw new BusinessException(
           'Ya existe una relación con ese objeto de aprendizaje relacionado',
+          HttpStatus.CONFLICT,
         )
       }
       throw e

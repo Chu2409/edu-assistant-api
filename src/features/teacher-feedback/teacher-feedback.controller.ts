@@ -1,12 +1,13 @@
 import {
-  ConflictException,
   Controller,
   Get,
+  HttpStatus,
   Param,
   ParseIntPipe,
   Post,
   Query,
 } from '@nestjs/common'
+import { BusinessException } from 'src/shared/exceptions/business.exception'
 import {
   ApiForbiddenResponse,
   ApiNotFoundResponse,
@@ -84,8 +85,9 @@ export class TeacherFeedbackController {
     if (existingJob) {
       const state = await existingJob.getState()
       if (state === 'active' || state === 'waiting' || state === 'delayed') {
-        throw new ConflictException(
+        throw new BusinessException(
           `Ya existe una generación de feedback en progreso para el módulo ${moduleId}`,
+          HttpStatus.CONFLICT,
         )
       }
       // Si completó o falló, eliminar para poder encolar uno nuevo

@@ -1,9 +1,10 @@
 import {
-  ForbiddenException,
+  HttpStatus,
   Injectable,
   Logger,
   NotFoundException,
 } from '@nestjs/common'
+import { BusinessException } from 'src/shared/exceptions/business.exception'
 import { DBService } from 'src/core/database/database.service'
 import { OpenaiService } from 'src/providers/ai/services/openai.service'
 import { FeedbackDataCollectorService } from './services/feedback-data-collector.service'
@@ -279,8 +280,9 @@ export class TeacherFeedbackService {
     }
 
     if (mod.teacherId !== teacherId) {
-      throw new ForbiddenException(
+      throw new BusinessException(
         'No tienes permisos para ver los feedbacks de este módulo',
+        HttpStatus.FORBIDDEN,
       )
     }
   }

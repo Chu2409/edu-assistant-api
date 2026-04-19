@@ -1,4 +1,5 @@
-import { ForbiddenException, Injectable } from '@nestjs/common'
+import { HttpStatus, Injectable, NotFoundException } from '@nestjs/common'
+import { BusinessException } from 'src/shared/exceptions/business.exception'
 import { DBService } from 'src/core/database/database.service'
 import { CreateQuestionReplyDto } from './dtos/req/create-question-reply.dto'
 import { UpdateQuestionReplyDto } from './dtos/req/update-question-reply.dto'
@@ -20,7 +21,7 @@ export class QuestionRepliesService {
     })
 
     if (!question) {
-      throw new ForbiddenException('La pregunta no existe.')
+      throw new NotFoundException('La pregunta no existe.')
     }
 
     const teacher = await this.dbService.user.findUnique({
@@ -59,8 +60,9 @@ export class QuestionRepliesService {
     })
 
     if (!existingReply || existingReply.userId !== userId) {
-      throw new ForbiddenException(
+      throw new BusinessException(
         'No tienes permiso para actualizar esta respuesta.',
+        HttpStatus.FORBIDDEN,
       )
     }
 
@@ -85,8 +87,9 @@ export class QuestionRepliesService {
     })
 
     if (!existingReply || existingReply.userId !== userId) {
-      throw new ForbiddenException(
+      throw new BusinessException(
         'No tienes permiso para eliminar esta respuesta.',
+        HttpStatus.FORBIDDEN,
       )
     }
 

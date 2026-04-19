@@ -27,7 +27,7 @@ export class GlobalExceptionFilter implements ExceptionFilter {
       success: false,
       message: {
         content: ['Ocurrió un error inesperado'],
-        displayable: true,
+        displayable: false,
       },
       data: null,
     }
@@ -53,7 +53,7 @@ export class GlobalExceptionFilter implements ExceptionFilter {
 
       errorResponse.message.content = Array.isArray(errorMessage['message'])
         ? errorMessage['message']
-        : [errorMessage['message'] || 'HTTP Error']
+        : [errorMessage['message'] || 'Error HTTP']
     }
     // Handle Prisma specific errors
     else if (exception instanceof Prisma.PrismaClientKnownRequestError) {
@@ -61,20 +61,22 @@ export class GlobalExceptionFilter implements ExceptionFilter {
       errorResponse.message.displayable = false
 
       switch (exception.code) {
-        case 'P2002': // Unique constraint violation
+        case 'P2002': // Violación de restricción única
           errorResponse.message.content = [
-            'Unique constraint violation on field',
+            'Violación de restricción única en el campo',
           ]
           break
-        case 'P2003': // Foreign key constraint violation
-          errorResponse.message.content = ['Invalid related record']
+        case 'P2003': // Violación de clave foránea
+          errorResponse.message.content = ['Registro relacionado inválido']
           break
-        case 'P2025': // Record not found
+        case 'P2025': // Registro no encontrado
           status = HttpStatus.NOT_FOUND
-          errorResponse.message.content = ['Record not found']
+          errorResponse.message.content = ['Registro no encontrado']
           break
         default:
-          errorResponse.message.content = ['Database operation error']
+          errorResponse.message.content = [
+            'Error en operación de base de datos',
+          ]
       }
     }
     // Handle other types of errors
@@ -119,15 +121,15 @@ export class GlobalExceptionFilter implements ExceptionFilter {
 
     // Log error with different levels based on exception type
     if (originalException instanceof BusinessException) {
-      this.logger.warn('Displayable exception occurred', logContext)
+      this.logger.warn('Excepción de negocio controlada', logContext)
     } else if (originalException instanceof HttpException) {
-      this.logger.warn('HTTP exception occurred', logContext)
+      this.logger.warn('Excepción HTTP ocurrida', logContext)
     } else if (
       originalException instanceof Prisma.PrismaClientKnownRequestError
     ) {
-      this.logger.error('Prisma database error occurred', logContext)
+      this.logger.error('Error de base de datos Prisma', logContext)
     } else {
-      this.logger.error('Unexpected error occurred', logContext)
+      this.logger.error('Error inesperado', logContext)
     }
 
     // Additional detailed logging for debugging

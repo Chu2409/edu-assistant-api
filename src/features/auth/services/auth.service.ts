@@ -26,15 +26,6 @@ export class AuthService {
     return this.jwtService.sign(payload)
   }
 
-  verifyJwt(token: string) {
-    try {
-      return this.jwtService.verify<JwtPayload>(token)
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    } catch (error) {
-      throw new Error('Token inválido o expirado')
-    }
-  }
-
   async validateUser(dto: ValidateMicrosoftUserDto): Promise<User> {
     let user = await this.dbService.user.findUnique({
       where: { email: dto.email },

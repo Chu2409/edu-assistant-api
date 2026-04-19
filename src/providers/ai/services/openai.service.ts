@@ -1,4 +1,5 @@
-import { Injectable, Logger, OnModuleInit } from '@nestjs/common'
+import { HttpStatus, Injectable, Logger, OnModuleInit } from '@nestjs/common'
+import { BusinessException } from 'src/shared/exceptions/business.exception'
 import OpenAI from 'openai'
 import { CustomConfigService } from 'src/core/config/config.service'
 import { PromptInput } from '../interfaces/prompt-input.interface'
@@ -92,11 +93,11 @@ export class OpenaiService implements OnModuleInit {
         quality: 'auto',
       })
       if (!response.data || response.data.length === 0) {
-        throw new Error('No image data returned from OpenAI')
+        throw new Error('OpenAI no retornó datos de imagen')
       }
       const b64Json = response.data[0].b64_json
       if (!b64Json) {
-        throw new Error('No base64 JSON data returned from OpenAI')
+        throw new Error('OpenAI no retornó datos en formato base64')
       }
       return b64Json
     })
@@ -117,7 +118,7 @@ export class OpenaiService implements OnModuleInit {
 
         const delay = BASE_DELAY_MS * Math.pow(2, attempt - 1)
         this.logger.warn(
-          `OpenAI request failed (attempt ${attempt}/${MAX_RETRIES}), retrying in ${delay}ms...`,
+          `Solicitud a OpenAI fallida (intento ${attempt}/${MAX_RETRIES}), reintentando en ${delay}ms...`,
         )
         await this.delay(delay)
       }
@@ -145,12 +146,13 @@ export class OpenaiService implements OnModuleInit {
   private handleError(error: unknown, attempt: number): never {
     if (error instanceof OpenAI.APIError) {
       this.logger.error(
-        `OpenAI API Error [${error.status}] after ${attempt} attempt(s): ${error.message}`,
+        `Error de API OpenAI [${error.status}] después de ${attempt} intento(s): ${error.message}`,
       )
 
       if (error.status === 429) {
-        throw new Error(
+        throw new BusinessException(
           'El servicio de IA está temporalmente saturado. Intenta de nuevo en unos momentos.',
+          HttpStatus.TOO_MANY_REQUESTS,
         )
       }
 
@@ -159,7 +161,7 @@ export class OpenaiService implements OnModuleInit {
       }
     }
 
-    this.logger.error('OpenAI Error:', error)
+    this.logger.error('Error de OpenAI:', error)
     throw new Error('Error en la comunicación con OpenAI')
   }
 
@@ -171,7 +173,7 @@ export class OpenaiService implements OnModuleInit {
   private logUsage(model: string, usage: any): void {
     if (!usage) return
     this.logger.log(
-      `OpenAI usage [${model}]: input=${usage.input_tokens ?? '?'}, output=${usage.output_tokens ?? '?'}, total=${usage.total_tokens ?? '?'}`,
+      `Uso de OpenAI [${model}]: entrada=${usage.input_tokens ?? '?'}, salida=${usage.output_tokens ?? '?'}, total=${usage.total_tokens ?? '?'}`,
     )
   }
 }

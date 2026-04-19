@@ -1,8 +1,5 @@
-import {
-  Injectable,
-  NotFoundException,
-  ConflictException,
-} from '@nestjs/common'
+import { HttpStatus, Injectable, NotFoundException } from '@nestjs/common'
+import { BusinessException } from 'src/shared/exceptions/business.exception'
 import { DBService } from 'src/core/database/database.service'
 import { CreateLoTypeDto } from './dtos/req/create-lo-type.dto'
 import { UpdateLoTypeDto } from './dtos/req/update-lo-type.dto'
@@ -19,8 +16,9 @@ export class LoTypesService {
     })
 
     if (existing) {
-      throw new ConflictException(
+      throw new BusinessException(
         `Ya existe un tipo de objeto de aprendizaje con el nombre: ${dto.name}`,
+        HttpStatus.CONFLICT,
       )
     }
 
@@ -71,8 +69,9 @@ export class LoTypesService {
         where: { name: dto.name },
       })
       if (duplicate) {
-        throw new ConflictException(
+        throw new BusinessException(
           `Ya existe un tipo de objeto de aprendizaje con el nombre: ${dto.name}`,
+          HttpStatus.CONFLICT,
         )
       }
     }
@@ -102,8 +101,9 @@ export class LoTypesService {
     }
 
     if (existing._count.learningObjects > 0) {
-      throw new ConflictException(
+      throw new BusinessException(
         'No se puede eliminar el tipo porque está siendo usado por objetos de aprendizaje.',
+        HttpStatus.CONFLICT,
       )
     }
 

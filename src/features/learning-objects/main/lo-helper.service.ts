@@ -1,8 +1,5 @@
-import {
-  Injectable,
-  NotFoundException,
-  ForbiddenException,
-} from '@nestjs/common'
+import { HttpStatus, Injectable, NotFoundException } from '@nestjs/common'
+import { BusinessException } from 'src/shared/exceptions/business.exception'
 import { DBService } from 'src/core/database/database.service'
 import { Enrollment, Role, type User } from 'src/core/database/generated/client'
 
@@ -28,8 +25,9 @@ export class LoHelperService {
 
     if (user.role === Role.TEACHER) {
       if (lo.module.teacherId !== user.id) {
-        throw new ForbiddenException(
+        throw new BusinessException(
           'No tienes permisos para acceder a este objeto de aprendizaje',
+          HttpStatus.FORBIDDEN,
         )
       }
       return lo
@@ -43,13 +41,15 @@ export class LoHelperService {
       )
 
     if (!hasAccess) {
-      throw new ForbiddenException(
+      throw new BusinessException(
         'No tienes permisos para acceder a este objeto de aprendizaje',
+        HttpStatus.FORBIDDEN,
       )
     }
     if (!lo.isPublished) {
-      throw new ForbiddenException(
+      throw new BusinessException(
         'Este objeto de aprendizaje no está publicado aún',
+        HttpStatus.FORBIDDEN,
       )
     }
     return lo
@@ -70,8 +70,9 @@ export class LoHelperService {
     if (user.role === Role.ADMIN) return lo
 
     if (lo.module.teacherId !== user.id) {
-      throw new ForbiddenException(
+      throw new BusinessException(
         'Solo el profesor propietario puede modificar este objeto de aprendizaje',
+        HttpStatus.FORBIDDEN,
       )
     }
 

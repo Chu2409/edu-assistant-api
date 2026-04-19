@@ -1,10 +1,5 @@
-import {
-  Injectable,
-  NotFoundException,
-  ForbiddenException,
-  BadRequestException,
-  ConflictException,
-} from '@nestjs/common'
+import { HttpStatus, Injectable, NotFoundException } from '@nestjs/common'
+import { BusinessException } from 'src/shared/exceptions/business.exception'
 import { DBService } from 'src/core/database/database.service'
 import { CreateEnrollmentDto } from './dtos/req/create-enrollment.dto'
 import { UpdateEnrollmentDto } from './dtos/req/update-enrollment.dto'
@@ -35,12 +30,18 @@ export class EnrollmentsService {
 
     // Verificar que el módulo permite auto-inscripción
     if (!module.allowSelfEnroll) {
-      throw new ForbiddenException('Este módulo no permite auto-inscripción')
+      throw new BusinessException(
+        'Este módulo no permite auto-inscripción',
+        HttpStatus.FORBIDDEN,
+      )
     }
 
     // Verificar que el módulo está activo
     if (!module.isActive) {
-      throw new BadRequestException('El módulo no está activo')
+      throw new BusinessException(
+        'El módulo no está activo',
+        HttpStatus.BAD_REQUEST,
+      )
     }
 
     // Verificar que no esté ya inscrito
@@ -55,7 +56,10 @@ export class EnrollmentsService {
 
     if (existingEnrollment) {
       if (existingEnrollment.isActive) {
-        throw new ConflictException('Ya estás inscrito en este módulo')
+        throw new BusinessException(
+          'Ya estás inscrito en este módulo',
+          HttpStatus.CONFLICT,
+        )
       }
       // Si existe pero está inactiva, reactivarla
       const enrollment = await this.dbService.enrollment.update({
@@ -98,12 +102,16 @@ export class EnrollmentsService {
     }
 
     if (!module.isActive) {
-      throw new BadRequestException('El módulo no está activo')
+      throw new BusinessException(
+        'El módulo no está activo',
+        HttpStatus.BAD_REQUEST,
+      )
     }
 
     if (module.teacherId !== teacher.id) {
-      throw new ForbiddenException(
+      throw new BusinessException(
         'Solo el profesor propietario puede inscribir estudiantes',
+        HttpStatus.FORBIDDEN,
       )
     }
 
@@ -192,8 +200,9 @@ export class EnrollmentsService {
     }
 
     if (module.teacherId !== teacher.id) {
-      throw new ForbiddenException(
+      throw new BusinessException(
         'Solo el profesor propietario puede ver las inscripciones',
+        HttpStatus.FORBIDDEN,
       )
     }
 
@@ -231,8 +240,9 @@ export class EnrollmentsService {
     }
 
     if (enrollment.module.teacherId !== user.id) {
-      throw new ForbiddenException(
+      throw new BusinessException(
         'Solo el profesor propietario puede actualizar inscripciones',
+        HttpStatus.FORBIDDEN,
       )
     }
 
@@ -263,15 +273,24 @@ export class EnrollmentsService {
     })
 
     if (!enrollment) {
-      throw new NotFoundException('No estás inscrito en este módulo')
+      throw new BusinessException(
+        'No estás inscrito en este módulo',
+        HttpStatus.NOT_FOUND,
+      )
     }
 
     if (!enrollment.isActive) {
-      throw new BadRequestException('Ya estás desinscrito de este módulo')
+      throw new BusinessException(
+        'Ya estás desinscrito de este módulo',
+        HttpStatus.BAD_REQUEST,
+      )
     }
 
     if (!enrollment.module.allowSelfUnenroll) {
-      throw new ForbiddenException('Este módulo no permite auto-desinscripción')
+      throw new BusinessException(
+        'Este módulo no permite auto-desinscripción',
+        HttpStatus.FORBIDDEN,
+      )
     }
 
     await this.dbService.enrollment.delete({
@@ -294,8 +313,9 @@ export class EnrollmentsService {
     }
 
     if (enrollment.module.teacherId !== teacher.id) {
-      throw new ForbiddenException(
+      throw new BusinessException(
         'Solo el profesor propietario puede eliminar inscripciones',
+        HttpStatus.FORBIDDEN,
       )
     }
 

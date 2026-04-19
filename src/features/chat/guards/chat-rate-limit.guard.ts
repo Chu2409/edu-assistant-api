@@ -1,10 +1,10 @@
 import {
   CanActivate,
   ExecutionContext,
-  Injectable,
-  HttpException,
   HttpStatus,
+  Injectable,
 } from '@nestjs/common'
+import { BusinessException } from 'src/shared/exceptions/business.exception'
 import { Role } from 'src/core/database/generated/enums'
 import { ChatRateLimitService } from '../services/chat-rate-limit.service'
 
@@ -25,11 +25,8 @@ export class ChatRateLimitGuard implements CanActivate {
       await this.chatRateLimitService.checkStudentLimits(user.id)
 
     if (!allowed) {
-      throw new HttpException(
-        {
-          statusCode: HttpStatus.TOO_MANY_REQUESTS,
-          message: reason,
-        },
+      throw new BusinessException(
+        reason ?? 'Límite de mensajes alcanzado',
         HttpStatus.TOO_MANY_REQUESTS,
       )
     }

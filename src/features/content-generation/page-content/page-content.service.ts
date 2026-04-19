@@ -33,7 +33,7 @@ export class PageContentService {
   async generatePageContent(
     data: GenerateContentDto,
   ): Promise<GeneratedLoContent> {
-    this.logger.log('Generating page content')
+    this.logger.log('Generando contenido de página')
 
     const page = await this.dbService.learningObject.findUnique({
       where: { id: data.learningObjectId },
@@ -42,7 +42,7 @@ export class PageContentService {
 
     if (!page) {
       throw new NotFoundException(
-        `Page with id ${data.learningObjectId} not found`,
+        `Página con ID ${data.learningObjectId} no encontrada`,
       )
     }
 
@@ -68,7 +68,7 @@ export class PageContentService {
   async regeneratePageContent(
     data: RegenerateContentDto,
   ): Promise<GeneratedLoContent> {
-    this.logger.log('Regenerating page content')
+    this.logger.log('Regenerando contenido de página')
 
     const page = await this.dbService.learningObject.findUnique({
       where: { id: data.learningObjectId },
@@ -84,7 +84,7 @@ export class PageContentService {
 
     if (!page) {
       throw new NotFoundException(
-        `Page with id ${data.learningObjectId} not found`,
+        `Página con ID ${data.learningObjectId} no encontrada`,
       )
     }
 
@@ -117,7 +117,7 @@ export class PageContentService {
   async regenerateBlock(
     data: RegenerateBlockDto,
   ): Promise<RegeneratedBlockDto> {
-    this.logger.log('Regenerating block')
+    this.logger.log('Regenerando bloque')
 
     const page = await this.dbService.learningObject.findUnique({
       where: { id: data.learningObjectId },
@@ -129,7 +129,7 @@ export class PageContentService {
 
     if (!page) {
       throw new NotFoundException(
-        `Page with id ${data.learningObjectId} not found`,
+        `Página con ID ${data.learningObjectId} no encontrada`,
       )
     }
 
@@ -139,7 +139,7 @@ export class PageContentService {
 
     if (blockIndex === -1) {
       throw new NotFoundException(
-        `Block with orderIndex ${data.orderIndex} not found in page ${data.learningObjectId}`,
+        `Bloque con índice ${data.orderIndex} no encontrado en la página ${data.learningObjectId}`,
       )
     }
 
@@ -195,7 +195,7 @@ export class PageContentService {
   }
 
   async expandContent(data: ExpandContentDto): Promise<ExpandedContentDto> {
-    this.logger.log('Expanding content')
+    this.logger.log('Expandiendo contenido')
 
     const page = await this.dbService.learningObject.findUnique({
       where: { id: data.learningObjectId },
@@ -207,7 +207,7 @@ export class PageContentService {
 
     if (!page) {
       throw new NotFoundException(
-        `Page with id ${data.learningObjectId} not found`,
+        `Página con ID ${data.learningObjectId} no encontrada`,
       )
     }
 
@@ -218,7 +218,7 @@ export class PageContentService {
       )
       if (targetBlockIndex === -1) {
         throw new NotFoundException(
-          `Target block with orderIndex ${data.targetOrderIndex} not found`,
+          `Bloque objetivo con índice ${data.targetOrderIndex} no encontrado`,
         )
       }
     }
@@ -255,7 +255,7 @@ export class PageContentService {
   }
 
   async generateImage(prompt: string, language?: string) {
-    this.logger.log('Generating image')
+    this.logger.log('Generando imagen')
     const finalPrompt = language
       ? `${prompt}. Any text or labels within the image MUST be explicitly written in ${language} language.`
       : prompt

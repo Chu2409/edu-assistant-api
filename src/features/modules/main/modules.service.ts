@@ -1,9 +1,6 @@
-import {
-  Injectable,
-  NotFoundException,
-  ForbiddenException,
-  ConflictException,
-} from '@nestjs/common'
+import { HttpStatus, Injectable } from '@nestjs/common'
+import { BusinessException } from 'src/shared/exceptions/business.exception'
+import { NotFoundException } from '@nestjs/common'
 import { DBService } from 'src/core/database/database.service'
 import { CreateModuleDto } from './dtos/req/create-module.dto'
 import { UpdateModuleDto } from './dtos/req/update-module.dto'
@@ -48,8 +45,9 @@ export class ModulesService {
     })
 
     if (existingModule) {
-      throw new ConflictException(
+      throw new BusinessException(
         `Ya tienes un módulo con el título "${title}"`,
+        HttpStatus.CONFLICT,
       )
     }
   }
@@ -204,8 +202,9 @@ export class ModulesService {
     }
 
     if (!module.isActive && module.teacherId !== user.id) {
-      throw new ForbiddenException(
+      throw new BusinessException(
         'No tienes permisos para acceder a este módulo',
+        HttpStatus.FORBIDDEN,
       )
     }
 
@@ -214,8 +213,9 @@ export class ModulesService {
       !module.isPublic &&
       !module.enrollments.some((enrollment) => enrollment.userId === user.id)
     ) {
-      throw new ForbiddenException(
+      throw new BusinessException(
         'No tienes permisos para acceder a este módulo',
+        HttpStatus.FORBIDDEN,
       )
     }
 
@@ -239,8 +239,9 @@ export class ModulesService {
     }
 
     if (existingModule.teacherId !== user.id) {
-      throw new ForbiddenException(
+      throw new BusinessException(
         'Solo el profesor propietario puede actualizar el módulo',
+        HttpStatus.FORBIDDEN,
       )
     }
 
@@ -334,8 +335,9 @@ export class ModulesService {
     }
 
     if (existingModule.teacherId !== user.id) {
-      throw new ForbiddenException(
+      throw new BusinessException(
         'Solo el profesor propietario puede cambiar el estado del módulo',
+        HttpStatus.FORBIDDEN,
       )
     }
 

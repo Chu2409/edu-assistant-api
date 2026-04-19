@@ -1,9 +1,10 @@
 import {
   Injectable,
   ExecutionContext,
+  HttpStatus,
   UnauthorizedException,
-  ForbiddenException,
 } from '@nestjs/common'
+import { BusinessException } from 'src/shared/exceptions/business.exception'
 import { Reflector } from '@nestjs/core'
 import { AuthGuard } from '@nestjs/passport'
 import { Observable } from 'rxjs'
@@ -61,8 +62,9 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
 
     const hasRole = requiredRoles.some((role) => user.role === role)
     if (!hasRole) {
-      throw new ForbiddenException(
+      throw new BusinessException(
         'No tienes permisos suficientes para acceder a este recurso',
+        HttpStatus.FORBIDDEN,
       )
     }
   }
