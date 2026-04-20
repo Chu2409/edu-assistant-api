@@ -35,7 +35,9 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     rm -f /etc/apt/apt.conf.d/docker-clean && \
     apt-get update && \
     apt-get install -y --no-install-recommends \
-        ffmpeg libgomp1 dumb-init && \
+        ffmpeg libgomp1 dumb-init ca-certificates curl python3 && \
+    curl -fsSL https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp -o /usr/local/bin/yt-dlp && \
+    chmod a+rx /usr/local/bin/yt-dlp && \
     groupadd -g 1001 nodejs && \
     useradd -u 1001 -g nodejs -s /bin/false -M nodeuser
 
