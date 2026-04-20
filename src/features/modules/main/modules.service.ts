@@ -1,7 +1,5 @@
 import {
   Injectable,
-  NotFoundException,
-  ForbiddenException,
   HttpStatus,
 } from '@nestjs/common'
 import { DBService } from 'src/core/database/database.service'
@@ -200,12 +198,16 @@ export class ModulesService {
     })
 
     if (!module) {
-      throw new NotFoundException(`Módulo con ID ${id} no encontrado`)
+      throw new BusinessException(
+        `Módulo con ID ${id} no encontrado`,
+        HttpStatus.NOT_FOUND,
+      )
     }
 
     if (!module.isActive && module.teacherId !== user.id) {
-      throw new ForbiddenException(
+      throw new BusinessException(
         'No tienes permisos para acceder a este módulo',
+        HttpStatus.FORBIDDEN,
       )
     }
 
@@ -214,8 +216,9 @@ export class ModulesService {
       !module.isPublic &&
       !module.enrollments.some((enrollment) => enrollment.userId === user.id)
     ) {
-      throw new ForbiddenException(
+      throw new BusinessException(
         'No tienes permisos para acceder a este módulo',
+        HttpStatus.FORBIDDEN,
       )
     }
 
@@ -235,12 +238,16 @@ export class ModulesService {
     })
 
     if (!existingModule) {
-      throw new NotFoundException(`Módulo con ID ${id} no encontrado`)
+      throw new BusinessException(
+        `Módulo con ID ${id} no encontrado`,
+        HttpStatus.NOT_FOUND,
+      )
     }
 
     if (existingModule.teacherId !== user.id) {
-      throw new ForbiddenException(
+      throw new BusinessException(
         'Solo el profesor propietario puede actualizar el módulo',
+        HttpStatus.FORBIDDEN,
       )
     }
 
@@ -330,12 +337,16 @@ export class ModulesService {
     })
 
     if (!existingModule) {
-      throw new NotFoundException(`Módulo con ID ${id} no encontrado`)
+      throw new BusinessException(
+        `Módulo con ID ${id} no encontrado`,
+        HttpStatus.NOT_FOUND,
+      )
     }
 
     if (existingModule.teacherId !== user.id) {
-      throw new ForbiddenException(
+      throw new BusinessException(
         'Solo el profesor propietario puede cambiar el estado del módulo',
+        HttpStatus.FORBIDDEN,
       )
     }
 
