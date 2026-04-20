@@ -1,7 +1,4 @@
-import {
-  Injectable,
-  HttpStatus,
-} from '@nestjs/common'
+import { Injectable, HttpStatus, NotFoundException } from '@nestjs/common'
 import { DBService } from 'src/core/database/database.service'
 import { CreateModuleDto } from './dtos/req/create-module.dto'
 import { UpdateModuleDto } from './dtos/req/update-module.dto'
@@ -198,10 +195,7 @@ export class ModulesService {
     })
 
     if (!module) {
-      throw new BusinessException(
-        `Módulo con ID ${id} no encontrado`,
-        HttpStatus.NOT_FOUND,
-      )
+      throw new NotFoundException(`Módulo con ID ${id} no encontrado`)
     }
 
     if (!module.isActive && module.teacherId !== user.id) {
@@ -238,10 +232,7 @@ export class ModulesService {
     })
 
     if (!existingModule) {
-      throw new BusinessException(
-        `Módulo con ID ${id} no encontrado`,
-        HttpStatus.NOT_FOUND,
-      )
+      throw new NotFoundException(`Módulo con ID ${id} no encontrado`)
     }
 
     if (existingModule.teacherId !== user.id) {
@@ -337,10 +328,7 @@ export class ModulesService {
     })
 
     if (!existingModule) {
-      throw new BusinessException(
-        `Módulo con ID ${id} no encontrado`,
-        HttpStatus.NOT_FOUND,
-      )
+      throw new NotFoundException(`Módulo con ID ${id} no encontrado`)
     }
 
     if (existingModule.teacherId !== user.id) {
