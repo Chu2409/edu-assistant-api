@@ -381,13 +381,18 @@ export class LoService {
         const blockDto = updateLoContentDto.blocks[index]
         const orderIndex = index
 
+        const tipTapContent =
+          blockDto.tipTapContent == null
+            ? Prisma.JsonNull
+            : blockDto.tipTapContent
+
         if (blockDto.id) {
           await prisma.block.update({
             where: { id: blockDto.id },
             data: {
               type: blockDto.type,
               content: blockDto.content,
-              tipTapContent: blockDto.tipTapContent,
+              tipTapContent,
               orderIndex,
             },
           })
@@ -397,7 +402,7 @@ export class LoService {
               learningObjectId: id,
               type: blockDto.type,
               content: blockDto.content,
-              tipTapContent: blockDto.tipTapContent,
+              tipTapContent,
               orderIndex,
             },
           })

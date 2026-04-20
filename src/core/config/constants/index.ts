@@ -22,6 +22,31 @@ export const config = (): { APP: IConfig } => ({
       : 6379,
 
     OPENAI_API_KEY: process.env.OPENAI_API_KEY!,
+
+    VIDEO_AI_PROVIDER: process.env.VIDEO_AI_PROVIDER || 'groq',
+    VIDEO_AI_MODEL: process.env.VIDEO_AI_MODEL || 'llama-3.3-70b-versatile',
+    GROQ_API_KEY: process.env.GROQ_API_KEY || '',
+    GOOGLE_GENERATIVE_AI_API_KEY:
+      process.env.GOOGLE_GENERATIVE_AI_API_KEY || '',
+    NVIDIA_API_KEY: process.env.NVIDIA_API_KEY || '',
+    NVIDIA_BASE_URL:
+      process.env.NVIDIA_BASE_URL || 'https://integrate.api.nvidia.com/v1',
+    NVIDIA_ENABLE_THINKING: process.env.NVIDIA_ENABLE_THINKING === 'true',
+    OLLAMA_BASE_URL: process.env.OLLAMA_BASE_URL || 'http://localhost:11434',
+    VIDEO_AI_REQUEST_TIMEOUT: process.env.VIDEO_AI_REQUEST_TIMEOUT
+      ? parseInt(process.env.VIDEO_AI_REQUEST_TIMEOUT, 10)
+      : 120000,
+
+    WHISPER_MODEL: process.env.WHISPER_MODEL || 'base',
+    WHISPER_LANGUAGE: process.env.WHISPER_LANGUAGE || 'auto',
+    WHISPER_MODELS_DIR: process.env.WHISPER_MODELS_DIR || '',
+
+    MAX_VIDEO_DURATION_MINUTES: process.env.MAX_VIDEO_DURATION_MINUTES
+      ? parseInt(process.env.MAX_VIDEO_DURATION_MINUTES, 10)
+      : 30,
+    MAX_VIDEO_FILE_SIZE_MB: process.env.MAX_VIDEO_FILE_SIZE_MB
+      ? parseInt(process.env.MAX_VIDEO_FILE_SIZE_MB, 10)
+      : 500,
   },
 })
 
@@ -52,4 +77,27 @@ export const configValidationSchema = Joi.object<IConfig>({
   REDIS_PORT: Joi.number().default(6379),
 
   OPENAI_API_KEY: Joi.string(),
+
+  VIDEO_AI_PROVIDER: Joi.string()
+    .valid('groq', 'openai', 'google', 'nvidia', 'ollama')
+    .default('groq'),
+  VIDEO_AI_MODEL: Joi.string().default('llama-3.3-70b-versatile'),
+  GROQ_API_KEY: Joi.string().allow('').default(''),
+  GOOGLE_GENERATIVE_AI_API_KEY: Joi.string().allow('').default(''),
+  NVIDIA_API_KEY: Joi.string().allow('').default(''),
+  NVIDIA_BASE_URL: Joi.string()
+    .uri()
+    .default('https://integrate.api.nvidia.com/v1'),
+  NVIDIA_ENABLE_THINKING: Joi.boolean().default(false),
+  OLLAMA_BASE_URL: Joi.string().uri().default('http://localhost:11434'),
+  VIDEO_AI_REQUEST_TIMEOUT: Joi.number().default(120000),
+
+  WHISPER_MODEL: Joi.string()
+    .valid('tiny', 'base', 'small', 'medium', 'large-v3')
+    .default('base'),
+  WHISPER_LANGUAGE: Joi.string().default('auto'),
+  WHISPER_MODELS_DIR: Joi.string().allow('').default(''),
+
+  MAX_VIDEO_DURATION_MINUTES: Joi.number().min(1).default(30),
+  MAX_VIDEO_FILE_SIZE_MB: Joi.number().min(1).default(500),
 })
