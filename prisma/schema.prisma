@@ -55,7 +55,7 @@ model User {
 
 model Module {
   id                Int      @id @default(autoincrement())
-  title             String
+  title             String   @unique
   description       String?  @db.Text
   teacherId         Int      @map("teacher_id")
   isPublic          Boolean  @default(false) @map("is_public")
@@ -66,7 +66,6 @@ model Module {
   createdAt         DateTime @default(now()) @map("created_at")
   updatedAt         DateTime @updatedAt @map("updated_at")
 
-  // Relations
   teacher          User                @relation("TeacherModules", fields: [teacherId], references: [id], onDelete: Cascade)
   learningObjects  LearningObject[]
   enrollments      Enrollment[]

@@ -1,6 +1,4 @@
-import { HttpStatus, Injectable } from '@nestjs/common'
-import { BusinessException } from 'src/shared/exceptions/business.exception'
-import { NotFoundException } from '@nestjs/common'
+import { Injectable, HttpStatus, NotFoundException } from '@nestjs/common'
 import { DBService } from 'src/core/database/database.service'
 import { CreateModuleDto } from './dtos/req/create-module.dto'
 import { UpdateModuleDto } from './dtos/req/update-module.dto'
@@ -23,6 +21,7 @@ import {
 import { ApiPaginatedRes } from 'src/shared/dtos/res/api-response.dto'
 import { ModulesMapper } from './mappers/modules.mapper'
 import { convertToFilterWhere } from 'src/shared/utils/converters'
+import { BusinessException } from 'src/shared/exceptions/business.exception'
 
 @Injectable()
 export class ModulesService {
@@ -30,7 +29,6 @@ export class ModulesService {
 
   private async validateUniqueTitle(
     title: string,
-    teacherId: number,
     excludeModuleId?: number,
   ): Promise<void> {
     const existingModule = await this.dbService.module.findFirst({
@@ -39,14 +37,13 @@ export class ModulesService {
           equals: title,
           mode: 'insensitive',
         },
-        teacherId,
         ...(excludeModuleId && { id: { not: excludeModuleId } }),
       },
     })
 
     if (existingModule) {
       throw new BusinessException(
-        `Ya tienes un módulo con el título "${title}"`,
+        `Ya existe un módulo con el título "${title}"`,
         HttpStatus.CONFLICT,
       )
     }
@@ -56,7 +53,7 @@ export class ModulesService {
     createModuleDto: CreateModuleDto,
     user: User,
   ): Promise<ModuleDto> {
-    await this.validateUniqueTitle(createModuleDto.title, user.id)
+    await this.validateUniqueTitle(createModuleDto.title)
 
     const module = await this.dbService.module.create({
       data: {
@@ -246,7 +243,7 @@ export class ModulesService {
     }
 
     if (updateModuleDto.title) {
-      await this.validateUniqueTitle(updateModuleDto.title, user.id, id)
+      await this.validateUniqueTitle(updateModuleDto.title, id)
     }
 
     const { aiConfiguration, ...moduleData } = updateModuleDto
