@@ -12,6 +12,7 @@ export const config = (): { APP: IConfig } => ({
     MICROSOFT_CLIENT_SECRET: process.env.MICROSOFT_CLIENT_SECRET!,
     MICROSOFT_CALLBACK_URL: process.env.MICROSOFT_CALLBACK_URL!,
     MICROSOFT_TENANT: process.env.MICROSOFT_TENANT || 'organizations',
+    MICROSOFT_EMAIL_SENDER: process.env.MICROSOFT_EMAIL_SENDER!,
 
     JWT_SECRET: process.env.JWT_SECRET!,
     JWT_EXPIRATION: process.env.JWT_EXPIRATION || '24h',
@@ -69,6 +70,7 @@ export const configValidationSchema = Joi.object<IConfig>({
       ), // Permite también GUIDs de tenant específico
     )
     .default('organizations'),
+  MICROSOFT_EMAIL_SENDER: Joi.string().email().required(),
 
   JWT_SECRET: Joi.string().min(30).required(),
   JWT_EXPIRATION: Joi.string().default('24h'),

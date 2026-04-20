@@ -28,6 +28,7 @@ import { VideosModule } from './features/videos/videos.module'
     ContentGenerationModule,
     TeacherFeedbackModule,
     VideosModule,
+    // EmailModule,
   ],
   controllers: [HealthController],
   providers: [
