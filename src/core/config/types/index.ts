@@ -8,6 +8,7 @@ export interface IConfig {
   MICROSOFT_CLIENT_SECRET: string
   MICROSOFT_CALLBACK_URL: string
   MICROSOFT_TENANT: string
+  MICROSOFT_EMAIL_SENDER: string
 
   JWT_SECRET: string
   JWT_EXPIRATION: string
