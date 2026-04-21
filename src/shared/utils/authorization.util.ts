@@ -20,10 +20,7 @@ export const AuthorizationUtils = {
     // Profesor propietario tiene acceso siempre
     if (module.teacherId === user.id) return
 
-    // Módulos públicos y activos están disponibles para lectura
-    if (module.isPublic && module.isActive) return
-
-    // Módulos privados requieren matrícula activa
+    // Requiere matrícula activa (isPublic no aplica para acceso a contenido)
     const isEnrolled = module.enrollments?.some(
       (e) => e.userId === user.id && e.isActive,
     )
@@ -78,5 +75,17 @@ export const AuthorizationUtils = {
       'Solo el profesor propietario puede modificar objetos de aprendizaje en este módulo',
       HttpStatus.FORBIDDEN,
     )
+  },
+
+  assertAnonymousLoReadAccess(
+    module: { isPublic: boolean },
+    lo: { isPublished: boolean },
+  ): void {
+    if (!lo.isPublished || !module.isPublic) {
+      throw new BusinessException(
+        'Este contenido no está disponible',
+        HttpStatus.FORBIDDEN,
+      )
+    }
   },
 }

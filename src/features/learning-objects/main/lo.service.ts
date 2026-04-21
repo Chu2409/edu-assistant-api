@@ -15,11 +15,13 @@ import { LoMapper } from './mappers/lo.mapper'
 import { ApiPaginatedRes } from 'src/shared/dtos/res/api-response.dto'
 import { FullLoDto } from './dtos/res/full-lo.dto'
 import { AuthorizationUtils } from 'src/shared/utils/authorization.util'
+import { LoHelperService } from './lo-helper.service'
 
 @Injectable()
 export class LoService {
   constructor(
     private readonly dbService: DBService,
+    private readonly loHelper: LoHelperService,
     @InjectQueue(QUEUE_NAMES.EMBEDDINGS.NAME)
     private readonly embeddingsQueue: Queue,
   ) {}
@@ -84,7 +86,7 @@ export class LoService {
       where.OR = [{ title: { contains: params.search, mode: 'insensitive' } }]
     }
 
-    if (module.teacherId !== user.id) {
+    if (user.role !== Role.ADMIN && module.teacherId !== user.id) {
       where.isPublished = true
     }
 
@@ -112,8 +114,8 @@ export class LoService {
     }
   }
 
-  private async findOneToTeacher(id: number, user: User) {
-    const lo = await this.dbService.learningObject.findUnique({
+  private async fetchTeacherView(id: number) {
+    return this.dbService.learningObject.findUniqueOrThrow({
       where: { id },
       include: {
         type: true,
@@ -122,11 +124,6 @@ export class LoService {
             user: true,
           },
         },
-        module: {
-          include: {
-            enrollments: true,
-          },
-        },
         studentQuestions: {
           include: {
             user: true,
@@ -142,28 +139,13 @@ export class LoService {
         },
       },
     })
-
-    if (!lo) {
-      throw new NotFoundException(
-        `Objeto de aprendizaje con ID ${id} no encontrado`,
-      )
-    }
-
-    AuthorizationUtils.assertLoReadAccess(user, lo.module, lo)
-
-    return lo
   }
 
-  private async findOneToStudent(id: number, user: User) {
-    const lo = await this.dbService.learningObject.findUnique({
+  private async fetchStudentView(id: number, userId: number) {
+    return this.dbService.learningObject.findUniqueOrThrow({
       where: { id },
       include: {
         type: true,
-        module: {
-          include: {
-            enrollments: true,
-          },
-        },
         studentQuestions: {
           include: {
             user: true,
@@ -174,20 +156,33 @@ export class LoService {
             },
           },
           where: {
-            OR: [{ isPublic: true }, { userId: user.id }],
+            OR: [{ isPublic: true }, { userId }],
           },
         },
         notes: {
           where: {
-            userId: user.id,
+            userId,
           },
         },
         blocks: {
           orderBy: { orderIndex: 'asc' },
         },
         sessions: {
-          where: { userId: user.id },
+          where: { userId },
           take: 1,
+        },
+      },
+    })
+  }
+
+  private async findOneToAnonymous(id: number) {
+    const lo = await this.dbService.learningObject.findUnique({
+      where: { id },
+      include: {
+        type: true,
+        module: true,
+        blocks: {
+          orderBy: { orderIndex: 'asc' },
         },
       },
     })
@@ -198,20 +193,30 @@ export class LoService {
       )
     }
 
-    AuthorizationUtils.assertLoReadAccess(user, lo.module, lo)
+    AuthorizationUtils.assertAnonymousLoReadAccess(lo.module, lo)
 
     return lo
   }
 
-  async findOne(id: number, user: User): Promise<FullLoDto> {
+  async findOne(id: number, user?: User | null): Promise<FullLoDto> {
     let lo
     let isStudentView = false
 
-    if (user.role === Role.STUDENT) {
-      lo = await this.findOneToStudent(id, user)
+    if (!user) {
+      lo = await this.findOneToAnonymous(id)
       isStudentView = true
     } else {
-      lo = await this.findOneToTeacher(id, user)
+      // Valida acceso y obtiene relación con el módulo
+      const loBase = await this.loHelper.getLoForRead(id, user)
+      const isOwnerOrAdmin =
+        user.role === Role.ADMIN || loBase.module.teacherId === user.id
+
+      if (isOwnerOrAdmin) {
+        lo = await this.fetchTeacherView(id)
+      } else {
+        lo = await this.fetchStudentView(id, user.id)
+        isStudentView = true
+      }
     }
 
     const previousLo = await this.dbService.learningObject.findFirst({
