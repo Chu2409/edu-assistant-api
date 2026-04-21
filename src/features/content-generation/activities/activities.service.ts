@@ -60,7 +60,7 @@ export class ActivitiesService {
 
     if (blocks.length === 0) {
       throw new BusinessException(
-        'No se encontraron bloques de tipo TEXT/CODE elegibles para la generación de actividades',
+        'No se encontraron bloques elegibles para la generación de actividades',
         HttpStatus.BAD_REQUEST,
       )
     }

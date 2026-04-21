@@ -1,9 +1,4 @@
-import {
-  ForbiddenException,
-  HttpStatus,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common'
+import { HttpStatus, Injectable, NotFoundException } from '@nestjs/common'
 import { InjectQueue } from '@nestjs/bullmq'
 import { Queue } from 'bullmq'
 import { DBService } from 'src/core/database/database.service'
@@ -11,12 +6,12 @@ import { QUEUE_NAMES } from 'src/shared/constants/queues'
 import {
   IngestionStatus,
   Prisma,
-  Role,
   SourceKind,
   type User,
 } from 'src/core/database/generated/client'
 import { BusinessException } from 'src/shared/exceptions/business.exception'
 import { ApiPaginatedRes } from 'src/shared/dtos/res/api-response.dto'
+import { AuthorizationUtils } from 'src/shared/utils/authorization.util'
 import { LoHelperService } from 'src/features/learning-objects/main/lo-helper.service'
 import { CreateVideoFromUrlDto } from './dtos/req/create-video-from-url.dto'
 import { UploadVideoFileDto } from './dtos/req/upload-video-file.dto'
@@ -89,13 +84,7 @@ export class VideosService {
       throw new NotFoundException(`Module with ID ${moduleId} not found`)
     }
 
-    if (
-      module.teacherId !== user.id &&
-      !module.isPublic &&
-      !module.enrollments.some((e) => e.userId === user.id)
-    ) {
-      throw new ForbiddenException('No permission to access this module')
-    }
+    AuthorizationUtils.assertModuleReadAccess(user, module)
 
     const where: Prisma.LearningObjectWhereInput = {
       moduleId,
@@ -107,7 +96,7 @@ export class VideosService {
       where.title = { contains: params.search, mode: 'insensitive' }
     }
 
-    if (user.role === Role.STUDENT && module.teacherId !== user.id) {
+    if (module.teacherId !== user.id) {
       where.isPublished = true
     }
 
@@ -140,19 +129,20 @@ export class VideosService {
   }
 
   async findOne(id: number, user: User): Promise<FullVideoDto> {
-    await this.loHelper.getLoForRead(id, user)
-
-    const lo = await this.dbService.learningObject.findUniqueOrThrow({
+    const lo = await this.dbService.learningObject.findUnique({
       where: { id },
       include: {
         video: true,
         blocks: { orderBy: { orderIndex: 'asc' } },
+        module: { include: { enrollments: true } },
       },
     })
 
-    if (!lo.video) {
+    if (!lo || !lo.video) {
       throw new NotFoundException(`Video with ID ${id} not found`)
     }
+
+    AuthorizationUtils.assertLoReadAccess(user, lo.module, lo)
 
     return VideoMapper.toFullDto(
       lo as typeof lo & { video: NonNullable<typeof lo.video> },
@@ -179,16 +169,16 @@ export class VideosService {
     dto: RetryVideoContentDto,
     user: User,
   ): Promise<VideoStatusDto> {
-    await this.loHelper.getLoForWrite(id, user)
-
-    const lo = await this.dbService.learningObject.findUniqueOrThrow({
+    const lo = await this.dbService.learningObject.findUnique({
       where: { id },
-      include: { video: true },
+      include: { video: true, module: true },
     })
 
-    if (!lo.video) {
+    if (!lo || !lo.video) {
       throw new NotFoundException(`Video with ID ${id} not found`)
     }
+
+    AuthorizationUtils.assertLoWriteAccess(user, lo.module)
 
     if (
       lo.video.status !== IngestionStatus.FAILED &&
@@ -228,16 +218,16 @@ export class VideosService {
     dto: UpdateVideoContentDto,
     user: User,
   ): Promise<FullVideoDto> {
-    await this.loHelper.getLoForWrite(id, user)
-
-    const lo = await this.dbService.learningObject.findUniqueOrThrow({
+    const lo = await this.dbService.learningObject.findUnique({
       where: { id },
-      include: { video: true },
+      include: { video: true, module: true },
     })
 
-    if (!lo.video) {
+    if (!lo || !lo.video) {
       throw new NotFoundException(`Video with ID ${id} not found`)
     }
+
+    AuthorizationUtils.assertLoWriteAccess(user, lo.module)
 
     await this.dbService.$transaction(async (tx) => {
       const blockIdsToKeep = dto.blocks
@@ -320,9 +310,7 @@ export class VideosService {
       throw new NotFoundException(`Module with ID ${moduleId} not found`)
     }
 
-    if (module.teacherId !== user.id) {
-      throw new ForbiddenException('Only the module owner can create videos')
-    }
+    AuthorizationUtils.assertModuleWriteAccess(user, module)
 
     const videoType = await this.findLoTypeOrFail(VIDEO_LO_TYPE_NAME)
     const orderIndex = await this.loHelper.getNextOrderIndex(moduleId)
