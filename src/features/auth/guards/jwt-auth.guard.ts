@@ -51,6 +51,10 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
   }
 
   private validateRoles(context: ExecutionContext, user: User): void {
+    if (user.role === Role.ADMIN) {
+      return
+    }
+
     const requiredRoles = this.reflector.getAllAndOverride<Role[] | undefined>(
       ROLES_KEY,
       [context.getHandler(), context.getClass()],
@@ -63,7 +67,7 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
     const hasRole = requiredRoles.some((role) => user.role === role)
     if (!hasRole) {
       throw new BusinessException(
-        'No tienes permisos suficientes para acceder a este recurso',
+        'No tienes permisos para realizar esta acción',
         HttpStatus.FORBIDDEN,
       )
     }
