@@ -21,7 +21,7 @@ export class UsersController {
   @ApiStandardResponse(UserDto)
   @ApiResponse({ status: 401, description: 'No autorizado' })
   @ApiResponse({ status: 403, description: 'Prohibido' })
-  @JwtAuth(Role.TEACHER, Role.ADMIN)
+  @JwtAuth(Role.TEACHER)
   findStudents(@Query() params: UsersFiltersDto): Promise<UserDto[]> {
     return this.usersService.findStudents(params)
   }

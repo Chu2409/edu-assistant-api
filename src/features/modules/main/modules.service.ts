@@ -22,6 +22,7 @@ import { ApiPaginatedRes } from 'src/shared/dtos/res/api-response.dto'
 import { ModulesMapper } from './mappers/modules.mapper'
 import { convertToFilterWhere } from 'src/shared/utils/converters'
 import { BusinessException } from 'src/shared/exceptions/business.exception'
+import { AuthorizationUtils } from 'src/shared/utils/authorization.util'
 
 @Injectable()
 export class ModulesService {
@@ -92,15 +93,15 @@ export class ModulesService {
     const where: Prisma.ModuleWhereInput = {}
 
     if (user.role === Role.TEACHER) {
-      where.teacherId = user.id
+      // where.teacherId = user.id
       where.isPublic = params.isPublic
     } else if (user.role === Role.STUDENT) {
       where.enrollments = {
         some: { userId: user.id, isActive: true },
       }
       where.isActive = true
-      where.teacherId = { in: convertToFilterWhere(params.teacherId) }
     }
+    where.teacherId = { in: convertToFilterWhere(params.teacherId) }
 
     if (params.search) {
       where.AND = {
@@ -198,23 +199,7 @@ export class ModulesService {
       throw new NotFoundException(`Módulo con ID ${id} no encontrado`)
     }
 
-    if (!module.isActive && module.teacherId !== user.id) {
-      throw new BusinessException(
-        'No tienes permisos para acceder a este módulo',
-        HttpStatus.FORBIDDEN,
-      )
-    }
-
-    if (
-      module.teacherId !== user.id &&
-      !module.isPublic &&
-      !module.enrollments.some((enrollment) => enrollment.userId === user.id)
-    ) {
-      throw new BusinessException(
-        'No tienes permisos para acceder a este módulo',
-        HttpStatus.FORBIDDEN,
-      )
-    }
+    AuthorizationUtils.assertModuleReadAccess(user, module)
 
     return ModulesMapper.mapToDto(module)
   }
@@ -235,12 +220,7 @@ export class ModulesService {
       throw new NotFoundException(`Módulo con ID ${id} no encontrado`)
     }
 
-    if (existingModule.teacherId !== user.id) {
-      throw new BusinessException(
-        'Solo el profesor propietario puede actualizar el módulo',
-        HttpStatus.FORBIDDEN,
-      )
-    }
+    AuthorizationUtils.assertModuleWriteAccess(user, existingModule)
 
     if (updateModuleDto.title) {
       await this.validateUniqueTitle(updateModuleDto.title, id)
@@ -331,12 +311,7 @@ export class ModulesService {
       throw new NotFoundException(`Módulo con ID ${id} no encontrado`)
     }
 
-    if (existingModule.teacherId !== user.id) {
-      throw new BusinessException(
-        'Solo el profesor propietario puede cambiar el estado del módulo',
-        HttpStatus.FORBIDDEN,
-      )
-    }
+    AuthorizationUtils.assertModuleWriteAccess(user, existingModule)
 
     const module = await this.dbService.module.update({
       where: { id },

@@ -9,16 +9,12 @@ import { UpdateLoDto } from './dtos/req/update-lo.dto'
 import { UpdateLoContentDto } from './dtos/req/update-lo-content.dto'
 import { ReorderLoDto } from './dtos/req/reorder-lo.dto'
 import { LoDto } from './dtos/res/lo.dto'
-import {
-  Enrollment,
-  Prisma,
-  Role,
-  type User,
-} from 'src/core/database/generated/client'
+import { Prisma, Role, type User } from 'src/core/database/generated/client'
 import { LoFiltersDto } from './dtos/req/lo-filters.dto'
 import { LoMapper } from './mappers/lo.mapper'
 import { ApiPaginatedRes } from 'src/shared/dtos/res/api-response.dto'
 import { FullLoDto } from './dtos/res/full-lo.dto'
+import { AuthorizationUtils } from 'src/shared/utils/authorization.util'
 
 @Injectable()
 export class LoService {
@@ -37,12 +33,7 @@ export class LoService {
     if (!module) {
       throw new NotFoundException(`Módulo con ID ${dto.moduleId} no encontrado`)
     }
-    if (module.teacherId !== user.id) {
-      throw new BusinessException(
-        'Solo el profesor propietario puede crear objetos de aprendizaje en este módulo',
-        HttpStatus.FORBIDDEN,
-      )
-    }
+    AuthorizationUtils.assertModuleWriteAccess(user, module)
 
     const lastLo = await this.dbService.learningObject.findFirst({
       where: { moduleId: dto.moduleId },
@@ -79,16 +70,7 @@ export class LoService {
       throw new NotFoundException(`Módulo con ID ${moduleId} no encontrado`)
     }
 
-    if (
-      module.teacherId !== user.id &&
-      !module.isPublic &&
-      !module.enrollments.some((enrollment) => enrollment.userId === user.id)
-    ) {
-      throw new BusinessException(
-        'No tienes permisos para ver los objetos de aprendizaje de este módulo',
-        HttpStatus.FORBIDDEN,
-      )
-    }
+    AuthorizationUtils.assertModuleReadAccess(user, module)
 
     const where: Prisma.LearningObjectWhereInput = {
       moduleId,
@@ -102,7 +84,7 @@ export class LoService {
       where.OR = [{ title: { contains: params.search, mode: 'insensitive' } }]
     }
 
-    if (user.role === Role.STUDENT && module.teacherId !== user.id) {
+    if (module.teacherId !== user.id) {
       where.isPublished = true
     }
 
@@ -140,7 +122,11 @@ export class LoService {
             user: true,
           },
         },
-        module: true,
+        module: {
+          include: {
+            enrollments: true,
+          },
+        },
         studentQuestions: {
           include: {
             user: true,
@@ -163,12 +149,7 @@ export class LoService {
       )
     }
 
-    if (lo.module.teacherId !== user.id) {
-      throw new BusinessException(
-        'No tienes permisos para ver este objeto de aprendizaje',
-        HttpStatus.FORBIDDEN,
-      )
-    }
+    AuthorizationUtils.assertLoReadAccess(user, lo.module, lo)
 
     return lo
   }
@@ -217,25 +198,7 @@ export class LoService {
       )
     }
 
-    if (
-      !lo.module.isPublic &&
-      !lo.module.enrollments.some(
-        (enrollment: Enrollment) =>
-          enrollment.userId === user.id && enrollment.isActive,
-      )
-    ) {
-      throw new BusinessException(
-        'No tienes permisos para ver este objeto de aprendizaje',
-        HttpStatus.FORBIDDEN,
-      )
-    }
-
-    if (!lo.isPublished) {
-      throw new BusinessException(
-        'Este objeto de aprendizaje no está publicado aún',
-        HttpStatus.FORBIDDEN,
-      )
-    }
+    AuthorizationUtils.assertLoReadAccess(user, lo.module, lo)
 
     return lo
   }
@@ -296,12 +259,7 @@ export class LoService {
       )
     }
 
-    if (existingLo.module.teacherId !== user.id) {
-      throw new BusinessException(
-        'Solo el profesor propietario puede actualizar este objeto de aprendizaje',
-        HttpStatus.FORBIDDEN,
-      )
-    }
+    AuthorizationUtils.assertLoWriteAccess(user, existingLo.module)
 
     const lo = await this.dbService.learningObject.update({
       where: { id },
@@ -356,12 +314,7 @@ export class LoService {
       )
     }
 
-    if (existingLo.module.teacherId !== user.id) {
-      throw new BusinessException(
-        'Solo el profesor propietario puede actualizar el contenido de este objeto de aprendizaje',
-        HttpStatus.FORBIDDEN,
-      )
-    }
+    AuthorizationUtils.assertLoWriteAccess(user, existingLo.module)
 
     await this.dbService.$transaction(async (prisma) => {
       const blockIdsToKeep = updateLoContentDto.blocks
@@ -438,12 +391,7 @@ export class LoService {
       )
     }
 
-    if (lo.module.teacherId !== user.id) {
-      throw new BusinessException(
-        'Solo el profesor propietario puede reordenar objetos de aprendizaje en este módulo',
-        HttpStatus.FORBIDDEN,
-      )
-    }
+    AuthorizationUtils.assertLoWriteAccess(user, lo.module)
 
     const oldIndex = lo.orderIndex
     const newIndex = dto.orderIndex
