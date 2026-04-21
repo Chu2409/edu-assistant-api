@@ -10,13 +10,10 @@ import { GetUser } from 'src/features/auth/decorators/get-user.decorator'
 import { LoFeedbacksService } from './lo-feedbacks.service'
 import { CreateLoFeedbackDto } from './dtos/req/create-lo-feedback.dto'
 import { UpdateLoFeedbackDto } from './dtos/req/update-lo-feedback.dto'
-import { JwtAuth } from 'src/features/auth/decorators/jwt-auth.decorator'
 import { LoFeedbackDto } from './dtos/res/lo-feedback.dto'
-import { Role } from 'src/core/database/generated/enums'
 
 @ApiTags('Learning Object Feedbacks')
 @Controller('learning-object-feedbacks')
-@JwtAuth(Role.STUDENT)
 export class LoFeedbacksController {
   constructor(private readonly loFeedbacksService: LoFeedbacksService) {}
 

@@ -7,9 +7,8 @@ import {
   Post,
 } from '@nestjs/common'
 import { ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger'
-import { JwtAuth } from 'src/features/auth/decorators/jwt-auth.decorator'
 import { GetUser } from 'src/features/auth/decorators/get-user.decorator'
-import { Role, type User } from 'src/core/database/generated/client'
+import { type User } from 'src/core/database/generated/client'
 import { ApiStandardResponse } from 'src/shared/decorators/api-standard-response.decorator'
 import { ActivitiesService } from './activities.service'
 import { CreateActivityAttemptDto } from './dtos/req/create-activity-attempt.dto'
@@ -17,7 +16,6 @@ import { ActivityAttemptDto } from './dtos/res/activity-attempt.dto'
 
 @ApiTags('Activities')
 @Controller('activities')
-@JwtAuth(Role.STUDENT)
 export class ActivityAttemptsController {
   constructor(private readonly activitiesService: ActivitiesService) {}
 

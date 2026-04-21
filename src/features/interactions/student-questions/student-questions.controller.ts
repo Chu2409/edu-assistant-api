@@ -19,12 +19,9 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger'
-import { JwtAuth } from 'src/features/auth/decorators/jwt-auth.decorator'
-import { Role } from 'src/core/database/generated/enums'
 
 @ApiTags('Student Questions')
 @Controller('pages/student-questions')
-@JwtAuth(Role.STUDENT)
 export class StudentQuestionsController {
   constructor(
     private readonly studentQuestionsService: StudentQuestionsService,

@@ -68,7 +68,6 @@ export class ModulesController {
   }
 
   @Get('available')
-  @JwtAuth(Role.STUDENT)
   @ApiOperation({
     summary: 'Listar módulos disponibles',
     description:
@@ -101,7 +100,6 @@ export class ModulesController {
     status: 403,
     description: 'Sin permisos para acceder al módulo',
   })
-  @JwtAuth(Role.TEACHER, Role.STUDENT)
   findOne(
     @Param('id', ParseIntPipe) id: number,
     @GetUser() user: User,
