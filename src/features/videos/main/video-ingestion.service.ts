@@ -1,0 +1,174 @@
+import { Injectable, Logger, NotFoundException } from '@nestjs/common'
+import {
+  BlockType,
+  IngestionStatus,
+  Prisma,
+} from 'src/core/database/generated/client'
+import { DBService } from 'src/core/database/database.service'
+import { TranscriptionResult } from '../transcription/interfaces/transcription-result.interface'
+import { GenerationResult } from '../ai/interfaces/generation-result.interface'
+import { GENERATED_BLOCK_TYPES } from '../constants/video.constants'
+import { VideoStateService } from './video-state.service'
+
+@Injectable()
+export class VideoIngestionService {
+  private readonly logger = new Logger(VideoIngestionService.name)
+
+  constructor(
+    private readonly dbService: DBService,
+    private readonly stateService: VideoStateService,
+  ) {}
+
+  async transition(
+    videoId: number,
+    status: IngestionStatus,
+    extra?: { errorMessage?: string | null },
+  ): Promise<void> {
+    await this.stateService.transition(videoId, status, extra)
+  }
+
+  async persistTranscription(
+    videoId: number,
+    result: TranscriptionResult,
+  ): Promise<void> {
+    await this.dbService.video.update({
+      where: { learningObjectId: videoId },
+      data: {
+        rawText: result.text,
+        detectedLanguage: result.language,
+        durationSeconds: result.durationSeconds,
+      },
+    })
+  }
+
+  async persistGeneratedContent(
+    videoId: number,
+    generated: GenerationResult,
+    contentTypes: BlockType[],
+    tx: Prisma.TransactionClient,
+  ): Promise<void> {
+    await tx.block.deleteMany({
+      where: {
+        learningObjectId: videoId,
+        type: { in: contentTypes },
+      },
+    })
+
+    const blocks = this.buildBlockInputs(videoId, generated)
+
+    if (blocks.length > 0) {
+      await tx.block.createMany({ data: blocks })
+    }
+  }
+
+  async loadForProcessing(videoId: number) {
+    const lo = await this.dbService.learningObject.findUnique({
+      where: { id: videoId },
+      include: { video: true },
+    })
+
+    if (!lo?.video) {
+      throw new NotFoundException(
+        `LearningObject ${videoId} has no video source`,
+      )
+    }
+
+    return {
+      title: lo.title,
+      kind: lo.video.kind,
+      sourceUrl: lo.video.sourceUrl,
+      outputLanguage: lo.video.outputLanguage,
+      detectedLanguage: lo.video.detectedLanguage,
+      rawText: lo.video.rawText,
+    }
+  }
+
+  async finalizeGeneration(
+    videoId: number,
+    generated: GenerationResult,
+    requestedTypes: BlockType[],
+    tx?: Prisma.TransactionClient,
+  ): Promise<void> {
+    const client = tx || this.dbService
+    const failedCount = generated.errors.length
+    const requestedCount = requestedTypes.length
+
+    if (failedCount === 0) {
+      await this.stateService.transition(
+        videoId,
+        IngestionStatus.COMPLETED,
+        { errorMessage: null },
+        client,
+      )
+      return
+    }
+
+    if (failedCount === requestedCount) {
+      const failedTypes = generated.errors.map((e) => e.type).join(', ')
+      await this.stateService.transition(
+        videoId,
+        IngestionStatus.FAILED,
+        { errorMessage: `Failed to generate: ${failedTypes}` },
+        client,
+      )
+      return
+    }
+
+    const failedTypes = generated.errors.map((e) => e.type).join(', ')
+    await this.stateService.transition(
+      videoId,
+      IngestionStatus.COMPLETED,
+      { errorMessage: `Partial: ${failedTypes}` },
+      client,
+    )
+  }
+
+  private buildBlockInputs(
+    videoId: number,
+    generated: GenerationResult,
+  ): Prisma.BlockCreateManyInput[] {
+    const blocks: Prisma.BlockCreateManyInput[] = []
+
+    const entries: Array<{
+      type: BlockType
+      data: Prisma.InputJsonValue | undefined
+    }> = [
+      {
+        type: BlockType.SUMMARY,
+        data: generated.summary as Prisma.InputJsonValue,
+      },
+      {
+        type: BlockType.FLASHCARDS,
+        data: generated.flashcards as Prisma.InputJsonValue,
+      },
+      { type: BlockType.QUIZ, data: generated.quiz as Prisma.InputJsonValue },
+      {
+        type: BlockType.GLOSSARY,
+        data: generated.glossary as Prisma.InputJsonValue,
+      },
+    ]
+
+    for (const entry of entries) {
+      if (!entry.data) continue
+
+      const needsReview = generated.needsReview[entry.type] === true
+      const content = needsReview
+        ? {
+            ...(entry.data as Record<string, unknown>),
+            meta: { needsReview: true },
+          }
+        : entry.data
+
+      blocks.push({
+        learningObjectId: videoId,
+        type: entry.type,
+        content: content as Prisma.InputJsonValue,
+        orderIndex: GENERATED_BLOCK_TYPES.indexOf(
+          entry.type as (typeof GENERATED_BLOCK_TYPES)[number],
+        ),
+      })
+    }
+
+    return blocks
+  }
+}

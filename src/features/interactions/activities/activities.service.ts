@@ -25,6 +25,7 @@ import {
   AiMultipleChoiceActivity,
   AiTrueFalseActivity,
 } from 'src/features/content-generation/activities/interfaces/ai-generated-activity.interface'
+import { AuthorizationUtils } from 'src/shared/utils/authorization.util'
 import { LoHelperService } from 'src/features/learning-objects/main/lo-helper.service'
 
 @Injectable()
@@ -160,7 +161,11 @@ export class ActivitiesService {
     }
 
     // student access check
-    await this.loHelperService.getLoForRead(activity.learningObjectId, user)
+    AuthorizationUtils.assertLoReadAccess(
+      user,
+      activity.learningObject.module,
+      activity.learningObject,
+    )
 
     const lastAttempt = await this.dbService.activityAttempt.findFirst({
       where: { activityId, userId: user.id },

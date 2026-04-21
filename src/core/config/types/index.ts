@@ -8,6 +8,7 @@ export interface IConfig {
   MICROSOFT_CLIENT_SECRET: string
   MICROSOFT_CALLBACK_URL: string
   MICROSOFT_TENANT: string
+  MICROSOFT_EMAIL_SENDER: string
 
   JWT_SECRET: string
   JWT_EXPIRATION: string
@@ -16,4 +17,21 @@ export interface IConfig {
   REDIS_PORT: number
 
   OPENAI_API_KEY: string
+
+  VIDEO_AI_PROVIDER: string
+  VIDEO_AI_MODEL: string
+  GROQ_API_KEY: string
+  GOOGLE_GENERATIVE_AI_API_KEY: string
+  NVIDIA_API_KEY: string
+  NVIDIA_BASE_URL: string
+  NVIDIA_ENABLE_THINKING: boolean
+  OLLAMA_BASE_URL: string
+  VIDEO_AI_REQUEST_TIMEOUT: number
+
+  WHISPER_MODEL: string
+  WHISPER_LANGUAGE: string
+  WHISPER_MODELS_DIR: string
+
+  MAX_VIDEO_DURATION_MINUTES: number
+  MAX_VIDEO_FILE_SIZE_MB: number
 }

@@ -1,8 +1,5 @@
-import {
-  ForbiddenException,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common'
+import { HttpStatus, Injectable, NotFoundException } from '@nestjs/common'
+import { BusinessException } from 'src/shared/exceptions/business.exception'
 import { DBService } from 'src/core/database/database.service'
 import { CreateLoFeedbackDto } from './dtos/req/create-lo-feedback.dto'
 import { UpdateLoFeedbackDto } from './dtos/req/update-lo-feedback.dto'
@@ -36,12 +33,13 @@ export class LoFeedbacksService {
     })
 
     if (!feedback) {
-      throw new NotFoundException(`Feedback with ID ${id} not found`)
+      throw new NotFoundException(`Feedback con ID ${id} no encontrado`)
     }
 
     if (feedback.userId !== userId) {
-      throw new ForbiddenException(
-        'You are not allowed to update this feedback',
+      throw new BusinessException(
+        'No tienes permiso para actualizar este feedback',
+        HttpStatus.FORBIDDEN,
       )
     }
 
@@ -64,12 +62,13 @@ export class LoFeedbacksService {
     })
 
     if (!feedback) {
-      throw new NotFoundException(`Feedback with ID ${id} not found`)
+      throw new NotFoundException(`Feedback con ID ${id} no encontrado`)
     }
 
     if (feedback.userId !== userId) {
-      throw new ForbiddenException(
-        'You are not allowed to delete this feedback',
+      throw new BusinessException(
+        'No tienes permiso para eliminar este feedback',
+        HttpStatus.FORBIDDEN,
       )
     }
 

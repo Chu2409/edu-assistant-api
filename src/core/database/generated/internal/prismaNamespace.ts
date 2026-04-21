@@ -406,7 +406,9 @@ export const ModelName = {
   MediaResource: 'MediaResource',
   ModuleMetrics: 'ModuleMetrics',
   SystemSetting: 'SystemSetting',
-  TeacherAiFeedback: 'TeacherAiFeedback'
+  TeacherAiFeedback: 'TeacherAiFeedback',
+  Video: 'Video',
+  VideoGenerationAttempt: 'VideoGenerationAttempt'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -422,7 +424,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "module" | "aiConfiguration" | "enrollment" | "learningObjectType" | "learningObject" | "block" | "session" | "message" | "learningObjectRelation" | "learningObjectConcept" | "activity" | "activityAttempt" | "learningObjectFeedback" | "note" | "studentQuestion" | "questionReply" | "notification" | "podcast" | "mediaResource" | "moduleMetrics" | "systemSetting" | "teacherAiFeedback"
+    modelProps: "user" | "module" | "aiConfiguration" | "enrollment" | "learningObjectType" | "learningObject" | "block" | "session" | "message" | "learningObjectRelation" | "learningObjectConcept" | "activity" | "activityAttempt" | "learningObjectFeedback" | "note" | "studentQuestion" | "questionReply" | "notification" | "podcast" | "mediaResource" | "moduleMetrics" | "systemSetting" | "teacherAiFeedback" | "video" | "videoGenerationAttempt"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -2128,6 +2130,154 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    Video: {
+      payload: Prisma.$VideoPayload<ExtArgs>
+      fields: Prisma.VideoFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.VideoFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VideoPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.VideoFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VideoPayload>
+        }
+        findFirst: {
+          args: Prisma.VideoFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VideoPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.VideoFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VideoPayload>
+        }
+        findMany: {
+          args: Prisma.VideoFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VideoPayload>[]
+        }
+        create: {
+          args: Prisma.VideoCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VideoPayload>
+        }
+        createMany: {
+          args: Prisma.VideoCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.VideoCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VideoPayload>[]
+        }
+        delete: {
+          args: Prisma.VideoDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VideoPayload>
+        }
+        update: {
+          args: Prisma.VideoUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VideoPayload>
+        }
+        deleteMany: {
+          args: Prisma.VideoDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.VideoUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.VideoUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VideoPayload>[]
+        }
+        upsert: {
+          args: Prisma.VideoUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VideoPayload>
+        }
+        aggregate: {
+          args: Prisma.VideoAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateVideo>
+        }
+        groupBy: {
+          args: Prisma.VideoGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.VideoGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.VideoCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.VideoCountAggregateOutputType> | number
+        }
+      }
+    }
+    VideoGenerationAttempt: {
+      payload: Prisma.$VideoGenerationAttemptPayload<ExtArgs>
+      fields: Prisma.VideoGenerationAttemptFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.VideoGenerationAttemptFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VideoGenerationAttemptPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.VideoGenerationAttemptFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VideoGenerationAttemptPayload>
+        }
+        findFirst: {
+          args: Prisma.VideoGenerationAttemptFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VideoGenerationAttemptPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.VideoGenerationAttemptFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VideoGenerationAttemptPayload>
+        }
+        findMany: {
+          args: Prisma.VideoGenerationAttemptFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VideoGenerationAttemptPayload>[]
+        }
+        create: {
+          args: Prisma.VideoGenerationAttemptCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VideoGenerationAttemptPayload>
+        }
+        createMany: {
+          args: Prisma.VideoGenerationAttemptCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.VideoGenerationAttemptCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VideoGenerationAttemptPayload>[]
+        }
+        delete: {
+          args: Prisma.VideoGenerationAttemptDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VideoGenerationAttemptPayload>
+        }
+        update: {
+          args: Prisma.VideoGenerationAttemptUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VideoGenerationAttemptPayload>
+        }
+        deleteMany: {
+          args: Prisma.VideoGenerationAttemptDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.VideoGenerationAttemptUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.VideoGenerationAttemptUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VideoGenerationAttemptPayload>[]
+        }
+        upsert: {
+          args: Prisma.VideoGenerationAttemptUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VideoGenerationAttemptPayload>
+        }
+        aggregate: {
+          args: Prisma.VideoGenerationAttemptAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateVideoGenerationAttempt>
+        }
+        groupBy: {
+          args: Prisma.VideoGenerationAttemptGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.VideoGenerationAttemptGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.VideoGenerationAttemptCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.VideoGenerationAttemptCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -2491,6 +2641,45 @@ export const TeacherAiFeedbackScalarFieldEnum = {
 export type TeacherAiFeedbackScalarFieldEnum = (typeof TeacherAiFeedbackScalarFieldEnum)[keyof typeof TeacherAiFeedbackScalarFieldEnum]
 
 
+export const VideoScalarFieldEnum = {
+  learningObjectId: 'learningObjectId',
+  kind: 'kind',
+  sourceUrl: 'sourceUrl',
+  status: 'status',
+  outputLanguage: 'outputLanguage',
+  rawText: 'rawText',
+  detectedLanguage: 'detectedLanguage',
+  durationSeconds: 'durationSeconds',
+  errorMessage: 'errorMessage',
+  metadata: 'metadata',
+  hasManualEdits: 'hasManualEdits',
+  updatedAt: 'updatedAt'
+} as const
+
+export type VideoScalarFieldEnum = (typeof VideoScalarFieldEnum)[keyof typeof VideoScalarFieldEnum]
+
+
+export const VideoGenerationAttemptScalarFieldEnum = {
+  id: 'id',
+  videoId: 'videoId',
+  provider: 'provider',
+  model: 'model',
+  requestedTypes: 'requestedTypes',
+  completedTypes: 'completedTypes',
+  failedTypes: 'failedTypes',
+  tokensInput: 'tokensInput',
+  tokensOutput: 'tokensOutput',
+  processingTimeMs: 'processingTimeMs',
+  qualityMetrics: 'qualityMetrics',
+  instruction: 'instruction',
+  previousContent: 'previousContent',
+  startedAt: 'startedAt',
+  completedAt: 'completedAt'
+} as const
+
+export type VideoGenerationAttemptScalarFieldEnum = (typeof VideoGenerationAttemptScalarFieldEnum)[keyof typeof VideoGenerationAttemptScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -2789,6 +2978,34 @@ export type EnumTeacherFeedbackScopeFieldRefInput<$PrismaModel> = FieldRefInputT
 export type ListEnumTeacherFeedbackScopeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TeacherFeedbackScope[]'>
     
 
+
+/**
+ * Reference to a field of type 'SourceKind'
+ */
+export type EnumSourceKindFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SourceKind'>
+    
+
+
+/**
+ * Reference to a field of type 'SourceKind[]'
+ */
+export type ListEnumSourceKindFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SourceKind[]'>
+    
+
+
+/**
+ * Reference to a field of type 'IngestionStatus'
+ */
+export type EnumIngestionStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'IngestionStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'IngestionStatus[]'
+ */
+export type ListEnumIngestionStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'IngestionStatus[]'>
+    
+
 /**
  * Batch Payload for updateMany & deleteMany & createMany
  */
@@ -2907,6 +3124,8 @@ export type GlobalOmitConfig = {
   moduleMetrics?: Prisma.ModuleMetricsOmit
   systemSetting?: Prisma.SystemSettingOmit
   teacherAiFeedback?: Prisma.TeacherAiFeedbackOmit
+  video?: Prisma.VideoOmit
+  videoGenerationAttempt?: Prisma.VideoGenerationAttemptOmit
 }
 
 /* Types for Logging */

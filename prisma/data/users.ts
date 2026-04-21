@@ -18,20 +18,24 @@ const user2 = (): Prisma.UserCreateInput => ({
   role: Role.STUDENT,
 })
 
-export const createUser1 = async (prisma: PrismaClient) => {
-  const user = user1()
-  return await prisma.user.upsert({
-    where: { email: user.email },
-    update: user,
-    create: user,
-  })
-}
+const user3 = (): Prisma.UserCreateInput => ({
+  email: 'jcamino7758@uta.edu.ec',
+  name: 'Josue',
+  lastName: 'Camino',
+  microsoftId: 'seed-jcamino7758',
+  displayName: 'Camino Josue',
+  role: Role.TEACHER,
+})
 
-export const createUser2 = async (prisma: PrismaClient) => {
-  const user = user2()
-  return await prisma.user.upsert({
-    where: { email: user.email },
-    update: user,
-    create: user,
+const upsertUser = async (prisma: PrismaClient, data: Prisma.UserCreateInput) =>
+  prisma.user.upsert({
+    where: { email: data.email },
+    update: data,
+    create: data,
   })
-}
+
+export const createUser1 = (prisma: PrismaClient) => upsertUser(prisma, user1())
+
+export const createUser2 = (prisma: PrismaClient) => upsertUser(prisma, user2())
+
+export const createUser3 = (prisma: PrismaClient) => upsertUser(prisma, user3())

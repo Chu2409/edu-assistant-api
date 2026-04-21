@@ -1,0 +1,91 @@
+import { Injectable } from '@nestjs/common'
+import { existsSync, readFileSync } from 'fs'
+import { join } from 'path'
+import * as yaml from 'js-yaml'
+import { GenerationInput } from '../interfaces/generation-input.interface'
+import { TaskConfig } from './task-config.interface'
+import { TaskName } from './task-name.type'
+import {
+  MAX_FLASHCARDS,
+  MAX_QUIZ_QUESTIONS,
+} from '../../constants/video.constants'
+
+@Injectable()
+export class PromptLoaderService {
+  private readonly tasks: Record<TaskName, TaskConfig>
+  private readonly languageNames = new Intl.DisplayNames(['en'], {
+    type: 'language',
+  })
+
+  constructor() {
+    const filePath = this.resolveTasksPath()
+    const raw = readFileSync(filePath, 'utf-8')
+    this.tasks = yaml.load(raw) as Record<TaskName, TaskConfig>
+  }
+
+  private resolveTasksPath(): string {
+    const candidates = [
+      join(__dirname, 'tasks.yaml'),
+      join(
+        process.cwd(),
+        'dist',
+        'features',
+        'videos',
+        'ai',
+        'config',
+        'tasks.yaml',
+      ),
+      join(
+        process.cwd(),
+        'src',
+        'features',
+        'videos',
+        'ai',
+        'config',
+        'tasks.yaml',
+      ),
+    ]
+
+    const found = candidates.find((p) => existsSync(p))
+    if (!found) {
+      throw new Error(`tasks.yaml not found. Checked: ${candidates.join(', ')}`)
+    }
+    return found
+  }
+
+  getPrompt(taskName: TaskName, input: GenerationInput): string {
+    const task = this.tasks[taskName]
+    const titleContext = `The video title is: "${input.videoTitle}".`
+    const languageName = this.resolveLanguageName(input.language)
+    const languageInstruction = `Respond entirely in ${languageName}. All output fields MUST be written in ${languageName}.`
+
+    const instructionBlock = input.instruction
+      ? `\nTeacher feedback — adjust the output accordingly:\n<instruction>\n${input.instruction.replace(/</g, '&lt;').replace(/>/g, '&gt;')}\n</instruction>\n`
+      : ''
+
+    return task.description
+      .replace(/{transcription}/g, input.transcription)
+      .replace(/{title_context}/g, titleContext)
+      .replace(/{language_instruction}/g, languageInstruction)
+      .replace(/{instruction_block}/g, instructionBlock)
+      .replace(/{language_name}/g, languageName)
+      .replace(/{max_cards}/g, String(MAX_FLASHCARDS))
+      .replace(/{max_questions}/g, String(MAX_QUIZ_QUESTIONS))
+  }
+
+  getTemperature(taskName: TaskName): number {
+    return this.tasks[taskName].temperature
+  }
+
+  getMaxTokens(taskName: TaskName): number {
+    return this.tasks[taskName].max_tokens
+  }
+
+  private resolveLanguageName(code: string): string {
+    try {
+      return this.languageNames.of(code) ?? code
+    } catch {
+      return code
+    }
+  }
+}

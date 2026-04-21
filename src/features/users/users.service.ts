@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common'
 import { DBService } from 'src/core/database/database.service'
-import { Role, type Prisma } from 'src/core/database/generated/client'
+import { type Prisma } from 'src/core/database/generated/client'
 import { UsersFiltersDto } from './dtos/req/users-filters.dto'
 import { UserDto } from './dtos/res/user.dto'
 import { UsersMapper } from './mappers/users.mapper'
@@ -13,7 +13,7 @@ export class UsersService {
     const take = Math.min(params.limit || 20, 20)
 
     const where: Prisma.UserWhereInput = {
-      role: Role.STUDENT,
+      // role: Role.STUDENT,
       isActive: true,
     }
 

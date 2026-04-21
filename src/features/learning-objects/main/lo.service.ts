@@ -1,9 +1,5 @@
-import {
-  Injectable,
-  NotFoundException,
-  ForbiddenException,
-  BadRequestException,
-} from '@nestjs/common'
+import { HttpStatus, Injectable, NotFoundException } from '@nestjs/common'
+import { BusinessException } from 'src/shared/exceptions/business.exception'
 import { InjectQueue } from '@nestjs/bullmq'
 import { Queue } from 'bullmq'
 import { DBService } from 'src/core/database/database.service'
@@ -13,21 +9,19 @@ import { UpdateLoDto } from './dtos/req/update-lo.dto'
 import { UpdateLoContentDto } from './dtos/req/update-lo-content.dto'
 import { ReorderLoDto } from './dtos/req/reorder-lo.dto'
 import { LoDto } from './dtos/res/lo.dto'
-import {
-  Enrollment,
-  Prisma,
-  Role,
-  type User,
-} from 'src/core/database/generated/client'
+import { Prisma, Role, type User } from 'src/core/database/generated/client'
 import { LoFiltersDto } from './dtos/req/lo-filters.dto'
 import { LoMapper } from './mappers/lo.mapper'
 import { ApiPaginatedRes } from 'src/shared/dtos/res/api-response.dto'
 import { FullLoDto } from './dtos/res/full-lo.dto'
+import { AuthorizationUtils } from 'src/shared/utils/authorization.util'
+import { LoHelperService } from './lo-helper.service'
 
 @Injectable()
 export class LoService {
   constructor(
     private readonly dbService: DBService,
+    private readonly loHelper: LoHelperService,
     @InjectQueue(QUEUE_NAMES.EMBEDDINGS.NAME)
     private readonly embeddingsQueue: Queue,
   ) {}
@@ -41,11 +35,7 @@ export class LoService {
     if (!module) {
       throw new NotFoundException(`Módulo con ID ${dto.moduleId} no encontrado`)
     }
-    if (module.teacherId !== user.id) {
-      throw new ForbiddenException(
-        'Solo el profesor propietario puede crear objetos de aprendizaje en este módulo',
-      )
-    }
+    AuthorizationUtils.assertModuleWriteAccess(user, module)
 
     const lastLo = await this.dbService.learningObject.findFirst({
       where: { moduleId: dto.moduleId },
@@ -82,15 +72,7 @@ export class LoService {
       throw new NotFoundException(`Módulo con ID ${moduleId} no encontrado`)
     }
 
-    if (
-      module.teacherId !== user.id &&
-      !module.isPublic &&
-      !module.enrollments.some((enrollment) => enrollment.userId === user.id)
-    ) {
-      throw new ForbiddenException(
-        'No tienes permisos para ver los objetos de aprendizaje de este módulo',
-      )
-    }
+    AuthorizationUtils.assertModuleReadAccess(user, module)
 
     const where: Prisma.LearningObjectWhereInput = {
       moduleId,
@@ -104,7 +86,7 @@ export class LoService {
       where.OR = [{ title: { contains: params.search, mode: 'insensitive' } }]
     }
 
-    if (user.role === Role.STUDENT && module.teacherId !== user.id) {
+    if (user.role !== Role.ADMIN && module.teacherId !== user.id) {
       where.isPublished = true
     }
 
@@ -132,8 +114,8 @@ export class LoService {
     }
   }
 
-  private async findOneToTeacher(id: number, user: User) {
-    const lo = await this.dbService.learningObject.findUnique({
+  private async fetchTeacherView(id: number) {
+    return this.dbService.learningObject.findUniqueOrThrow({
       where: { id },
       include: {
         type: true,
@@ -142,7 +124,6 @@ export class LoService {
             user: true,
           },
         },
-        module: true,
         studentQuestions: {
           include: {
             user: true,
@@ -158,32 +139,13 @@ export class LoService {
         },
       },
     })
-
-    if (!lo) {
-      throw new NotFoundException(
-        `Objeto de aprendizaje con ID ${id} no encontrado`,
-      )
-    }
-
-    if (lo.module.teacherId !== user.id) {
-      throw new ForbiddenException(
-        'No tienes permisos para ver este objeto de aprendizaje',
-      )
-    }
-
-    return lo
   }
 
-  private async findOneToStudent(id: number, user: User) {
-    const lo = await this.dbService.learningObject.findUnique({
+  private async fetchStudentView(id: number, userId: number) {
+    return this.dbService.learningObject.findUniqueOrThrow({
       where: { id },
       include: {
         type: true,
-        module: {
-          include: {
-            enrollments: true,
-          },
-        },
         studentQuestions: {
           include: {
             user: true,
@@ -194,20 +156,33 @@ export class LoService {
             },
           },
           where: {
-            OR: [{ isPublic: true }, { userId: user.id }],
+            OR: [{ isPublic: true }, { userId }],
           },
         },
         notes: {
           where: {
-            userId: user.id,
+            userId,
           },
         },
         blocks: {
           orderBy: { orderIndex: 'asc' },
         },
         sessions: {
-          where: { userId: user.id },
+          where: { userId },
           take: 1,
+        },
+      },
+    })
+  }
+
+  private async findOneToAnonymous(id: number) {
+    const lo = await this.dbService.learningObject.findUnique({
+      where: { id },
+      include: {
+        type: true,
+        module: true,
+        blocks: {
+          orderBy: { orderIndex: 'asc' },
         },
       },
     })
@@ -218,36 +193,30 @@ export class LoService {
       )
     }
 
-    if (
-      !lo.module.isPublic &&
-      !lo.module.enrollments.some(
-        (enrollment: Enrollment) =>
-          enrollment.userId === user.id && enrollment.isActive,
-      )
-    ) {
-      throw new ForbiddenException(
-        'No tienes permisos para ver este objeto de aprendizaje',
-      )
-    }
-
-    if (!lo.isPublished) {
-      throw new ForbiddenException(
-        'Este objeto de aprendizaje no está publicado aún',
-      )
-    }
+    AuthorizationUtils.assertAnonymousLoReadAccess(lo.module, lo)
 
     return lo
   }
 
-  async findOne(id: number, user: User): Promise<FullLoDto> {
+  async findOne(id: number, user?: User | null): Promise<FullLoDto> {
     let lo
     let isStudentView = false
 
-    if (user.role === Role.STUDENT) {
-      lo = await this.findOneToStudent(id, user)
+    if (!user) {
+      lo = await this.findOneToAnonymous(id)
       isStudentView = true
     } else {
-      lo = await this.findOneToTeacher(id, user)
+      // Valida acceso y obtiene relación con el módulo
+      const loBase = await this.loHelper.getLoForRead(id, user)
+      const isOwnerOrAdmin =
+        user.role === Role.ADMIN || loBase.module.teacherId === user.id
+
+      if (isOwnerOrAdmin) {
+        lo = await this.fetchTeacherView(id)
+      } else {
+        lo = await this.fetchStudentView(id, user.id)
+        isStudentView = true
+      }
     }
 
     const previousLo = await this.dbService.learningObject.findFirst({
@@ -295,11 +264,7 @@ export class LoService {
       )
     }
 
-    if (existingLo.module.teacherId !== user.id) {
-      throw new ForbiddenException(
-        'Solo el profesor propietario puede actualizar este objeto de aprendizaje',
-      )
-    }
+    AuthorizationUtils.assertLoWriteAccess(user, existingLo.module)
 
     const lo = await this.dbService.learningObject.update({
       where: { id },
@@ -354,11 +319,7 @@ export class LoService {
       )
     }
 
-    if (existingLo.module.teacherId !== user.id) {
-      throw new ForbiddenException(
-        'Solo el profesor propietario puede actualizar el contenido de este objeto de aprendizaje',
-      )
-    }
+    AuthorizationUtils.assertLoWriteAccess(user, existingLo.module)
 
     await this.dbService.$transaction(async (prisma) => {
       const blockIdsToKeep = updateLoContentDto.blocks
@@ -378,13 +339,18 @@ export class LoService {
         const blockDto = updateLoContentDto.blocks[index]
         const orderIndex = index
 
+        const tipTapContent =
+          blockDto.tipTapContent == null
+            ? Prisma.JsonNull
+            : blockDto.tipTapContent
+
         if (blockDto.id) {
           await prisma.block.update({
             where: { id: blockDto.id },
             data: {
               type: blockDto.type,
               content: blockDto.content,
-              tipTapContent: blockDto.tipTapContent,
+              tipTapContent,
               orderIndex,
             },
           })
@@ -394,7 +360,7 @@ export class LoService {
               learningObjectId: id,
               type: blockDto.type,
               content: blockDto.content,
-              tipTapContent: blockDto.tipTapContent,
+              tipTapContent,
               orderIndex,
             },
           })
@@ -430,11 +396,7 @@ export class LoService {
       )
     }
 
-    if (lo.module.teacherId !== user.id) {
-      throw new ForbiddenException(
-        'Solo el profesor propietario puede reordenar objetos de aprendizaje en este módulo',
-      )
-    }
+    AuthorizationUtils.assertLoWriteAccess(user, lo.module)
 
     const oldIndex = lo.orderIndex
     const newIndex = dto.orderIndex
@@ -448,8 +410,9 @@ export class LoService {
     })
 
     if (newIndex < 1 || newIndex > totalLos) {
-      throw new BadRequestException(
+      throw new BusinessException(
         `El nuevo índice ${newIndex} está fuera de los límites [1, ${totalLos}]`,
+        HttpStatus.BAD_REQUEST,
       )
     }
 

@@ -1,9 +1,10 @@
 import {
-  BadRequestException,
+  HttpStatus,
   Injectable,
   Logger,
   NotFoundException,
 } from '@nestjs/common'
+import { BusinessException } from 'src/shared/exceptions/business.exception'
 import { DBService } from 'src/core/database/database.service'
 import { OpenaiService } from 'src/providers/ai/services/openai.service'
 import { extractLoConceptsPrompt } from './prompts/extract-lo-concepts.prompt'
@@ -29,7 +30,7 @@ export class ConceptsService {
   async extractLoConcepts(
     data: ExtractConceptsDto,
   ): Promise<PageConceptsExtractedDto> {
-    this.logger.log('Extracting learning object concepts')
+    this.logger.log('Extrayendo conceptos del objeto de aprendizaje')
     const lo = await this.dbService.learningObject.findUnique({
       where: { id: data.learningObjectId },
       include: { blocks: true, module: { include: { aiConfiguration: true } } },
@@ -37,12 +38,15 @@ export class ConceptsService {
 
     if (!lo) {
       throw new NotFoundException(
-        `Learning Object with id ${data.learningObjectId} not found`,
+        `Objeto de aprendizaje con ID ${data.learningObjectId} no encontrado`,
       )
     }
 
     if (lo.blocks.length === 0) {
-      throw new BadRequestException('Learning Object has no blocks')
+      throw new BusinessException(
+        'El objeto de aprendizaje no tiene bloques',
+        HttpStatus.BAD_REQUEST,
+      )
     }
 
     const prompt = extractLoConceptsPrompt({
@@ -68,7 +72,7 @@ export class ConceptsService {
   async generateConcept(
     data: GenerateConceptDto,
   ): Promise<GeneratedConceptDto> {
-    this.logger.log('Generating concept definition')
+    this.logger.log('Generando definición de concepto')
 
     const block = await this.dbService.block.findUnique({
       where: { id: data.blockId },
@@ -76,7 +80,7 @@ export class ConceptsService {
     })
 
     if (!block) {
-      throw new NotFoundException(`Block with id ${data.blockId} not found`)
+      throw new NotFoundException(`Bloque con ID ${data.blockId} no encontrado`)
     }
 
     const prompt = generateConceptDefinitionPrompt({
@@ -102,8 +106,9 @@ export class ConceptsService {
 
     const terms = validated.terms
     if (!terms.length) {
-      throw new BadRequestException(
+      throw new BusinessException(
         'La IA no devolvió una definición válida para el término',
+        HttpStatus.BAD_REQUEST,
       )
     }
 

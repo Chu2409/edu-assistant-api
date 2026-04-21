@@ -1,9 +1,10 @@
 import {
-  BadRequestException,
+  HttpStatus,
   Injectable,
   Logger,
   NotFoundException,
 } from '@nestjs/common'
+import { BusinessException } from 'src/shared/exceptions/business.exception'
 import { DBService } from 'src/core/database/database.service'
 import { OpenaiService } from 'src/providers/ai/services/openai.service'
 import {
@@ -31,7 +32,7 @@ export class RelationsService {
   async generateLoRelations(
     data: GenerateRelationsDto,
   ): Promise<GeneratedRelationsDto> {
-    this.logger.log('Generating learning object relations')
+    this.logger.log('Generando relaciones del objeto de aprendizaje')
 
     const lo = await this.dbService.learningObject.findUnique({
       where: { id: data.learningObjectId },
@@ -42,12 +43,15 @@ export class RelationsService {
 
     if (!lo) {
       throw new NotFoundException(
-        `Learning Object with id ${data.learningObjectId} not found`,
+        `Objeto de aprendizaje con ID ${data.learningObjectId} no encontrado`,
       )
     }
 
     if (lo.blocks.length === 0) {
-      throw new BadRequestException('Learning Object has no blocks')
+      throw new BusinessException(
+        'El objeto de aprendizaje no tiene bloques',
+        HttpStatus.BAD_REQUEST,
+      )
     }
 
     // 1. Procesar embedding para poder buscar similares

@@ -1,4 +1,5 @@
-import { ForbiddenException, Injectable } from '@nestjs/common'
+import { HttpStatus, Injectable } from '@nestjs/common'
+import { BusinessException } from 'src/shared/exceptions/business.exception'
 import { DBService } from 'src/core/database/database.service'
 import { CreateStudentQuestionDto } from './dtos/req/create-student-question.dto'
 import { UpdateStudentQuestionDto } from './dtos/req/update-student-question.dto'
@@ -36,8 +37,9 @@ export class StudentQuestionsService {
     })
 
     if (!existingQuestion || existingQuestion.userId !== userId) {
-      throw new ForbiddenException(
+      throw new BusinessException(
         'No tienes permiso para actualizar esta pregunta.',
+        HttpStatus.FORBIDDEN,
       )
     }
 
@@ -65,8 +67,9 @@ export class StudentQuestionsService {
     })
 
     if (!existingQuestion || existingQuestion.userId !== userId) {
-      throw new ForbiddenException(
+      throw new BusinessException(
         'No tienes permiso para eliminar esta pregunta.',
+        HttpStatus.FORBIDDEN,
       )
     }
 

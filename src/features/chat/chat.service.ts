@@ -1,8 +1,5 @@
-import {
-  ForbiddenException,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common'
+import { HttpStatus, Injectable, NotFoundException } from '@nestjs/common'
+import { BusinessException } from 'src/shared/exceptions/business.exception'
 import { DBService } from 'src/core/database/database.service'
 import { OpenaiService } from 'src/providers/ai/services/openai.service'
 import { LoHelperService } from 'src/features/learning-objects/main/lo-helper.service'
@@ -15,6 +12,7 @@ import { ApiPaginatedRes } from 'src/shared/dtos/res/api-response.dto'
 import { ChatMessageCreatedDto } from './dtos/res/chat-message-created.dto'
 import { parseJsonField } from 'src/providers/ai/helpers/utils'
 import { chatSessionPrompt } from './prompts/chat-session.prompt'
+import { AuthorizationUtils } from 'src/shared/utils/authorization.util'
 import { ChatMapper } from './mappers/chat.mapper'
 import { compileBlocksToText } from 'src/features/learning-objects/blocks/helpers/compile-blocks'
 import { BaseParamsReqDto } from 'src/shared/dtos/req/base-params.dto'
@@ -80,11 +78,18 @@ export class ChatService {
     }
 
     if (session.userId !== user.id) {
-      throw new ForbiddenException('No tienes permisos para ver esta sesión')
+      throw new BusinessException(
+        'No tienes permisos para ver esta sesión',
+        HttpStatus.FORBIDDEN,
+      )
     }
 
     // valida acceso al objeto de aprendizaje (por si cambió publicación/matrícula)
-    await this.loHelperService.getLoForRead(session.learningObjectId, user)
+    AuthorizationUtils.assertLoReadAccess(
+      user,
+      session.learningObject.module,
+      session.learningObject,
+    )
 
     const skip = (query.page - 1) * query.limit
 
@@ -147,12 +152,16 @@ export class ChatService {
     }
 
     if (session.userId !== user.id) {
-      throw new ForbiddenException('No tienes permisos para usar esta sesión')
+      throw new BusinessException(
+        'No tienes permisos para usar esta sesión',
+        HttpStatus.FORBIDDEN,
+      )
     }
 
-    const lo = await this.loHelperService.getLoForRead(
-      session.learningObjectId,
+    AuthorizationUtils.assertLoReadAccess(
       user,
+      session.learningObject.module,
+      session.learningObject,
     )
 
     const previousResponseId = this.getPreviousResponseId(session.messages)
@@ -162,11 +171,12 @@ export class ChatService {
       ? compileBlocksToText(session.learningObject.blocks)
       : undefined
 
-    const language = lo.module.aiConfiguration?.language ?? 'es'
+    const language =
+      session.learningObject.module.aiConfiguration?.language ?? 'es'
 
     const prompt = chatSessionPrompt({
       language,
-      lessonTitle: lo.title,
+      lessonTitle: session.learningObject.title,
       lessonContext,
       userMessage: dto.message,
       isFirstMessage,

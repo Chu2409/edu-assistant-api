@@ -33,6 +33,8 @@ import {
 import { ApiPaginatedRes } from 'src/shared/dtos/res/api-response.dto'
 import { FullLoDto } from './dtos/res/full-lo.dto'
 
+import { OptionalAuth } from 'src/features/auth/decorators/optional-auth.decorator'
+
 @ApiTags('Learning Objects')
 @Controller('learning-objects')
 export class LoController {
@@ -100,10 +102,11 @@ export class LoController {
   }
 
   @Get(':id')
+  @OptionalAuth()
   @ApiOperation({
     summary: 'Obtener un objeto de aprendizaje por ID',
     description:
-      'Solo el profesor propietario, estudiante inscrito o módulo público pueden acceder',
+      'Solo el profesor propietario, estudiante inscrito o de acceso público pueden acceder',
   })
   @ApiParam({
     name: 'id',
@@ -122,7 +125,7 @@ export class LoController {
   })
   findOne(
     @Param('id', ParseIntPipe) id: number,
-    @GetUser() user: User,
+    @GetUser() user?: User | null,
   ): Promise<FullLoDto> {
     return this.loService.findOne(id, user)
   }

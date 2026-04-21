@@ -1,10 +1,7 @@
-import {
-  Injectable,
-  NotFoundException,
-  ForbiddenException,
-} from '@nestjs/common'
+import { Injectable, NotFoundException } from '@nestjs/common'
 import { DBService } from 'src/core/database/database.service'
-import { Enrollment, Role, type User } from 'src/core/database/generated/client'
+import { type User } from 'src/core/database/generated/client'
+import { AuthorizationUtils } from 'src/shared/utils/authorization.util'
 
 @Injectable()
 export class LoHelperService {
@@ -24,34 +21,8 @@ export class LoHelperService {
       )
     }
 
-    if (user.role === Role.ADMIN) return lo
+    AuthorizationUtils.assertLoReadAccess(user, lo.module, lo)
 
-    if (user.role === Role.TEACHER) {
-      if (lo.module.teacherId !== user.id) {
-        throw new ForbiddenException(
-          'No tienes permisos para acceder a este objeto de aprendizaje',
-        )
-      }
-      return lo
-    }
-
-    const hasAccess =
-      lo.module.isPublic ||
-      lo.module.enrollments.some(
-        (enrollment: Enrollment) =>
-          enrollment.userId === user.id && enrollment.isActive,
-      )
-
-    if (!hasAccess) {
-      throw new ForbiddenException(
-        'No tienes permisos para acceder a este objeto de aprendizaje',
-      )
-    }
-    if (!lo.isPublished) {
-      throw new ForbiddenException(
-        'Este objeto de aprendizaje no está publicado aún',
-      )
-    }
     return lo
   }
 
@@ -67,14 +38,18 @@ export class LoHelperService {
       )
     }
 
-    if (user.role === Role.ADMIN) return lo
-
-    if (lo.module.teacherId !== user.id) {
-      throw new ForbiddenException(
-        'Solo el profesor propietario puede modificar este objeto de aprendizaje',
-      )
-    }
+    AuthorizationUtils.assertLoWriteAccess(user, lo.module)
 
     return lo
+  }
+
+  async getNextOrderIndex(moduleId: number): Promise<number> {
+    const last = await this.dbService.learningObject.findFirst({
+      where: { moduleId },
+      orderBy: { orderIndex: 'desc' },
+      select: { orderIndex: true },
+    })
+
+    return last ? last.orderIndex + 1 : 1
   }
 }

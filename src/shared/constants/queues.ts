@@ -18,6 +18,13 @@ export const QUEUE_NAMES = {
       GENERATE_MODULE: 'generate-module-feedback',
     },
   },
+  VIDEOS: {
+    NAME: 'videos',
+    JOBS: {
+      PROCESS: 'process-video',
+      RETRY: 'retry-video-content',
+    },
+  },
 } as const satisfies Record<
   string,
   { NAME: string; JOBS: Record<string, string> }

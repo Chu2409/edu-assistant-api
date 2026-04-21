@@ -23,7 +23,6 @@ import { EnrollmentStudentsDto } from './dtos/res/enrollment-student.dto'
 
 @ApiTags('Enrollments')
 @Controller('enrollments')
-@JwtAuth(Role.TEACHER)
 export class EnrollmentsController {
   constructor(private readonly enrollmentsService: EnrollmentsService) {}
 
@@ -40,7 +39,6 @@ export class EnrollmentsController {
   })
   @ApiResponse({ status: 404, description: 'Módulo no encontrado' })
   @ApiResponse({ status: 409, description: 'Ya estás inscrito en este módulo' })
-  @JwtAuth(Role.STUDENT)
   selfEnroll(
     @Body() createEnrollmentDto: CreateEnrollmentDto,
     @GetUser() user: User,
@@ -63,6 +61,7 @@ export class EnrollmentsController {
     status: 404,
     description: 'Módulo o estudiantes no encontrados',
   })
+  @JwtAuth(Role.TEACHER)
   bulkEnrollStudents(
     @Body() bulkEnrollDto: BulkEnrollStudentsDto,
     @GetUser() user: User,
@@ -87,6 +86,7 @@ export class EnrollmentsController {
     description: 'Solo el profesor propietario puede ver las inscripciones',
   })
   @ApiResponse({ status: 404, description: 'Módulo no encontrado' })
+  @JwtAuth(Role.TEACHER)
   findModuleEnrollments(
     @Param('moduleId', ParseIntPipe) moduleId: number,
     @GetUser() user: User,
@@ -111,6 +111,7 @@ export class EnrollmentsController {
     description: 'Solo el profesor propietario puede actualizar',
   })
   @ApiResponse({ status: 404, description: 'Inscripción no encontrada' })
+  @JwtAuth(Role.TEACHER)
   update(
     @Param('id', ParseIntPipe) id: number,
     @Body() updateEnrollmentDto: UpdateEnrollmentDto,
@@ -132,7 +133,6 @@ export class EnrollmentsController {
   @ApiStandardResponse(EnrollmentDto)
   @ApiResponse({ status: 401, description: 'No autorizado' })
   @ApiResponse({ status: 404, description: 'No estás inscrito en este módulo' })
-  @JwtAuth(Role.STUDENT)
   selfUnenroll(
     @Param('moduleId', ParseIntPipe) moduleId: number,
     @GetUser() user: User,
@@ -157,6 +157,7 @@ export class EnrollmentsController {
   })
   @ApiResponse({ status: 404, description: 'Inscripción no encontrada' })
   @ApiStandardResponse(EnrollmentDto)
+  @JwtAuth(Role.TEACHER)
   remove(
     @Param('id', ParseIntPipe) id: number,
     @GetUser() user: User,

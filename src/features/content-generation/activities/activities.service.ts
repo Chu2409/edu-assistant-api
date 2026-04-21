@@ -1,9 +1,10 @@
 import {
-  BadRequestException,
+  HttpStatus,
   Injectable,
   Logger,
   NotFoundException,
 } from '@nestjs/common'
+import { BusinessException } from 'src/shared/exceptions/business.exception'
 import { DBService } from 'src/core/database/database.service'
 import { OpenaiService } from 'src/providers/ai/services/openai.service'
 import { generateActivityPrompt } from './prompts/generate-activity.prompt'
@@ -30,7 +31,7 @@ export class ActivitiesService {
   async generateActivity(
     data: GenerateActivityDto,
   ): Promise<AiGeneratedActivity> {
-    this.logger.log('Generating activity')
+    this.logger.log('Generando actividad')
 
     const lo = await this.dbService.learningObject.findUnique({
       where: { id: data.learningObjectId },
@@ -39,12 +40,15 @@ export class ActivitiesService {
 
     if (!lo) {
       throw new NotFoundException(
-        `Learning Object with id ${data.learningObjectId} not found`,
+        `Objeto de aprendizaje con ID ${data.learningObjectId} no encontrado`,
       )
     }
 
     if (lo.blocks.length === 0) {
-      throw new BadRequestException('Learning Object has no blocks')
+      throw new BusinessException(
+        'El objeto de aprendizaje no tiene bloques',
+        HttpStatus.BAD_REQUEST,
+      )
     }
 
     const blocks = lo.blocks
@@ -55,8 +59,9 @@ export class ActivitiesService {
       }))
 
     if (blocks.length === 0) {
-      throw new BadRequestException(
-        'No eligible TEXT/CODE blocks found for activity generation',
+      throw new BusinessException(
+        'No se encontraron bloques elegibles para la generación de actividades',
+        HttpStatus.BAD_REQUEST,
       )
     }
 

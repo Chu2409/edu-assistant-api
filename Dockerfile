@@ -1,45 +1,57 @@
-# ─────────────────────────────────────────
-# Stage 1: Install dependencies
-# ─────────────────────────────────────────
-FROM node:24-alpine AS deps
+FROM node:24-bookworm-slim AS deps
 
 WORKDIR /app
+RUN sed -i 's|deb.debian.org|cloudfront.debian.net|g' /etc/apt/sources.list.d/debian.sources
+RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
+    --mount=type=cache,target=/var/lib/apt,sharing=locked \
+    rm -f /etc/apt/apt.conf.d/docker-clean && \
+    apt-get update && \
+    apt-get install -y --no-install-recommends \
+        build-essential cmake python3 git
 
-COPY package*.json ./
+COPY package.json package-lock.json ./
 COPY prisma ./prisma/
+RUN --mount=type=cache,target=/root/.npm \
+    npm ci
 
-RUN npm ci --frozen-lockfile
+FROM deps AS whisper-build
+RUN cd node_modules/nodejs-whisper/cpp/whisper.cpp && \
+    cmake -B build -DGGML_NATIVE=OFF -DCMAKE_BUILD_TYPE=Release && \
+    cmake --build build --config Release -j "$(nproc)"
 
-# ─────────────────────────────────────────
-# Stage 2: Build
-# ─────────────────────────────────────────
-FROM node:24-alpine AS builder
+FROM whisper-build AS build
+COPY tsconfig*.json ./
+COPY nest-cli.json ./
+COPY prisma.config.ts ./
+COPY src ./src
+RUN npm run build && npm prune --omit=dev
 
+FROM node:24-bookworm-slim AS runner
 WORKDIR /app
-
-COPY --from=deps /app/node_modules ./node_modules
-COPY . .
-
-RUN npm run build
-
-# ─────────────────────────────────────────
-# Stage 3: Production image
-# ─────────────────────────────────────────
-FROM node:24-alpine AS runner
-
-WORKDIR /app
-
 ENV NODE_ENV=production
+ARG YT_DLP_VERSION=2026.03.17
+ARG YT_DLP_SHA256=3bda0968a01cde70d26720653003b28553c71be14dcb2e5f4c24e9921fdad745
+RUN sed -i 's|deb.debian.org|cloudfront.debian.net|g' /etc/apt/sources.list.d/debian.sources
+RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
+    --mount=type=cache,target=/var/lib/apt,sharing=locked \
+    rm -f /etc/apt/apt.conf.d/docker-clean && \
+    apt-get update && \
+    apt-get install -y --no-install-recommends \
+        ffmpeg libgomp1 dumb-init ca-certificates curl python3 && \
+    curl -fsSL "https://github.com/yt-dlp/yt-dlp/releases/download/${YT_DLP_VERSION}/yt-dlp" -o /usr/local/bin/yt-dlp && \
+    echo "${YT_DLP_SHA256}  /usr/local/bin/yt-dlp" | sha256sum -c - && \
+    chmod a+rx /usr/local/bin/yt-dlp && \
+    apt-get purge -y --auto-remove curl && \
+    groupadd -g 1001 nodejs && \
+    useradd -u 1001 -g nodejs -s /bin/false -M nodeuser
 
-# Install only production deps
-COPY package*.json ./
-COPY prisma ./prisma/
-COPY prisma.config.ts ./prisma.config.ts
+COPY --from=build --chown=nodeuser:nodejs /app/node_modules ./node_modules
+COPY --from=build --chown=nodeuser:nodejs /app/dist ./dist
+COPY --from=build --chown=nodeuser:nodejs /app/package.json ./
+COPY --from=build --chown=nodeuser:nodejs /app/prisma ./prisma
+COPY --from=build --chown=nodeuser:nodejs /app/prisma.config.ts ./prisma.config.ts
 
-RUN npm ci --frozen-lockfile --omit=dev
-
-# Copy compiled output
-COPY --from=builder /app/dist ./dist
-
-# The default command is overridden per-service in docker-compose
+USER nodeuser
+EXPOSE 3000
+ENTRYPOINT ["dumb-init", "--"]
 CMD ["node", "dist/src/main"]

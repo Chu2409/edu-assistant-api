@@ -19,12 +19,9 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger'
-import { JwtAuth } from 'src/features/auth/decorators/jwt-auth.decorator'
-import { Role } from 'src/core/database/generated/enums'
 
 @ApiTags('Learning Object Notes')
 @Controller('learning-objects/notes')
-@JwtAuth(Role.STUDENT)
 export class LoNotesController {
   constructor(private readonly pageNotesService: LoNotesService) {}
 

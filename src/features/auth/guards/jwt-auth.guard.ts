@@ -1,13 +1,15 @@
 import {
   Injectable,
   ExecutionContext,
+  HttpStatus,
   UnauthorizedException,
-  ForbiddenException,
 } from '@nestjs/common'
+import { BusinessException } from 'src/shared/exceptions/business.exception'
 import { Reflector } from '@nestjs/core'
 import { AuthGuard } from '@nestjs/passport'
 import { Observable } from 'rxjs'
 import { IS_PUBLIC_KEY } from '../decorators/public-route.decorator'
+import { IS_OPTIONAL_AUTH } from '../decorators/optional-auth.decorator'
 import { ROLES_KEY } from '../decorators/require-roles.decorator'
 import { Role } from 'src/core/database/generated/enums'
 import { User } from 'src/core/database/generated/client'
@@ -40,7 +42,15 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
     info: unknown,
     context: ExecutionContext,
   ) {
+    const isOptional = this.reflector.getAllAndOverride<boolean>(
+      IS_OPTIONAL_AUTH,
+      [context.getHandler(), context.getClass()],
+    )
+
     if (err || !user) {
+      if (isOptional) {
+        return null
+      }
       throw new UnauthorizedException('Error de autenticación')
     }
 
@@ -50,6 +60,10 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
   }
 
   private validateRoles(context: ExecutionContext, user: User): void {
+    if (user.role === Role.ADMIN) {
+      return
+    }
+
     const requiredRoles = this.reflector.getAllAndOverride<Role[] | undefined>(
       ROLES_KEY,
       [context.getHandler(), context.getClass()],
@@ -61,8 +75,9 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
 
     const hasRole = requiredRoles.some((role) => user.role === role)
     if (!hasRole) {
-      throw new ForbiddenException(
-        'No tienes permisos suficientes para acceder a este recurso',
+      throw new BusinessException(
+        'No tienes permisos para realizar esta acción',
+        HttpStatus.FORBIDDEN,
       )
     }
   }

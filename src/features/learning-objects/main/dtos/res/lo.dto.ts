@@ -1,5 +1,5 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger'
-import { LoTypeDto } from './lo-type.dto'
+import { LoTypeDto } from 'src/features/learning-objects/lo-types/dtos/res/lo-type.dto'
 
 export class LoDto {
   @ApiProperty({

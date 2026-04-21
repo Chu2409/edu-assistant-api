@@ -33,10 +33,13 @@ export class ChatRateLimitService implements OnModuleInit {
       }
 
       this.logger.log(
-        `Chat rate limits loaded: ${this.limits.hourlyLimit}/hour, ${this.limits.dailyLimit}/day`,
+        `Límites de chat cargados: ${this.limits.hourlyLimit}/hora, ${this.limits.dailyLimit}/día`,
       )
     } catch (e) {
-      this.logger.error('Error loading CHAT_RATE_LIMITS config from DB', e)
+      this.logger.error(
+        'Error al cargar configuración de límites de chat desde la base de datos',
+        e,
+      )
     }
   }
 

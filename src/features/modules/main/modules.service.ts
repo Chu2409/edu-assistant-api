@@ -1,9 +1,4 @@
-import {
-  Injectable,
-  NotFoundException,
-  ForbiddenException,
-  ConflictException,
-} from '@nestjs/common'
+import { Injectable, HttpStatus, NotFoundException } from '@nestjs/common'
 import { DBService } from 'src/core/database/database.service'
 import { CreateModuleDto } from './dtos/req/create-module.dto'
 import { UpdateModuleDto } from './dtos/req/update-module.dto'
@@ -26,6 +21,8 @@ import {
 import { ApiPaginatedRes } from 'src/shared/dtos/res/api-response.dto'
 import { ModulesMapper } from './mappers/modules.mapper'
 import { convertToFilterWhere } from 'src/shared/utils/converters'
+import { BusinessException } from 'src/shared/exceptions/business.exception'
+import { AuthorizationUtils } from 'src/shared/utils/authorization.util'
 
 @Injectable()
 export class ModulesService {
@@ -33,7 +30,6 @@ export class ModulesService {
 
   private async validateUniqueTitle(
     title: string,
-    teacherId: number,
     excludeModuleId?: number,
   ): Promise<void> {
     const existingModule = await this.dbService.module.findFirst({
@@ -42,14 +38,14 @@ export class ModulesService {
           equals: title,
           mode: 'insensitive',
         },
-        teacherId,
         ...(excludeModuleId && { id: { not: excludeModuleId } }),
       },
     })
 
     if (existingModule) {
-      throw new ConflictException(
-        `Ya tienes un módulo con el título "${title}"`,
+      throw new BusinessException(
+        `Ya existe un módulo con el título "${title}"`,
+        HttpStatus.CONFLICT,
       )
     }
   }
@@ -58,7 +54,7 @@ export class ModulesService {
     createModuleDto: CreateModuleDto,
     user: User,
   ): Promise<ModuleDto> {
-    await this.validateUniqueTitle(createModuleDto.title, user.id)
+    await this.validateUniqueTitle(createModuleDto.title)
 
     const module = await this.dbService.module.create({
       data: {
@@ -97,15 +93,17 @@ export class ModulesService {
     const where: Prisma.ModuleWhereInput = {}
 
     if (user.role === Role.TEACHER) {
-      where.teacherId = user.id
-      where.isPublic = params.isPublic
+      where.OR = [
+        { teacherId: user.id },
+        { enrollments: { some: { userId: user.id, isActive: true } } },
+      ]
     } else if (user.role === Role.STUDENT) {
       where.enrollments = {
         some: { userId: user.id, isActive: true },
       }
       where.isActive = true
-      where.teacherId = { in: convertToFilterWhere(params.teacherId) }
     }
+    where.teacherId = { in: convertToFilterWhere(params.teacherId) }
 
     if (params.search) {
       where.AND = {
@@ -203,21 +201,7 @@ export class ModulesService {
       throw new NotFoundException(`Módulo con ID ${id} no encontrado`)
     }
 
-    if (!module.isActive && module.teacherId !== user.id) {
-      throw new ForbiddenException(
-        'No tienes permisos para acceder a este módulo',
-      )
-    }
-
-    if (
-      module.teacherId !== user.id &&
-      !module.isPublic &&
-      !module.enrollments.some((enrollment) => enrollment.userId === user.id)
-    ) {
-      throw new ForbiddenException(
-        'No tienes permisos para acceder a este módulo',
-      )
-    }
+    AuthorizationUtils.assertModuleReadAccess(user, module)
 
     return ModulesMapper.mapToDto(module)
   }
@@ -238,14 +222,10 @@ export class ModulesService {
       throw new NotFoundException(`Módulo con ID ${id} no encontrado`)
     }
 
-    if (existingModule.teacherId !== user.id) {
-      throw new ForbiddenException(
-        'Solo el profesor propietario puede actualizar el módulo',
-      )
-    }
+    AuthorizationUtils.assertModuleWriteAccess(user, existingModule)
 
     if (updateModuleDto.title) {
-      await this.validateUniqueTitle(updateModuleDto.title, user.id, id)
+      await this.validateUniqueTitle(updateModuleDto.title, id)
     }
 
     const { aiConfiguration, ...moduleData } = updateModuleDto
@@ -333,11 +313,7 @@ export class ModulesService {
       throw new NotFoundException(`Módulo con ID ${id} no encontrado`)
     }
 
-    if (existingModule.teacherId !== user.id) {
-      throw new ForbiddenException(
-        'Solo el profesor propietario puede cambiar el estado del módulo',
-      )
-    }
+    AuthorizationUtils.assertModuleWriteAccess(user, existingModule)
 
     const module = await this.dbService.module.update({
       where: { id },

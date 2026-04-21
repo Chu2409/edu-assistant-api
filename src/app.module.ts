@@ -13,6 +13,7 @@ import { InteractionsModule } from './features/interactions/interactions.module'
 import { ChatModule } from './features/chat/chat.module'
 import { ContentGenerationModule } from './features/content-generation/content-generation.module'
 import { TeacherFeedbackModule } from './features/teacher-feedback/teacher-feedback.module'
+import { VideosModule } from './features/videos/videos.module'
 
 @Module({
   imports: [
@@ -26,6 +27,8 @@ import { TeacherFeedbackModule } from './features/teacher-feedback/teacher-feedb
     ChatModule,
     ContentGenerationModule,
     TeacherFeedbackModule,
+    VideosModule,
+    // EmailModule,
   ],
   controllers: [HealthController],
   providers: [
