@@ -34,7 +34,7 @@ export class LoMapper {
     lo: LearningObject & {
       type: LearningObjectType
       notes?: Note[]
-      studentQuestions: (StudentQuestion & { user: User })[]
+      studentQuestions?: (StudentQuestion & { user: User })[]
       loFeedbacks?: (LearningObjectFeedback & { user: User })[]
       blocks: Block[]
       sessions?: Session[]
@@ -52,17 +52,17 @@ export class LoMapper {
       isPublished: lo.isPublished,
       createdAt: lo.createdAt,
       updatedAt: lo.updatedAt,
-      studentQuestions: lo.studentQuestions.map((studentQuestion) =>
-        StudentQuestionsMapper.mapToDto(studentQuestion),
-      ),
+      studentQuestions: lo.studentQuestions
+        ? lo.studentQuestions.map((studentQuestion) =>
+            StudentQuestionsMapper.mapToDto(studentQuestion),
+          )
+        : [],
       loFeedbacks: lo.loFeedbacks
         ? lo.loFeedbacks.map((loFeedback) =>
             LoFeedbacksMapper.mapToDto(loFeedback),
           )
-        : null,
-      notes: lo.notes
-        ? lo.notes.map((note) => NotesMapper.mapToDto(note))
-        : null,
+        : [],
+      notes: lo.notes ? lo.notes.map((note) => NotesMapper.mapToDto(note)) : [],
       chatSessionId: lo.sessions?.[0]?.id ?? null,
       blocks: lo.blocks.map((block) => BlocksMapper.mapToDto(block)),
       previousLoId: previousLoId ?? null,
