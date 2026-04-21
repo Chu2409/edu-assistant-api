@@ -6,6 +6,7 @@ import { QUEUE_NAMES } from 'src/shared/constants/queues'
 import {
   IngestionStatus,
   Prisma,
+  Role,
   SourceKind,
   type User,
 } from 'src/core/database/generated/client'
@@ -96,7 +97,7 @@ export class VideosService {
       where.title = { contains: params.search, mode: 'insensitive' }
     }
 
-    if (module.teacherId !== user.id) {
+    if (user.role !== Role.ADMIN && module.teacherId !== user.id) {
       where.isPublished = true
     }
 

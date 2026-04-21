@@ -9,6 +9,7 @@ import { Reflector } from '@nestjs/core'
 import { AuthGuard } from '@nestjs/passport'
 import { Observable } from 'rxjs'
 import { IS_PUBLIC_KEY } from '../decorators/public-route.decorator'
+import { IS_OPTIONAL_AUTH } from '../decorators/optional-auth.decorator'
 import { ROLES_KEY } from '../decorators/require-roles.decorator'
 import { Role } from 'src/core/database/generated/enums'
 import { User } from 'src/core/database/generated/client'
@@ -41,7 +42,15 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
     info: unknown,
     context: ExecutionContext,
   ) {
+    const isOptional = this.reflector.getAllAndOverride<boolean>(
+      IS_OPTIONAL_AUTH,
+      [context.getHandler(), context.getClass()],
+    )
+
     if (err || !user) {
+      if (isOptional) {
+        return null
+      }
       throw new UnauthorizedException('Error de autenticación')
     }
 

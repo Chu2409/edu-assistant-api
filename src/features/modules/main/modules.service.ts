@@ -93,8 +93,10 @@ export class ModulesService {
     const where: Prisma.ModuleWhereInput = {}
 
     if (user.role === Role.TEACHER) {
-      // where.teacherId = user.id
-      where.isPublic = params.isPublic
+      where.OR = [
+        { teacherId: user.id },
+        { enrollments: { some: { userId: user.id, isActive: true } } },
+      ]
     } else if (user.role === Role.STUDENT) {
       where.enrollments = {
         some: { userId: user.id, isActive: true },
