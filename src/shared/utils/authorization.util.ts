@@ -54,13 +54,10 @@ export const AuthorizationUtils = {
     // Profesor propietario tiene acceso total al LO sin importar si está publicado o no
     if (module.teacherId === user.id) return
 
-    // Todos los demás usuarios requieren acceso de lectura al módulo padre...
-    this.assertModuleReadAccess(user, module)
-
     // ... y además que el LO esté publicado
-    if (!lo.isPublished) {
+    if (!lo.isPublished || !module.isPublic) {
       throw new BusinessException(
-        'Este objeto de aprendizaje no está publicado aún',
+        'Este contenido no está disponible',
         HttpStatus.FORBIDDEN,
       )
     }
