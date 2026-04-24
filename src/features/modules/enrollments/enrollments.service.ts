@@ -1,6 +1,12 @@
-import { HttpStatus, Injectable, NotFoundException } from '@nestjs/common'
+import {
+  HttpStatus,
+  Injectable,
+  Logger,
+  NotFoundException,
+} from '@nestjs/common'
 import { BusinessException } from 'src/shared/exceptions/business.exception'
 import { DBService } from 'src/core/database/database.service'
+import { EmailService } from 'src/providers/email/email.service'
 import { CreateEnrollmentDto } from './dtos/req/create-enrollment.dto'
 import { UpdateEnrollmentDto } from './dtos/req/update-enrollment.dto'
 import { BulkEnrollStudentsDto } from './dtos/req/bulk-enroll-students.dto'
@@ -11,15 +17,20 @@ import { EnrollmentStudentsDto } from './dtos/res/enrollment-student.dto'
 
 @Injectable()
 export class EnrollmentsService {
-  constructor(private readonly dbService: DBService) {}
+  private readonly logger = new Logger(EnrollmentsService.name)
+
+  constructor(
+    private readonly dbService: DBService,
+    private readonly emailService: EmailService,
+  ) {}
 
   async selfEnroll(
     createEnrollmentDto: CreateEnrollmentDto,
     user: User,
   ): Promise<EnrollmentDto> {
-    // Verificar que el módulo existe
     const module = await this.dbService.module.findUnique({
       where: { id: createEnrollmentDto.moduleId },
+      include: { teacher: true },
     })
 
     if (!module) {
@@ -28,7 +39,6 @@ export class EnrollmentsService {
       )
     }
 
-    // Verificar que el módulo permite auto-inscripción
     if (!module.allowSelfEnroll) {
       throw new BusinessException(
         'Este módulo no permite auto-inscripción',
@@ -36,7 +46,6 @@ export class EnrollmentsService {
       )
     }
 
-    // Verificar que el módulo está activo
     if (!module.isActive) {
       throw new BusinessException(
         'El módulo no está activo',
@@ -44,7 +53,6 @@ export class EnrollmentsService {
       )
     }
 
-    // Verificar que no esté ya inscrito
     const existingEnrollment = await this.dbService.enrollment.findUnique({
       where: {
         userId_moduleId: {
@@ -54,6 +62,7 @@ export class EnrollmentsService {
       },
     })
 
+    let enrollment
     if (existingEnrollment) {
       if (existingEnrollment.isActive) {
         throw new BusinessException(
@@ -61,8 +70,7 @@ export class EnrollmentsService {
           HttpStatus.CONFLICT,
         )
       }
-      // Si existe pero está inactiva, reactivarla
-      const enrollment = await this.dbService.enrollment.update({
+      enrollment = await this.dbService.enrollment.update({
         where: { id: existingEnrollment.id },
         data: {
           isActive: true,
@@ -70,18 +78,14 @@ export class EnrollmentsService {
           completedAt: null,
         },
       })
-      return EnrollmentsMapper.mapToDto(enrollment)
+    } else {
+      enrollment = await this.dbService.enrollment.create({
+        data: {
+          userId: user.id,
+          moduleId: createEnrollmentDto.moduleId,
+        },
+      })
     }
-
-    // Crear nueva inscripción
-    const enrollment = await this.dbService.enrollment.create({
-      data: {
-        userId: user.id,
-        moduleId: createEnrollmentDto.moduleId,
-      },
-    })
-
-    // TODO: Enviar notificación al profesor
 
     return EnrollmentsMapper.mapToDto(enrollment)
   }
@@ -90,7 +94,6 @@ export class EnrollmentsService {
     bulkEnrollDto: BulkEnrollStudentsDto,
     teacher: User,
   ): Promise<EnrollmentDto[]> {
-    // Verificar que el módulo existe y pertenece al profesor
     const module = await this.dbService.module.findUnique({
       where: { id: bulkEnrollDto.moduleId },
     })
@@ -115,7 +118,6 @@ export class EnrollmentsService {
       )
     }
 
-    // Verificar que los estudiantes existen
     const students = await this.dbService.user.findMany({
       where: {
         id: {
@@ -154,7 +156,6 @@ export class EnrollmentsService {
       })
     }
 
-    // Reactivar inscripciones inactivas si existen
     const inactiveEnrollments = existingEnrollments.filter((e) => !e.isActive)
     if (inactiveEnrollments.length > 0) {
       await this.dbService.enrollment.updateMany({
@@ -170,8 +171,6 @@ export class EnrollmentsService {
         },
       })
     }
-
-    // TODO: Enviar notificación a los estudiantes inscritos
 
     const allEnrollments = await this.dbService.enrollment.findMany({
       where: {
@@ -324,5 +323,91 @@ export class EnrollmentsService {
     })
 
     return EnrollmentsMapper.mapToDto(enrollment)
+  }
+
+  async sendDailySummaries(): Promise<void> {
+    const today = new Date()
+    today.setHours(0, 0, 0, 0)
+
+    const tomorrow = new Date(today)
+    tomorrow.setDate(tomorrow.getDate() + 1)
+
+    const newEnrollments = await this.dbService.enrollment.findMany({
+      where: {
+        enrolledAt: {
+          gte: today,
+          lt: tomorrow,
+        },
+        isActive: true,
+      },
+      include: {
+        user: {
+          select: { name: true, email: true },
+        },
+        module: {
+          include: {
+            teacher: {
+              select: { email: true },
+            },
+          },
+        },
+      },
+    })
+
+    if (newEnrollments.length === 0) {
+      return
+    }
+
+    const groupedByModule = newEnrollments.reduce(
+      (acc, enrollment) => {
+        const moduleId = enrollment.moduleId
+        if (!acc[moduleId]) {
+          acc[moduleId] = {
+            moduleTitle: enrollment.module.title,
+            teacherEmail: enrollment.module.teacher.email,
+            students: [],
+          }
+        }
+
+        acc[moduleId].students.push({
+          name: enrollment.user.name || enrollment.user.email,
+          date: enrollment.enrolledAt.toLocaleTimeString('es-AR', {
+            hour: '2-digit',
+            minute: '2-digit',
+          }),
+        })
+
+        return acc
+      },
+      {} as Record<
+        number,
+        {
+          moduleTitle: string
+          teacherEmail: string
+          students: { name: string; date: string }[]
+        }
+      >,
+    )
+
+    for (const data of Object.values(groupedByModule)) {
+      if (data.teacherEmail && data.students.length > 0) {
+        try {
+          await this.emailService.sendWithTemplate(
+            data.teacherEmail,
+            `Resumen diario: ${data.students.length} nuevas inscripciones en ${data.moduleTitle}`,
+            'teacher-daily-enrollments',
+            {
+              moduleTitle: data.moduleTitle,
+              students: data.students,
+              dashboardUrl: `${process.env.FRONTEND_URL || 'https://tu-app.com'}`,
+            },
+          )
+        } catch (error) {
+          this.logger.error(
+            `Error enviando resumen a ${data.teacherEmail}: ${error}`,
+          )
+        }
+      }
+    }
   }
 }

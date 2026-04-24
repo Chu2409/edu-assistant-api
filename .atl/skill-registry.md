@@ -6,7 +6,7 @@
 - **Framework**: NestJS (follow module-controller-service pattern)
 - **Database**: Prisma ORM (schema-first)
 - **Linting**: ESLint, Prettier
-- **Testing**: Jest (inferred, though not in `package.json` scripts, common for NestJS projects)
+- **Testing**: Not configured (no test runner found in package.json)
 - **Concurrency**: BullMQ
 - **AI**: OpenAI integration
 - **Naming Convention**: 

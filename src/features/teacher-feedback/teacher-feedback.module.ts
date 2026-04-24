@@ -2,15 +2,16 @@ import { Module, OnModuleInit, Logger } from '@nestjs/common'
 import { BullModule, InjectQueue } from '@nestjs/bullmq'
 import { Queue } from 'bullmq'
 import { AIModule } from 'src/providers/ai/ai.module'
+import { EmailModule } from 'src/providers/email/email.module'
 import { QUEUE_NAMES } from 'src/shared/constants/queues'
 import { TeacherFeedbackController } from './teacher-feedback.controller'
 import { TeacherFeedbackService } from './teacher-feedback.service'
 import { FeedbackDataCollectorService } from './services/feedback-data-collector.service'
-import { FEEDBACK_CRON_INTERVAL_MS } from './constants/thresholds'
 
 @Module({
   imports: [
     AIModule,
+    EmailModule,
     BullModule.registerQueue({
       name: QUEUE_NAMES.TEACHER_FEEDBACK.NAME,
     }),
@@ -28,17 +29,16 @@ export class TeacherFeedbackModule implements OnModuleInit {
   ) {}
 
   async onModuleInit() {
-    // Registrar el job repeatable (cron cada 24 horas)
     await this.feedbackQueue.upsertJobScheduler(
       'teacher-feedback-scheduler',
-      { every: FEEDBACK_CRON_INTERVAL_MS },
+      { pattern: '0 9 * * 6' },
       {
         name: QUEUE_NAMES.TEACHER_FEEDBACK.JOBS.GENERATE_ALL,
       },
     )
 
     this.logger.log(
-      `Job de feedback pedagógico programado cada ${FEEDBACK_CRON_INTERVAL_MS / 3600000}h`,
+      'Job de feedback pedagógico programado para los sábados a las 9 AM',
     )
   }
 }
