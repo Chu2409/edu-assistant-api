@@ -9,8 +9,4 @@ export class CustomConfigService {
   get env(): IConfig {
     return this.configService.get<IConfig>('APP')!
   }
-
-  get enableEmailNotifications(): boolean {
-    return this.env.ENABLE_EMAIL_NOTIFICATIONS
-  }
 }

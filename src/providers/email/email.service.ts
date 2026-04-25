@@ -54,7 +54,7 @@ export class EmailService {
     template: string,
     data: any,
   ): Promise<void> {
-    if (!this.configService.enableEmailNotifications) {
+    if (!this.configService.env.ENABLE_EMAIL_NOTIFICATIONS) {
       this.logger.log(
         `Notificación de correo omitida para ${to} (ENABLE_EMAIL_NOTIFICATIONS=false)`,
       )
