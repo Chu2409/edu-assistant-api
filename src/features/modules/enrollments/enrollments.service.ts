@@ -14,6 +14,7 @@ import { EnrollmentDto } from './dtos/res/enrollment.dto'
 import type { User } from 'src/core/database/generated/client'
 import { EnrollmentsMapper } from './mappers/enrollments.mapper'
 import { EnrollmentStudentsDto } from './dtos/res/enrollment-student.dto'
+import { EMAIL_TEMPLATES } from 'src/shared/constants/email-templates'
 
 @Injectable()
 export class EnrollmentsService {
@@ -395,7 +396,7 @@ export class EnrollmentsService {
           await this.emailService.sendWithTemplate(
             data.teacherEmail,
             `Resumen diario: ${data.students.length} nuevas inscripciones en ${data.moduleTitle}`,
-            'teacher-daily-enrollments',
+            EMAIL_TEMPLATES.TEACHER_DAILY_ENROLLMENTS,
             {
               moduleTitle: data.moduleTitle,
               students: data.students,

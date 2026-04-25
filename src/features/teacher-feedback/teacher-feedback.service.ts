@@ -22,6 +22,8 @@ import type { AiFeedbackContent } from './interfaces/feedback-data.interface'
 import type { ApiPaginatedRes } from 'src/shared/dtos/res/api-response.dto'
 import { TeacherFeedbackScope } from 'src/core/database/generated/enums'
 
+import { EMAIL_TEMPLATES } from 'src/shared/constants/email-templates'
+
 @Injectable()
 export class TeacherFeedbackService {
   private readonly logger = new Logger(TeacherFeedbackService.name)
@@ -158,7 +160,7 @@ export class TeacherFeedbackService {
             .sendWithTemplate(
               mod.teacher.email,
               `Nuevo Reporte de Feedback: ${mod.title}`,
-              'teacher-new-feedback',
+              EMAIL_TEMPLATES.TEACHER_NEW_FEEDBACK,
               {
                 moduleTitle: mod.title,
                 summary: feedbackContent.summary,

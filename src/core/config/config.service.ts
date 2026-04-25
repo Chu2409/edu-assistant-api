@@ -11,6 +11,6 @@ export class CustomConfigService {
   }
 
   get enableEmailNotifications(): boolean {
-    return String(this.env.ENABLE_EMAIL_NOTIFICATIONS) === 'true'
+    return this.env.ENABLE_EMAIL_NOTIFICATIONS
   }
 }
