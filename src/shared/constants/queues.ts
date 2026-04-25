@@ -18,6 +18,12 @@ export const QUEUE_NAMES = {
       GENERATE_MODULE: 'generate-module-feedback',
     },
   },
+  ENROLLMENTS: {
+    NAME: 'enrollments',
+    JOBS: {
+      DAILY_SUMMARY: 'daily-enrollment-summary',
+    },
+  },
   VIDEOS: {
     NAME: 'videos',
     JOBS: {

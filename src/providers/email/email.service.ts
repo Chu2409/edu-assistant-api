@@ -1,18 +1,75 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Injectable, Logger } from '@nestjs/common'
 import { HttpService } from '@nestjs/axios'
 import { CustomConfigService } from '../../core/config/config.service'
 import { lastValueFrom } from 'rxjs'
 import { SendEmailOptions } from './interfaces/send-email-options'
+import * as ejs from 'ejs'
+import * as path from 'path'
 
 @Injectable()
 export class EmailService {
   private readonly logger = new Logger(EmailService.name)
+  private readonly templatesPath = path.join(
+    __dirname,
+    '../../../shared/templates/email',
+  )
 
   constructor(
     private readonly configService: CustomConfigService,
     private readonly httpService: HttpService,
   ) {}
+
+  private async renderTemplate(
+    templateName: string,
+    data: any,
+  ): Promise<string> {
+    const layoutPath = path.join(this.templatesPath, 'layout.ejs')
+    const templatePath = path.join(this.templatesPath, `${templateName}.ejs`)
+
+    const templateData = {
+      ...data,
+      year: data.year || new Date().getFullYear(),
+      subject: data.subject || 'Notificación de EduAssistant',
+      baseUrl:
+        this.configService.env.FRONTEND_URL?.replace(/\/$/, '') ||
+        'http://localhost:4200',
+    }
+
+    try {
+      const content = await ejs.renderFile(templatePath, templateData)
+
+      return await ejs.renderFile(layoutPath, {
+        ...templateData,
+        content,
+      })
+    } catch (error: any) {
+      this.logger.error(`Error renderizando plantilla ${templateName}`, error)
+      throw new Error(`No se pudo renderizar el correo: ${error.message}`)
+    }
+  }
+
+  async sendWithTemplate(
+    to: string,
+    subject: string,
+    template: string,
+    data: any,
+  ): Promise<void> {
+    if (!this.configService.env.ENABLE_EMAIL_NOTIFICATIONS) {
+      this.logger.log(
+        `Notificación de correo omitida para ${to} (ENABLE_EMAIL_NOTIFICATIONS=false)`,
+      )
+      return
+    }
+
+    const htmlBody = await this.renderTemplate(template, { ...data, subject })
+
+    await this.sendEmail({
+      to,
+      subject,
+      body: htmlBody,
+      isHtml: true,
+    })
+  }
 
   private async getAccessToken(): Promise<string> {
     const tenantId = this.configService.env.MICROSOFT_TENANT
