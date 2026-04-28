@@ -8,6 +8,10 @@
       {
         "include": "features/videos/ai/config/*.yaml",
         "watchAssets": true
+      },
+      {
+        "include": "shared/templates/email/**/*",
+        "watchAssets": true
       }
     ]
   }

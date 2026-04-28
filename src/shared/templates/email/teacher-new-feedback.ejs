@@ -1,0 +1,45 @@
+<h2 style="margin-top: 0; color: #233a83;">Reporte de Feedback IA: <%= moduleTitle %></h2>
+<p>Hola,</p>
+<p>El procesamiento de feedback pedagógico generado por IA para tu módulo ya ha finalizado. Aquí tienes un resumen de los puntos clave:</p>
+
+<div style="background-color: #f8f9fa; padding: 20px; border-radius: 4px; border-left: 4px solid #233a83; margin: 25px 0;">
+    <h3 style="margin: 0 0 10px 0; color: #233a83; font-size: 18px;">Resumen Ejecutivo</h3>
+    <p style="margin: 0; line-height: 1.6;"><%= summary %></p>
+</div>
+
+<h3 style="color: #28a745; font-size: 18px; margin-bottom: 10px;">✅ Puntos Fuertes</h3>
+<ul style="padding-left: 20px; margin-bottom: 25px;">
+    <% strengths.forEach(function(item) { %>
+    <li style="margin-bottom: 10px;">
+        <strong><%= item.topic %>:</strong> <%= item.detail %>
+        <span style="font-size: 11px; color: #666; font-weight: normal;">(Prioridad: <%= item.priority %>)</span>
+    </li>
+    <% }); %>
+</ul>
+
+<h3 style="color: #fd7e14; font-size: 18px; margin-bottom: 10px;">⚠️ Oportunidades de Mejora</h3>
+<ul style="padding-left: 20px; margin-bottom: 25px;">
+    <% improvements.forEach(function(item) { %>
+    <li style="margin-bottom: 10px;">
+        <strong><%= item.topic %>:</strong> <%= item.detail %>
+        <span style="font-size: 11px; color: #666; font-weight: normal;">(Prioridad: <%= item.priority %>)</span>
+    </li>
+    <% }); %>
+</ul>
+
+<h3 style="color: #233a83; font-size: 18px; margin-bottom: 10px;">💡 Recomendaciones</h3>
+<ul style="padding-left: 20px; margin-bottom: 25px;">
+    <% recommendations.forEach(function(item) { %>
+    <li style="margin-bottom: 10px;">
+        <strong><%= item.topic %>:</strong> <%= item.detail %>
+        <span style="font-size: 11px; color: #666; font-weight: normal;">(Prioridad: <%= item.priority %>)</span>
+    </li>
+    <% }); %>
+</ul>
+
+<p style="text-align: center; margin: 30px 0;">
+    <a href="<%= baseUrl %><%= reportUrl %>" style="background-color: #233a83; color: #ffffff; padding: 12px 24px; text-decoration: none; border-radius: 4px; font-weight: 600; display: inline-block;">Ver Detalle Completo en la App</a>
+</p>
+
+<p>Este reporte se genera automáticamente basándose en las interacciones recientes de tus alumnos con los objetos de aprendizaje.</p>
+<p>Saludos,<br>El equipo de EduAssistant</p>
