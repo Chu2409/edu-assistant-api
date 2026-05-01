@@ -235,7 +235,7 @@ export type PodcastGroupByOutputType = {
   _max: PodcastMaxAggregateOutputType | null
 }
 
-type GetPodcastGroupByPayload<T extends PodcastGroupByArgs> = Prisma.PrismaPromise<
+export type GetPodcastGroupByPayload<T extends PodcastGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<PodcastGroupByOutputType, T['by']> &
       {

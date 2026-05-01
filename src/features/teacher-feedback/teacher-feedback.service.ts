@@ -98,6 +98,9 @@ export class TeacherFeedbackService {
           orderBy: { orderIndex: 'asc' },
         },
         aiConfiguration: true,
+        teacher: {
+          select: { email: true },
+        },
       },
     })
 
@@ -121,11 +124,39 @@ export class TeacherFeedbackService {
     }
 
     try {
-      return await this.generateModuleFeedback(
+      const feedbackContent = await this.generateModuleFeedback(
         moduleId,
         language,
         loFeedbackSummaries,
       )
+
+      // Send email if feedback was generated
+      if (feedbackContent && mod.teacher.email) {
+        this.logger.log(`Enviando email de feedback a ${mod.teacher.email}...`)
+        await this.emailService.sendWithTemplate(
+          mod.teacher.email,
+          `Feedback AI - ${mod.title}`,
+          EMAIL_TEMPLATES.TEACHER_NEW_FEEDBACK,
+          {
+            moduleTitle: mod.title,
+            summary: feedbackContent.summary,
+            strengths: feedbackContent.strengths,
+            improvements: feedbackContent.improvements,
+            recommendations: feedbackContent.recommendations,
+            reportUrl: `/modules/${mod.id}/wiki`,
+            date: new Date().toLocaleDateString('es-AR', {
+              day: '2-digit',
+              month: 'long',
+              year: 'numeric',
+            }),
+          },
+        )
+        this.logger.log(`Email enviado exitosamente a ${mod.teacher.email}`)
+      } else if (!feedbackContent) {
+        this.logger.log(`No se generó feedback para módulo ${mod.id}, no se envía email`)
+      }
+
+      return feedbackContent
     } catch (error) {
       this.logger.error(
         `Error generando feedback del módulo ${moduleId}: ${error}`,
@@ -153,34 +184,7 @@ export class TeacherFeedbackService {
     for (const mod of modules) {
       try {
         this.logger.log(`Procesando módulo: ${mod.title} (ID: ${mod.id})`)
-        const feedbackContent = await this.generateForModule(mod.id)
-
-        if (feedbackContent && mod.teacher.email) {
-          this.emailService
-            .sendWithTemplate(
-              mod.teacher.email,
-              `Nuevo Reporte de Feedback: ${mod.title}`,
-              EMAIL_TEMPLATES.TEACHER_NEW_FEEDBACK,
-              {
-                moduleTitle: mod.title,
-                summary: feedbackContent.summary,
-                strengths: feedbackContent.strengths,
-                improvements: feedbackContent.improvements,
-                recommendations: feedbackContent.recommendations,
-                reportUrl: `${process.env.FRONTEND_URL || 'https://tu-app.com'}/modules/${mod.id}/feedback`,
-                date: new Date().toLocaleDateString('es-AR', {
-                  day: '2-digit',
-                  month: 'long',
-                  year: 'numeric',
-                }),
-              },
-            )
-            .catch((err) => {
-              this.logger.error(
-                `Error enviando notificación de feedback para módulo ${mod.id}: ${err}`,
-              )
-            })
-        }
+        await this.generateForModule(mod.id)
       } catch (error) {
         this.logger.error(
           `Error procesando módulo ${mod.id} (${mod.title}): ${error}`,

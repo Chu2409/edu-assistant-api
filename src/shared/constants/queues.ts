@@ -31,6 +31,25 @@ export const QUEUE_NAMES = {
       RETRY: 'retry-video-content',
     },
   },
+  FEEDBACK_DIGEST: {
+    NAME: 'feedback-digest',
+    JOBS: {
+      WEEKLY_DIGEST: 'weekly-feedback-digest',
+    },
+  },
+  STUDENT_FEEDBACK_DIGEST: {
+    NAME: 'student-feedback-digest',
+    JOBS: {
+      WEEKLY_DIGEST: 'student-weekly-feedback-digest',
+    },
+  },
+  STUDENT_AI_FEEDBACK: {
+    NAME: 'student-ai-feedback',
+    JOBS: {
+      GENERATE_ALL: 'generate-all-student-feedbacks',
+      GENERATE_STUDENT: 'generate-student-feedback',
+    },
+  },
 } as const satisfies Record<
   string,
   { NAME: string; JOBS: Record<string, string> }
