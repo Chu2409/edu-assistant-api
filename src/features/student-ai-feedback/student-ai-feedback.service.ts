@@ -69,9 +69,7 @@ export class StudentAIFeedbackService {
     })
 
     if (!feedback) {
-      throw new NotFoundException(
-        `Feedback with ID ${feedbackId} not found`,
-      )
+      throw new NotFoundException(`Feedback with ID ${feedbackId} not found`)
     }
 
     return StudentFeedbackMapper.toDto(feedback)
@@ -99,7 +97,9 @@ export class StudentAIFeedbackService {
     })
 
     if (!enrollment) {
-      this.logger.warn(`Student ${studentId} not enrolled in module ${moduleId}, skipping`)
+      this.logger.warn(
+        `Student ${studentId} not enrolled in module ${moduleId}, skipping`,
+      )
       return null
     }
 
@@ -133,7 +133,8 @@ export class StudentAIFeedbackService {
     })
 
     try {
-      const response = await this.openaiService.getResponse<StudentAiFeedbackContent>(prompt)
+      const response =
+        await this.openaiService.getResponse<StudentAiFeedbackContent>(prompt)
       const aiContent = response.content
 
       // Save to database
@@ -157,19 +158,28 @@ export class StudentAIFeedbackService {
           moduleTitle: module.title,
           moduleId,
           aiContent,
-          baseUrl: this.configService.env.FRONTEND_URL || 'http://localhost:4200',
+          baseUrl:
+            this.configService.env.FRONTEND_URL || 'http://localhost:4200',
         },
       )
 
-      this.logger.log(`Student AI feedback generated and email sent to ${student.email}`)
+      this.logger.log(
+        `Student AI feedback generated and email sent to ${student.email}`,
+      )
       return aiContent
     } catch (error) {
-      this.logger.error(`Error generating feedback for student ${studentId}: ${error}`)
+      this.logger.error(
+        `Error generating feedback for student ${studentId}: ${error}`,
+      )
       return null
     }
   }
 
-  async generateForAllStudents(): Promise<{ processed: number; sent: number; skipped: number }> {
+  async generateForAllStudents(): Promise<{
+    processed: number
+    sent: number
+    skipped: number
+  }> {
     const enrollments = await this.dbService.enrollment.findMany({
       where: { isActive: true },
       include: {
@@ -178,7 +188,9 @@ export class StudentAIFeedbackService {
       },
     })
 
-    this.logger.log(`Starting AI feedback generation for ${enrollments.length} enrollments`)
+    this.logger.log(
+      `Starting AI feedback generation for ${enrollments.length} enrollments`,
+    )
 
     let processed = 0
     let sent = 0
@@ -199,12 +211,16 @@ export class StudentAIFeedbackService {
           skipped++
         }
       } catch (error) {
-        this.logger.error(`Error processing student ${enrollment.user.id}: ${error}`)
+        this.logger.error(
+          `Error processing student ${enrollment.user.id}: ${error}`,
+        )
         skipped++
       }
     }
 
-    this.logger.log(`Student AI feedback completed. Processed: ${processed}, Sent: ${sent}, Skipped: ${skipped}`)
+    this.logger.log(
+      `Student AI feedback completed. Processed: ${processed}, Sent: ${sent}, Skipped: ${skipped}`,
+    )
 
     return { processed, sent, skipped }
   }

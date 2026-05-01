@@ -1,6 +1,11 @@
 import { Injectable, Logger } from '@nestjs/common'
 import { DBService } from 'src/core/database/database.service'
-import type { StudentInteractionData, StudentActivityResult, FailedConcept, RecommendedLo } from '../interfaces/student-feedback-data.interface'
+import type {
+  StudentInteractionData,
+  StudentActivityResult,
+  FailedConcept,
+  RecommendedLo,
+} from '../interfaces/student-feedback-data.interface'
 
 @Injectable()
 export class StudentFeedbackDataCollectorService {
@@ -89,10 +94,13 @@ export class StudentFeedbackDataCollectorService {
 
     // Calculate correct rates
     for (const stats of activityMap.values()) {
-      stats.correctRate = stats.totalAttempts > 0 ? stats.correct / stats.totalAttempts : 0
+      stats.correctRate =
+        stats.totalAttempts > 0 ? stats.correct / stats.totalAttempts : 0
     }
 
-    const activityResults = Array.from(activityMap.values()).filter((a) => a.totalAttempts > 0)
+    const activityResults = Array.from(activityMap.values()).filter(
+      (a) => a.totalAttempts > 0,
+    )
 
     // Completed LOs (unique LOs with at least one correct attempt)
     const completedLos = Array.from(completedLoIds).map((id) => ({
@@ -101,7 +109,10 @@ export class StudentFeedbackDataCollectorService {
     }))
 
     // Failed concepts (from activities with failed attempts)
-    const conceptErrors = new Map<string, { concept: string; loTitle: string; count: number }>()
+    const conceptErrors = new Map<
+      string,
+      { concept: string; loTitle: string; count: number }
+    >()
     for (const [loId, attempts] of failedAttemptsByLo.entries()) {
       const loTitle = loMap.get(loId) || `LO ${loId}`
       for (const attempt of attempts) {
@@ -114,7 +125,9 @@ export class StudentFeedbackDataCollectorService {
       }
     }
 
-    const failedConcepts: FailedConcept[] = Array.from(conceptErrors.values()).map((c) => ({
+    const failedConcepts: FailedConcept[] = Array.from(
+      conceptErrors.values(),
+    ).map((c) => ({
       concept: c.concept,
       loTitle: c.loTitle,
       errorCount: c.count,
@@ -157,9 +170,13 @@ export class StudentFeedbackDataCollectorService {
     }
 
     // Totals
-    const totalAttempts = activityResults.reduce((sum, a) => sum + a.totalAttempts, 0)
+    const totalAttempts = activityResults.reduce(
+      (sum, a) => sum + a.totalAttempts,
+      0,
+    )
     const totalCorrect = activityResults.reduce((sum, a) => sum + a.correct, 0)
-    const overallSuccessRate = totalAttempts > 0 ? totalCorrect / totalAttempts : 0
+    const overallSuccessRate =
+      totalAttempts > 0 ? totalCorrect / totalAttempts : 0
 
     return {
       studentId,

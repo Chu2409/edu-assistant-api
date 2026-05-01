@@ -153,7 +153,9 @@ export class TeacherFeedbackService {
         )
         this.logger.log(`Email enviado exitosamente a ${mod.teacher.email}`)
       } else if (!feedbackContent) {
-        this.logger.log(`No se generó feedback para módulo ${mod.id}, no se envía email`)
+        this.logger.log(
+          `No se generó feedback para módulo ${mod.id}, no se envía email`,
+        )
       }
 
       return feedbackContent

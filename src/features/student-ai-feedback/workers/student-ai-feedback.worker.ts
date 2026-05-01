@@ -8,7 +8,9 @@ import { StudentAIFeedbackService } from '../student-ai-feedback.service'
 export class StudentAIFeedbackWorker extends WorkerHost {
   private readonly logger = new Logger(StudentAIFeedbackWorker.name)
 
-  constructor(private readonly studentAIFeedbackService: StudentAIFeedbackService) {
+  constructor(
+    private readonly studentAIFeedbackService: StudentAIFeedbackService,
+  ) {
     super()
   }
 
@@ -27,8 +29,11 @@ export class StudentAIFeedbackWorker extends WorkerHost {
     this.logger.log('Starting AI feedback generation for all students...')
 
     try {
-      const result = await this.studentAIFeedbackService.generateForAllStudents()
-      this.logger.log(`Student AI feedback completed: ${JSON.stringify(result)}`)
+      const result =
+        await this.studentAIFeedbackService.generateForAllStudents()
+      this.logger.log(
+        `Student AI feedback completed: ${JSON.stringify(result)}`,
+      )
       return { success: true, ...result }
     } catch (error) {
       this.logger.error('Error in student AI feedback generation:', error)
@@ -37,14 +42,22 @@ export class StudentAIFeedbackWorker extends WorkerHost {
   }
 
   private async handleGenerateStudent(studentId: number, moduleId: number) {
-    this.logger.log(`Starting AI feedback generation for student ${studentId}, module ${moduleId}`)
+    this.logger.log(
+      `Starting AI feedback generation for student ${studentId}, module ${moduleId}`,
+    )
 
     try {
-      const result = await this.studentAIFeedbackService.generateForStudent(studentId, moduleId)
+      const result = await this.studentAIFeedbackService.generateForStudent(
+        studentId,
+        moduleId,
+      )
       this.logger.log(`Student AI feedback generated for student ${studentId}`)
       return { success: true, studentId, moduleId, result: !!result }
     } catch (error) {
-      this.logger.error(`Error generating feedback for student ${studentId}:`, error)
+      this.logger.error(
+        `Error generating feedback for student ${studentId}:`,
+        error,
+      )
       throw error
     }
   }
