@@ -3,6 +3,7 @@ import { Logger } from '@nestjs/common'
 import { Job } from 'bullmq'
 import { QUEUE_NAMES } from 'src/shared/constants/queues'
 import { StudentAIFeedbackService } from '../student-ai-feedback.service'
+import type { StudentAiFeedbackContent } from '../interfaces/student-feedback-data.interface'
 
 @Processor(QUEUE_NAMES.STUDENT_AI_FEEDBACK.NAME)
 export class StudentAIFeedbackWorker extends WorkerHost {
@@ -20,6 +21,8 @@ export class StudentAIFeedbackWorker extends WorkerHost {
         return this.handleGenerateAll()
       case QUEUE_NAMES.STUDENT_AI_FEEDBACK.JOBS.GENERATE_STUDENT:
         return this.handleGenerateStudent(job.data.studentId, job.data.moduleId)
+      case QUEUE_NAMES.STUDENT_AI_FEEDBACK.JOBS.SEND_STUDENT_EMAIL:
+        return this.handleSendStudentEmail(job.data)
       default:
         this.logger.warn(`Unknown job name: ${job.name}`)
     }
@@ -56,6 +59,34 @@ export class StudentAIFeedbackWorker extends WorkerHost {
     } catch (error) {
       this.logger.error(
         `Error generating feedback for student ${studentId}:`,
+        error,
+      )
+      throw error
+    }
+  }
+
+  private async handleSendStudentEmail(data: {
+    studentId: number
+    studentName: string
+    studentEmail: string
+    moduleId: number
+    moduleTitle: string
+    aiContent: StudentAiFeedbackContent
+  }) {
+    this.logger.log(
+      `Sending delayed email to student ${data.studentId} (${data.studentEmail})`,
+    )
+
+    try {
+      const result =
+        await this.studentAIFeedbackService.sendDelayedStudentEmail(data)
+      this.logger.log(
+        `Delayed email result for ${data.studentEmail}: ${JSON.stringify(result)}`,
+      )
+      return { success: true, ...result }
+    } catch (error) {
+      this.logger.error(
+        `Error sending delayed email to student ${data.studentId}:`,
         error,
       )
       throw error

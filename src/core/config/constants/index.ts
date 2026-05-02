@@ -51,6 +51,9 @@ export const config = (): { APP: IConfig } => ({
 
     ENABLE_EMAIL_NOTIFICATIONS:
       process.env.ENABLE_EMAIL_NOTIFICATIONS === 'true',
+    EMAIL_DAILY_LIMIT: process.env.EMAIL_DAILY_LIMIT
+      ? parseInt(process.env.EMAIL_DAILY_LIMIT, 10)
+      : 1000,
   },
 })
 
@@ -107,4 +110,5 @@ export const configValidationSchema = Joi.object<IConfig>({
   MAX_VIDEO_FILE_SIZE_MB: Joi.number().min(1).default(500),
 
   ENABLE_EMAIL_NOTIFICATIONS: Joi.boolean().default(false),
+  EMAIL_DAILY_LIMIT: Joi.number().min(1).default(1000),
 })

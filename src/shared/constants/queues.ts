@@ -1,3 +1,5 @@
+export const EMAIL_DAILY_LIMIT = 1000
+
 export const QUEUE_NAMES = {
   CONCEPTS: {
     NAME: 'concepts',
@@ -48,6 +50,7 @@ export const QUEUE_NAMES = {
     JOBS: {
       GENERATE_ALL: 'generate-all-student-feedbacks',
       GENERATE_STUDENT: 'generate-student-feedback',
+      SEND_STUDENT_EMAIL: 'send-student-email',
     },
   },
 } as const satisfies Record<
