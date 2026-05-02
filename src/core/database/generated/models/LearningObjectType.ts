@@ -192,7 +192,7 @@ export type LearningObjectTypeGroupByOutputType = {
   _max: LearningObjectTypeMaxAggregateOutputType | null
 }
 
-type GetLearningObjectTypeGroupByPayload<T extends LearningObjectTypeGroupByArgs> = Prisma.PrismaPromise<
+export type GetLearningObjectTypeGroupByPayload<T extends LearningObjectTypeGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<LearningObjectTypeGroupByOutputType, T['by']> &
       {

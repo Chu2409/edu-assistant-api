@@ -74,6 +74,7 @@ export const ModelName = {
   ModuleMetrics: 'ModuleMetrics',
   SystemSetting: 'SystemSetting',
   TeacherAiFeedback: 'TeacherAiFeedback',
+  StudentAiFeedback: 'StudentAiFeedback',
   Video: 'Video',
   VideoGenerationAttempt: 'VideoGenerationAttempt'
 } as const
@@ -416,6 +417,18 @@ export const TeacherAiFeedbackScalarFieldEnum = {
 } as const
 
 export type TeacherAiFeedbackScalarFieldEnum = (typeof TeacherAiFeedbackScalarFieldEnum)[keyof typeof TeacherAiFeedbackScalarFieldEnum]
+
+
+export const StudentAiFeedbackScalarFieldEnum = {
+  id: 'id',
+  scope: 'scope',
+  studentId: 'studentId',
+  moduleId: 'moduleId',
+  content: 'content',
+  createdAt: 'createdAt'
+} as const
+
+export type StudentAiFeedbackScalarFieldEnum = (typeof StudentAiFeedbackScalarFieldEnum)[keyof typeof StudentAiFeedbackScalarFieldEnum]
 
 
 export const VideoScalarFieldEnum = {

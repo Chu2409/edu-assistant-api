@@ -165,11 +165,10 @@ export class FeedbackDataCollectorService {
         ? allAttempts.filter((a) => a.isCorrect).length / allAttempts.length
         : 0
 
-    // Top preguntas del foro del módulo
+    // Forum questions in the module
     const topQuestions = await this.dbService.studentQuestion.findMany({
       where: { learningObject: { moduleId } },
       include: { learningObject: { select: { title: true } } },
-      orderBy: { upvotes: 'desc' },
       take: 10,
     })
 
