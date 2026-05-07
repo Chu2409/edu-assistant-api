@@ -7,7 +7,6 @@ import { QUEUE_NAMES } from 'src/shared/constants/queues'
 import { StudentAIFeedbackService } from './student-ai-feedback.service'
 import { StudentAIFeedbackController } from './student-ai-feedback.controller'
 import { StudentFeedbackDataCollectorService } from './services/student-feedback-data-collector.service'
-import { StudentAIFeedbackWorker } from './workers/student-ai-feedback.worker'
 
 @Module({
   imports: [
@@ -21,7 +20,6 @@ import { StudentAIFeedbackWorker } from './workers/student-ai-feedback.worker'
   providers: [
     StudentAIFeedbackService,
     StudentFeedbackDataCollectorService,
-    StudentAIFeedbackWorker,
   ],
   exports: [StudentAIFeedbackService],
 })

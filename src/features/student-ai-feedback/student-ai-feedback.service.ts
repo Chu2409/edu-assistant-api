@@ -85,7 +85,11 @@ export class StudentAIFeedbackService {
   async generateForStudent(
     studentId: number,
     moduleId: number,
-  ): Promise<{ content: StudentAiFeedbackContent | null; emailSent: boolean; emailQueued: boolean }> {
+  ): Promise<{
+    content: StudentAiFeedbackContent | null
+    emailSent: boolean
+    emailQueued: boolean
+  }> {
     // Validate student is enrolled in this module
     const enrollment = await this.dbService.enrollment.findFirst({
       where: {
@@ -165,7 +169,11 @@ export class StudentAIFeedbackService {
       this.logger.log(
         `Student AI feedback generated for student ${studentId} (email: sent=${emailResult.sent}, queued=${emailResult.queued})`,
       )
-      return { content: aiContent, emailSent: emailResult.sent, emailQueued: emailResult.queued }
+      return {
+        content: aiContent,
+        emailSent: emailResult.sent,
+        emailQueued: emailResult.queued,
+      }
     } catch (error) {
       this.logger.error(
         `Error generating feedback for student ${studentId}: ${error}`,
@@ -334,7 +342,14 @@ export class StudentAIFeedbackService {
     moduleTitle: string
     aiContent: StudentAiFeedbackContent
   }): Promise<{ sent: boolean; queued: boolean }> {
-    const { studentId, studentName, studentEmail, moduleId, moduleTitle, aiContent } = data
+    const {
+      studentId,
+      studentName,
+      studentEmail,
+      moduleId,
+      moduleTitle,
+      aiContent,
+    } = data
 
     const canSend = await this.emailDailyLimitService.canSendEmail()
 
