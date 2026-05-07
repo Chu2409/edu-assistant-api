@@ -17,10 +17,7 @@ import { StudentFeedbackDataCollectorService } from './services/student-feedback
     }),
   ],
   controllers: [StudentAIFeedbackController],
-  providers: [
-    StudentAIFeedbackService,
-    StudentFeedbackDataCollectorService,
-  ],
+  providers: [StudentAIFeedbackService, StudentFeedbackDataCollectorService],
   exports: [StudentAIFeedbackService],
 })
 export class StudentAIFeedbackModule implements OnModuleInit {

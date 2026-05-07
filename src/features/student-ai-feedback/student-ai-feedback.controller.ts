@@ -83,7 +83,7 @@ export class StudentAIFeedbackController {
       const state = await existingJob.getState()
       if (state === 'active' || state === 'waiting' || state === 'delayed') {
         throw new BusinessException(
-          `Feedback generation already in progress for this module`,
+          'Feedback generation already in progress for this module',
           HttpStatus.CONFLICT,
         )
       }
