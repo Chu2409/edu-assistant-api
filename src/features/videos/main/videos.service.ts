@@ -242,6 +242,7 @@ export class VideosService {
         },
       })
 
+
       for (let index = 0; index < dto.blocks.length; index++) {
         const blockDto = dto.blocks[index]
         const orderIndex = index
@@ -277,6 +278,8 @@ export class VideosService {
         where: { learningObjectId: id },
         data: { hasManualEdits: true },
       })
+
+      await this.loHelper.updateCompiledContent(tx, id)
     })
 
     const updated = await this.dbService.learningObject.findUniqueOrThrow({

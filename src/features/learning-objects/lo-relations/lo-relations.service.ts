@@ -7,7 +7,6 @@ import { CreateLoRelationDto } from './dtos/req/create-lo-relation.dto'
 import { UpdateLoRelationDto } from './dtos/req/update-lo-relation.dto'
 import { LoRelationDto } from './dtos/res/lo-relation.dto'
 import { LoHelperService } from '../main/lo-helper.service'
-import { compileBlocksToText } from '../blocks/helpers/compile-blocks'
 
 type SimilarRow = { id: number; similarity: number }
 
@@ -168,29 +167,36 @@ export class LoRelationsService {
     })
   }
 
-  /**
-   * Procesa el embedding de un objeto de aprendizaje (para uso interno: workers, jobs).
-   * Compila contenido de bloques, obtiene embedding de OpenAI y guarda en DB.
-   * Retorna el embedding literal para búsquedas por similitud.
-   */
   async processPageEmbedding(learningObjectId: number): Promise<string | null> {
-    const lo = await this.dbService.learningObject.findUnique({
+    let lo = await this.dbService.learningObject.findUnique({
       where: { id: learningObjectId },
-      include: { blocks: { orderBy: { orderIndex: 'asc' } } },
+      select: { id: true, compiledContent: true },
     })
+
     if (!lo)
       throw new NotFoundException(
         `Objeto de aprendizaje con ID ${learningObjectId} no encontrado`,
       )
 
-    const compiledContent = compileBlocksToText(lo.blocks)
-    if (!compiledContent.trim()) return null
+    if (!lo.compiledContent) {
+      await this.loHelperService.updateCompiledContent(
+        this.dbService,
+        learningObjectId,
+      )
+      lo = await this.dbService.learningObject.findUnique({
+        where: { id: learningObjectId },
+        select: { id: true, compiledContent: true },
+      })
+    }
+
+    const compiledContent = lo?.compiledContent
+    if (!compiledContent || !compiledContent.trim()) return null
 
     const embedding = await this.openAiService.getEmbedding(compiledContent)
     const embeddingLiteral = `[${embedding.join(',')}]`
 
     await this.dbService.$executeRaw(
-      Prisma.sql`UPDATE learning_objects SET embedding = ${embeddingLiteral}::vector, compiled_content = ${compiledContent} WHERE id = ${learningObjectId}`,
+      Prisma.sql`UPDATE learning_objects SET embedding = ${embeddingLiteral}::vector WHERE id = ${learningObjectId}`,
     )
 
     return embeddingLiteral
@@ -202,7 +208,7 @@ export class LoRelationsService {
   async ensurePageEmbedding(learningObjectId: number): Promise<string> {
     const lo = await this.dbService.learningObject.findUnique({
       where: { id: learningObjectId },
-      include: { blocks: { orderBy: { orderIndex: 'asc' } } },
+      select: { id: true },
     })
     if (!lo)
       throw new NotFoundException(

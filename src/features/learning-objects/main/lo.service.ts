@@ -289,6 +289,7 @@ export class LoService {
       include: { type: true },
     })
 
+
     if (updateLoDto.isPublished === true) {
       await this.embeddingsQueue.add(
         QUEUE_NAMES.EMBEDDINGS.JOBS.PROCESS_LO,
@@ -374,6 +375,8 @@ export class LoService {
           conceptsProcessed: false,
         },
       })
+
+      await this.loHelper.updateCompiledContent(prisma, id)
     })
 
     const updatedLo = await this.dbService.learningObject.findUnique({
