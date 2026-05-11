@@ -57,6 +57,7 @@ export const ModelName = {
   Enrollment: 'Enrollment',
   LearningObjectType: 'LearningObjectType',
   LearningObject: 'LearningObject',
+  LearningObjectProgress: 'LearningObjectProgress',
   Block: 'Block',
   Session: 'Session',
   Message: 'Message',
@@ -176,7 +177,6 @@ export const LearningObjectScalarFieldEnum = {
   keywords: 'keywords',
   compiledContent: 'compiledContent',
   isPublished: 'isPublished',
-  aiResponseId: 'aiResponseId',
   hasManualEdits: 'hasManualEdits',
   conceptsProcessed: 'conceptsProcessed',
   createdAt: 'createdAt',
@@ -185,6 +185,20 @@ export const LearningObjectScalarFieldEnum = {
 } as const
 
 export type LearningObjectScalarFieldEnum = (typeof LearningObjectScalarFieldEnum)[keyof typeof LearningObjectScalarFieldEnum]
+
+
+export const LearningObjectProgressScalarFieldEnum = {
+  id: 'id',
+  learningObjectId: 'learningObjectId',
+  userId: 'userId',
+  isCompleted: 'isCompleted',
+  completedAt: 'completedAt',
+  lastVisitedAt: 'lastVisitedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type LearningObjectProgressScalarFieldEnum = (typeof LearningObjectProgressScalarFieldEnum)[keyof typeof LearningObjectProgressScalarFieldEnum]
 
 
 export const BlockScalarFieldEnum = {

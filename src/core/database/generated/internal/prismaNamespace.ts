@@ -390,6 +390,7 @@ export const ModelName = {
   Enrollment: 'Enrollment',
   LearningObjectType: 'LearningObjectType',
   LearningObject: 'LearningObject',
+  LearningObjectProgress: 'LearningObjectProgress',
   Block: 'Block',
   Session: 'Session',
   Message: 'Message',
@@ -425,7 +426,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "module" | "aiConfiguration" | "enrollment" | "learningObjectType" | "learningObject" | "block" | "session" | "message" | "learningObjectRelation" | "learningObjectConcept" | "activity" | "activityAttempt" | "learningObjectFeedback" | "note" | "studentQuestion" | "questionReply" | "notification" | "podcast" | "mediaResource" | "moduleMetrics" | "systemSetting" | "teacherAiFeedback" | "studentAiFeedback" | "video" | "videoGenerationAttempt"
+    modelProps: "user" | "module" | "aiConfiguration" | "enrollment" | "learningObjectType" | "learningObject" | "learningObjectProgress" | "block" | "session" | "message" | "learningObjectRelation" | "learningObjectConcept" | "activity" | "activityAttempt" | "learningObjectFeedback" | "note" | "studentQuestion" | "questionReply" | "notification" | "podcast" | "mediaResource" | "moduleMetrics" | "systemSetting" | "teacherAiFeedback" | "studentAiFeedback" | "video" | "videoGenerationAttempt"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -870,6 +871,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.LearningObjectCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.LearningObjectCountAggregateOutputType> | number
+        }
+      }
+    }
+    LearningObjectProgress: {
+      payload: Prisma.$LearningObjectProgressPayload<ExtArgs>
+      fields: Prisma.LearningObjectProgressFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.LearningObjectProgressFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LearningObjectProgressPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.LearningObjectProgressFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LearningObjectProgressPayload>
+        }
+        findFirst: {
+          args: Prisma.LearningObjectProgressFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LearningObjectProgressPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.LearningObjectProgressFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LearningObjectProgressPayload>
+        }
+        findMany: {
+          args: Prisma.LearningObjectProgressFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LearningObjectProgressPayload>[]
+        }
+        create: {
+          args: Prisma.LearningObjectProgressCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LearningObjectProgressPayload>
+        }
+        createMany: {
+          args: Prisma.LearningObjectProgressCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.LearningObjectProgressCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LearningObjectProgressPayload>[]
+        }
+        delete: {
+          args: Prisma.LearningObjectProgressDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LearningObjectProgressPayload>
+        }
+        update: {
+          args: Prisma.LearningObjectProgressUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LearningObjectProgressPayload>
+        }
+        deleteMany: {
+          args: Prisma.LearningObjectProgressDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.LearningObjectProgressUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.LearningObjectProgressUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LearningObjectProgressPayload>[]
+        }
+        upsert: {
+          args: Prisma.LearningObjectProgressUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LearningObjectProgressPayload>
+        }
+        aggregate: {
+          args: Prisma.LearningObjectProgressAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateLearningObjectProgress>
+        }
+        groupBy: {
+          args: Prisma.LearningObjectProgressGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.LearningObjectProgressGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.LearningObjectProgressCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.LearningObjectProgressCountAggregateOutputType> | number
         }
       }
     }
@@ -2473,7 +2548,6 @@ export const LearningObjectScalarFieldEnum = {
   keywords: 'keywords',
   compiledContent: 'compiledContent',
   isPublished: 'isPublished',
-  aiResponseId: 'aiResponseId',
   hasManualEdits: 'hasManualEdits',
   conceptsProcessed: 'conceptsProcessed',
   createdAt: 'createdAt',
@@ -2482,6 +2556,20 @@ export const LearningObjectScalarFieldEnum = {
 } as const
 
 export type LearningObjectScalarFieldEnum = (typeof LearningObjectScalarFieldEnum)[keyof typeof LearningObjectScalarFieldEnum]
+
+
+export const LearningObjectProgressScalarFieldEnum = {
+  id: 'id',
+  learningObjectId: 'learningObjectId',
+  userId: 'userId',
+  isCompleted: 'isCompleted',
+  completedAt: 'completedAt',
+  lastVisitedAt: 'lastVisitedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type LearningObjectProgressScalarFieldEnum = (typeof LearningObjectProgressScalarFieldEnum)[keyof typeof LearningObjectProgressScalarFieldEnum]
 
 
 export const BlockScalarFieldEnum = {
@@ -3194,6 +3282,7 @@ export type GlobalOmitConfig = {
   enrollment?: Prisma.EnrollmentOmit
   learningObjectType?: Prisma.LearningObjectTypeOmit
   learningObject?: Prisma.LearningObjectOmit
+  learningObjectProgress?: Prisma.LearningObjectProgressOmit
   block?: Prisma.BlockOmit
   session?: Prisma.SessionOmit
   message?: Prisma.MessageOmit

@@ -11,9 +11,12 @@ import { StudentQuestionsService } from './student-questions/student-questions.s
 import { LoNotesController } from './notes/lo-notes.controller'
 import { LoNotesService } from './notes/lo-notes.service'
 import { LearningObjectsModule } from '../learning-objects/learning-objects.module'
+import { LoProgressModule } from './lo-progress/lo-progress.module'
+import { LoProgressController } from './lo-progress/lo-progress.controller'
+import { LoProgressService } from './lo-progress/lo-progress.service'
 
 @Module({
-  imports: [LearningObjectsModule],
+  imports: [LearningObjectsModule, LoProgressModule],
   controllers: [
     LoActivitiesController,
     ActivityAttemptsController,
@@ -21,6 +24,7 @@ import { LearningObjectsModule } from '../learning-objects/learning-objects.modu
     QuestionRepliesController,
     StudentQuestionsController,
     LoNotesController,
+    LoProgressController,
   ],
   providers: [
     ActivitiesService,
@@ -28,6 +32,7 @@ import { LearningObjectsModule } from '../learning-objects/learning-objects.modu
     QuestionRepliesService,
     StudentQuestionsService,
     LoNotesService,
+    LoProgressService,
   ],
   exports: [],
 })
