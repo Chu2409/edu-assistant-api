@@ -200,7 +200,7 @@ export type NoteGroupByOutputType = {
   _max: NoteMaxAggregateOutputType | null
 }
 
-export type GetNoteGroupByPayload<T extends NoteGroupByArgs> = Prisma.PrismaPromise<
+type GetNoteGroupByPayload<T extends NoteGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<NoteGroupByOutputType, T['by']> &
       {

@@ -241,7 +241,7 @@ export type VideoGroupByOutputType = {
   _max: VideoMaxAggregateOutputType | null
 }
 
-export type GetVideoGroupByPayload<T extends VideoGroupByArgs> = Prisma.PrismaPromise<
+type GetVideoGroupByPayload<T extends VideoGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<VideoGroupByOutputType, T['by']> &
       {

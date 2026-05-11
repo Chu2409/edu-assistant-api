@@ -213,7 +213,7 @@ export type BlockGroupByOutputType = {
   _max: BlockMaxAggregateOutputType | null
 }
 
-export type GetBlockGroupByPayload<T extends BlockGroupByArgs> = Prisma.PrismaPromise<
+type GetBlockGroupByPayload<T extends BlockGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<BlockGroupByOutputType, T['by']> &
       {

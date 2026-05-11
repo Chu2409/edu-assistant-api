@@ -238,7 +238,7 @@ export type ModuleGroupByOutputType = {
   _max: ModuleMaxAggregateOutputType | null
 }
 
-export type GetModuleGroupByPayload<T extends ModuleGroupByArgs> = Prisma.PrismaPromise<
+type GetModuleGroupByPayload<T extends ModuleGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<ModuleGroupByOutputType, T['by']> &
       {

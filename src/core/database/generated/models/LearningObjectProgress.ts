@@ -221,7 +221,7 @@ export type LearningObjectProgressGroupByOutputType = {
   _max: LearningObjectProgressMaxAggregateOutputType | null
 }
 
-export type GetLearningObjectProgressGroupByPayload<T extends LearningObjectProgressGroupByArgs> = Prisma.PrismaPromise<
+type GetLearningObjectProgressGroupByPayload<T extends LearningObjectProgressGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<LearningObjectProgressGroupByOutputType, T['by']> &
       {

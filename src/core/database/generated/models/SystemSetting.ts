@@ -147,7 +147,7 @@ export type SystemSettingGroupByOutputType = {
   _max: SystemSettingMaxAggregateOutputType | null
 }
 
-export type GetSystemSettingGroupByPayload<T extends SystemSettingGroupByArgs> = Prisma.PrismaPromise<
+type GetSystemSettingGroupByPayload<T extends SystemSettingGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<SystemSettingGroupByOutputType, T['by']> &
       {
