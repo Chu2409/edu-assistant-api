@@ -7,6 +7,7 @@ import {
   User,
   Session,
   LearningObjectType,
+  LearningObjectProgress,
 } from 'src/core/database/generated/client'
 import { LoDto } from '../dtos/res/lo.dto'
 import { FullLoDto } from '../dtos/res/full-lo.dto'
@@ -38,6 +39,7 @@ export class LoMapper {
       loFeedbacks?: (LearningObjectFeedback & { user: User })[]
       blocks: Block[]
       sessions?: Session[]
+      progress?: LearningObjectProgress[]
     },
     previousLoId?: number | null,
     nextLoId?: number | null,
@@ -67,6 +69,7 @@ export class LoMapper {
       blocks: lo.blocks.map((block) => BlocksMapper.mapToDto(block)),
       previousLoId: previousLoId ?? null,
       nextLoId: nextLoId ?? null,
+      progress: lo.progress && lo.progress.length > 0 ? lo.progress[0] : null,
     }
   }
 }

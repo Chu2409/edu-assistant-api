@@ -41,6 +41,7 @@ model User {
   activityAttempts ActivityAttempt[]
   notifications    Notification[]
   loFeedbacks      LearningObjectFeedback[]
+  loProgress       LearningObjectProgress[]
   studentQuestions StudentQuestion[]
   questionReplies  QuestionReply[]
   sessions         Session[]
@@ -197,12 +198,33 @@ model LearningObject {
   sessions         Session[]
   blocks           Block[]
   teacherFeedbacks TeacherAiFeedback[]
+  progress         LearningObjectProgress[]
   video            Video?
 
   @@unique([moduleId, orderIndex])
   @@index([moduleId])
   @@index([typeId])
   @@map("learning_objects")
+}
+
+model LearningObjectProgress {
+  id               Int       @id @default(autoincrement())
+  learningObjectId Int       @map("learning_object_id")
+  userId           Int       @map("user_id")
+  isCompleted      Boolean   @default(false) @map("is_completed")
+  completedAt      DateTime? @map("completed_at")
+  lastVisitedAt    DateTime  @default(now()) @map("last_visited_at")
+  createdAt        DateTime  @default(now()) @map("created_at")
+  updatedAt        DateTime  @updatedAt @map("updated_at")
+
+  // Relations
+  learningObject LearningObject @relation(fields: [learningObjectId], references: [id], onDelete: Cascade)
+  user           User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, learningObjectId])
+  @@index([userId])
+  @@index([learningObjectId])
+  @@map("lo_progress")
 }
 
 enum BlockType {

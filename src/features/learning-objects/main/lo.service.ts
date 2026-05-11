@@ -159,6 +159,14 @@ export class LoService {
             OR: [{ isPublic: true }, { userId }],
           },
         },
+        loFeedbacks: {
+          where: { userId },
+          include: { user: true },
+        },
+        progress: {
+          where: { userId },
+          take: 1,
+        },
         notes: {
           where: {
             userId,

@@ -76,7 +76,15 @@ export class ConceptsService {
 
     const block = await this.dbService.block.findUnique({
       where: { id: data.blockId },
-      include: { learningObject: true },
+      include: {
+        learningObject: {
+          include: {
+            module: {
+              include: { aiConfiguration: true },
+            },
+          },
+        },
+      },
     })
 
     if (!block) {
@@ -91,7 +99,7 @@ export class ConceptsService {
         pageTitle: block.learningObject.title,
       },
       config: {
-        language: data.language ?? 'es',
+        language: block.learningObject.module.aiConfiguration?.language ?? 'es',
         maxDefinitionLength: 120,
       },
     })

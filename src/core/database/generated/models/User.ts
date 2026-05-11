@@ -278,6 +278,7 @@ export type UserWhereInput = {
   activityAttempts?: Prisma.ActivityAttemptListRelationFilter
   notifications?: Prisma.NotificationListRelationFilter
   loFeedbacks?: Prisma.LearningObjectFeedbackListRelationFilter
+  loProgress?: Prisma.LearningObjectProgressListRelationFilter
   studentQuestions?: Prisma.StudentQuestionListRelationFilter
   questionReplies?: Prisma.QuestionReplyListRelationFilter
   sessions?: Prisma.SessionListRelationFilter
@@ -303,6 +304,7 @@ export type UserOrderByWithRelationInput = {
   activityAttempts?: Prisma.ActivityAttemptOrderByRelationAggregateInput
   notifications?: Prisma.NotificationOrderByRelationAggregateInput
   loFeedbacks?: Prisma.LearningObjectFeedbackOrderByRelationAggregateInput
+  loProgress?: Prisma.LearningObjectProgressOrderByRelationAggregateInput
   studentQuestions?: Prisma.StudentQuestionOrderByRelationAggregateInput
   questionReplies?: Prisma.QuestionReplyOrderByRelationAggregateInput
   sessions?: Prisma.SessionOrderByRelationAggregateInput
@@ -331,6 +333,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   activityAttempts?: Prisma.ActivityAttemptListRelationFilter
   notifications?: Prisma.NotificationListRelationFilter
   loFeedbacks?: Prisma.LearningObjectFeedbackListRelationFilter
+  loProgress?: Prisma.LearningObjectProgressListRelationFilter
   studentQuestions?: Prisma.StudentQuestionListRelationFilter
   questionReplies?: Prisma.QuestionReplyListRelationFilter
   sessions?: Prisma.SessionListRelationFilter
@@ -393,6 +396,7 @@ export type UserCreateInput = {
   activityAttempts?: Prisma.ActivityAttemptCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   loFeedbacks?: Prisma.LearningObjectFeedbackCreateNestedManyWithoutUserInput
+  loProgress?: Prisma.LearningObjectProgressCreateNestedManyWithoutUserInput
   studentQuestions?: Prisma.StudentQuestionCreateNestedManyWithoutUserInput
   questionReplies?: Prisma.QuestionReplyCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
@@ -418,6 +422,7 @@ export type UserUncheckedCreateInput = {
   activityAttempts?: Prisma.ActivityAttemptUncheckedCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   loFeedbacks?: Prisma.LearningObjectFeedbackUncheckedCreateNestedManyWithoutUserInput
+  loProgress?: Prisma.LearningObjectProgressUncheckedCreateNestedManyWithoutUserInput
   studentQuestions?: Prisma.StudentQuestionUncheckedCreateNestedManyWithoutUserInput
   questionReplies?: Prisma.QuestionReplyUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
@@ -442,6 +447,7 @@ export type UserUpdateInput = {
   activityAttempts?: Prisma.ActivityAttemptUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   loFeedbacks?: Prisma.LearningObjectFeedbackUpdateManyWithoutUserNestedInput
+  loProgress?: Prisma.LearningObjectProgressUpdateManyWithoutUserNestedInput
   studentQuestions?: Prisma.StudentQuestionUpdateManyWithoutUserNestedInput
   questionReplies?: Prisma.QuestionReplyUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
@@ -467,6 +473,7 @@ export type UserUncheckedUpdateInput = {
   activityAttempts?: Prisma.ActivityAttemptUncheckedUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   loFeedbacks?: Prisma.LearningObjectFeedbackUncheckedUpdateManyWithoutUserNestedInput
+  loProgress?: Prisma.LearningObjectProgressUncheckedUpdateManyWithoutUserNestedInput
   studentQuestions?: Prisma.StudentQuestionUncheckedUpdateManyWithoutUserNestedInput
   questionReplies?: Prisma.QuestionReplyUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
@@ -635,6 +642,20 @@ export type UserUpdateOneRequiredWithoutEnrollmentsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutEnrollmentsInput, Prisma.UserUpdateWithoutEnrollmentsInput>, Prisma.UserUncheckedUpdateWithoutEnrollmentsInput>
 }
 
+export type UserCreateNestedOneWithoutLoProgressInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutLoProgressInput, Prisma.UserUncheckedCreateWithoutLoProgressInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutLoProgressInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutLoProgressNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutLoProgressInput, Prisma.UserUncheckedCreateWithoutLoProgressInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutLoProgressInput
+  upsert?: Prisma.UserUpsertWithoutLoProgressInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutLoProgressInput, Prisma.UserUpdateWithoutLoProgressInput>, Prisma.UserUncheckedUpdateWithoutLoProgressInput>
+}
+
 export type UserCreateNestedOneWithoutSessionsInput = {
   create?: Prisma.XOR<Prisma.UserCreateWithoutSessionsInput, Prisma.UserUncheckedCreateWithoutSessionsInput>
   connectOrCreate?: Prisma.UserCreateOrConnectWithoutSessionsInput
@@ -764,6 +785,7 @@ export type UserCreateWithoutModulesAsTeacherInput = {
   activityAttempts?: Prisma.ActivityAttemptCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   loFeedbacks?: Prisma.LearningObjectFeedbackCreateNestedManyWithoutUserInput
+  loProgress?: Prisma.LearningObjectProgressCreateNestedManyWithoutUserInput
   studentQuestions?: Prisma.StudentQuestionCreateNestedManyWithoutUserInput
   questionReplies?: Prisma.QuestionReplyCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
@@ -788,6 +810,7 @@ export type UserUncheckedCreateWithoutModulesAsTeacherInput = {
   activityAttempts?: Prisma.ActivityAttemptUncheckedCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   loFeedbacks?: Prisma.LearningObjectFeedbackUncheckedCreateNestedManyWithoutUserInput
+  loProgress?: Prisma.LearningObjectProgressUncheckedCreateNestedManyWithoutUserInput
   studentQuestions?: Prisma.StudentQuestionUncheckedCreateNestedManyWithoutUserInput
   questionReplies?: Prisma.QuestionReplyUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
@@ -827,6 +850,7 @@ export type UserUpdateWithoutModulesAsTeacherInput = {
   activityAttempts?: Prisma.ActivityAttemptUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   loFeedbacks?: Prisma.LearningObjectFeedbackUpdateManyWithoutUserNestedInput
+  loProgress?: Prisma.LearningObjectProgressUpdateManyWithoutUserNestedInput
   studentQuestions?: Prisma.StudentQuestionUpdateManyWithoutUserNestedInput
   questionReplies?: Prisma.QuestionReplyUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
@@ -851,6 +875,7 @@ export type UserUncheckedUpdateWithoutModulesAsTeacherInput = {
   activityAttempts?: Prisma.ActivityAttemptUncheckedUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   loFeedbacks?: Prisma.LearningObjectFeedbackUncheckedUpdateManyWithoutUserNestedInput
+  loProgress?: Prisma.LearningObjectProgressUncheckedUpdateManyWithoutUserNestedInput
   studentQuestions?: Prisma.StudentQuestionUncheckedUpdateManyWithoutUserNestedInput
   questionReplies?: Prisma.QuestionReplyUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
@@ -874,6 +899,7 @@ export type UserCreateWithoutEnrollmentsInput = {
   activityAttempts?: Prisma.ActivityAttemptCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   loFeedbacks?: Prisma.LearningObjectFeedbackCreateNestedManyWithoutUserInput
+  loProgress?: Prisma.LearningObjectProgressCreateNestedManyWithoutUserInput
   studentQuestions?: Prisma.StudentQuestionCreateNestedManyWithoutUserInput
   questionReplies?: Prisma.QuestionReplyCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
@@ -898,6 +924,7 @@ export type UserUncheckedCreateWithoutEnrollmentsInput = {
   activityAttempts?: Prisma.ActivityAttemptUncheckedCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   loFeedbacks?: Prisma.LearningObjectFeedbackUncheckedCreateNestedManyWithoutUserInput
+  loProgress?: Prisma.LearningObjectProgressUncheckedCreateNestedManyWithoutUserInput
   studentQuestions?: Prisma.StudentQuestionUncheckedCreateNestedManyWithoutUserInput
   questionReplies?: Prisma.QuestionReplyUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
@@ -937,6 +964,7 @@ export type UserUpdateWithoutEnrollmentsInput = {
   activityAttempts?: Prisma.ActivityAttemptUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   loFeedbacks?: Prisma.LearningObjectFeedbackUpdateManyWithoutUserNestedInput
+  loProgress?: Prisma.LearningObjectProgressUpdateManyWithoutUserNestedInput
   studentQuestions?: Prisma.StudentQuestionUpdateManyWithoutUserNestedInput
   questionReplies?: Prisma.QuestionReplyUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
@@ -957,6 +985,121 @@ export type UserUncheckedUpdateWithoutEnrollmentsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   modulesAsTeacher?: Prisma.ModuleUncheckedUpdateManyWithoutTeacherNestedInput
+  generatedContent?: Prisma.NoteUncheckedUpdateManyWithoutUserNestedInput
+  activityAttempts?: Prisma.ActivityAttemptUncheckedUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  loFeedbacks?: Prisma.LearningObjectFeedbackUncheckedUpdateManyWithoutUserNestedInput
+  loProgress?: Prisma.LearningObjectProgressUncheckedUpdateManyWithoutUserNestedInput
+  studentQuestions?: Prisma.StudentQuestionUncheckedUpdateManyWithoutUserNestedInput
+  questionReplies?: Prisma.QuestionReplyUncheckedUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  studentAiFeedback?: Prisma.StudentAiFeedbackUncheckedUpdateManyWithoutStudentNestedInput
+}
+
+export type UserCreateWithoutLoProgressInput = {
+  email: string
+  role?: $Enums.Role
+  name: string
+  lastName: string
+  isActive?: boolean
+  microsoftId: string
+  displayName: string
+  profilePicture?: string | null
+  lastLoginAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  modulesAsTeacher?: Prisma.ModuleCreateNestedManyWithoutTeacherInput
+  enrollments?: Prisma.EnrollmentCreateNestedManyWithoutUserInput
+  generatedContent?: Prisma.NoteCreateNestedManyWithoutUserInput
+  activityAttempts?: Prisma.ActivityAttemptCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  loFeedbacks?: Prisma.LearningObjectFeedbackCreateNestedManyWithoutUserInput
+  studentQuestions?: Prisma.StudentQuestionCreateNestedManyWithoutUserInput
+  questionReplies?: Prisma.QuestionReplyCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  studentAiFeedback?: Prisma.StudentAiFeedbackCreateNestedManyWithoutStudentInput
+}
+
+export type UserUncheckedCreateWithoutLoProgressInput = {
+  id?: number
+  email: string
+  role?: $Enums.Role
+  name: string
+  lastName: string
+  isActive?: boolean
+  microsoftId: string
+  displayName: string
+  profilePicture?: string | null
+  lastLoginAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  modulesAsTeacher?: Prisma.ModuleUncheckedCreateNestedManyWithoutTeacherInput
+  enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutUserInput
+  generatedContent?: Prisma.NoteUncheckedCreateNestedManyWithoutUserInput
+  activityAttempts?: Prisma.ActivityAttemptUncheckedCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  loFeedbacks?: Prisma.LearningObjectFeedbackUncheckedCreateNestedManyWithoutUserInput
+  studentQuestions?: Prisma.StudentQuestionUncheckedCreateNestedManyWithoutUserInput
+  questionReplies?: Prisma.QuestionReplyUncheckedCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  studentAiFeedback?: Prisma.StudentAiFeedbackUncheckedCreateNestedManyWithoutStudentInput
+}
+
+export type UserCreateOrConnectWithoutLoProgressInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutLoProgressInput, Prisma.UserUncheckedCreateWithoutLoProgressInput>
+}
+
+export type UserUpsertWithoutLoProgressInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutLoProgressInput, Prisma.UserUncheckedUpdateWithoutLoProgressInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutLoProgressInput, Prisma.UserUncheckedCreateWithoutLoProgressInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutLoProgressInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutLoProgressInput, Prisma.UserUncheckedUpdateWithoutLoProgressInput>
+}
+
+export type UserUpdateWithoutLoProgressInput = {
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  lastName?: Prisma.StringFieldUpdateOperationsInput | string
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  microsoftId?: Prisma.StringFieldUpdateOperationsInput | string
+  displayName?: Prisma.StringFieldUpdateOperationsInput | string
+  profilePicture?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  modulesAsTeacher?: Prisma.ModuleUpdateManyWithoutTeacherNestedInput
+  enrollments?: Prisma.EnrollmentUpdateManyWithoutUserNestedInput
+  generatedContent?: Prisma.NoteUpdateManyWithoutUserNestedInput
+  activityAttempts?: Prisma.ActivityAttemptUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  loFeedbacks?: Prisma.LearningObjectFeedbackUpdateManyWithoutUserNestedInput
+  studentQuestions?: Prisma.StudentQuestionUpdateManyWithoutUserNestedInput
+  questionReplies?: Prisma.QuestionReplyUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  studentAiFeedback?: Prisma.StudentAiFeedbackUpdateManyWithoutStudentNestedInput
+}
+
+export type UserUncheckedUpdateWithoutLoProgressInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  lastName?: Prisma.StringFieldUpdateOperationsInput | string
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  microsoftId?: Prisma.StringFieldUpdateOperationsInput | string
+  displayName?: Prisma.StringFieldUpdateOperationsInput | string
+  profilePicture?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  modulesAsTeacher?: Prisma.ModuleUncheckedUpdateManyWithoutTeacherNestedInput
+  enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutUserNestedInput
   generatedContent?: Prisma.NoteUncheckedUpdateManyWithoutUserNestedInput
   activityAttempts?: Prisma.ActivityAttemptUncheckedUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
@@ -985,6 +1128,7 @@ export type UserCreateWithoutSessionsInput = {
   activityAttempts?: Prisma.ActivityAttemptCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   loFeedbacks?: Prisma.LearningObjectFeedbackCreateNestedManyWithoutUserInput
+  loProgress?: Prisma.LearningObjectProgressCreateNestedManyWithoutUserInput
   studentQuestions?: Prisma.StudentQuestionCreateNestedManyWithoutUserInput
   questionReplies?: Prisma.QuestionReplyCreateNestedManyWithoutUserInput
   studentAiFeedback?: Prisma.StudentAiFeedbackCreateNestedManyWithoutStudentInput
@@ -1009,6 +1153,7 @@ export type UserUncheckedCreateWithoutSessionsInput = {
   activityAttempts?: Prisma.ActivityAttemptUncheckedCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   loFeedbacks?: Prisma.LearningObjectFeedbackUncheckedCreateNestedManyWithoutUserInput
+  loProgress?: Prisma.LearningObjectProgressUncheckedCreateNestedManyWithoutUserInput
   studentQuestions?: Prisma.StudentQuestionUncheckedCreateNestedManyWithoutUserInput
   questionReplies?: Prisma.QuestionReplyUncheckedCreateNestedManyWithoutUserInput
   studentAiFeedback?: Prisma.StudentAiFeedbackUncheckedCreateNestedManyWithoutStudentInput
@@ -1048,6 +1193,7 @@ export type UserUpdateWithoutSessionsInput = {
   activityAttempts?: Prisma.ActivityAttemptUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   loFeedbacks?: Prisma.LearningObjectFeedbackUpdateManyWithoutUserNestedInput
+  loProgress?: Prisma.LearningObjectProgressUpdateManyWithoutUserNestedInput
   studentQuestions?: Prisma.StudentQuestionUpdateManyWithoutUserNestedInput
   questionReplies?: Prisma.QuestionReplyUpdateManyWithoutUserNestedInput
   studentAiFeedback?: Prisma.StudentAiFeedbackUpdateManyWithoutStudentNestedInput
@@ -1072,6 +1218,7 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
   activityAttempts?: Prisma.ActivityAttemptUncheckedUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   loFeedbacks?: Prisma.LearningObjectFeedbackUncheckedUpdateManyWithoutUserNestedInput
+  loProgress?: Prisma.LearningObjectProgressUncheckedUpdateManyWithoutUserNestedInput
   studentQuestions?: Prisma.StudentQuestionUncheckedUpdateManyWithoutUserNestedInput
   questionReplies?: Prisma.QuestionReplyUncheckedUpdateManyWithoutUserNestedInput
   studentAiFeedback?: Prisma.StudentAiFeedbackUncheckedUpdateManyWithoutStudentNestedInput
@@ -1094,6 +1241,7 @@ export type UserCreateWithoutActivityAttemptsInput = {
   generatedContent?: Prisma.NoteCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   loFeedbacks?: Prisma.LearningObjectFeedbackCreateNestedManyWithoutUserInput
+  loProgress?: Prisma.LearningObjectProgressCreateNestedManyWithoutUserInput
   studentQuestions?: Prisma.StudentQuestionCreateNestedManyWithoutUserInput
   questionReplies?: Prisma.QuestionReplyCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
@@ -1118,6 +1266,7 @@ export type UserUncheckedCreateWithoutActivityAttemptsInput = {
   generatedContent?: Prisma.NoteUncheckedCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   loFeedbacks?: Prisma.LearningObjectFeedbackUncheckedCreateNestedManyWithoutUserInput
+  loProgress?: Prisma.LearningObjectProgressUncheckedCreateNestedManyWithoutUserInput
   studentQuestions?: Prisma.StudentQuestionUncheckedCreateNestedManyWithoutUserInput
   questionReplies?: Prisma.QuestionReplyUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
@@ -1157,6 +1306,7 @@ export type UserUpdateWithoutActivityAttemptsInput = {
   generatedContent?: Prisma.NoteUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   loFeedbacks?: Prisma.LearningObjectFeedbackUpdateManyWithoutUserNestedInput
+  loProgress?: Prisma.LearningObjectProgressUpdateManyWithoutUserNestedInput
   studentQuestions?: Prisma.StudentQuestionUpdateManyWithoutUserNestedInput
   questionReplies?: Prisma.QuestionReplyUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
@@ -1181,6 +1331,7 @@ export type UserUncheckedUpdateWithoutActivityAttemptsInput = {
   generatedContent?: Prisma.NoteUncheckedUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   loFeedbacks?: Prisma.LearningObjectFeedbackUncheckedUpdateManyWithoutUserNestedInput
+  loProgress?: Prisma.LearningObjectProgressUncheckedUpdateManyWithoutUserNestedInput
   studentQuestions?: Prisma.StudentQuestionUncheckedUpdateManyWithoutUserNestedInput
   questionReplies?: Prisma.QuestionReplyUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
@@ -1204,6 +1355,7 @@ export type UserCreateWithoutLoFeedbacksInput = {
   generatedContent?: Prisma.NoteCreateNestedManyWithoutUserInput
   activityAttempts?: Prisma.ActivityAttemptCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  loProgress?: Prisma.LearningObjectProgressCreateNestedManyWithoutUserInput
   studentQuestions?: Prisma.StudentQuestionCreateNestedManyWithoutUserInput
   questionReplies?: Prisma.QuestionReplyCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
@@ -1228,6 +1380,7 @@ export type UserUncheckedCreateWithoutLoFeedbacksInput = {
   generatedContent?: Prisma.NoteUncheckedCreateNestedManyWithoutUserInput
   activityAttempts?: Prisma.ActivityAttemptUncheckedCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  loProgress?: Prisma.LearningObjectProgressUncheckedCreateNestedManyWithoutUserInput
   studentQuestions?: Prisma.StudentQuestionUncheckedCreateNestedManyWithoutUserInput
   questionReplies?: Prisma.QuestionReplyUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
@@ -1267,6 +1420,7 @@ export type UserUpdateWithoutLoFeedbacksInput = {
   generatedContent?: Prisma.NoteUpdateManyWithoutUserNestedInput
   activityAttempts?: Prisma.ActivityAttemptUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  loProgress?: Prisma.LearningObjectProgressUpdateManyWithoutUserNestedInput
   studentQuestions?: Prisma.StudentQuestionUpdateManyWithoutUserNestedInput
   questionReplies?: Prisma.QuestionReplyUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
@@ -1291,6 +1445,7 @@ export type UserUncheckedUpdateWithoutLoFeedbacksInput = {
   generatedContent?: Prisma.NoteUncheckedUpdateManyWithoutUserNestedInput
   activityAttempts?: Prisma.ActivityAttemptUncheckedUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  loProgress?: Prisma.LearningObjectProgressUncheckedUpdateManyWithoutUserNestedInput
   studentQuestions?: Prisma.StudentQuestionUncheckedUpdateManyWithoutUserNestedInput
   questionReplies?: Prisma.QuestionReplyUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
@@ -1314,6 +1469,7 @@ export type UserCreateWithoutGeneratedContentInput = {
   activityAttempts?: Prisma.ActivityAttemptCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   loFeedbacks?: Prisma.LearningObjectFeedbackCreateNestedManyWithoutUserInput
+  loProgress?: Prisma.LearningObjectProgressCreateNestedManyWithoutUserInput
   studentQuestions?: Prisma.StudentQuestionCreateNestedManyWithoutUserInput
   questionReplies?: Prisma.QuestionReplyCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
@@ -1338,6 +1494,7 @@ export type UserUncheckedCreateWithoutGeneratedContentInput = {
   activityAttempts?: Prisma.ActivityAttemptUncheckedCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   loFeedbacks?: Prisma.LearningObjectFeedbackUncheckedCreateNestedManyWithoutUserInput
+  loProgress?: Prisma.LearningObjectProgressUncheckedCreateNestedManyWithoutUserInput
   studentQuestions?: Prisma.StudentQuestionUncheckedCreateNestedManyWithoutUserInput
   questionReplies?: Prisma.QuestionReplyUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
@@ -1377,6 +1534,7 @@ export type UserUpdateWithoutGeneratedContentInput = {
   activityAttempts?: Prisma.ActivityAttemptUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   loFeedbacks?: Prisma.LearningObjectFeedbackUpdateManyWithoutUserNestedInput
+  loProgress?: Prisma.LearningObjectProgressUpdateManyWithoutUserNestedInput
   studentQuestions?: Prisma.StudentQuestionUpdateManyWithoutUserNestedInput
   questionReplies?: Prisma.QuestionReplyUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
@@ -1401,6 +1559,7 @@ export type UserUncheckedUpdateWithoutGeneratedContentInput = {
   activityAttempts?: Prisma.ActivityAttemptUncheckedUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   loFeedbacks?: Prisma.LearningObjectFeedbackUncheckedUpdateManyWithoutUserNestedInput
+  loProgress?: Prisma.LearningObjectProgressUncheckedUpdateManyWithoutUserNestedInput
   studentQuestions?: Prisma.StudentQuestionUncheckedUpdateManyWithoutUserNestedInput
   questionReplies?: Prisma.QuestionReplyUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
@@ -1425,6 +1584,7 @@ export type UserCreateWithoutStudentQuestionsInput = {
   activityAttempts?: Prisma.ActivityAttemptCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   loFeedbacks?: Prisma.LearningObjectFeedbackCreateNestedManyWithoutUserInput
+  loProgress?: Prisma.LearningObjectProgressCreateNestedManyWithoutUserInput
   questionReplies?: Prisma.QuestionReplyCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   studentAiFeedback?: Prisma.StudentAiFeedbackCreateNestedManyWithoutStudentInput
@@ -1449,6 +1609,7 @@ export type UserUncheckedCreateWithoutStudentQuestionsInput = {
   activityAttempts?: Prisma.ActivityAttemptUncheckedCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   loFeedbacks?: Prisma.LearningObjectFeedbackUncheckedCreateNestedManyWithoutUserInput
+  loProgress?: Prisma.LearningObjectProgressUncheckedCreateNestedManyWithoutUserInput
   questionReplies?: Prisma.QuestionReplyUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   studentAiFeedback?: Prisma.StudentAiFeedbackUncheckedCreateNestedManyWithoutStudentInput
@@ -1488,6 +1649,7 @@ export type UserUpdateWithoutStudentQuestionsInput = {
   activityAttempts?: Prisma.ActivityAttemptUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   loFeedbacks?: Prisma.LearningObjectFeedbackUpdateManyWithoutUserNestedInput
+  loProgress?: Prisma.LearningObjectProgressUpdateManyWithoutUserNestedInput
   questionReplies?: Prisma.QuestionReplyUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   studentAiFeedback?: Prisma.StudentAiFeedbackUpdateManyWithoutStudentNestedInput
@@ -1512,6 +1674,7 @@ export type UserUncheckedUpdateWithoutStudentQuestionsInput = {
   activityAttempts?: Prisma.ActivityAttemptUncheckedUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   loFeedbacks?: Prisma.LearningObjectFeedbackUncheckedUpdateManyWithoutUserNestedInput
+  loProgress?: Prisma.LearningObjectProgressUncheckedUpdateManyWithoutUserNestedInput
   questionReplies?: Prisma.QuestionReplyUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   studentAiFeedback?: Prisma.StudentAiFeedbackUncheckedUpdateManyWithoutStudentNestedInput
@@ -1535,6 +1698,7 @@ export type UserCreateWithoutQuestionRepliesInput = {
   activityAttempts?: Prisma.ActivityAttemptCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   loFeedbacks?: Prisma.LearningObjectFeedbackCreateNestedManyWithoutUserInput
+  loProgress?: Prisma.LearningObjectProgressCreateNestedManyWithoutUserInput
   studentQuestions?: Prisma.StudentQuestionCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   studentAiFeedback?: Prisma.StudentAiFeedbackCreateNestedManyWithoutStudentInput
@@ -1559,6 +1723,7 @@ export type UserUncheckedCreateWithoutQuestionRepliesInput = {
   activityAttempts?: Prisma.ActivityAttemptUncheckedCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   loFeedbacks?: Prisma.LearningObjectFeedbackUncheckedCreateNestedManyWithoutUserInput
+  loProgress?: Prisma.LearningObjectProgressUncheckedCreateNestedManyWithoutUserInput
   studentQuestions?: Prisma.StudentQuestionUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   studentAiFeedback?: Prisma.StudentAiFeedbackUncheckedCreateNestedManyWithoutStudentInput
@@ -1598,6 +1763,7 @@ export type UserUpdateWithoutQuestionRepliesInput = {
   activityAttempts?: Prisma.ActivityAttemptUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   loFeedbacks?: Prisma.LearningObjectFeedbackUpdateManyWithoutUserNestedInput
+  loProgress?: Prisma.LearningObjectProgressUpdateManyWithoutUserNestedInput
   studentQuestions?: Prisma.StudentQuestionUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   studentAiFeedback?: Prisma.StudentAiFeedbackUpdateManyWithoutStudentNestedInput
@@ -1622,6 +1788,7 @@ export type UserUncheckedUpdateWithoutQuestionRepliesInput = {
   activityAttempts?: Prisma.ActivityAttemptUncheckedUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   loFeedbacks?: Prisma.LearningObjectFeedbackUncheckedUpdateManyWithoutUserNestedInput
+  loProgress?: Prisma.LearningObjectProgressUncheckedUpdateManyWithoutUserNestedInput
   studentQuestions?: Prisma.StudentQuestionUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   studentAiFeedback?: Prisma.StudentAiFeedbackUncheckedUpdateManyWithoutStudentNestedInput
@@ -1644,6 +1811,7 @@ export type UserCreateWithoutNotificationsInput = {
   generatedContent?: Prisma.NoteCreateNestedManyWithoutUserInput
   activityAttempts?: Prisma.ActivityAttemptCreateNestedManyWithoutUserInput
   loFeedbacks?: Prisma.LearningObjectFeedbackCreateNestedManyWithoutUserInput
+  loProgress?: Prisma.LearningObjectProgressCreateNestedManyWithoutUserInput
   studentQuestions?: Prisma.StudentQuestionCreateNestedManyWithoutUserInput
   questionReplies?: Prisma.QuestionReplyCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
@@ -1668,6 +1836,7 @@ export type UserUncheckedCreateWithoutNotificationsInput = {
   generatedContent?: Prisma.NoteUncheckedCreateNestedManyWithoutUserInput
   activityAttempts?: Prisma.ActivityAttemptUncheckedCreateNestedManyWithoutUserInput
   loFeedbacks?: Prisma.LearningObjectFeedbackUncheckedCreateNestedManyWithoutUserInput
+  loProgress?: Prisma.LearningObjectProgressUncheckedCreateNestedManyWithoutUserInput
   studentQuestions?: Prisma.StudentQuestionUncheckedCreateNestedManyWithoutUserInput
   questionReplies?: Prisma.QuestionReplyUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
@@ -1707,6 +1876,7 @@ export type UserUpdateWithoutNotificationsInput = {
   generatedContent?: Prisma.NoteUpdateManyWithoutUserNestedInput
   activityAttempts?: Prisma.ActivityAttemptUpdateManyWithoutUserNestedInput
   loFeedbacks?: Prisma.LearningObjectFeedbackUpdateManyWithoutUserNestedInput
+  loProgress?: Prisma.LearningObjectProgressUpdateManyWithoutUserNestedInput
   studentQuestions?: Prisma.StudentQuestionUpdateManyWithoutUserNestedInput
   questionReplies?: Prisma.QuestionReplyUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
@@ -1731,6 +1901,7 @@ export type UserUncheckedUpdateWithoutNotificationsInput = {
   generatedContent?: Prisma.NoteUncheckedUpdateManyWithoutUserNestedInput
   activityAttempts?: Prisma.ActivityAttemptUncheckedUpdateManyWithoutUserNestedInput
   loFeedbacks?: Prisma.LearningObjectFeedbackUncheckedUpdateManyWithoutUserNestedInput
+  loProgress?: Prisma.LearningObjectProgressUncheckedUpdateManyWithoutUserNestedInput
   studentQuestions?: Prisma.StudentQuestionUncheckedUpdateManyWithoutUserNestedInput
   questionReplies?: Prisma.QuestionReplyUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
@@ -1755,6 +1926,7 @@ export type UserCreateWithoutStudentAiFeedbackInput = {
   activityAttempts?: Prisma.ActivityAttemptCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   loFeedbacks?: Prisma.LearningObjectFeedbackCreateNestedManyWithoutUserInput
+  loProgress?: Prisma.LearningObjectProgressCreateNestedManyWithoutUserInput
   studentQuestions?: Prisma.StudentQuestionCreateNestedManyWithoutUserInput
   questionReplies?: Prisma.QuestionReplyCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
@@ -1779,6 +1951,7 @@ export type UserUncheckedCreateWithoutStudentAiFeedbackInput = {
   activityAttempts?: Prisma.ActivityAttemptUncheckedCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   loFeedbacks?: Prisma.LearningObjectFeedbackUncheckedCreateNestedManyWithoutUserInput
+  loProgress?: Prisma.LearningObjectProgressUncheckedCreateNestedManyWithoutUserInput
   studentQuestions?: Prisma.StudentQuestionUncheckedCreateNestedManyWithoutUserInput
   questionReplies?: Prisma.QuestionReplyUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
@@ -1818,6 +1991,7 @@ export type UserUpdateWithoutStudentAiFeedbackInput = {
   activityAttempts?: Prisma.ActivityAttemptUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   loFeedbacks?: Prisma.LearningObjectFeedbackUpdateManyWithoutUserNestedInput
+  loProgress?: Prisma.LearningObjectProgressUpdateManyWithoutUserNestedInput
   studentQuestions?: Prisma.StudentQuestionUpdateManyWithoutUserNestedInput
   questionReplies?: Prisma.QuestionReplyUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
@@ -1842,6 +2016,7 @@ export type UserUncheckedUpdateWithoutStudentAiFeedbackInput = {
   activityAttempts?: Prisma.ActivityAttemptUncheckedUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   loFeedbacks?: Prisma.LearningObjectFeedbackUncheckedUpdateManyWithoutUserNestedInput
+  loProgress?: Prisma.LearningObjectProgressUncheckedUpdateManyWithoutUserNestedInput
   studentQuestions?: Prisma.StudentQuestionUncheckedUpdateManyWithoutUserNestedInput
   questionReplies?: Prisma.QuestionReplyUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
@@ -1859,6 +2034,7 @@ export type UserCountOutputType = {
   activityAttempts: number
   notifications: number
   loFeedbacks: number
+  loProgress: number
   studentQuestions: number
   questionReplies: number
   sessions: number
@@ -1872,6 +2048,7 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   activityAttempts?: boolean | UserCountOutputTypeCountActivityAttemptsArgs
   notifications?: boolean | UserCountOutputTypeCountNotificationsArgs
   loFeedbacks?: boolean | UserCountOutputTypeCountLoFeedbacksArgs
+  loProgress?: boolean | UserCountOutputTypeCountLoProgressArgs
   studentQuestions?: boolean | UserCountOutputTypeCountStudentQuestionsArgs
   questionReplies?: boolean | UserCountOutputTypeCountQuestionRepliesArgs
   sessions?: boolean | UserCountOutputTypeCountSessionsArgs
@@ -1933,6 +2110,13 @@ export type UserCountOutputTypeCountLoFeedbacksArgs<ExtArgs extends runtime.Type
 /**
  * UserCountOutputType without action
  */
+export type UserCountOutputTypeCountLoProgressArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.LearningObjectProgressWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
 export type UserCountOutputTypeCountStudentQuestionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.StudentQuestionWhereInput
 }
@@ -1978,6 +2162,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   activityAttempts?: boolean | Prisma.User$activityAttemptsArgs<ExtArgs>
   notifications?: boolean | Prisma.User$notificationsArgs<ExtArgs>
   loFeedbacks?: boolean | Prisma.User$loFeedbacksArgs<ExtArgs>
+  loProgress?: boolean | Prisma.User$loProgressArgs<ExtArgs>
   studentQuestions?: boolean | Prisma.User$studentQuestionsArgs<ExtArgs>
   questionReplies?: boolean | Prisma.User$questionRepliesArgs<ExtArgs>
   sessions?: boolean | Prisma.User$sessionsArgs<ExtArgs>
@@ -2038,6 +2223,7 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   activityAttempts?: boolean | Prisma.User$activityAttemptsArgs<ExtArgs>
   notifications?: boolean | Prisma.User$notificationsArgs<ExtArgs>
   loFeedbacks?: boolean | Prisma.User$loFeedbacksArgs<ExtArgs>
+  loProgress?: boolean | Prisma.User$loProgressArgs<ExtArgs>
   studentQuestions?: boolean | Prisma.User$studentQuestionsArgs<ExtArgs>
   questionReplies?: boolean | Prisma.User$questionRepliesArgs<ExtArgs>
   sessions?: boolean | Prisma.User$sessionsArgs<ExtArgs>
@@ -2056,6 +2242,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     activityAttempts: Prisma.$ActivityAttemptPayload<ExtArgs>[]
     notifications: Prisma.$NotificationPayload<ExtArgs>[]
     loFeedbacks: Prisma.$LearningObjectFeedbackPayload<ExtArgs>[]
+    loProgress: Prisma.$LearningObjectProgressPayload<ExtArgs>[]
     studentQuestions: Prisma.$StudentQuestionPayload<ExtArgs>[]
     questionReplies: Prisma.$QuestionReplyPayload<ExtArgs>[]
     sessions: Prisma.$SessionPayload<ExtArgs>[]
@@ -2474,6 +2661,7 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   activityAttempts<T extends Prisma.User$activityAttemptsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$activityAttemptsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ActivityAttemptPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   notifications<T extends Prisma.User$notificationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$notificationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   loFeedbacks<T extends Prisma.User$loFeedbacksArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$loFeedbacksArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LearningObjectFeedbackPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  loProgress<T extends Prisma.User$loProgressArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$loProgressArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LearningObjectProgressPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   studentQuestions<T extends Prisma.User$studentQuestionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$studentQuestionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$StudentQuestionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   questionReplies<T extends Prisma.User$questionRepliesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$questionRepliesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$QuestionReplyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   sessions<T extends Prisma.User$sessionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$sessionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -3053,6 +3241,30 @@ export type User$loFeedbacksArgs<ExtArgs extends runtime.Types.Extensions.Intern
   take?: number
   skip?: number
   distinct?: Prisma.LearningObjectFeedbackScalarFieldEnum | Prisma.LearningObjectFeedbackScalarFieldEnum[]
+}
+
+/**
+ * User.loProgress
+ */
+export type User$loProgressArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the LearningObjectProgress
+   */
+  select?: Prisma.LearningObjectProgressSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the LearningObjectProgress
+   */
+  omit?: Prisma.LearningObjectProgressOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.LearningObjectProgressInclude<ExtArgs> | null
+  where?: Prisma.LearningObjectProgressWhereInput
+  orderBy?: Prisma.LearningObjectProgressOrderByWithRelationInput | Prisma.LearningObjectProgressOrderByWithRelationInput[]
+  cursor?: Prisma.LearningObjectProgressWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.LearningObjectProgressScalarFieldEnum | Prisma.LearningObjectProgressScalarFieldEnum[]
 }
 
 /**
