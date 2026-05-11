@@ -44,6 +44,7 @@ model User {
   studentQuestions StudentQuestion[]
   questionReplies  QuestionReply[]
   sessions         Session[]
+  studentAiFeedback StudentAiFeedback[]
 
   @@index([microsoftId])
   @@map("users")
@@ -72,6 +73,7 @@ model Module {
   aiConfiguration  AiConfiguration?
   moduleMetrics    ModuleMetrics?
   teacherFeedbacks TeacherAiFeedback[]
+  studentAIFeedbacks StudentAiFeedback[]
 
   @@index([teacherId])
   @@map("modules")
@@ -174,7 +176,6 @@ model LearningObject {
   keywords          String[] // Mantener para búsquedas
   compiledContent   String?                      @map("compiled_content")
   isPublished       Boolean                      @default(false) @map("is_published")
-  aiResponseId      String?                      @map("ai_response_id") // Para continuar conversación
   hasManualEdits    Boolean                      @default(false) @map("has_manual_edits") // Si el profesor editó manualmente
   conceptsProcessed Boolean                      @default(false) @map("concepts_processed") // Si se procesaron los conceptos
   createdAt         DateTime                     @default(now()) @map("created_at")
@@ -619,10 +620,9 @@ model TeacherAiFeedback {
   scope            TeacherFeedbackScope
   moduleId         Int                  @map("module_id")
   learningObjectId Int?                 @map("learning_object_id")
-  content          Json // Respuesta estructurada de la IA: { summary, strengths, improvements, recommendations }
+  content          Json
   createdAt        DateTime             @default(now()) @map("created_at")
 
-  // Relations
   module         Module          @relation(fields: [moduleId], references: [id], onDelete: Cascade)
   learningObject LearningObject? @relation(fields: [learningObjectId], references: [id], onDelete: Cascade)
 
@@ -630,6 +630,23 @@ model TeacherAiFeedback {
   @@index([learningObjectId])
   @@index([createdAt])
   @@map("teacher_ai_feedbacks")
+}
+
+model StudentAiFeedback {
+  id           Int     @id @default(autoincrement())
+  scope        String  @default("WEEKLY_DIGEST") @map("scope")
+  studentId    Int     @map("student_id")
+  moduleId     Int     @map("module_id")
+  content      Json
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  student  User    @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  module   Module  @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+
+  @@index([studentId])
+  @@index([moduleId])
+  @@index([createdAt])
+  @@map("student_ai_feedbacks")
 }
 
 model Video {

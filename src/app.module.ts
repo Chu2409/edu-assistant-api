@@ -14,6 +14,7 @@ import { ChatModule } from './features/chat/chat.module'
 import { ContentGenerationModule } from './features/content-generation/content-generation.module'
 import { TeacherFeedbackModule } from './features/teacher-feedback/teacher-feedback.module'
 import { VideosModule } from './features/videos/videos.module'
+import { StudentAIFeedbackModule } from './features/student-ai-feedback/student-ai-feedback.module'
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { VideosModule } from './features/videos/videos.module'
     ContentGenerationModule,
     TeacherFeedbackModule,
     VideosModule,
+    StudentAIFeedbackModule,
     // EmailModule,
   ],
   controllers: [HealthController],

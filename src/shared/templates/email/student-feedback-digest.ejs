@@ -1,0 +1,61 @@
+<h2 style="margin-top: 0; color: #233a83;">Tu Resumen Semanal de Aprendizaje</h2>
+<p><%= aiContent.greeting %></p>
+<p>Te enviamos tu resumen semanal de aprendizaje para <strong><%= moduleTitle %></strong>. Este email está basado en tu actividad durante la última semana.</p>
+
+<div style="background-color: #f0f7ff; padding: 20px; border-radius: 4px; border-left: 4px solid #4caf50; margin: 25px 0;">
+    <p style="margin: 0 0 10px 0; font-size: 16px;"><strong>Módulo:</strong> <%= moduleTitle %></p>
+</div>
+
+<div style="background-color: #e8f5e9; padding: 20px; border-radius: 4px; border-left: 4px solid #4caf50; margin: 25px 0;">
+    <h3 style="margin: 0 0 10px 0; color: #2e7d32; font-size: 16px;">📊 Tu semana en números</h3>
+    <p style="margin: 0; font-size: 14px; color: #555;"><%= aiContent.weeklySummary %></p>
+</div>
+
+<% if (aiContent.areasOfDifficulty && aiContent.areasOfDifficulty.length > 0) { %>
+    <h3 style="color: #fd7e14; font-size: 18px; margin-bottom: 10px;">⚠️ Áreas de dificultad</h3>
+    <% aiContent.areasOfDifficulty.forEach(function(area) { %>
+        <div style="background-color: #fff3e0; padding: 15px; border-radius: 4px; border-left: 4px solid #fd7e14; margin: 15px 0;">
+            <h4 style="margin: 0 0 8px 0; color: #233a83; font-size: 16px;"><%= area.concept %></h4>
+            <p style="margin: 0 0 8px 0; font-size: 14px; color: #555;"><%= area.explanation %></p>
+            <p style="margin: 0; font-size: 12px; color: #888;">Aparece en: <%= area.relatedLoTitle %></p>
+        </div>
+    <% }); %>
+<% } %>
+
+<% if (aiContent.recommendedActions && aiContent.recommendedActions.length > 0) { %>
+    <h3 style="color: #2196f3; font-size: 18px; margin-bottom: 10px;">📚 Contenido recomendado para vos</h3>
+    <% aiContent.recommendedActions.forEach(function(action) { %>
+        <div style="background-color: #e3f2fd; padding: 15px; border-radius: 4px; border-left: 4px solid #2196f3; margin: 15px 0;">
+            <h4 style="margin: 0 0 8px 0; color: #233a83; font-size: 16px;"><%= action.loTitle %></h4>
+            <p style="margin: 0 0 8px 0; font-size: 14px; color: #555;"><%= action.reason %></p>
+            <p style="margin: 0; font-size: 14px; color: #2e7d32;"><strong>💡 Tip de estudio:</strong> <%= action.studyTip %></p>
+        </div>
+    <% }); %>
+<% } %>
+
+<% if (aiContent.vocabularyTips && aiContent.vocabularyTips.length > 0) { %>
+    <h3 style="color: #9c27b0; font-size: 18px; margin-bottom: 10px;">📖 Vocabulario clave</h3>
+    <% aiContent.vocabularyTips.forEach(function(vocab) { %>
+        <div style="background-color: #f3e5f5; padding: 15px; border-radius: 4px; border-left: 4px solid #9c27b0; margin: 15px 0;">
+            <h4 style="margin: 0 0 8px 0; color: #233a83; font-size: 16px;"><%= vocab.term %></h4>
+            <p style="margin: 0 0 8px 0; font-size: 14px; color: #555;"><%= vocab.definition %></p>
+            <p style="margin: 0; font-size: 14px; color: #666;"><em>Ejemplo: <%= vocab.usageExample %></em></p>
+        </div>
+    <% }); %>
+<% } %>
+
+<div style="background-color: #e8f5e9; padding: 20px; border-radius: 4px; border-left: 4px solid #4caf50; margin: 25px 0;">
+    <p style="margin: 0; font-size: 16px; color: #2e7d32;"><%= aiContent.encouragement %></p>
+</div>
+
+<p style="text-align: center; margin: 30px 0;">
+    <a href="<%= baseUrl %>/modules/<%= moduleId %>/wiki" style="background-color: #233a83; color: #ffffff; padding: 12px 24px; text-decoration: none; border-radius: 4px; font-weight: 600; display: inline-block;">Ir a mi Módulo</a>
+</p>
+
+<div style="margin-top: 30px; padding: 15px; background-color: #f8f9fa; border-radius: 4px;">
+    <p style="margin: 0; font-size: 12px; color: #666;">
+        <strong>Sobre este email:</strong> Este resumen se genera automáticamente basándose en tus interacciones con el contenido del módulo. Incluye tus intentos de actividades, preguntas realizadas y progreso general. ¡Seguíl así!
+    </p>
+</div>
+
+<p>Saludos y buen aprendizaje,<br>El equipo de NousAI</p>

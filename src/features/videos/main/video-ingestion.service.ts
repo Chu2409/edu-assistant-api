@@ -9,6 +9,7 @@ import { TranscriptionResult } from '../transcription/interfaces/transcription-r
 import { GenerationResult } from '../ai/interfaces/generation-result.interface'
 import { GENERATED_BLOCK_TYPES } from '../constants/video.constants'
 import { VideoStateService } from './video-state.service'
+import { LoHelperService } from 'src/features/learning-objects/main/lo-helper.service'
 
 @Injectable()
 export class VideoIngestionService {
@@ -17,6 +18,7 @@ export class VideoIngestionService {
   constructor(
     private readonly dbService: DBService,
     private readonly stateService: VideoStateService,
+    private readonly loHelper: LoHelperService,
   ) {}
 
   async transition(
@@ -59,6 +61,8 @@ export class VideoIngestionService {
     if (blocks.length > 0) {
       await tx.block.createMany({ data: blocks })
     }
+
+    await this.loHelper.updateCompiledContent(tx, videoId)
   }
 
   async loadForProcessing(videoId: number) {

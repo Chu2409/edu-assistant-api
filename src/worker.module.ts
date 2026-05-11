@@ -8,6 +8,9 @@ import { EnrollmentsWorker } from './features/modules/enrollments/workers/enroll
 import { ModulesModule } from './features/modules/modules.module'
 import { VideosModule } from './features/videos/videos.module'
 import { VideoProcessingWorker } from './features/videos/workers/video-processing.worker'
+import { StudentAIFeedbackModule } from './features/student-ai-feedback/student-ai-feedback.module'
+import { StudentAIFeedbackWorker } from './features/student-ai-feedback/workers/student-ai-feedback.worker'
+import { EmailModule } from './providers/email/email.module'
 
 @Module({
   imports: [
@@ -16,12 +19,15 @@ import { VideoProcessingWorker } from './features/videos/workers/video-processin
     TeacherFeedbackModule,
     VideosModule,
     ModulesModule,
+    StudentAIFeedbackModule,
+    EmailModule,
   ],
   providers: [
     EmbeddingsWorker,
     TeacherFeedbackWorker,
     VideoProcessingWorker,
     EnrollmentsWorker,
+    StudentAIFeedbackWorker,
   ],
 })
 export class WorkerModule {}

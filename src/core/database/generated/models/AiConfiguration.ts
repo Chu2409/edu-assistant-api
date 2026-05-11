@@ -224,7 +224,7 @@ export type AiConfigurationGroupByOutputType = {
   _max: AiConfigurationMaxAggregateOutputType | null
 }
 
-type GetAiConfigurationGroupByPayload<T extends AiConfigurationGroupByArgs> = Prisma.PrismaPromise<
+export type GetAiConfigurationGroupByPayload<T extends AiConfigurationGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<AiConfigurationGroupByOutputType, T['by']> &
       {
