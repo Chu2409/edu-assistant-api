@@ -4,6 +4,7 @@ import { NoteDto } from 'src/features/interactions/notes/dtos/res/note.dto'
 import { LoFeedbackDto } from 'src/features/interactions/lo-feedbacks/dtos/res/lo-feedback.dto'
 import { StudentQuestionDto } from 'src/features/interactions/student-questions/dtos/res/student-question.dto'
 import { LoTypeDto } from 'src/features/learning-objects/lo-types/dtos/res/lo-type.dto'
+import { LoProgressDto } from 'src/features/interactions/lo-progress/dtos/res/lo-progress.dto'
 
 export class FullLoDto {
   @ApiProperty({
@@ -166,4 +167,11 @@ export class FullLoDto {
     nullable: true,
   })
   nextLoId?: number | null
+
+  @ApiPropertyOptional({
+    description: 'Progreso del estudiante en el objeto de aprendizaje',
+    type: () => LoProgressDto,
+    nullable: true,
+  })
+  progress?: LoProgressDto | null
 }

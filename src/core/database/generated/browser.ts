@@ -48,6 +48,11 @@ export type LearningObjectType = Prisma.LearningObjectTypeModel
  */
 export type LearningObject = Prisma.LearningObjectModel
 /**
+ * Model LearningObjectProgress
+ * 
+ */
+export type LearningObjectProgress = Prisma.LearningObjectProgressModel
+/**
  * Model Block
  * 
  */
