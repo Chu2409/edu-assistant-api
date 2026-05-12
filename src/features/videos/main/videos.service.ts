@@ -242,7 +242,6 @@ export class VideosService {
         },
       })
 
-
       for (let index = 0; index < dto.blocks.length; index++) {
         const blockDto = dto.blocks[index]
         const orderIndex = index
@@ -289,6 +288,8 @@ export class VideosService {
         blocks: { orderBy: { orderIndex: 'asc' } },
       },
     })
+
+    await this.loHelper.triggerEmbeddingUpdate(id, updated.isPublished)
 
     return VideoMapper.toFullDto(
       updated as typeof updated & { video: NonNullable<typeof updated.video> },

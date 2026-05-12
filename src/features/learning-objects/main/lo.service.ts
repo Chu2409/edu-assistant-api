@@ -22,8 +22,6 @@ export class LoService {
   constructor(
     private readonly dbService: DBService,
     private readonly loHelper: LoHelperService,
-    @InjectQueue(QUEUE_NAMES.EMBEDDINGS.NAME)
-    private readonly embeddingsQueue: Queue,
   ) {}
 
   async create(dto: CreateLoDto, user: User): Promise<LoDto> {
@@ -52,6 +50,8 @@ export class LoService {
       },
       include: { type: true },
     })
+
+    await this.loHelper.triggerEmbeddingUpdate(lo.id, lo.isPublished)
 
     return LoMapper.mapToDto(lo)
   }
@@ -297,14 +297,7 @@ export class LoService {
       include: { type: true },
     })
 
-
-    if (updateLoDto.isPublished === true) {
-      await this.embeddingsQueue.add(
-        QUEUE_NAMES.EMBEDDINGS.JOBS.PROCESS_LO,
-        { learningObjectId: id },
-        { removeOnComplete: true },
-      )
-    }
+    await this.loHelper.triggerEmbeddingUpdate(lo.id, lo.isPublished)
 
     return LoMapper.mapToDto(lo)
   }
@@ -391,6 +384,8 @@ export class LoService {
       where: { id },
       include: { type: true },
     })
+
+    await this.loHelper.triggerEmbeddingUpdate(id, updatedLo!.isPublished)
 
     return LoMapper.mapToDto(updatedLo!)
   }
