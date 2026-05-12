@@ -3,10 +3,32 @@ import { DBService } from 'src/core/database/database.service'
 import { type User, Prisma } from 'src/core/database/generated/client'
 import { AuthorizationUtils } from 'src/shared/utils/authorization.util'
 import { compileBlocksToText } from '../blocks/helpers/compile-blocks'
+import { InjectQueue } from '@nestjs/bullmq'
+import { QUEUE_NAMES } from 'src/shared/constants/queues'
+import { Queue } from 'bullmq'
 
 @Injectable()
 export class LoHelperService {
-  constructor(private readonly dbService: DBService) {}
+  constructor(
+    private readonly dbService: DBService,
+    @InjectQueue(QUEUE_NAMES.EMBEDDINGS.NAME)
+    private readonly embeddingsQueue: Queue,
+  ) {}
+
+  async triggerEmbeddingUpdate(loId: number, isPublished: boolean) {
+    if (!isPublished) {
+      return
+    }
+
+    await this.embeddingsQueue.add(
+      QUEUE_NAMES.EMBEDDINGS.JOBS.PROCESS_LO,
+      { learningObjectId: loId },
+      {
+        jobId: `lo-embedding-${loId}`,
+        removeOnComplete: true,
+      },
+    )
+  }
 
   async updateCompiledContent(tx: Prisma.TransactionClient, loId: number) {
     const blocks = await tx.block.findMany({

@@ -7,7 +7,10 @@ import { LoProgressDto } from './dtos/res/lo-progress.dto'
 export class LoProgressService {
   constructor(private readonly dbService: DBService) {}
 
-  async markVisited(userId: number, dto: MarkLoVisitedDto): Promise<LoProgressDto> {
+  async markVisited(
+    userId: number,
+    dto: MarkLoVisitedDto,
+  ): Promise<LoProgressDto> {
     const { learningObjectId, isCompleted } = dto
 
     const progress = await this.dbService.learningObjectProgress.upsert({
@@ -36,7 +39,10 @@ export class LoProgressService {
     return progress as LoProgressDto
   }
 
-  async getProgress(userId: number, learningObjectId: number): Promise<LoProgressDto | null> {
+  async getProgress(
+    userId: number,
+    learningObjectId: number,
+  ): Promise<LoProgressDto | null> {
     const progress = await this.dbService.learningObjectProgress.findUnique({
       where: {
         userId_learningObjectId: {
