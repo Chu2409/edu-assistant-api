@@ -48,6 +48,14 @@ async function bootstrap() {
   app.use(express.urlencoded({ limit: '50mb', extended: true }))
   app.use(express.text({ limit: '50mb' }))
 
+  // Support for Private Network Access (PNA) CORS preflight
+  app.use((req, res, next) => {
+    if (req.headers['access-control-request-private-network'] === 'true') {
+      res.setHeader('Access-Control-Allow-Private-Network', 'true')
+    }
+    next()
+  })
+
   app.enableCors()
 
   app.useGlobalPipes(
