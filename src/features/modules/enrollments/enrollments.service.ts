@@ -16,6 +16,7 @@ import { EnrollmentsMapper } from './mappers/enrollments.mapper'
 import { EnrollmentStudentsDto } from './dtos/res/enrollment-student.dto'
 import { EMAIL_TEMPLATES } from 'src/shared/constants/email-templates'
 import { AuthorizationUtils } from 'src/shared/utils/authorization.util'
+import { EventEmitter2 } from '@nestjs/event-emitter'
 
 @Injectable()
 export class EnrollmentsService {
@@ -24,6 +25,7 @@ export class EnrollmentsService {
   constructor(
     private readonly dbService: DBService,
     private readonly emailService: EmailService,
+    private readonly eventEmitter: EventEmitter2,
   ) {}
 
   async selfEnroll(
@@ -90,6 +92,12 @@ export class EnrollmentsService {
         },
       })
     }
+
+    this.eventEmitter.emit('student.enrolled', {
+      studentId: user.id,
+      moduleId: createEnrollmentDto.moduleId,
+      moduleTitle: module.title,
+    })
 
     return EnrollmentsMapper.mapToDto(enrollment)
   }
@@ -170,6 +178,12 @@ export class EnrollmentsService {
         },
       })
     }
+
+    this.eventEmitter.emit('student.enrolled.bulk', {
+      studentIds: bulkEnrollDto.studentIds,
+      moduleId: bulkEnrollDto.moduleId,
+      moduleTitle: module.title,
+    })
 
     const allEnrollments = await this.dbService.enrollment.findMany({
       where: {

@@ -20,6 +20,7 @@ import { EMAIL_TEMPLATES } from 'src/shared/constants/email-templates'
 import { CustomConfigService } from 'src/core/config/config.service'
 import { InjectQueue } from '@nestjs/bullmq'
 import { Queue } from 'bullmq'
+import { EventEmitter2 } from '@nestjs/event-emitter'
 import { QUEUE_NAMES } from 'src/shared/constants/queues'
 
 @Injectable()
@@ -33,6 +34,7 @@ export class StudentAIFeedbackService {
     private readonly emailService: EmailService,
     private readonly emailDailyLimitService: EmailDailyLimitService,
     private readonly configService: CustomConfigService,
+    private readonly eventEmitter: EventEmitter2,
     @InjectQueue(QUEUE_NAMES.STUDENT_AI_FEEDBACK.NAME)
     private readonly feedbackQueue: Queue,
   ) {}
@@ -149,13 +151,20 @@ export class StudentAIFeedbackService {
       const aiContent = response.content
 
       // Save to database
-      await this.dbService.studentAiFeedback.create({
+      const feedback = await this.dbService.studentAiFeedback.create({
         data: {
           scope: 'WEEKLY_DIGEST',
           studentId,
           moduleId,
           content: aiContent as object,
         },
+      })
+
+      this.eventEmitter.emit('digest.generated', {
+        studentId,
+        moduleId,
+        feedbackId: feedback.id,
+        moduleTitle: module.title,
       })
 
       // Send email with digest (respecting daily limit)

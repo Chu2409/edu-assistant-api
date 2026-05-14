@@ -21,6 +21,7 @@ import {
 import type { AiFeedbackContent } from './interfaces/feedback-data.interface'
 import type { ApiPaginatedRes } from 'src/shared/dtos/res/api-response.dto'
 import { TeacherFeedbackScope } from 'src/core/database/generated/enums'
+import { EventEmitter2 } from '@nestjs/event-emitter'
 
 import { EMAIL_TEMPLATES } from 'src/shared/constants/email-templates'
 
@@ -33,6 +34,7 @@ export class TeacherFeedbackService {
     private readonly openaiService: OpenaiService,
     private readonly dataCollector: FeedbackDataCollectorService,
     private readonly emailService: EmailService,
+    private readonly eventEmitter: EventEmitter2,
   ) {}
 
   async listByModule(
@@ -99,7 +101,7 @@ export class TeacherFeedbackService {
         },
         aiConfiguration: true,
         teacher: {
-          select: { email: true },
+          select: { id: true, email: true },
         },
       },
     })
@@ -152,6 +154,13 @@ export class TeacherFeedbackService {
           },
         )
         this.logger.log(`Email enviado exitosamente a ${mod.teacher.email}`)
+
+        // Emit event for teacher notification
+        this.eventEmitter.emit('teacher.feedback.generated', {
+          teacherId: mod.teacherId,
+          moduleId: mod.id,
+          moduleTitle: mod.title,
+        })
       } else if (!feedbackContent) {
         this.logger.log(
           `No se generó feedback para módulo ${mod.id}, no se envía email`,

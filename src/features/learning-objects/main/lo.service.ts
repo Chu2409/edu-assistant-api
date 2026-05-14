@@ -13,12 +13,14 @@ import { ApiPaginatedRes } from 'src/shared/dtos/res/api-response.dto'
 import { FullLoDto } from './dtos/res/full-lo.dto'
 import { AuthorizationUtils } from 'src/shared/utils/authorization.util'
 import { LoHelperService } from './lo-helper.service'
+import { EventEmitter2 } from '@nestjs/event-emitter'
 
 @Injectable()
 export class LoService {
   constructor(
     private readonly dbService: DBService,
     private readonly loHelper: LoHelperService,
+    private readonly eventEmitter: EventEmitter2,
   ) {}
 
   async create(dto: CreateLoDto, user: User): Promise<LoDto> {
@@ -49,6 +51,14 @@ export class LoService {
     })
 
     await this.loHelper.triggerEmbeddingUpdate(lo.id, lo.isPublished)
+
+    if (lo.isPublished) {
+      this.eventEmitter.emit('lo.published', {
+        loId: lo.id,
+        title: lo.title,
+        moduleId: lo.moduleId,
+      })
+    }
 
     return LoMapper.mapToDto(lo)
   }
@@ -295,6 +305,14 @@ export class LoService {
     })
 
     await this.loHelper.triggerEmbeddingUpdate(lo.id, lo.isPublished)
+
+    if (lo.isPublished && !existingLo.isPublished) {
+      this.eventEmitter.emit('lo.published', {
+        loId: lo.id,
+        title: lo.title,
+        moduleId: lo.moduleId,
+      })
+    }
 
     return LoMapper.mapToDto(lo)
   }

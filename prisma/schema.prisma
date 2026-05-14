@@ -519,6 +519,9 @@ enum NotificationType {
   TEACHER_REPLY
   EXCESSIVE_USE_WARNING // RF-13: abuso de herramienta
   MODULE_UPDATE
+  WEEKLY_DIGEST
+  NEW_ENROLLMENT
+  TEACHER_AI_FEEDBACK
 }
 
 model Notification {

@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common'
+import { EventEmitterModule } from '@nestjs/event-emitter'
 import { CoreModule } from './core/core.module'
 import { HealthController } from './health.controller'
 import { ResponseInterceptor } from './shared/interceptors/response.interceptor'
@@ -15,9 +16,11 @@ import { ContentGenerationModule } from './features/content-generation/content-g
 import { TeacherFeedbackModule } from './features/teacher-feedback/teacher-feedback.module'
 import { VideosModule } from './features/videos/videos.module'
 import { StudentAIFeedbackModule } from './features/student-ai-feedback/student-ai-feedback.module'
+import { NotificationsModule } from './features/notifications/notifications.module'
 
 @Module({
   imports: [
+    EventEmitterModule.forRoot(),
     CoreModule,
     AuthModule,
     ModulesModule,
@@ -30,6 +33,7 @@ import { StudentAIFeedbackModule } from './features/student-ai-feedback/student-
     TeacherFeedbackModule,
     VideosModule,
     StudentAIFeedbackModule,
+    NotificationsModule,
     // EmailModule,
   ],
   controllers: [HealthController],
