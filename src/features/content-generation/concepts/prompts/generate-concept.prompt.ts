@@ -1,5 +1,6 @@
 import { PromptInput } from '../../../../providers/ai/interfaces/prompt-input.interface'
 import { JSON_ONLY_INSTRUCTION } from '../../shared/helpers/guidances'
+import { resolveLanguageName } from 'src/shared/utils/language.util'
 
 export interface GenerateConceptDefinitionPromptInput {
   selectedText: string
@@ -19,6 +20,7 @@ export const generateConceptDefinitionPrompt = ({
   config,
 }: GenerateConceptDefinitionPromptInput): PromptInput[] => {
   const { language = 'es', maxDefinitionLength = 120 } = config
+  const languageName = resolveLanguageName(language)
 
   return [
     {
@@ -48,7 +50,7 @@ ${JSON_ONLY_INSTRUCTION}
 - Standalone (no references like "in this context" or "as mentioned")
 - No circular definitions (don't use the term to define itself)
 - Appropriate for students encountering this term
-- Language: ${language}
+- Respond entirely in ${languageName}. All output fields MUST be written in ${languageName}.
 
 # QUALITY GUIDELINES
 

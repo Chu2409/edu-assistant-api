@@ -38,6 +38,7 @@ export class RelationsService {
       where: { id: data.learningObjectId },
       include: {
         blocks: { orderBy: { orderIndex: 'asc' } },
+        module: { include: { aiConfiguration: true } },
       },
     })
 
@@ -107,6 +108,7 @@ export class RelationsService {
       candidatePages: candidateLosForPrompt,
       config: {
         maxRelationsPerPage,
+        language: lo.module.aiConfiguration?.language ?? 'es',
       },
     })
 
