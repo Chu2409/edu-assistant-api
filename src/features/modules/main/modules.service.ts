@@ -92,18 +92,21 @@ export class ModulesService {
   ): Promise<ApiPaginatedRes<ModuleDto>> {
     const where: Prisma.ModuleWhereInput = {}
 
-    if (user.role === Role.TEACHER) {
+    if (user.role === Role.TEACHER || user.role === Role.ADMIN) {
       where.OR = [
         { teacherId: user.id },
         { enrollments: { some: { userId: user.id, isActive: true } } },
       ]
-    } else if (user.role === Role.STUDENT) {
+    } else {
       where.enrollments = {
         some: { userId: user.id, isActive: true },
       }
       where.isActive = true
     }
-    where.teacherId = { in: convertToFilterWhere(params.teacherId) }
+
+    if (params.teacherId) {
+      where.teacherId = { in: convertToFilterWhere(params.teacherId) }
+    }
 
     if (params.search) {
       where.AND = {
@@ -148,7 +151,12 @@ export class ModulesService {
 
     where.isPublic = true
     where.isActive = true
-    where.teacherId = { in: convertToFilterWhere(params.teacherId) }
+
+    where.teacherId = {
+      not: user.id,
+      ...(params.teacherId && { in: convertToFilterWhere(params.teacherId) }),
+    }
+
     where.enrollments = {
       none: { userId: user.id },
     }

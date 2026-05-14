@@ -65,7 +65,6 @@ export class StudentFeedbackDataCollectorService {
     for (const attempt of allAttempts) {
       const activityId = attempt.activityId
       const loId = attempt.activity.learningObject.id
-      const loTitle = attempt.activity.learningObject.title
 
       if (!activityMap.has(activityId)) {
         activityMap.set(activityId, {
@@ -115,7 +114,7 @@ export class StudentFeedbackDataCollectorService {
     >()
     for (const [loId, attempts] of failedAttemptsByLo.entries()) {
       const loTitle = loMap.get(loId) || `LO ${loId}`
-      for (const attempt of attempts) {
+      for (const _attempt of attempts) {
         // For now, we'll use the loTitle as the concept since we don't have concept mentions here
         const key = loTitle
         if (!conceptErrors.has(key)) {

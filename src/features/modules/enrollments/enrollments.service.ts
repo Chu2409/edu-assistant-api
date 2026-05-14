@@ -11,10 +11,11 @@ import { CreateEnrollmentDto } from './dtos/req/create-enrollment.dto'
 import { UpdateEnrollmentDto } from './dtos/req/update-enrollment.dto'
 import { BulkEnrollStudentsDto } from './dtos/req/bulk-enroll-students.dto'
 import { EnrollmentDto } from './dtos/res/enrollment.dto'
-import type { User } from 'src/core/database/generated/client'
+import { Role, type User } from 'src/core/database/generated/client'
 import { EnrollmentsMapper } from './mappers/enrollments.mapper'
 import { EnrollmentStudentsDto } from './dtos/res/enrollment-student.dto'
 import { EMAIL_TEMPLATES } from 'src/shared/constants/email-templates'
+import { AuthorizationUtils } from 'src/shared/utils/authorization.util'
 
 @Injectable()
 export class EnrollmentsService {
@@ -40,18 +41,20 @@ export class EnrollmentsService {
       )
     }
 
-    if (!module.allowSelfEnroll) {
-      throw new BusinessException(
-        'Este módulo no permite auto-inscripción',
-        HttpStatus.FORBIDDEN,
-      )
-    }
+    if (user.role !== Role.ADMIN) {
+      if (!module.allowSelfEnroll) {
+        throw new BusinessException(
+          'Este módulo no permite auto-inscripción',
+          HttpStatus.FORBIDDEN,
+        )
+      }
 
-    if (!module.isActive) {
-      throw new BusinessException(
-        'El módulo no está activo',
-        HttpStatus.BAD_REQUEST,
-      )
+      if (!module.isActive) {
+        throw new BusinessException(
+          'El módulo no está activo',
+          HttpStatus.BAD_REQUEST,
+        )
+      }
     }
 
     const existingEnrollment = await this.dbService.enrollment.findUnique({
@@ -93,7 +96,7 @@ export class EnrollmentsService {
 
   async bulkEnrollStudents(
     bulkEnrollDto: BulkEnrollStudentsDto,
-    teacher: User,
+    user: User,
   ): Promise<EnrollmentDto[]> {
     const module = await this.dbService.module.findUnique({
       where: { id: bulkEnrollDto.moduleId },
@@ -105,17 +108,12 @@ export class EnrollmentsService {
       )
     }
 
-    if (!module.isActive) {
+    AuthorizationUtils.assertModuleWriteAccess(user, module)
+
+    if (!module.isActive && user.role !== Role.ADMIN) {
       throw new BusinessException(
         'El módulo no está activo',
         HttpStatus.BAD_REQUEST,
-      )
-    }
-
-    if (module.teacherId !== teacher.id) {
-      throw new BusinessException(
-        'Solo el profesor propietario puede inscribir estudiantes',
-        HttpStatus.FORBIDDEN,
       )
     }
 
@@ -189,7 +187,7 @@ export class EnrollmentsService {
 
   async findModuleEnrollments(
     moduleId: number,
-    teacher: User,
+    user: User,
   ): Promise<EnrollmentStudentsDto[]> {
     const module = await this.dbService.module.findUnique({
       where: { id: moduleId },
@@ -199,12 +197,7 @@ export class EnrollmentsService {
       throw new NotFoundException(`Módulo con ID ${moduleId} no encontrado`)
     }
 
-    if (module.teacherId !== teacher.id) {
-      throw new BusinessException(
-        'Solo el profesor propietario puede ver las inscripciones',
-        HttpStatus.FORBIDDEN,
-      )
-    }
+    AuthorizationUtils.assertModuleWriteAccess(user, module)
 
     const enrollments = await this.dbService.enrollment.findMany({
       where: {
@@ -239,12 +232,7 @@ export class EnrollmentsService {
       throw new NotFoundException(`Inscripción con ID ${id} no encontrada`)
     }
 
-    if (enrollment.module.teacherId !== user.id) {
-      throw new BusinessException(
-        'Solo el profesor propietario puede actualizar inscripciones',
-        HttpStatus.FORBIDDEN,
-      )
-    }
+    AuthorizationUtils.assertModuleWriteAccess(user, enrollment.module)
 
     const updatedEnrollment = await this.dbService.enrollment.update({
       where: { id },
@@ -286,7 +274,7 @@ export class EnrollmentsService {
       )
     }
 
-    if (!enrollment.module.allowSelfUnenroll) {
+    if (!enrollment.module.allowSelfUnenroll && user.role !== Role.ADMIN) {
       throw new BusinessException(
         'Este módulo no permite auto-desinscripción',
         HttpStatus.FORBIDDEN,
@@ -300,7 +288,7 @@ export class EnrollmentsService {
     return EnrollmentsMapper.mapToDto(enrollment)
   }
 
-  async remove(id: number, teacher: User): Promise<EnrollmentDto> {
+  async remove(id: number, user: User): Promise<EnrollmentDto> {
     const enrollment = await this.dbService.enrollment.findUnique({
       where: { id },
       include: {
@@ -312,12 +300,7 @@ export class EnrollmentsService {
       throw new NotFoundException(`Inscripción con ID ${id} no encontrada`)
     }
 
-    if (enrollment.module.teacherId !== teacher.id) {
-      throw new BusinessException(
-        'Solo el profesor propietario puede eliminar inscripciones',
-        HttpStatus.FORBIDDEN,
-      )
-    }
+    AuthorizationUtils.assertModuleWriteAccess(user, enrollment.module)
 
     await this.dbService.enrollment.delete({
       where: { id },
@@ -391,23 +374,21 @@ export class EnrollmentsService {
     )
 
     for (const data of Object.values(groupedByModule)) {
-      if (data.teacherEmail && data.students.length > 0) {
-        try {
-          await this.emailService.sendWithTemplate(
-            data.teacherEmail,
-            `Resumen diario: ${data.students.length} nuevas inscripciones en ${data.moduleTitle}`,
-            EMAIL_TEMPLATES.TEACHER_DAILY_ENROLLMENTS,
-            {
-              moduleTitle: data.moduleTitle,
-              students: data.students,
-              dashboardUrl: `${process.env.FRONTEND_URL || 'https://tu-app.com'}`,
-            },
-          )
-        } catch (error) {
-          this.logger.error(
-            `Error enviando resumen a ${data.teacherEmail}: ${error}`,
-          )
-        }
+      try {
+        await this.emailService.sendWithTemplate(
+          data.teacherEmail,
+          `Resumen diario: ${data.students.length} nuevas inscripciones en ${data.moduleTitle}`,
+          EMAIL_TEMPLATES.TEACHER_DAILY_ENROLLMENTS,
+          {
+            moduleTitle: data.moduleTitle,
+            students: data.students,
+            dashboardUrl: `${process.env.FRONTEND_URL || 'https://tu-app.com'}`,
+          },
+        )
+      } catch (error) {
+        this.logger.error(
+          `Error enviando resumen a ${data.teacherEmail}: ${error}`,
+        )
       }
     }
   }
