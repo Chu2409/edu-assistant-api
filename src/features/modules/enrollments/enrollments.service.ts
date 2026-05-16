@@ -7,16 +7,24 @@ import {
 import { BusinessException } from 'src/shared/exceptions/business.exception'
 import { DBService } from 'src/core/database/database.service'
 import { EmailService } from 'src/providers/email/email.service'
+import { EmailLimitExceededException } from 'src/providers/email/exceptions/email-limit-exceeded.exception'
 import { CreateEnrollmentDto } from './dtos/req/create-enrollment.dto'
 import { UpdateEnrollmentDto } from './dtos/req/update-enrollment.dto'
 import { BulkEnrollStudentsDto } from './dtos/req/bulk-enroll-students.dto'
 import { EnrollmentDto } from './dtos/res/enrollment.dto'
-import { Role, type User } from 'src/core/database/generated/client'
+import {
+  Role,
+  NotificationType,
+  type User,
+} from 'src/core/database/generated/client'
 import { EnrollmentsMapper } from './mappers/enrollments.mapper'
 import { EnrollmentStudentsDto } from './dtos/res/enrollment-student.dto'
 import { EMAIL_TEMPLATES } from 'src/shared/constants/email-templates'
 import { AuthorizationUtils } from 'src/shared/utils/authorization.util'
-import { EventEmitter2 } from '@nestjs/event-emitter'
+import { InjectQueue } from '@nestjs/bullmq'
+import { Queue } from 'bullmq'
+import { QUEUE_NAMES } from 'src/shared/constants/queues'
+import { ENTITY_TYPES } from 'src/shared/constants/entity-types'
 
 @Injectable()
 export class EnrollmentsService {
@@ -25,7 +33,8 @@ export class EnrollmentsService {
   constructor(
     private readonly dbService: DBService,
     private readonly emailService: EmailService,
-    private readonly eventEmitter: EventEmitter2,
+    @InjectQueue(QUEUE_NAMES.NOTIFICATIONS.NAME)
+    private readonly notificationsQueue: Queue,
   ) {}
 
   async selfEnroll(
@@ -93,10 +102,13 @@ export class EnrollmentsService {
       })
     }
 
-    this.eventEmitter.emit('student.enrolled', {
-      studentId: user.id,
-      moduleId: createEnrollmentDto.moduleId,
-      moduleTitle: module.title,
+    await this.notificationsQueue.add(QUEUE_NAMES.NOTIFICATIONS.JOBS.CREATE, {
+      type: NotificationType.NEW_ENROLLMENT,
+      userId: user.id,
+      title: 'Inscripción confirmada',
+      message: `Te has inscrito exitosamente en el módulo: "${module.title}"`,
+      relatedEntityId: createEnrollmentDto.moduleId,
+      relatedEntityType: ENTITY_TYPES.MODULE,
     })
 
     return EnrollmentsMapper.mapToDto(enrollment)
@@ -179,10 +191,13 @@ export class EnrollmentsService {
       })
     }
 
-    this.eventEmitter.emit('student.enrolled.bulk', {
-      studentIds: bulkEnrollDto.studentIds,
-      moduleId: bulkEnrollDto.moduleId,
-      moduleTitle: module.title,
+    await this.notificationsQueue.add(QUEUE_NAMES.NOTIFICATIONS.JOBS.CREATE, {
+      type: NotificationType.NEW_ENROLLMENT,
+      userIds: bulkEnrollDto.studentIds,
+      title: 'Inscripción confirmada',
+      message: `Has sido inscrito en el módulo: "${module.title}"`,
+      relatedEntityId: bulkEnrollDto.moduleId,
+      relatedEntityType: ENTITY_TYPES.MODULE,
     })
 
     const allEnrollments = await this.dbService.enrollment.findMany({
@@ -359,6 +374,7 @@ export class EnrollmentsService {
     const groupedByModule = newEnrollments.reduce(
       (acc, enrollment) => {
         const moduleId = enrollment.moduleId
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
         if (!acc[moduleId]) {
           acc[moduleId] = {
             moduleTitle: enrollment.module.title,
@@ -400,6 +416,12 @@ export class EnrollmentsService {
           },
         )
       } catch (error) {
+        if (error instanceof EmailLimitExceededException) {
+          this.logger.warn(
+            'Límite diario de emails alcanzado. Deteniendo envío de resúmenes.',
+          )
+          break
+        }
         this.logger.error(
           `Error enviando resumen a ${data.teacherEmail}: ${error}`,
         )

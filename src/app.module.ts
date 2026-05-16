@@ -1,5 +1,4 @@
 import { Module } from '@nestjs/common'
-import { EventEmitterModule } from '@nestjs/event-emitter'
 import { CoreModule } from './core/core.module'
 import { HealthController } from './health.controller'
 import { ResponseInterceptor } from './shared/interceptors/response.interceptor'
@@ -20,7 +19,6 @@ import { NotificationsModule } from './features/notifications/notifications.modu
 
 @Module({
   imports: [
-    EventEmitterModule.forRoot(),
     CoreModule,
     AuthModule,
     ModulesModule,
@@ -34,7 +32,6 @@ import { NotificationsModule } from './features/notifications/notifications.modu
     VideosModule,
     StudentAIFeedbackModule,
     NotificationsModule,
-    // EmailModule,
   ],
   controllers: [HealthController],
   providers: [

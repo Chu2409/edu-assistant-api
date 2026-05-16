@@ -8,7 +8,7 @@ import { BusinessException } from 'src/shared/exceptions/business.exception'
 import { DBService } from 'src/core/database/database.service'
 import { OpenaiService } from 'src/providers/ai/services/openai.service'
 import { EmailService } from 'src/providers/email/email.service'
-import { EmailDailyLimitService } from 'src/providers/email/services/email-daily-limit.service'
+import { EmailLimitExceededException } from 'src/providers/email/exceptions/email-limit-exceeded.exception'
 import { StudentFeedbackDataCollectorService } from './services/student-feedback-data-collector.service'
 import { StudentFeedbackMapper } from './mappers/student-feedback.mapper'
 import { StudentFeedbackDto } from './dtos/res/student-feedback.dto'
@@ -20,8 +20,10 @@ import { EMAIL_TEMPLATES } from 'src/shared/constants/email-templates'
 import { CustomConfigService } from 'src/core/config/config.service'
 import { InjectQueue } from '@nestjs/bullmq'
 import { Queue } from 'bullmq'
-import { EventEmitter2 } from '@nestjs/event-emitter'
 import { QUEUE_NAMES } from 'src/shared/constants/queues'
+import { NotificationType } from 'src/core/database/generated/client'
+import { ENTITY_TYPES } from 'src/shared/constants/entity-types'
+import { AI_FEEDBACK_SCOPES } from 'src/shared/constants/ai-feedback-scopes'
 
 @Injectable()
 export class StudentAIFeedbackService {
@@ -32,11 +34,11 @@ export class StudentAIFeedbackService {
     private readonly openaiService: OpenaiService,
     private readonly dataCollector: StudentFeedbackDataCollectorService,
     private readonly emailService: EmailService,
-    private readonly emailDailyLimitService: EmailDailyLimitService,
     private readonly configService: CustomConfigService,
-    private readonly eventEmitter: EventEmitter2,
     @InjectQueue(QUEUE_NAMES.STUDENT_AI_FEEDBACK.NAME)
     private readonly feedbackQueue: Queue,
+    @InjectQueue(QUEUE_NAMES.NOTIFICATIONS.NAME)
+    private readonly notificationsQueue: Queue,
   ) {}
 
   async listByModule(
@@ -153,18 +155,20 @@ export class StudentAIFeedbackService {
       // Save to database
       const feedback = await this.dbService.studentAiFeedback.create({
         data: {
-          scope: 'WEEKLY_DIGEST',
+          scope: AI_FEEDBACK_SCOPES.WEEKLY_DIGEST,
           studentId,
           moduleId,
           content: aiContent as object,
         },
       })
 
-      this.eventEmitter.emit('digest.generated', {
-        studentId,
-        moduleId,
-        feedbackId: feedback.id,
-        moduleTitle: module.title,
+      await this.notificationsQueue.add(QUEUE_NAMES.NOTIFICATIONS.JOBS.CREATE, {
+        type: NotificationType.STUDENT_WEEKLY_DIGEST,
+        userId: studentId,
+        title: 'Resumen semanal disponible',
+        message: `Tu resumen semanal del módulo "${module.title}" ya está listo.`,
+        relatedEntityId: feedback.id,
+        relatedEntityType: ENTITY_TYPES.STUDENT_AI_FEEDBACK,
       })
 
       // Send email with digest (respecting daily limit)
@@ -289,9 +293,7 @@ export class StudentAIFeedbackService {
     moduleTitle: string,
     aiContent: StudentAiFeedbackContent,
   ): Promise<{ sent: boolean; queued: boolean }> {
-    const canSend = await this.emailDailyLimitService.canSendEmail()
-
-    if (canSend) {
+    try {
       await this.emailService.sendWithTemplate(
         student.email,
         `Tu resumen semanal: ${moduleTitle}`,
@@ -309,35 +311,35 @@ export class StudentAIFeedbackService {
 
       this.logger.log(`Email sent to ${student.email}`)
       return { sent: true, queued: false }
+    } catch (error) {
+      if (error instanceof EmailLimitExceededException) {
+        this.logger.warn(
+          `Daily email limit reached. Enqueueing email for ${student.email} for tomorrow`,
+        )
+        await this.feedbackQueue.add(
+          QUEUE_NAMES.STUDENT_AI_FEEDBACK.JOBS.SEND_STUDENT_EMAIL,
+          {
+            studentId: student.id,
+            studentName: student.name,
+            studentEmail: student.email,
+            moduleId,
+            moduleTitle,
+            aiContent,
+          },
+          {
+            jobId: `send-email-${student.id}-${moduleId}-${Date.now()}`,
+            delay: this.getMillisecondsUntilNextDayMorning(),
+            attempts: 3,
+            backoff: {
+              type: 'exponential' as const,
+              delay: 60000,
+            },
+          },
+        )
+        return { sent: false, queued: true }
+      }
+      throw error
     }
-
-    // Limit reached - enqueue for tomorrow
-    this.logger.warn(
-      `Daily email limit reached. Enqueueing email for ${student.email} for tomorrow`,
-    )
-
-    await this.feedbackQueue.add(
-      QUEUE_NAMES.STUDENT_AI_FEEDBACK.JOBS.SEND_STUDENT_EMAIL,
-      {
-        studentId: student.id,
-        studentName: student.name,
-        studentEmail: student.email,
-        moduleId,
-        moduleTitle,
-        aiContent,
-      },
-      {
-        jobId: `send-email-${student.id}-${moduleId}-${Date.now()}`,
-        delay: this.getMillisecondsUntilNextDayMorning(),
-        attempts: 3,
-        backoff: {
-          type: 'exponential' as const,
-          delay: 60000,
-        },
-      },
-    )
-
-    return { sent: false, queued: true }
   }
 
   /**
@@ -360,9 +362,7 @@ export class StudentAIFeedbackService {
       aiContent,
     } = data
 
-    const canSend = await this.emailDailyLimitService.canSendEmail()
-
-    if (canSend) {
+    try {
       await this.emailService.sendWithTemplate(
         studentEmail,
         `Tu resumen semanal: ${moduleTitle}`,
@@ -380,27 +380,27 @@ export class StudentAIFeedbackService {
 
       this.logger.log(`Delayed email sent to ${studentEmail}`)
       return { sent: true, queued: false }
+    } catch (error) {
+      if (error instanceof EmailLimitExceededException) {
+        this.logger.warn(
+          `Still over daily limit for ${studentEmail}. Re-enqueueing for tomorrow`,
+        )
+        await this.feedbackQueue.add(
+          QUEUE_NAMES.STUDENT_AI_FEEDBACK.JOBS.SEND_STUDENT_EMAIL,
+          data,
+          {
+            jobId: `send-email-${studentId}-${moduleId}-${Date.now()}`,
+            delay: this.getMillisecondsUntilNextDayMorning(),
+            attempts: 3,
+            backoff: {
+              type: 'exponential' as const,
+              delay: 60000,
+            },
+          },
+        )
+        return { sent: false, queued: true }
+      }
+      throw error
     }
-
-    // Still over limit - re-enqueue for next day
-    this.logger.warn(
-      `Still over daily limit for ${studentEmail}. Re-enqueueing for tomorrow`,
-    )
-
-    await this.feedbackQueue.add(
-      QUEUE_NAMES.STUDENT_AI_FEEDBACK.JOBS.SEND_STUDENT_EMAIL,
-      data,
-      {
-        jobId: `send-email-${studentId}-${moduleId}-${Date.now()}`,
-        delay: this.getMillisecondsUntilNextDayMorning(),
-        attempts: 3,
-        backoff: {
-          type: 'exponential' as const,
-          delay: 60000,
-        },
-      },
-    )
-
-    return { sent: false, queued: true }
   }
 }

@@ -3,6 +3,8 @@ import { HttpService } from '@nestjs/axios'
 import { CustomConfigService } from '../../core/config/config.service'
 import { lastValueFrom } from 'rxjs'
 import { SendEmailOptions } from './interfaces/send-email-options'
+import { EmailDailyLimitService } from './services/email-daily-limit.service'
+import { EmailLimitExceededException } from './exceptions/email-limit-exceeded.exception'
 import * as ejs from 'ejs'
 import * as path from 'path'
 
@@ -17,6 +19,7 @@ export class EmailService {
   constructor(
     private readonly configService: CustomConfigService,
     private readonly httpService: HttpService,
+    private readonly dailyLimitService: EmailDailyLimitService,
   ) {}
 
   private async renderTemplate(
@@ -31,7 +34,7 @@ export class EmailService {
       year: data.year || new Date().getFullYear(),
       subject: data.subject || 'Notificación de EduAssistant',
       baseUrl:
-        this.configService.env.FRONTEND_URL?.replace(/\/$/, '') ||
+        (this.configService.env.FRONTEND_URL || '').replace(/\/$/, '') ||
         'http://localhost:4200',
     }
 
@@ -59,6 +62,15 @@ export class EmailService {
         `Notificación de correo omitida para ${to} (ENABLE_EMAIL_NOTIFICATIONS=false)`,
       )
       return
+    }
+
+    // Check global daily email limit
+    const canSend = await this.dailyLimitService.canSendEmail()
+    if (!canSend) {
+      throw new EmailLimitExceededException(
+        86400,
+        this.dailyLimitService['limit'],
+      )
     }
 
     const htmlBody = await this.renderTemplate(template, { ...data, subject })

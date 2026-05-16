@@ -519,7 +519,7 @@ enum NotificationType {
   TEACHER_REPLY
   EXCESSIVE_USE_WARNING // RF-13: abuso de herramienta
   MODULE_UPDATE
-  WEEKLY_DIGEST
+  STUDENT_WEEKLY_DIGEST
   NEW_ENROLLMENT
   TEACHER_AI_FEEDBACK
 }
@@ -659,7 +659,7 @@ model TeacherAiFeedback {
 
 model StudentAiFeedback {
   id           Int     @id @default(autoincrement())
-  scope        String  @default("WEEKLY_DIGEST") @map("scope")
+  scope        String  @default("STUDENT_WEEKLY_DIGEST") @map("scope")
   studentId    Int     @map("student_id")
   moduleId     Int     @map("module_id")
   content      Json

@@ -1,6 +1,12 @@
 export const EMAIL_DAILY_LIMIT = 1000
 
 export const QUEUE_NAMES = {
+  NOTIFICATIONS: {
+    NAME: 'notifications',
+    JOBS: {
+      CREATE: 'notification:create',
+    },
+  },
   CONCEPTS: {
     NAME: 'concepts',
     JOBS: {

@@ -6,21 +6,30 @@ import { UpdateLoDto } from './dtos/req/update-lo.dto'
 import { UpdateLoContentDto } from './dtos/req/update-lo-content.dto'
 import { ReorderLoDto } from './dtos/req/reorder-lo.dto'
 import { LoDto } from './dtos/res/lo.dto'
-import { Prisma, Role, type User } from 'src/core/database/generated/client'
+import {
+  Prisma,
+  Role,
+  NotificationType,
+  type User,
+} from 'src/core/database/generated/client'
 import { LoFiltersDto } from './dtos/req/lo-filters.dto'
 import { LoMapper } from './mappers/lo.mapper'
 import { ApiPaginatedRes } from 'src/shared/dtos/res/api-response.dto'
 import { FullLoDto } from './dtos/res/full-lo.dto'
 import { AuthorizationUtils } from 'src/shared/utils/authorization.util'
 import { LoHelperService } from './lo-helper.service'
-import { EventEmitter2 } from '@nestjs/event-emitter'
+import { InjectQueue } from '@nestjs/bullmq'
+import { Queue } from 'bullmq'
+import { QUEUE_NAMES } from 'src/shared/constants/queues'
+import { ENTITY_TYPES } from 'src/shared/constants/entity-types'
 
 @Injectable()
 export class LoService {
   constructor(
     private readonly dbService: DBService,
     private readonly loHelper: LoHelperService,
-    private readonly eventEmitter: EventEmitter2,
+    @InjectQueue(QUEUE_NAMES.NOTIFICATIONS.NAME)
+    private readonly notificationsQueue: Queue,
   ) {}
 
   async create(dto: CreateLoDto, user: User): Promise<LoDto> {
@@ -53,11 +62,23 @@ export class LoService {
     await this.loHelper.triggerEmbeddingUpdate(lo.id, lo.isPublished)
 
     if (lo.isPublished) {
-      this.eventEmitter.emit('lo.published', {
-        loId: lo.id,
-        title: lo.title,
-        moduleId: lo.moduleId,
+      const enrollments = await this.dbService.enrollment.findMany({
+        where: { moduleId: lo.moduleId, isActive: true },
+        select: { userId: true },
       })
+      if (enrollments.length > 0) {
+        await this.notificationsQueue.add(
+          QUEUE_NAMES.NOTIFICATIONS.JOBS.CREATE,
+          {
+            type: NotificationType.NEW_PAGE,
+            userIds: enrollments.map((e) => e.userId),
+            title: 'Nueva página añadida',
+            message: `Se ha publicado una nueva lección: "${lo.title}"`,
+            relatedEntityId: lo.id,
+            relatedEntityType: ENTITY_TYPES.LEARNING_OBJECT,
+          },
+        )
+      }
     }
 
     return LoMapper.mapToDto(lo)
@@ -307,11 +328,23 @@ export class LoService {
     await this.loHelper.triggerEmbeddingUpdate(lo.id, lo.isPublished)
 
     if (lo.isPublished && !existingLo.isPublished) {
-      this.eventEmitter.emit('lo.published', {
-        loId: lo.id,
-        title: lo.title,
-        moduleId: lo.moduleId,
+      const enrollments = await this.dbService.enrollment.findMany({
+        where: { moduleId: lo.moduleId, isActive: true },
+        select: { userId: true },
       })
+      if (enrollments.length > 0) {
+        await this.notificationsQueue.add(
+          QUEUE_NAMES.NOTIFICATIONS.JOBS.CREATE,
+          {
+            type: NotificationType.NEW_PAGE,
+            userIds: enrollments.map((e) => e.userId),
+            title: 'Nueva página añadida',
+            message: `Se ha publicado una nueva lección: "${lo.title}"`,
+            relatedEntityId: lo.id,
+            relatedEntityType: ENTITY_TYPES.LEARNING_OBJECT,
+          },
+        )
+      }
     }
 
     return LoMapper.mapToDto(lo)

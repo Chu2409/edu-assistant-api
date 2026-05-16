@@ -11,6 +11,8 @@ import { VideoProcessingWorker } from './features/videos/workers/video-processin
 import { StudentAIFeedbackModule } from './features/student-ai-feedback/student-ai-feedback.module'
 import { StudentAIFeedbackWorker } from './features/student-ai-feedback/workers/student-ai-feedback.worker'
 import { EmailModule } from './providers/email/email.module'
+import { NotificationsModule } from './features/notifications/notifications.module'
+import { NotificationsWorker } from './features/notifications/workers/notifications.worker'
 
 @Module({
   imports: [
@@ -21,6 +23,7 @@ import { EmailModule } from './providers/email/email.module'
     ModulesModule,
     StudentAIFeedbackModule,
     EmailModule,
+    NotificationsModule,
   ],
   providers: [
     EmbeddingsWorker,
@@ -28,6 +31,7 @@ import { EmailModule } from './providers/email/email.module'
     VideoProcessingWorker,
     EnrollmentsWorker,
     StudentAIFeedbackWorker,
+    NotificationsWorker,
   ],
 })
 export class WorkerModule {}

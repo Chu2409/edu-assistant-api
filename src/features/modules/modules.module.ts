@@ -16,6 +16,9 @@ import { ModuleAnalyticsController } from './analytics/module-analytics.controll
     BullModule.registerQueue({
       name: QUEUE_NAMES.ENROLLMENTS.NAME,
     }),
+    BullModule.registerQueue({
+      name: QUEUE_NAMES.NOTIFICATIONS.NAME,
+    }),
   ],
   controllers: [
     ModulesController,
