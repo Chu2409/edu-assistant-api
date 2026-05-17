@@ -15,6 +15,9 @@ import { FeedbackDataCollectorService } from './services/feedback-data-collector
     BullModule.registerQueue({
       name: QUEUE_NAMES.TEACHER_FEEDBACK.NAME,
     }),
+    BullModule.registerQueue({
+      name: QUEUE_NAMES.NOTIFICATIONS.NAME,
+    }),
   ],
   controllers: [TeacherFeedbackController],
   providers: [TeacherFeedbackService, FeedbackDataCollectorService],

@@ -47,8 +47,8 @@ export class EmailDailyLimitService implements OnModuleDestroy {
       port: this.configService.env.REDIS_PORT,
     })
 
-    // Default to 1000 if not configured
-    this.limit = this.configService.env.EMAIL_DAILY_LIMIT ?? 1000
+    // Default to 1000 if not configured (Joi provides the default)
+    this.limit = this.configService.env.EMAIL_DAILY_LIMIT
 
     this.logger.log(
       `EmailDailyLimitService initialized with limit: ${this.limit}`,
@@ -140,6 +140,7 @@ export class EmailDailyLimitService implements OnModuleDestroy {
   async isHealthy(): Promise<boolean> {
     try {
       const pong = await this.redis.ping()
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
       return pong === 'PONG'
     } catch {
       return false

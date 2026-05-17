@@ -1,27 +1,35 @@
 import { HttpStatus, Injectable, NotFoundException } from '@nestjs/common'
 import { BusinessException } from 'src/shared/exceptions/business.exception'
-import { InjectQueue } from '@nestjs/bullmq'
-import { Queue } from 'bullmq'
 import { DBService } from 'src/core/database/database.service'
-import { QUEUE_NAMES } from 'src/shared/constants/queues'
 import { CreateLoDto } from './dtos/req/create-lo.dto'
 import { UpdateLoDto } from './dtos/req/update-lo.dto'
 import { UpdateLoContentDto } from './dtos/req/update-lo-content.dto'
 import { ReorderLoDto } from './dtos/req/reorder-lo.dto'
 import { LoDto } from './dtos/res/lo.dto'
-import { Prisma, Role, type User } from 'src/core/database/generated/client'
+import {
+  Prisma,
+  Role,
+  NotificationType,
+  type User,
+} from 'src/core/database/generated/client'
 import { LoFiltersDto } from './dtos/req/lo-filters.dto'
 import { LoMapper } from './mappers/lo.mapper'
 import { ApiPaginatedRes } from 'src/shared/dtos/res/api-response.dto'
 import { FullLoDto } from './dtos/res/full-lo.dto'
 import { AuthorizationUtils } from 'src/shared/utils/authorization.util'
 import { LoHelperService } from './lo-helper.service'
+import { InjectQueue } from '@nestjs/bullmq'
+import { Queue } from 'bullmq'
+import { QUEUE_NAMES } from 'src/shared/constants/queues'
+import { ENTITY_TYPES } from 'src/shared/constants/entity-types'
 
 @Injectable()
 export class LoService {
   constructor(
     private readonly dbService: DBService,
     private readonly loHelper: LoHelperService,
+    @InjectQueue(QUEUE_NAMES.NOTIFICATIONS.NAME)
+    private readonly notificationsQueue: Queue,
   ) {}
 
   async create(dto: CreateLoDto, user: User): Promise<LoDto> {
@@ -52,6 +60,26 @@ export class LoService {
     })
 
     await this.loHelper.triggerEmbeddingUpdate(lo.id, lo.isPublished)
+
+    if (lo.isPublished) {
+      const enrollments = await this.dbService.enrollment.findMany({
+        where: { moduleId: lo.moduleId, isActive: true },
+        select: { userId: true },
+      })
+      if (enrollments.length > 0) {
+        await this.notificationsQueue.add(
+          QUEUE_NAMES.NOTIFICATIONS.JOBS.CREATE,
+          {
+            type: NotificationType.NEW_PAGE,
+            userIds: enrollments.map((e) => e.userId),
+            title: 'Nueva página añadida',
+            message: `Se ha publicado una nueva lección: "${lo.title}"`,
+            relatedEntityId: lo.id,
+            relatedEntityType: ENTITY_TYPES.LEARNING_OBJECT,
+          },
+        )
+      }
+    }
 
     return LoMapper.mapToDto(lo)
   }
@@ -298,6 +326,26 @@ export class LoService {
     })
 
     await this.loHelper.triggerEmbeddingUpdate(lo.id, lo.isPublished)
+
+    if (lo.isPublished && !existingLo.isPublished) {
+      const enrollments = await this.dbService.enrollment.findMany({
+        where: { moduleId: lo.moduleId, isActive: true },
+        select: { userId: true },
+      })
+      if (enrollments.length > 0) {
+        await this.notificationsQueue.add(
+          QUEUE_NAMES.NOTIFICATIONS.JOBS.CREATE,
+          {
+            type: NotificationType.NEW_PAGE,
+            userIds: enrollments.map((e) => e.userId),
+            title: 'Nueva página añadida',
+            message: `Se ha publicado una nueva lección: "${lo.title}"`,
+            relatedEntityId: lo.id,
+            relatedEntityType: ENTITY_TYPES.LEARNING_OBJECT,
+          },
+        )
+      }
+    }
 
     return LoMapper.mapToDto(lo)
   }

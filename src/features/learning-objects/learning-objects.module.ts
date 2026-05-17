@@ -18,6 +18,9 @@ import { QUEUE_NAMES } from 'src/shared/constants/queues'
     BullModule.registerQueue({
       name: QUEUE_NAMES.EMBEDDINGS.NAME,
     }),
+    BullModule.registerQueue({
+      name: QUEUE_NAMES.NOTIFICATIONS.NAME,
+    }),
   ],
   controllers: [
     LoController,

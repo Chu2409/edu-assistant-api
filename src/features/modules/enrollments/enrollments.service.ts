@@ -7,14 +7,24 @@ import {
 import { BusinessException } from 'src/shared/exceptions/business.exception'
 import { DBService } from 'src/core/database/database.service'
 import { EmailService } from 'src/providers/email/email.service'
+import { EmailLimitExceededException } from 'src/providers/email/exceptions/email-limit-exceeded.exception'
 import { CreateEnrollmentDto } from './dtos/req/create-enrollment.dto'
 import { UpdateEnrollmentDto } from './dtos/req/update-enrollment.dto'
 import { BulkEnrollStudentsDto } from './dtos/req/bulk-enroll-students.dto'
 import { EnrollmentDto } from './dtos/res/enrollment.dto'
-import type { User } from 'src/core/database/generated/client'
+import {
+  Role,
+  NotificationType,
+  type User,
+} from 'src/core/database/generated/client'
 import { EnrollmentsMapper } from './mappers/enrollments.mapper'
 import { EnrollmentStudentsDto } from './dtos/res/enrollment-student.dto'
 import { EMAIL_TEMPLATES } from 'src/shared/constants/email-templates'
+import { AuthorizationUtils } from 'src/shared/utils/authorization.util'
+import { InjectQueue } from '@nestjs/bullmq'
+import { Queue } from 'bullmq'
+import { QUEUE_NAMES } from 'src/shared/constants/queues'
+import { ENTITY_TYPES } from 'src/shared/constants/entity-types'
 
 @Injectable()
 export class EnrollmentsService {
@@ -23,6 +33,8 @@ export class EnrollmentsService {
   constructor(
     private readonly dbService: DBService,
     private readonly emailService: EmailService,
+    @InjectQueue(QUEUE_NAMES.NOTIFICATIONS.NAME)
+    private readonly notificationsQueue: Queue,
   ) {}
 
   async selfEnroll(
@@ -88,12 +100,21 @@ export class EnrollmentsService {
       })
     }
 
+    await this.notificationsQueue.add(QUEUE_NAMES.NOTIFICATIONS.JOBS.CREATE, {
+      type: NotificationType.NEW_ENROLLMENT,
+      userId: user.id,
+      title: 'Inscripción confirmada',
+      message: `Te has inscrito exitosamente en el módulo: "${module.title}"`,
+      relatedEntityId: createEnrollmentDto.moduleId,
+      relatedEntityType: ENTITY_TYPES.MODULE,
+    })
+
     return EnrollmentsMapper.mapToDto(enrollment)
   }
 
   async bulkEnrollStudents(
     bulkEnrollDto: BulkEnrollStudentsDto,
-    teacher: User,
+    user: User,
   ): Promise<EnrollmentDto[]> {
     const module = await this.dbService.module.findUnique({
       where: { id: bulkEnrollDto.moduleId },
@@ -105,17 +126,12 @@ export class EnrollmentsService {
       )
     }
 
-    if (!module.isActive) {
+    AuthorizationUtils.assertModuleWriteAccess(user, module)
+
+    if (!module.isActive && user.role !== Role.ADMIN) {
       throw new BusinessException(
         'El módulo no está activo',
         HttpStatus.BAD_REQUEST,
-      )
-    }
-
-    if (module.teacherId !== teacher.id) {
-      throw new BusinessException(
-        'Solo el profesor propietario puede inscribir estudiantes',
-        HttpStatus.FORBIDDEN,
       )
     }
 
@@ -173,6 +189,15 @@ export class EnrollmentsService {
       })
     }
 
+    await this.notificationsQueue.add(QUEUE_NAMES.NOTIFICATIONS.JOBS.CREATE, {
+      type: NotificationType.NEW_ENROLLMENT,
+      userIds: bulkEnrollDto.studentIds,
+      title: 'Inscripción confirmada',
+      message: `Has sido inscrito en el módulo: "${module.title}"`,
+      relatedEntityId: bulkEnrollDto.moduleId,
+      relatedEntityType: ENTITY_TYPES.MODULE,
+    })
+
     const allEnrollments = await this.dbService.enrollment.findMany({
       where: {
         moduleId: bulkEnrollDto.moduleId,
@@ -189,7 +214,7 @@ export class EnrollmentsService {
 
   async findModuleEnrollments(
     moduleId: number,
-    teacher: User,
+    user: User,
   ): Promise<EnrollmentStudentsDto[]> {
     const module = await this.dbService.module.findUnique({
       where: { id: moduleId },
@@ -199,12 +224,7 @@ export class EnrollmentsService {
       throw new NotFoundException(`Módulo con ID ${moduleId} no encontrado`)
     }
 
-    if (module.teacherId !== teacher.id) {
-      throw new BusinessException(
-        'Solo el profesor propietario puede ver las inscripciones',
-        HttpStatus.FORBIDDEN,
-      )
-    }
+    AuthorizationUtils.assertModuleWriteAccess(user, module)
 
     const enrollments = await this.dbService.enrollment.findMany({
       where: {
@@ -239,12 +259,7 @@ export class EnrollmentsService {
       throw new NotFoundException(`Inscripción con ID ${id} no encontrada`)
     }
 
-    if (enrollment.module.teacherId !== user.id) {
-      throw new BusinessException(
-        'Solo el profesor propietario puede actualizar inscripciones',
-        HttpStatus.FORBIDDEN,
-      )
-    }
+    AuthorizationUtils.assertModuleWriteAccess(user, enrollment.module)
 
     const updatedEnrollment = await this.dbService.enrollment.update({
       where: { id },
@@ -300,7 +315,7 @@ export class EnrollmentsService {
     return EnrollmentsMapper.mapToDto(enrollment)
   }
 
-  async remove(id: number, teacher: User): Promise<EnrollmentDto> {
+  async remove(id: number, user: User): Promise<EnrollmentDto> {
     const enrollment = await this.dbService.enrollment.findUnique({
       where: { id },
       include: {
@@ -312,12 +327,7 @@ export class EnrollmentsService {
       throw new NotFoundException(`Inscripción con ID ${id} no encontrada`)
     }
 
-    if (enrollment.module.teacherId !== teacher.id) {
-      throw new BusinessException(
-        'Solo el profesor propietario puede eliminar inscripciones',
-        HttpStatus.FORBIDDEN,
-      )
-    }
+    AuthorizationUtils.assertModuleWriteAccess(user, enrollment.module)
 
     await this.dbService.enrollment.delete({
       where: { id },
@@ -362,6 +372,7 @@ export class EnrollmentsService {
     const groupedByModule = newEnrollments.reduce(
       (acc, enrollment) => {
         const moduleId = enrollment.moduleId
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
         if (!acc[moduleId]) {
           acc[moduleId] = {
             moduleTitle: enrollment.module.title,
@@ -391,23 +402,27 @@ export class EnrollmentsService {
     )
 
     for (const data of Object.values(groupedByModule)) {
-      if (data.teacherEmail && data.students.length > 0) {
-        try {
-          await this.emailService.sendWithTemplate(
-            data.teacherEmail,
-            `Resumen diario: ${data.students.length} nuevas inscripciones en ${data.moduleTitle}`,
-            EMAIL_TEMPLATES.TEACHER_DAILY_ENROLLMENTS,
-            {
-              moduleTitle: data.moduleTitle,
-              students: data.students,
-              dashboardUrl: `${process.env.FRONTEND_URL || 'https://tu-app.com'}`,
-            },
+      try {
+        await this.emailService.sendWithTemplate(
+          data.teacherEmail,
+          `Resumen diario: ${data.students.length} nuevas inscripciones en ${data.moduleTitle}`,
+          EMAIL_TEMPLATES.TEACHER_DAILY_ENROLLMENTS,
+          {
+            moduleTitle: data.moduleTitle,
+            students: data.students,
+            dashboardUrl: `${process.env.FRONTEND_URL || 'https://tu-app.com'}`,
+          },
+        )
+      } catch (error) {
+        if (error instanceof EmailLimitExceededException) {
+          this.logger.warn(
+            'Límite diario de emails alcanzado. Deteniendo envío de resúmenes.',
           )
-        } catch (error) {
-          this.logger.error(
-            `Error enviando resumen a ${data.teacherEmail}: ${error}`,
-          )
+          break
         }
+        this.logger.error(
+          `Error enviando resumen a ${data.teacherEmail}: ${error}`,
+        )
       }
     }
   }

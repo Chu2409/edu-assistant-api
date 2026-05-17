@@ -7,6 +7,8 @@ import { ModulesController } from './main/modules.controller'
 import { ModulesService } from './main/modules.service'
 import { EnrollmentsController } from './enrollments/enrollments.controller'
 import { EnrollmentsService } from './enrollments/enrollments.service'
+import { ModuleAnalyticsService } from './analytics/module-analytics.service'
+import { ModuleAnalyticsController } from './analytics/module-analytics.controller'
 
 @Module({
   imports: [
@@ -14,10 +16,17 @@ import { EnrollmentsService } from './enrollments/enrollments.service'
     BullModule.registerQueue({
       name: QUEUE_NAMES.ENROLLMENTS.NAME,
     }),
+    BullModule.registerQueue({
+      name: QUEUE_NAMES.NOTIFICATIONS.NAME,
+    }),
   ],
-  controllers: [ModulesController, EnrollmentsController],
-  providers: [ModulesService, EnrollmentsService],
-  exports: [EnrollmentsService],
+  controllers: [
+    ModulesController,
+    EnrollmentsController,
+    ModuleAnalyticsController,
+  ],
+  providers: [ModulesService, EnrollmentsService, ModuleAnalyticsService],
+  exports: [EnrollmentsService, ModuleAnalyticsService],
 })
 export class ModulesModule implements OnModuleInit {
   private readonly logger = new Logger(ModulesModule.name)

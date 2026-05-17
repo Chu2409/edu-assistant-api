@@ -15,6 +15,9 @@ import { StudentFeedbackDataCollectorService } from './services/student-feedback
     BullModule.registerQueue({
       name: QUEUE_NAMES.STUDENT_AI_FEEDBACK.NAME,
     }),
+    BullModule.registerQueue({
+      name: QUEUE_NAMES.NOTIFICATIONS.NAME,
+    }),
   ],
   controllers: [StudentAIFeedbackController],
   providers: [StudentAIFeedbackService, StudentFeedbackDataCollectorService],

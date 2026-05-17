@@ -246,7 +246,7 @@ export type LearningObjectRelationGroupByOutputType = {
   _max: LearningObjectRelationMaxAggregateOutputType | null
 }
 
-type GetLearningObjectRelationGroupByPayload<T extends LearningObjectRelationGroupByArgs> = Prisma.PrismaPromise<
+export type GetLearningObjectRelationGroupByPayload<T extends LearningObjectRelationGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<LearningObjectRelationGroupByOutputType, T['by']> &
       {

@@ -32,9 +32,7 @@ import {
 import { AiResponseDto } from './providers/ai/dtos/res/ai-response.dto'
 
 async function bootstrap() {
-  const app = await NestFactory.create<NestExpressApplication>(AppModule, {
-    cors: true,
-  })
+  const app = await NestFactory.create<NestExpressApplication>(AppModule)
 
   // Serve static files from the uploads directory
   app.useStaticAssets(join(process.cwd(), 'uploads'), {
@@ -48,7 +46,12 @@ async function bootstrap() {
   app.use(express.urlencoded({ limit: '50mb', extended: true }))
   app.use(express.text({ limit: '50mb' }))
 
-  app.enableCors()
+  // CORS configuration with PNA support for VPN access
+  app.enableCors({
+    origin: configService.env.FRONTEND_URL,
+    credentials: true,
+    exposedHeaders: ['Access-Control-Allow-Private-Network'],
+  })
 
   app.useGlobalPipes(
     new ValidationPipe({

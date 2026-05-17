@@ -15,6 +15,7 @@ import { ContentGenerationModule } from './features/content-generation/content-g
 import { TeacherFeedbackModule } from './features/teacher-feedback/teacher-feedback.module'
 import { VideosModule } from './features/videos/videos.module'
 import { StudentAIFeedbackModule } from './features/student-ai-feedback/student-ai-feedback.module'
+import { NotificationsModule } from './features/notifications/notifications.module'
 
 @Module({
   imports: [
@@ -30,7 +31,7 @@ import { StudentAIFeedbackModule } from './features/student-ai-feedback/student-
     TeacherFeedbackModule,
     VideosModule,
     StudentAIFeedbackModule,
-    // EmailModule,
+    NotificationsModule,
   ],
   controllers: [HealthController],
   providers: [

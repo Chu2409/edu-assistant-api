@@ -23,6 +23,11 @@ import type { ApiPaginatedRes } from 'src/shared/dtos/res/api-response.dto'
 import { TeacherFeedbackScope } from 'src/core/database/generated/enums'
 
 import { EMAIL_TEMPLATES } from 'src/shared/constants/email-templates'
+import { InjectQueue } from '@nestjs/bullmq'
+import { Queue } from 'bullmq'
+import { NotificationType } from 'src/core/database/generated/client'
+import { QUEUE_NAMES } from 'src/shared/constants/queues'
+import { ENTITY_TYPES } from 'src/shared/constants/entity-types'
 
 @Injectable()
 export class TeacherFeedbackService {
@@ -33,6 +38,8 @@ export class TeacherFeedbackService {
     private readonly openaiService: OpenaiService,
     private readonly dataCollector: FeedbackDataCollectorService,
     private readonly emailService: EmailService,
+    @InjectQueue(QUEUE_NAMES.NOTIFICATIONS.NAME)
+    private readonly notificationsQueue: Queue,
   ) {}
 
   async listByModule(
@@ -99,7 +106,7 @@ export class TeacherFeedbackService {
         },
         aiConfiguration: true,
         teacher: {
-          select: { email: true },
+          select: { id: true, email: true },
         },
       },
     })
@@ -152,6 +159,19 @@ export class TeacherFeedbackService {
           },
         )
         this.logger.log(`Email enviado exitosamente a ${mod.teacher.email}`)
+
+        // Emit notification for teacher
+        await this.notificationsQueue.add(
+          QUEUE_NAMES.NOTIFICATIONS.JOBS.CREATE,
+          {
+            type: NotificationType.TEACHER_AI_FEEDBACK,
+            userId: mod.teacherId,
+            title: 'Nuevo reporte de feedback IA',
+            message: `Se ha generado un nuevo reporte pedagógico para tu módulo: "${mod.title}"`,
+            relatedEntityId: mod.id,
+            relatedEntityType: ENTITY_TYPES.MODULE,
+          },
+        )
       } else if (!feedbackContent) {
         this.logger.log(
           `No se generó feedback para módulo ${mod.id}, no se envía email`,

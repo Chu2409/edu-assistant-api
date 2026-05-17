@@ -9,13 +9,11 @@ import {
   MAX_FLASHCARDS,
   MAX_QUIZ_QUESTIONS,
 } from '../../constants/video.constants'
+import { resolveLanguageName } from 'src/shared/utils/language.util'
 
 @Injectable()
 export class PromptLoaderService {
   private readonly tasks: Record<TaskName, TaskConfig>
-  private readonly languageNames = new Intl.DisplayNames(['en'], {
-    type: 'language',
-  })
 
   constructor() {
     const filePath = this.resolveTasksPath()
@@ -56,7 +54,7 @@ export class PromptLoaderService {
   getPrompt(taskName: TaskName, input: GenerationInput): string {
     const task = this.tasks[taskName]
     const titleContext = `The video title is: "${input.videoTitle}".`
-    const languageName = this.resolveLanguageName(input.language)
+    const languageName = resolveLanguageName(input.language)
     const languageInstruction = `Respond entirely in ${languageName}. All output fields MUST be written in ${languageName}.`
 
     const instructionBlock = input.instruction
@@ -79,13 +77,5 @@ export class PromptLoaderService {
 
   getMaxTokens(taskName: TaskName): number {
     return this.tasks[taskName].max_tokens
-  }
-
-  private resolveLanguageName(code: string): string {
-    try {
-      return this.languageNames.of(code) ?? code
-    } catch {
-      return code
-    }
   }
 }
