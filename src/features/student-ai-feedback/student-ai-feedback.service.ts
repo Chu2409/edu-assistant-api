@@ -8,6 +8,7 @@ import { BusinessException } from 'src/shared/exceptions/business.exception'
 import { DBService } from 'src/core/database/database.service'
 import { OpenaiService } from 'src/providers/ai/services/openai.service'
 import { EmailService } from 'src/providers/email/email.service'
+import { studentFeedbackContentSchema } from 'src/shared/schemas/ai-feedback.schema'
 import { StudentFeedbackDataCollectorService } from './services/student-feedback-data-collector.service'
 import { StudentFeedbackMapper } from './mappers/student-feedback.mapper'
 import { StudentFeedbackDto } from './dtos/res/student-feedback.dto'
@@ -147,8 +148,10 @@ export class StudentAIFeedbackService {
     })
 
     try {
-      const response =
-        await this.openaiService.getResponse<StudentAiFeedbackContent>(prompt)
+      const response = await this.openaiService.getResponse(
+        prompt,
+        studentFeedbackContentSchema,
+      )
       const aiContent = response.content
 
       // Save to database

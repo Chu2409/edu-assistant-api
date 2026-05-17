@@ -8,6 +8,7 @@ import { BusinessException } from 'src/shared/exceptions/business.exception'
 import { DBService } from 'src/core/database/database.service'
 import { OpenaiService } from 'src/providers/ai/services/openai.service'
 import { EmailService } from 'src/providers/email/email.service'
+import { teacherFeedbackContentSchema } from 'src/shared/schemas/ai-feedback.schema'
 import { FeedbackDataCollectorService } from './services/feedback-data-collector.service'
 import { TeacherFeedbackMapper } from './mappers/teacher-feedback.mapper'
 import { TeacherFeedbackDto } from './dtos/res/teacher-feedback.dto'
@@ -278,19 +279,22 @@ export class TeacherFeedbackService {
     })
 
     const prompt = loFeedbackPrompt({ language, data })
-    const aiResponse =
-      await this.openaiService.getResponse<AiFeedbackContent>(prompt)
+    const aiResponse = await this.openaiService.getResponse(
+      prompt,
+      teacherFeedbackContentSchema,
+    )
+    const validatedContent = aiResponse.content
 
     await this.dbService.teacherAiFeedback.create({
       data: {
         scope: TeacherFeedbackScope.LEARNING_OBJECT,
         moduleId: lo.moduleId,
         learningObjectId,
-        content: aiResponse.content as object,
+        content: validatedContent as object,
       },
     })
 
-    return aiResponse.content.summary
+    return validatedContent.summary
   }
 
   private async generateModuleFeedback(
@@ -314,18 +318,21 @@ export class TeacherFeedbackService {
     }
 
     const prompt = moduleFeedbackPrompt({ language, data })
-    const aiResponse =
-      await this.openaiService.getResponse<AiFeedbackContent>(prompt)
+    const aiResponse = await this.openaiService.getResponse(
+      prompt,
+      teacherFeedbackContentSchema,
+    )
+    const validatedContent = aiResponse.content
 
     await this.dbService.teacherAiFeedback.create({
       data: {
         scope: TeacherFeedbackScope.MODULE,
         moduleId,
-        content: aiResponse.content as object,
+        content: validatedContent as object,
       },
     })
 
-    return aiResponse.content
+    return validatedContent
   }
 
   async validateModuleOwnership(
