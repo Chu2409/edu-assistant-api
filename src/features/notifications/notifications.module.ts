@@ -2,7 +2,6 @@ import { Module } from '@nestjs/common'
 import { BullModule } from '@nestjs/bullmq'
 import { NotificationsService } from './notifications.service'
 import { NotificationsController } from './notifications.controller'
-import { NotificationsWorker } from './workers/notifications.worker'
 import { QUEUE_NAMES } from 'src/shared/constants/queues'
 
 @Module({
@@ -12,7 +11,7 @@ import { QUEUE_NAMES } from 'src/shared/constants/queues'
     }),
   ],
   controllers: [NotificationsController],
-  providers: [NotificationsService, NotificationsWorker],
+  providers: [NotificationsService],
   exports: [NotificationsService],
 })
 export class NotificationsModule {}

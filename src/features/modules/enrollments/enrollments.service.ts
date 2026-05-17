@@ -52,20 +52,18 @@ export class EnrollmentsService {
       )
     }
 
-    if (user.role !== Role.ADMIN) {
-      if (!module.allowSelfEnroll) {
-        throw new BusinessException(
-          'Este módulo no permite auto-inscripción',
-          HttpStatus.FORBIDDEN,
-        )
-      }
+    if (!module.allowSelfEnroll) {
+      throw new BusinessException(
+        'Este módulo no permite auto-inscripción',
+        HttpStatus.FORBIDDEN,
+      )
+    }
 
-      if (!module.isActive) {
-        throw new BusinessException(
-          'El módulo no está activo',
-          HttpStatus.BAD_REQUEST,
-        )
-      }
+    if (!module.isActive) {
+      throw new BusinessException(
+        'El módulo no está activo',
+        HttpStatus.BAD_REQUEST,
+      )
     }
 
     const existingEnrollment = await this.dbService.enrollment.findUnique({
@@ -303,7 +301,7 @@ export class EnrollmentsService {
       )
     }
 
-    if (!enrollment.module.allowSelfUnenroll && user.role !== Role.ADMIN) {
+    if (!enrollment.module.allowSelfUnenroll) {
       throw new BusinessException(
         'Este módulo no permite auto-desinscripción',
         HttpStatus.FORBIDDEN,
