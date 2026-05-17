@@ -191,8 +191,7 @@ export class StudentAIFeedbackService {
           moduleTitle: module.title,
           moduleId: module.id,
           aiContent,
-          baseUrl:
-            this.configService.env.FRONTEND_URL || 'http://localhost:4200',
+          reportUrl: `/modules/${moduleId}/wiki`,
         },
       )
 

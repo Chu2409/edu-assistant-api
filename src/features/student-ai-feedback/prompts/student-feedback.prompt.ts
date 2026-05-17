@@ -33,7 +33,6 @@ Reply ONLY with a valid JSON object in the following language: ${language}.
 }
 
 # RULES
-- Address the student by name in the summary.
 - Focus on the STUDENT's specific difficulties, not aggregated class data.
 - Be specific: name the exact concepts, Learning Objects, and strategies.
 - Recommendations should be concrete and actionable (e.g., "Revisá la lección sobre X y enfocate en Y", not just "study more").

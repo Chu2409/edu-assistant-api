@@ -107,7 +107,7 @@ export class TeacherFeedbackService {
         },
         aiConfiguration: true,
         teacher: {
-          select: { id: true, email: true },
+          select: { id: true, name: true, email: true },
         },
       },
     })
@@ -146,17 +146,13 @@ export class TeacherFeedbackService {
           `Feedback AI - ${mod.title}`,
           EMAIL_TEMPLATES.TEACHER_NEW_FEEDBACK,
           {
+            teacherName: mod.teacher.name,
             moduleTitle: mod.title,
             summary: feedbackContent.summary,
             strengths: feedbackContent.strengths,
             improvements: feedbackContent.improvements,
             recommendations: feedbackContent.recommendations,
             reportUrl: `/modules/${mod.id}/wiki`,
-            date: new Date().toLocaleDateString('es-AR', {
-              day: '2-digit',
-              month: 'long',
-              year: 'numeric',
-            }),
           },
         )
         this.logger.log(`Email enviado exitosamente a ${mod.teacher.email}`)

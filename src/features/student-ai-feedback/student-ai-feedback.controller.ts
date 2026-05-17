@@ -18,8 +18,6 @@ import {
 import { InjectQueue } from '@nestjs/bullmq'
 import { Queue } from 'bullmq'
 import { GetUser } from 'src/features/auth/decorators/get-user.decorator'
-import { JwtAuth } from 'src/features/auth/decorators/jwt-auth.decorator'
-import { Role } from 'src/core/database/generated/enums'
 import { QUEUE_NAMES } from 'src/shared/constants/queues'
 import { StudentAIFeedbackService } from './student-ai-feedback.service'
 import { StudentFeedbackDto } from './dtos/res/student-feedback.dto'
@@ -27,7 +25,6 @@ import { ListStudentFeedbackDto } from './dtos/req/list-student-feedback.dto'
 
 @ApiTags('Student AI Feedback')
 @Controller('modules/:moduleId/student-feedback')
-@JwtAuth(Role.STUDENT)
 export class StudentAIFeedbackController {
   constructor(
     private readonly studentAIFeedbackService: StudentAIFeedbackService,
@@ -101,5 +98,27 @@ export class StudentAIFeedbackController {
     )
 
     return { message: 'Feedback generation started' }
+  }
+
+  // TODO: Remover después de pruebas
+  @Post('generate-test')
+  @ApiOperation({
+    summary: '[TEST] Generate feedback synchronously (no queue) and send email',
+  })
+  async generateTest(
+    @Param('moduleId', ParseIntPipe) moduleId: number,
+    @GetUser('id') studentId: number,
+  ) {
+    await this.studentAIFeedbackService.validateEnrollment(studentId, moduleId)
+    const result = await this.studentAIFeedbackService.generateForStudent(
+      studentId,
+      moduleId,
+    )
+    return {
+      message: 'Feedback generado exitosamente',
+      content: result.content,
+      emailSent: result.emailSent,
+      emailQueued: result.emailQueued,
+    }
   }
 }
