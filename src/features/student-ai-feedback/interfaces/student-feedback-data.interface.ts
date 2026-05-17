@@ -1,5 +1,6 @@
 export interface StudentActivityResult {
   question: string
+  loTitle: string
   totalAttempts: number
   correct: number
   correctRate: number
@@ -16,11 +17,14 @@ export interface CompletedLo {
   title: string
 }
 
-export interface RecommendedLo {
-  id: number
-  title: string
-  reason: string
-  similarityScore?: number
+export interface StudentChatMessage {
+  loTitle: string
+  content: string
+}
+
+export interface StudentForumQuestion {
+  loTitle: string
+  question: string
 }
 
 export interface StudentInteractionData {
@@ -31,30 +35,22 @@ export interface StudentInteractionData {
   activityResults: StudentActivityResult[]
   failedConcepts: FailedConcept[]
   completedLos: CompletedLo[]
-  recommendedLos: RecommendedLo[]
+  chatMessages: StudentChatMessage[]
+  forumQuestions: StudentForumQuestion[]
   totalAttempts: number
   totalCorrect: number
   overallSuccessRate: number
 }
 
+export interface StudentAiFeedbackItem {
+  topic: string
+  detail: string
+  priority: 'HIGH' | 'MEDIUM' | 'LOW'
+}
+
 export interface StudentAiFeedbackContent {
-  greeting: string
-  weeklySummary: string
-  areasOfDifficulty: {
-    concept: string
-    explanation: string
-    relatedLoTitle: string
-  }[]
-  recommendedActions: {
-    loTitle: string
-    loId: number
-    reason: string
-    studyTip: string
-  }[]
-  vocabularyTips: {
-    term: string
-    definition: string
-    usageExample: string
-  }[]
-  encouragement: string
+  summary: string
+  strengths: StudentAiFeedbackItem[]
+  improvements: StudentAiFeedbackItem[]
+  recommendations: StudentAiFeedbackItem[]
 }

@@ -12,7 +12,7 @@ export const studentFeedbackPrompt = (
 ): PromptInput[] => {
   const { language, studentName, data } = input
 
-  const system = `You are an expert educational tutor for the NousAI platform. NousAI is an educational platform where students learn through Learning Objects (contenido educativo), Activities (actividades prácticas), Forum Questions (preguntas al comunidad), and Chat Sessions.
+  const system = `You are an expert educational consultant for the NousAI platform. NousAI is an educational platform where students learn through Learning Objects (educational content), Activities (practical exercises with attempts and success rate), Forum Questions (student questions to the community), and Chat Sessions (conversations per Learning Object).
 
 Your task is to analyze a student's weekly interaction data and provide personalized, actionable feedback.
 
@@ -20,55 +20,41 @@ Reply ONLY with a valid JSON object in the following language: ${language}.
 
 # OUTPUT FORMAT (strict JSON)
 {
-  "greeting": "Warm greeting for the student, mentioning their name (1 sentence)",
-  "weeklySummary": "Brief summary of the student's week in the module (2-3 sentences). Include specific numbers when available.",
-  "areasOfDifficulty": [
-    {
-      "concept": "specific concept or topic",
-      "explanation": "why this is difficult and what confuses the student",
-      "relatedLoTitle": "title of the learning object where this appears"
-    }
+  "summary": "Executive summary of the student's week (2-3 sentences). Include specific numbers when available. Be concrete and specific.",
+  "strengths": [
+    { "topic": "topic name", "detail": "specific explanation of what the student did well", "priority": "HIGH|MEDIUM|LOW" }
   ],
-  "recommendedActions": [
-    {
-      "loTitle": "specific learning object title to revisit",
-      "loId": number,
-      "reason": "why this LO is recommended",
-      "studyTip": "concrete study strategy for this student"
-    }
+  "improvements": [
+    { "topic": "topic name", "detail": "specific explanation of the difficulty with actionable suggestion", "priority": "HIGH|MEDIUM|LOW" }
   ],
-  "vocabularyTips": [
-    {
-      "term": "technical term",
-      "definition": "simple definition",
-      "usageExample": "example in context"
-    }
-  ],
-  "encouragement": "Motivational message for the student (1-2 sentences)"
+  "recommendations": [
+    { "topic": "action title", "detail": "concrete, actionable recommendation the student can follow", "priority": "HIGH|MEDIUM|LOW" }
+  ]
 }
 
 # RULES
-- Address the student by name with warmth and encouragement.
-- The greeting MUST include the module name: "Hola {studentName}, aquí está tu resumen de {moduleTitle}."
+- Address the student by name in the summary.
 - Focus on the STUDENT's specific difficulties, not aggregated class data.
-- Be specific: name the exact concepts, LOs, and strategies.
-- Study tips should be concrete and actionable (e.g., "Revisá el capítulo 3 sobre X", not just "study more").
-- Vocabulary tips should use simple language the student can understand.
-- If there are no difficult areas, return empty arrays for areasOfDifficulty and vocabularyTips.
-- If no LOs are recommended, return empty array for recommendedActions.
-- NEVER mention 'AI' or 'system' in the output.
-- Keep the tone supportive and motivating — this is a weekly learning companion, not a critique.`
+- Be specific: name the exact concepts, Learning Objects, and strategies.
+- Recommendations should be concrete and actionable (e.g., "Revisá la lección sobre X y enfocate en Y", not just "study more").
+- Identify strengths based on high success rates, completed LOs, and good activity performance.
+- Identify improvements based on low success rates, failed attempts, and questions asked in chat or forum.
+- Each array should have between 1 and 5 items, prioritized by importance.
+- If there is insufficient data for a category, return an empty array for that category.
+- NEVER mention 'AI', 'system', or 'algorithm' in the output.
+- Keep the tone supportive and constructive — this is a weekly learning companion.
+- Do NOT invent data. Only analyze what is provided.`
 
   const activitySection =
     data.activityResults.length > 0
       ? `## Activities Completed
-${data.activityResults.map((a) => `- "${a.question}" | Attempts: ${a.totalAttempts} | Correct: ${a.correct} | Success Rate: ${(a.correctRate * 100).toFixed(0)}%`).join('\n')}`
+${data.activityResults.map((a) => `- "${a.question}" (LO: "${a.loTitle}") | Attempts: ${a.totalAttempts} | Correct: ${a.correct} | Success Rate: ${(a.correctRate * 100).toFixed(0)}%`).join('\n')}`
       : '## Activities Completed\nNo activities attempted this week.'
 
   const failedConceptsSection =
     data.failedConcepts.length > 0
       ? `## Concepts with Mistakes
-${data.failedConcepts.map((c) => `- "${c.concept}" (appeared in "${c.loTitle}")`).join('\n')}`
+${data.failedConcepts.map((c) => `- "${c.concept}" (LO: "${c.loTitle}", errors: ${c.errorCount})`).join('\n')}`
       : '## Concepts with Mistakes\nNo specific concepts identified.'
 
   const completedLosSection =
@@ -77,15 +63,23 @@ ${data.failedConcepts.map((c) => `- "${c.concept}" (appeared in "${c.loTitle}")`
 ${data.completedLos.map((lo) => `- "${lo.title}"`).join('\n')}`
       : '## Learning Objects Completed Successfully\nNo LOs completed this week.'
 
-  const recommendedLosSection =
-    data.recommendedLos.length > 0
-      ? `## Recommended Learning Objects (based on their difficulties)
-${data.recommendedLos.map((lo) => `- "${lo.title}" (reason: ${lo.reason})`).join('\n')}`
-      : '## Recommended Learning Objects\nNo specific recommendations available.'
+  const chatSection =
+    data.chatMessages.length > 0
+      ? `## Chat Questions from this Student
+${data.chatMessages.map((m) => `- [LO: "${m.loTitle}"] "${m.content}"`).join('\n')}`
+      : '## Chat Questions\nNo chat questions this week.'
+
+  const forumSection =
+    data.forumQuestions.length > 0
+      ? `## Forum Questions from this Student
+${data.forumQuestions.map((q) => `- [LO: "${q.loTitle}"] "${q.question}"`).join('\n')}`
+      : '## Forum Questions\nNo forum questions this week.'
 
   const user = `# Student: ${studentName}
 # Module: "${data.moduleTitle}"
 # Week of: ${data.weekStartDate} to ${data.weekEndDate}
+# Overall Success Rate: ${(data.overallSuccessRate * 100).toFixed(1)}%
+# Total Attempts: ${data.totalAttempts} | Total Correct: ${data.totalCorrect}
 
 ${completedLosSection}
 
@@ -93,7 +87,9 @@ ${activitySection}
 
 ${failedConceptsSection}
 
-${recommendedLosSection}`
+${chatSection}
+
+${forumSection}`
 
   return [
     { role: 'system', content: system },
