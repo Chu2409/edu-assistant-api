@@ -48,7 +48,7 @@ async function bootstrap() {
 
   // CORS configuration with PNA support for VPN access
   app.enableCors({
-    origin: configService.env.FRONTEND_URL || true,
+    origin: configService.env.FRONTEND_URL,
     credentials: true,
     exposedHeaders: ['Access-Control-Allow-Private-Network'],
   })
