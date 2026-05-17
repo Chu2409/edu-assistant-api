@@ -43,10 +43,14 @@ export class StudentAIFeedbackService {
 
   async listByModule(
     studentId: number,
+    moduleId: number,
     query: ListStudentFeedbackDto,
   ): Promise<ApiPaginatedRes<StudentFeedbackDto>> {
+    await this.validateEnrollment(studentId, moduleId)
+
     const where = {
       studentId,
+      moduleId,
       ...(query.scope ? { scope: query.scope } : {}),
     }
 
@@ -73,10 +77,13 @@ export class StudentAIFeedbackService {
 
   async findOne(
     studentId: number,
+    moduleId: number,
     feedbackId: number,
   ): Promise<StudentFeedbackDto> {
+    await this.validateEnrollment(studentId, moduleId)
+
     const feedback = await this.dbService.studentAiFeedback.findFirst({
-      where: { id: feedbackId, studentId },
+      where: { id: feedbackId, studentId, moduleId },
     })
 
     if (!feedback) {

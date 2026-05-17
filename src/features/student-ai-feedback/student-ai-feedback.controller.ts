@@ -46,7 +46,11 @@ export class StudentAIFeedbackController {
     @GetUser('id') studentId: number,
     @Query() query: ListStudentFeedbackDto,
   ) {
-    return this.studentAIFeedbackService.listByModule(studentId, query)
+    return this.studentAIFeedbackService.listByModule(
+      studentId,
+      moduleId,
+      query,
+    )
   }
 
   @Get(':id')
@@ -59,7 +63,7 @@ export class StudentAIFeedbackController {
     @Param('id', ParseIntPipe) id: number,
     @GetUser('id') studentId: number,
   ) {
-    return this.studentAIFeedbackService.findOne(studentId, id)
+    return this.studentAIFeedbackService.findOne(studentId, moduleId, id)
   }
 
   @Post('generate')
