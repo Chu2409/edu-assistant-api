@@ -1,17 +1,5 @@
-import {
-  Controller,
-  Get,
-  Param,
-  ParseIntPipe,
-  HttpStatus,
-} from '@nestjs/common'
-import {
-  ApiTags,
-  ApiOperation,
-  ApiResponse,
-  ApiParam,
-  ApiBearerAuth,
-} from '@nestjs/swagger'
+import { Controller, Get, Param, ParseIntPipe } from '@nestjs/common'
+import { ApiTags, ApiOperation, ApiResponse, ApiParam } from '@nestjs/swagger'
 import { ModuleAnalyticsService } from './module-analytics.service'
 import { ModuleAnalyticsDto } from './dtos/res/module-analytics.dto'
 import { JwtAuth } from 'src/features/auth/decorators/jwt-auth.decorator'
@@ -22,7 +10,6 @@ import { AuthorizationUtils } from 'src/shared/utils/authorization.util'
 import { ApiStandardResponse } from 'src/shared/decorators/api-standard-response.decorator'
 
 @ApiTags('Modules Analytics')
-@ApiBearerAuth()
 @Controller('modules')
 export class ModuleAnalyticsController {
   constructor(

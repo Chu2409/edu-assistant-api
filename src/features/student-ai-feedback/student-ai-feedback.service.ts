@@ -8,7 +8,6 @@ import { BusinessException } from 'src/shared/exceptions/business.exception'
 import { DBService } from 'src/core/database/database.service'
 import { OpenaiService } from 'src/providers/ai/services/openai.service'
 import { EmailService } from 'src/providers/email/email.service'
-import { EmailLimitExceededException } from 'src/providers/email/exceptions/email-limit-exceeded.exception'
 import { StudentFeedbackDataCollectorService } from './services/student-feedback-data-collector.service'
 import { StudentFeedbackMapper } from './mappers/student-feedback.mapper'
 import { StudentFeedbackDto } from './dtos/res/student-feedback.dto'
@@ -171,12 +170,20 @@ export class StudentAIFeedbackService {
         relatedEntityType: ENTITY_TYPES.STUDENT_AI_FEEDBACK,
       })
 
-      // Send email with digest (respecting daily limit)
-      const emailResult = await this.sendFeedbackEmailWithLimit(
-        student,
-        module.id,
-        module.title,
-        aiContent,
+      // Send email with digest (limit handling is centralized in EmailService)
+      const emailResult = await this.emailService.sendWithTemplate(
+        student.email,
+        `Tu resumen semanal: ${module.title}`,
+        EMAIL_TEMPLATES.STUDENT_FEEDBACK_DIGEST,
+        {
+          studentName: student.name || `Estudiante ${student.id}`,
+          studentEmail: student.email,
+          moduleTitle: module.title,
+          moduleId: module.id,
+          aiContent,
+          baseUrl:
+            this.configService.env.FRONTEND_URL || 'http://localhost:4200',
+        },
       )
 
       this.logger.log(
@@ -269,138 +276,6 @@ export class StudentAIFeedbackService {
         'No estás inscrito en este módulo',
         HttpStatus.FORBIDDEN,
       )
-    }
-  }
-
-  /**
-   * Helper to get milliseconds until next day 9 AM for scheduled email retry
-   */
-  private getMillisecondsUntilNextDayMorning(): number {
-    const now = new Date()
-    const tomorrow = new Date(now)
-    tomorrow.setDate(tomorrow.getDate() + 1)
-    tomorrow.setHours(9, 0, 0, 0) // 9:00 AM
-    return tomorrow.getTime() - now.getTime()
-  }
-
-  /**
-   * Send feedback email respecting daily limit
-   * If limit reached, enqueue for next day
-   */
-  private async sendFeedbackEmailWithLimit(
-    student: { id: number; name: string; email: string },
-    moduleId: number,
-    moduleTitle: string,
-    aiContent: StudentAiFeedbackContent,
-  ): Promise<{ sent: boolean; queued: boolean }> {
-    try {
-      await this.emailService.sendWithTemplate(
-        student.email,
-        `Tu resumen semanal: ${moduleTitle}`,
-        EMAIL_TEMPLATES.STUDENT_FEEDBACK_DIGEST,
-        {
-          studentName: student.name || `Estudiante ${student.id}`,
-          studentEmail: student.email,
-          moduleTitle,
-          moduleId,
-          aiContent,
-          baseUrl:
-            this.configService.env.FRONTEND_URL || 'http://localhost:4200',
-        },
-      )
-
-      this.logger.log(`Email sent to ${student.email}`)
-      return { sent: true, queued: false }
-    } catch (error) {
-      if (error instanceof EmailLimitExceededException) {
-        this.logger.warn(
-          `Daily email limit reached. Enqueueing email for ${student.email} for tomorrow`,
-        )
-        await this.feedbackQueue.add(
-          QUEUE_NAMES.STUDENT_AI_FEEDBACK.JOBS.SEND_STUDENT_EMAIL,
-          {
-            studentId: student.id,
-            studentName: student.name,
-            studentEmail: student.email,
-            moduleId,
-            moduleTitle,
-            aiContent,
-          },
-          {
-            jobId: `send-email-${student.id}-${moduleId}-${Date.now()}`,
-            delay: this.getMillisecondsUntilNextDayMorning(),
-            attempts: 3,
-            backoff: {
-              type: 'exponential' as const,
-              delay: 60000,
-            },
-          },
-        )
-        return { sent: false, queued: true }
-      }
-      throw error
-    }
-  }
-
-  /**
-   * Send a delayed student email (called by worker when retrying after limit exceeded)
-   */
-  async sendDelayedStudentEmail(data: {
-    studentId: number
-    studentName: string
-    studentEmail: string
-    moduleId: number
-    moduleTitle: string
-    aiContent: StudentAiFeedbackContent
-  }): Promise<{ sent: boolean; queued: boolean }> {
-    const {
-      studentId,
-      studentName,
-      studentEmail,
-      moduleId,
-      moduleTitle,
-      aiContent,
-    } = data
-
-    try {
-      await this.emailService.sendWithTemplate(
-        studentEmail,
-        `Tu resumen semanal: ${moduleTitle}`,
-        EMAIL_TEMPLATES.STUDENT_FEEDBACK_DIGEST,
-        {
-          studentName: studentName || `Estudiante ${studentId}`,
-          studentEmail,
-          moduleTitle,
-          moduleId,
-          aiContent,
-          baseUrl:
-            this.configService.env.FRONTEND_URL || 'http://localhost:4200',
-        },
-      )
-
-      this.logger.log(`Delayed email sent to ${studentEmail}`)
-      return { sent: true, queued: false }
-    } catch (error) {
-      if (error instanceof EmailLimitExceededException) {
-        this.logger.warn(
-          `Still over daily limit for ${studentEmail}. Re-enqueueing for tomorrow`,
-        )
-        await this.feedbackQueue.add(
-          QUEUE_NAMES.STUDENT_AI_FEEDBACK.JOBS.SEND_STUDENT_EMAIL,
-          data,
-          {
-            jobId: `send-email-${studentId}-${moduleId}-${Date.now()}`,
-            delay: this.getMillisecondsUntilNextDayMorning(),
-            attempts: 3,
-            backoff: {
-              type: 'exponential' as const,
-              delay: 60000,
-            },
-          },
-        )
-        return { sent: false, queued: true }
-      }
-      throw error
     }
   }
 }

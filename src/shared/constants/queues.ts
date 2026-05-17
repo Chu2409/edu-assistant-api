@@ -56,7 +56,12 @@ export const QUEUE_NAMES = {
     JOBS: {
       GENERATE_ALL: 'generate-all-student-feedbacks',
       GENERATE_STUDENT: 'generate-student-feedback',
-      SEND_STUDENT_EMAIL: 'send-student-email',
+    },
+  },
+  EMAIL_QUEUE: {
+    NAME: 'email-queue',
+    JOBS: {
+      SEND_EMAIL: 'send-email',
     },
   },
 } as const satisfies Record<

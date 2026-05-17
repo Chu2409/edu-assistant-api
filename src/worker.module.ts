@@ -13,6 +13,7 @@ import { StudentAIFeedbackWorker } from './features/student-ai-feedback/workers/
 import { EmailModule } from './providers/email/email.module'
 import { NotificationsModule } from './features/notifications/notifications.module'
 import { NotificationsWorker } from './features/notifications/workers/notifications.worker'
+import { EmailQueueWorker } from './providers/email/workers/email-queue.worker'
 
 @Module({
   imports: [
@@ -32,6 +33,7 @@ import { NotificationsWorker } from './features/notifications/workers/notificati
     EnrollmentsWorker,
     StudentAIFeedbackWorker,
     NotificationsWorker,
+    EmailQueueWorker,
   ],
 })
 export class WorkerModule {}

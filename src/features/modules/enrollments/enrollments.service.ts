@@ -7,7 +7,6 @@ import {
 import { BusinessException } from 'src/shared/exceptions/business.exception'
 import { DBService } from 'src/core/database/database.service'
 import { EmailService } from 'src/providers/email/email.service'
-import { EmailLimitExceededException } from 'src/providers/email/exceptions/email-limit-exceeded.exception'
 import { CreateEnrollmentDto } from './dtos/req/create-enrollment.dto'
 import { UpdateEnrollmentDto } from './dtos/req/update-enrollment.dto'
 import { BulkEnrollStudentsDto } from './dtos/req/bulk-enroll-students.dto'
@@ -403,23 +402,22 @@ export class EnrollmentsService {
 
     for (const data of Object.values(groupedByModule)) {
       try {
-        await this.emailService.sendWithTemplate(
+        const result = await this.emailService.sendWithTemplate(
           data.teacherEmail,
           `Resumen diario: ${data.students.length} nuevas inscripciones en ${data.moduleTitle}`,
           EMAIL_TEMPLATES.TEACHER_DAILY_ENROLLMENTS,
           {
             moduleTitle: data.moduleTitle,
             students: data.students,
-            dashboardUrl: `${process.env.FRONTEND_URL || 'https://tu-app.com'}`,
           },
         )
-      } catch (error) {
-        if (error instanceof EmailLimitExceededException) {
-          this.logger.warn(
-            'Límite diario de emails alcanzado. Deteniendo envío de resúmenes.',
+
+        if (result.queued) {
+          this.logger.log(
+            `Resumen para ${data.teacherEmail} encolado para el siguiente día`,
           )
-          break
         }
+      } catch (error) {
         this.logger.error(
           `Error enviando resumen a ${data.teacherEmail}: ${error}`,
         )
