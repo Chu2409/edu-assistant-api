@@ -161,7 +161,7 @@ export class TeacherFeedbackService {
         await this.notificationsQueue.add(
           QUEUE_NAMES.NOTIFICATIONS.JOBS.CREATE,
           {
-            type: NotificationType.TEACHER_AI_FEEDBACK,
+            type: NotificationType.MODULE_UPDATE,
             userId: mod.teacherId,
             title: 'Nuevo reporte de feedback IA',
             message: `Se ha generado un nuevo reporte pedagógico para tu módulo: "${mod.title}"`,
