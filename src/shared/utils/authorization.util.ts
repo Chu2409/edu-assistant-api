@@ -20,12 +20,23 @@ export const AuthorizationUtils = {
     // Profesor propietario tiene acceso siempre
     if (module.teacherId === user.id) return
 
-    // Requiere matrícula activa (isPublic no aplica para acceso a contenido)
+    // Si el módulo no está activo, nadie excepto el admin/profe puede verlo
+    if (!module.isActive) {
+      throw new BusinessException(
+        'Este módulo no está disponible actualmente',
+        HttpStatus.FORBIDDEN,
+      )
+    }
+
+    // Si el módulo es público, cualquier usuario autenticado tiene acceso
+    if (module.isPublic) return
+
+    // Si no es público, requiere matrícula activa
     const isEnrolled = module.enrollments?.some(
       (e) => e.userId === user.id && e.isActive,
     )
 
-    if (module.isActive && isEnrolled) return
+    if (isEnrolled) return
 
     throw new BusinessException(
       'No tienes permisos para acceder a este módulo',
@@ -54,13 +65,16 @@ export const AuthorizationUtils = {
     // Profesor propietario tiene acceso total al LO sin importar si está publicado o no
     if (module.teacherId === user.id) return
 
-    // ... y además que el LO esté publicado
-    if (!lo.isPublished || !module.isPublic) {
+    // El LO debe estar publicado para estudiantes
+    if (!lo.isPublished) {
       throw new BusinessException(
         'Este contenido no está disponible',
         HttpStatus.FORBIDDEN,
       )
     }
+
+    // Reutilizamos la lógica de acceso al módulo (público o matrícula)
+    this.assertModuleReadAccess(user, module)
   },
 
   assertLoWriteAccess(user: User, module: { teacherId: number }): void {
