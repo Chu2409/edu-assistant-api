@@ -100,7 +100,7 @@ export class EnrollmentsService {
     }
 
     await this.notificationsQueue.add(QUEUE_NAMES.NOTIFICATIONS.JOBS.CREATE, {
-      type: NotificationType.NEW_ENROLLMENT,
+      type: NotificationType.MODULE_UPDATE,
       userId: user.id,
       title: 'Inscripción confirmada',
       message: `Te has inscrito exitosamente en el módulo: "${module.title}"`,
@@ -189,7 +189,7 @@ export class EnrollmentsService {
     }
 
     await this.notificationsQueue.add(QUEUE_NAMES.NOTIFICATIONS.JOBS.CREATE, {
-      type: NotificationType.NEW_ENROLLMENT,
+      type: NotificationType.MODULE_UPDATE,
       userIds: bulkEnrollDto.studentIds,
       title: 'Inscripción confirmada',
       message: `Has sido inscrito en el módulo: "${module.title}"`,
