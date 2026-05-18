@@ -47,7 +47,6 @@ export type LearningObjectMinAggregateOutputType = {
   orderIndex: number | null
   compiledContent: string | null
   isPublished: boolean | null
-  aiResponseId: string | null
   hasManualEdits: boolean | null
   conceptsProcessed: boolean | null
   createdAt: Date | null
@@ -62,7 +61,6 @@ export type LearningObjectMaxAggregateOutputType = {
   orderIndex: number | null
   compiledContent: string | null
   isPublished: boolean | null
-  aiResponseId: string | null
   hasManualEdits: boolean | null
   conceptsProcessed: boolean | null
   createdAt: Date | null
@@ -78,7 +76,6 @@ export type LearningObjectCountAggregateOutputType = {
   keywords: number
   compiledContent: number
   isPublished: number
-  aiResponseId: number
   hasManualEdits: number
   conceptsProcessed: number
   createdAt: number
@@ -109,7 +106,6 @@ export type LearningObjectMinAggregateInputType = {
   orderIndex?: true
   compiledContent?: true
   isPublished?: true
-  aiResponseId?: true
   hasManualEdits?: true
   conceptsProcessed?: true
   createdAt?: true
@@ -124,7 +120,6 @@ export type LearningObjectMaxAggregateInputType = {
   orderIndex?: true
   compiledContent?: true
   isPublished?: true
-  aiResponseId?: true
   hasManualEdits?: true
   conceptsProcessed?: true
   createdAt?: true
@@ -140,7 +135,6 @@ export type LearningObjectCountAggregateInputType = {
   keywords?: true
   compiledContent?: true
   isPublished?: true
-  aiResponseId?: true
   hasManualEdits?: true
   conceptsProcessed?: true
   createdAt?: true
@@ -243,7 +237,6 @@ export type LearningObjectGroupByOutputType = {
   keywords: string[]
   compiledContent: string | null
   isPublished: boolean
-  aiResponseId: string | null
   hasManualEdits: boolean
   conceptsProcessed: boolean
   createdAt: Date
@@ -256,7 +249,7 @@ export type LearningObjectGroupByOutputType = {
   _max: LearningObjectMaxAggregateOutputType | null
 }
 
-type GetLearningObjectGroupByPayload<T extends LearningObjectGroupByArgs> = Prisma.PrismaPromise<
+export type GetLearningObjectGroupByPayload<T extends LearningObjectGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<LearningObjectGroupByOutputType, T['by']> &
       {
@@ -282,7 +275,6 @@ export type LearningObjectWhereInput = {
   keywords?: Prisma.StringNullableListFilter<"LearningObject">
   compiledContent?: Prisma.StringNullableFilter<"LearningObject"> | string | null
   isPublished?: Prisma.BoolFilter<"LearningObject"> | boolean
-  aiResponseId?: Prisma.StringNullableFilter<"LearningObject"> | string | null
   hasManualEdits?: Prisma.BoolFilter<"LearningObject"> | boolean
   conceptsProcessed?: Prisma.BoolFilter<"LearningObject"> | boolean
   createdAt?: Prisma.DateTimeFilter<"LearningObject"> | Date | string
@@ -302,6 +294,7 @@ export type LearningObjectWhereInput = {
   sessions?: Prisma.SessionListRelationFilter
   blocks?: Prisma.BlockListRelationFilter
   teacherFeedbacks?: Prisma.TeacherAiFeedbackListRelationFilter
+  progress?: Prisma.LearningObjectProgressListRelationFilter
   video?: Prisma.XOR<Prisma.VideoNullableScalarRelationFilter, Prisma.VideoWhereInput> | null
 }
 
@@ -313,7 +306,6 @@ export type LearningObjectOrderByWithRelationInput = {
   keywords?: Prisma.SortOrder
   compiledContent?: Prisma.SortOrderInput | Prisma.SortOrder
   isPublished?: Prisma.SortOrder
-  aiResponseId?: Prisma.SortOrderInput | Prisma.SortOrder
   hasManualEdits?: Prisma.SortOrder
   conceptsProcessed?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -333,6 +325,7 @@ export type LearningObjectOrderByWithRelationInput = {
   sessions?: Prisma.SessionOrderByRelationAggregateInput
   blocks?: Prisma.BlockOrderByRelationAggregateInput
   teacherFeedbacks?: Prisma.TeacherAiFeedbackOrderByRelationAggregateInput
+  progress?: Prisma.LearningObjectProgressOrderByRelationAggregateInput
   video?: Prisma.VideoOrderByWithRelationInput
 }
 
@@ -348,7 +341,6 @@ export type LearningObjectWhereUniqueInput = Prisma.AtLeast<{
   keywords?: Prisma.StringNullableListFilter<"LearningObject">
   compiledContent?: Prisma.StringNullableFilter<"LearningObject"> | string | null
   isPublished?: Prisma.BoolFilter<"LearningObject"> | boolean
-  aiResponseId?: Prisma.StringNullableFilter<"LearningObject"> | string | null
   hasManualEdits?: Prisma.BoolFilter<"LearningObject"> | boolean
   conceptsProcessed?: Prisma.BoolFilter<"LearningObject"> | boolean
   createdAt?: Prisma.DateTimeFilter<"LearningObject"> | Date | string
@@ -368,6 +360,7 @@ export type LearningObjectWhereUniqueInput = Prisma.AtLeast<{
   sessions?: Prisma.SessionListRelationFilter
   blocks?: Prisma.BlockListRelationFilter
   teacherFeedbacks?: Prisma.TeacherAiFeedbackListRelationFilter
+  progress?: Prisma.LearningObjectProgressListRelationFilter
   video?: Prisma.XOR<Prisma.VideoNullableScalarRelationFilter, Prisma.VideoWhereInput> | null
 }, "id" | "moduleId_orderIndex">
 
@@ -379,7 +372,6 @@ export type LearningObjectOrderByWithAggregationInput = {
   keywords?: Prisma.SortOrder
   compiledContent?: Prisma.SortOrderInput | Prisma.SortOrder
   isPublished?: Prisma.SortOrder
-  aiResponseId?: Prisma.SortOrderInput | Prisma.SortOrder
   hasManualEdits?: Prisma.SortOrder
   conceptsProcessed?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -403,7 +395,6 @@ export type LearningObjectScalarWhereWithAggregatesInput = {
   keywords?: Prisma.StringNullableListFilter<"LearningObject">
   compiledContent?: Prisma.StringNullableWithAggregatesFilter<"LearningObject"> | string | null
   isPublished?: Prisma.BoolWithAggregatesFilter<"LearningObject"> | boolean
-  aiResponseId?: Prisma.StringNullableWithAggregatesFilter<"LearningObject"> | string | null
   hasManualEdits?: Prisma.BoolWithAggregatesFilter<"LearningObject"> | boolean
   conceptsProcessed?: Prisma.BoolWithAggregatesFilter<"LearningObject"> | boolean
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"LearningObject"> | Date | string
@@ -417,7 +408,6 @@ export type LearningObjectCreateInput = {
   keywords?: Prisma.LearningObjectCreatekeywordsInput | string[]
   compiledContent?: string | null
   isPublished?: boolean
-  aiResponseId?: string | null
   hasManualEdits?: boolean
   conceptsProcessed?: boolean
   createdAt?: Date | string
@@ -436,6 +426,7 @@ export type LearningObjectCreateInput = {
   sessions?: Prisma.SessionCreateNestedManyWithoutLearningObjectInput
   blocks?: Prisma.BlockCreateNestedManyWithoutLearningObjectInput
   teacherFeedbacks?: Prisma.TeacherAiFeedbackCreateNestedManyWithoutLearningObjectInput
+  progress?: Prisma.LearningObjectProgressCreateNestedManyWithoutLearningObjectInput
   video?: Prisma.VideoCreateNestedOneWithoutLearningObjectInput
 }
 
@@ -447,7 +438,6 @@ export type LearningObjectUncheckedCreateInput = {
   keywords?: Prisma.LearningObjectCreatekeywordsInput | string[]
   compiledContent?: string | null
   isPublished?: boolean
-  aiResponseId?: string | null
   hasManualEdits?: boolean
   conceptsProcessed?: boolean
   createdAt?: Date | string
@@ -465,6 +455,7 @@ export type LearningObjectUncheckedCreateInput = {
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutLearningObjectInput
   blocks?: Prisma.BlockUncheckedCreateNestedManyWithoutLearningObjectInput
   teacherFeedbacks?: Prisma.TeacherAiFeedbackUncheckedCreateNestedManyWithoutLearningObjectInput
+  progress?: Prisma.LearningObjectProgressUncheckedCreateNestedManyWithoutLearningObjectInput
   video?: Prisma.VideoUncheckedCreateNestedOneWithoutLearningObjectInput
 }
 
@@ -474,7 +465,6 @@ export type LearningObjectUpdateInput = {
   keywords?: Prisma.LearningObjectUpdatekeywordsInput | string[]
   compiledContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  aiResponseId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   hasManualEdits?: Prisma.BoolFieldUpdateOperationsInput | boolean
   conceptsProcessed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -493,6 +483,7 @@ export type LearningObjectUpdateInput = {
   sessions?: Prisma.SessionUpdateManyWithoutLearningObjectNestedInput
   blocks?: Prisma.BlockUpdateManyWithoutLearningObjectNestedInput
   teacherFeedbacks?: Prisma.TeacherAiFeedbackUpdateManyWithoutLearningObjectNestedInput
+  progress?: Prisma.LearningObjectProgressUpdateManyWithoutLearningObjectNestedInput
   video?: Prisma.VideoUpdateOneWithoutLearningObjectNestedInput
 }
 
@@ -504,7 +495,6 @@ export type LearningObjectUncheckedUpdateInput = {
   keywords?: Prisma.LearningObjectUpdatekeywordsInput | string[]
   compiledContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  aiResponseId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   hasManualEdits?: Prisma.BoolFieldUpdateOperationsInput | boolean
   conceptsProcessed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -522,6 +512,7 @@ export type LearningObjectUncheckedUpdateInput = {
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutLearningObjectNestedInput
   blocks?: Prisma.BlockUncheckedUpdateManyWithoutLearningObjectNestedInput
   teacherFeedbacks?: Prisma.TeacherAiFeedbackUncheckedUpdateManyWithoutLearningObjectNestedInput
+  progress?: Prisma.LearningObjectProgressUncheckedUpdateManyWithoutLearningObjectNestedInput
   video?: Prisma.VideoUncheckedUpdateOneWithoutLearningObjectNestedInput
 }
 
@@ -533,7 +524,6 @@ export type LearningObjectCreateManyInput = {
   keywords?: Prisma.LearningObjectCreatekeywordsInput | string[]
   compiledContent?: string | null
   isPublished?: boolean
-  aiResponseId?: string | null
   hasManualEdits?: boolean
   conceptsProcessed?: boolean
   createdAt?: Date | string
@@ -547,7 +537,6 @@ export type LearningObjectUpdateManyMutationInput = {
   keywords?: Prisma.LearningObjectUpdatekeywordsInput | string[]
   compiledContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  aiResponseId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   hasManualEdits?: Prisma.BoolFieldUpdateOperationsInput | boolean
   conceptsProcessed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -562,7 +551,6 @@ export type LearningObjectUncheckedUpdateManyInput = {
   keywords?: Prisma.LearningObjectUpdatekeywordsInput | string[]
   compiledContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  aiResponseId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   hasManualEdits?: Prisma.BoolFieldUpdateOperationsInput | boolean
   conceptsProcessed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -601,7 +589,6 @@ export type LearningObjectCountOrderByAggregateInput = {
   keywords?: Prisma.SortOrder
   compiledContent?: Prisma.SortOrder
   isPublished?: Prisma.SortOrder
-  aiResponseId?: Prisma.SortOrder
   hasManualEdits?: Prisma.SortOrder
   conceptsProcessed?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -623,7 +610,6 @@ export type LearningObjectMaxOrderByAggregateInput = {
   orderIndex?: Prisma.SortOrder
   compiledContent?: Prisma.SortOrder
   isPublished?: Prisma.SortOrder
-  aiResponseId?: Prisma.SortOrder
   hasManualEdits?: Prisma.SortOrder
   conceptsProcessed?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -638,7 +624,6 @@ export type LearningObjectMinOrderByAggregateInput = {
   orderIndex?: Prisma.SortOrder
   compiledContent?: Prisma.SortOrder
   isPublished?: Prisma.SortOrder
-  aiResponseId?: Prisma.SortOrder
   hasManualEdits?: Prisma.SortOrder
   conceptsProcessed?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -754,6 +739,20 @@ export type LearningObjectCreatekeywordsInput = {
 export type LearningObjectUpdatekeywordsInput = {
   set?: string[]
   push?: string | string[]
+}
+
+export type LearningObjectCreateNestedOneWithoutProgressInput = {
+  create?: Prisma.XOR<Prisma.LearningObjectCreateWithoutProgressInput, Prisma.LearningObjectUncheckedCreateWithoutProgressInput>
+  connectOrCreate?: Prisma.LearningObjectCreateOrConnectWithoutProgressInput
+  connect?: Prisma.LearningObjectWhereUniqueInput
+}
+
+export type LearningObjectUpdateOneRequiredWithoutProgressNestedInput = {
+  create?: Prisma.XOR<Prisma.LearningObjectCreateWithoutProgressInput, Prisma.LearningObjectUncheckedCreateWithoutProgressInput>
+  connectOrCreate?: Prisma.LearningObjectCreateOrConnectWithoutProgressInput
+  upsert?: Prisma.LearningObjectUpsertWithoutProgressInput
+  connect?: Prisma.LearningObjectWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.LearningObjectUpdateToOneWithWhereWithoutProgressInput, Prisma.LearningObjectUpdateWithoutProgressInput>, Prisma.LearningObjectUncheckedUpdateWithoutProgressInput>
 }
 
 export type LearningObjectCreateNestedOneWithoutBlocksInput = {
@@ -954,7 +953,6 @@ export type LearningObjectCreateWithoutModuleInput = {
   keywords?: Prisma.LearningObjectCreatekeywordsInput | string[]
   compiledContent?: string | null
   isPublished?: boolean
-  aiResponseId?: string | null
   hasManualEdits?: boolean
   conceptsProcessed?: boolean
   createdAt?: Date | string
@@ -972,6 +970,7 @@ export type LearningObjectCreateWithoutModuleInput = {
   sessions?: Prisma.SessionCreateNestedManyWithoutLearningObjectInput
   blocks?: Prisma.BlockCreateNestedManyWithoutLearningObjectInput
   teacherFeedbacks?: Prisma.TeacherAiFeedbackCreateNestedManyWithoutLearningObjectInput
+  progress?: Prisma.LearningObjectProgressCreateNestedManyWithoutLearningObjectInput
   video?: Prisma.VideoCreateNestedOneWithoutLearningObjectInput
 }
 
@@ -982,7 +981,6 @@ export type LearningObjectUncheckedCreateWithoutModuleInput = {
   keywords?: Prisma.LearningObjectCreatekeywordsInput | string[]
   compiledContent?: string | null
   isPublished?: boolean
-  aiResponseId?: string | null
   hasManualEdits?: boolean
   conceptsProcessed?: boolean
   createdAt?: Date | string
@@ -1000,6 +998,7 @@ export type LearningObjectUncheckedCreateWithoutModuleInput = {
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutLearningObjectInput
   blocks?: Prisma.BlockUncheckedCreateNestedManyWithoutLearningObjectInput
   teacherFeedbacks?: Prisma.TeacherAiFeedbackUncheckedCreateNestedManyWithoutLearningObjectInput
+  progress?: Prisma.LearningObjectProgressUncheckedCreateNestedManyWithoutLearningObjectInput
   video?: Prisma.VideoUncheckedCreateNestedOneWithoutLearningObjectInput
 }
 
@@ -1040,7 +1039,6 @@ export type LearningObjectScalarWhereInput = {
   keywords?: Prisma.StringNullableListFilter<"LearningObject">
   compiledContent?: Prisma.StringNullableFilter<"LearningObject"> | string | null
   isPublished?: Prisma.BoolFilter<"LearningObject"> | boolean
-  aiResponseId?: Prisma.StringNullableFilter<"LearningObject"> | string | null
   hasManualEdits?: Prisma.BoolFilter<"LearningObject"> | boolean
   conceptsProcessed?: Prisma.BoolFilter<"LearningObject"> | boolean
   createdAt?: Prisma.DateTimeFilter<"LearningObject"> | Date | string
@@ -1054,7 +1052,6 @@ export type LearningObjectCreateWithoutTypeInput = {
   keywords?: Prisma.LearningObjectCreatekeywordsInput | string[]
   compiledContent?: string | null
   isPublished?: boolean
-  aiResponseId?: string | null
   hasManualEdits?: boolean
   conceptsProcessed?: boolean
   createdAt?: Date | string
@@ -1072,6 +1069,7 @@ export type LearningObjectCreateWithoutTypeInput = {
   sessions?: Prisma.SessionCreateNestedManyWithoutLearningObjectInput
   blocks?: Prisma.BlockCreateNestedManyWithoutLearningObjectInput
   teacherFeedbacks?: Prisma.TeacherAiFeedbackCreateNestedManyWithoutLearningObjectInput
+  progress?: Prisma.LearningObjectProgressCreateNestedManyWithoutLearningObjectInput
   video?: Prisma.VideoCreateNestedOneWithoutLearningObjectInput
 }
 
@@ -1083,7 +1081,6 @@ export type LearningObjectUncheckedCreateWithoutTypeInput = {
   keywords?: Prisma.LearningObjectCreatekeywordsInput | string[]
   compiledContent?: string | null
   isPublished?: boolean
-  aiResponseId?: string | null
   hasManualEdits?: boolean
   conceptsProcessed?: boolean
   createdAt?: Date | string
@@ -1100,6 +1097,7 @@ export type LearningObjectUncheckedCreateWithoutTypeInput = {
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutLearningObjectInput
   blocks?: Prisma.BlockUncheckedCreateNestedManyWithoutLearningObjectInput
   teacherFeedbacks?: Prisma.TeacherAiFeedbackUncheckedCreateNestedManyWithoutLearningObjectInput
+  progress?: Prisma.LearningObjectProgressUncheckedCreateNestedManyWithoutLearningObjectInput
   video?: Prisma.VideoUncheckedCreateNestedOneWithoutLearningObjectInput
 }
 
@@ -1129,13 +1127,138 @@ export type LearningObjectUpdateManyWithWhereWithoutTypeInput = {
   data: Prisma.XOR<Prisma.LearningObjectUpdateManyMutationInput, Prisma.LearningObjectUncheckedUpdateManyWithoutTypeInput>
 }
 
+export type LearningObjectCreateWithoutProgressInput = {
+  title: string
+  orderIndex: number
+  keywords?: Prisma.LearningObjectCreatekeywordsInput | string[]
+  compiledContent?: string | null
+  isPublished?: boolean
+  hasManualEdits?: boolean
+  conceptsProcessed?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  type: Prisma.LearningObjectTypeCreateNestedOneWithoutLearningObjectsInput
+  module: Prisma.ModuleCreateNestedOneWithoutLearningObjectsInput
+  activities?: Prisma.ActivityCreateNestedManyWithoutLearningObjectInput
+  relatedLosFrom?: Prisma.LearningObjectRelationCreateNestedManyWithoutOriginLoInput
+  relatedLosTo?: Prisma.LearningObjectRelationCreateNestedManyWithoutRelatedLoInput
+  conceptMentions?: Prisma.LearningObjectConceptCreateNestedManyWithoutLearningObjectInput
+  notes?: Prisma.NoteCreateNestedManyWithoutLearningObjectInput
+  podcasts?: Prisma.PodcastCreateNestedManyWithoutLearningObjectInput
+  mediaResources?: Prisma.MediaResourceCreateNestedManyWithoutLearningObjectInput
+  loFeedbacks?: Prisma.LearningObjectFeedbackCreateNestedManyWithoutLearningObjectInput
+  studentQuestions?: Prisma.StudentQuestionCreateNestedManyWithoutLearningObjectInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutLearningObjectInput
+  blocks?: Prisma.BlockCreateNestedManyWithoutLearningObjectInput
+  teacherFeedbacks?: Prisma.TeacherAiFeedbackCreateNestedManyWithoutLearningObjectInput
+  video?: Prisma.VideoCreateNestedOneWithoutLearningObjectInput
+}
+
+export type LearningObjectUncheckedCreateWithoutProgressInput = {
+  id?: number
+  moduleId: number
+  title: string
+  orderIndex: number
+  keywords?: Prisma.LearningObjectCreatekeywordsInput | string[]
+  compiledContent?: string | null
+  isPublished?: boolean
+  hasManualEdits?: boolean
+  conceptsProcessed?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  typeId: number
+  activities?: Prisma.ActivityUncheckedCreateNestedManyWithoutLearningObjectInput
+  relatedLosFrom?: Prisma.LearningObjectRelationUncheckedCreateNestedManyWithoutOriginLoInput
+  relatedLosTo?: Prisma.LearningObjectRelationUncheckedCreateNestedManyWithoutRelatedLoInput
+  conceptMentions?: Prisma.LearningObjectConceptUncheckedCreateNestedManyWithoutLearningObjectInput
+  notes?: Prisma.NoteUncheckedCreateNestedManyWithoutLearningObjectInput
+  podcasts?: Prisma.PodcastUncheckedCreateNestedManyWithoutLearningObjectInput
+  mediaResources?: Prisma.MediaResourceUncheckedCreateNestedManyWithoutLearningObjectInput
+  loFeedbacks?: Prisma.LearningObjectFeedbackUncheckedCreateNestedManyWithoutLearningObjectInput
+  studentQuestions?: Prisma.StudentQuestionUncheckedCreateNestedManyWithoutLearningObjectInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutLearningObjectInput
+  blocks?: Prisma.BlockUncheckedCreateNestedManyWithoutLearningObjectInput
+  teacherFeedbacks?: Prisma.TeacherAiFeedbackUncheckedCreateNestedManyWithoutLearningObjectInput
+  video?: Prisma.VideoUncheckedCreateNestedOneWithoutLearningObjectInput
+}
+
+export type LearningObjectCreateOrConnectWithoutProgressInput = {
+  where: Prisma.LearningObjectWhereUniqueInput
+  create: Prisma.XOR<Prisma.LearningObjectCreateWithoutProgressInput, Prisma.LearningObjectUncheckedCreateWithoutProgressInput>
+}
+
+export type LearningObjectUpsertWithoutProgressInput = {
+  update: Prisma.XOR<Prisma.LearningObjectUpdateWithoutProgressInput, Prisma.LearningObjectUncheckedUpdateWithoutProgressInput>
+  create: Prisma.XOR<Prisma.LearningObjectCreateWithoutProgressInput, Prisma.LearningObjectUncheckedCreateWithoutProgressInput>
+  where?: Prisma.LearningObjectWhereInput
+}
+
+export type LearningObjectUpdateToOneWithWhereWithoutProgressInput = {
+  where?: Prisma.LearningObjectWhereInput
+  data: Prisma.XOR<Prisma.LearningObjectUpdateWithoutProgressInput, Prisma.LearningObjectUncheckedUpdateWithoutProgressInput>
+}
+
+export type LearningObjectUpdateWithoutProgressInput = {
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
+  keywords?: Prisma.LearningObjectUpdatekeywordsInput | string[]
+  compiledContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  hasManualEdits?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  conceptsProcessed?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  type?: Prisma.LearningObjectTypeUpdateOneRequiredWithoutLearningObjectsNestedInput
+  module?: Prisma.ModuleUpdateOneRequiredWithoutLearningObjectsNestedInput
+  activities?: Prisma.ActivityUpdateManyWithoutLearningObjectNestedInput
+  relatedLosFrom?: Prisma.LearningObjectRelationUpdateManyWithoutOriginLoNestedInput
+  relatedLosTo?: Prisma.LearningObjectRelationUpdateManyWithoutRelatedLoNestedInput
+  conceptMentions?: Prisma.LearningObjectConceptUpdateManyWithoutLearningObjectNestedInput
+  notes?: Prisma.NoteUpdateManyWithoutLearningObjectNestedInput
+  podcasts?: Prisma.PodcastUpdateManyWithoutLearningObjectNestedInput
+  mediaResources?: Prisma.MediaResourceUpdateManyWithoutLearningObjectNestedInput
+  loFeedbacks?: Prisma.LearningObjectFeedbackUpdateManyWithoutLearningObjectNestedInput
+  studentQuestions?: Prisma.StudentQuestionUpdateManyWithoutLearningObjectNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutLearningObjectNestedInput
+  blocks?: Prisma.BlockUpdateManyWithoutLearningObjectNestedInput
+  teacherFeedbacks?: Prisma.TeacherAiFeedbackUpdateManyWithoutLearningObjectNestedInput
+  video?: Prisma.VideoUpdateOneWithoutLearningObjectNestedInput
+}
+
+export type LearningObjectUncheckedUpdateWithoutProgressInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  moduleId?: Prisma.IntFieldUpdateOperationsInput | number
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
+  keywords?: Prisma.LearningObjectUpdatekeywordsInput | string[]
+  compiledContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  hasManualEdits?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  conceptsProcessed?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  typeId?: Prisma.IntFieldUpdateOperationsInput | number
+  activities?: Prisma.ActivityUncheckedUpdateManyWithoutLearningObjectNestedInput
+  relatedLosFrom?: Prisma.LearningObjectRelationUncheckedUpdateManyWithoutOriginLoNestedInput
+  relatedLosTo?: Prisma.LearningObjectRelationUncheckedUpdateManyWithoutRelatedLoNestedInput
+  conceptMentions?: Prisma.LearningObjectConceptUncheckedUpdateManyWithoutLearningObjectNestedInput
+  notes?: Prisma.NoteUncheckedUpdateManyWithoutLearningObjectNestedInput
+  podcasts?: Prisma.PodcastUncheckedUpdateManyWithoutLearningObjectNestedInput
+  mediaResources?: Prisma.MediaResourceUncheckedUpdateManyWithoutLearningObjectNestedInput
+  loFeedbacks?: Prisma.LearningObjectFeedbackUncheckedUpdateManyWithoutLearningObjectNestedInput
+  studentQuestions?: Prisma.StudentQuestionUncheckedUpdateManyWithoutLearningObjectNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutLearningObjectNestedInput
+  blocks?: Prisma.BlockUncheckedUpdateManyWithoutLearningObjectNestedInput
+  teacherFeedbacks?: Prisma.TeacherAiFeedbackUncheckedUpdateManyWithoutLearningObjectNestedInput
+  video?: Prisma.VideoUncheckedUpdateOneWithoutLearningObjectNestedInput
+}
+
 export type LearningObjectCreateWithoutBlocksInput = {
   title: string
   orderIndex: number
   keywords?: Prisma.LearningObjectCreatekeywordsInput | string[]
   compiledContent?: string | null
   isPublished?: boolean
-  aiResponseId?: string | null
   hasManualEdits?: boolean
   conceptsProcessed?: boolean
   createdAt?: Date | string
@@ -1153,6 +1276,7 @@ export type LearningObjectCreateWithoutBlocksInput = {
   studentQuestions?: Prisma.StudentQuestionCreateNestedManyWithoutLearningObjectInput
   sessions?: Prisma.SessionCreateNestedManyWithoutLearningObjectInput
   teacherFeedbacks?: Prisma.TeacherAiFeedbackCreateNestedManyWithoutLearningObjectInput
+  progress?: Prisma.LearningObjectProgressCreateNestedManyWithoutLearningObjectInput
   video?: Prisma.VideoCreateNestedOneWithoutLearningObjectInput
 }
 
@@ -1164,7 +1288,6 @@ export type LearningObjectUncheckedCreateWithoutBlocksInput = {
   keywords?: Prisma.LearningObjectCreatekeywordsInput | string[]
   compiledContent?: string | null
   isPublished?: boolean
-  aiResponseId?: string | null
   hasManualEdits?: boolean
   conceptsProcessed?: boolean
   createdAt?: Date | string
@@ -1181,6 +1304,7 @@ export type LearningObjectUncheckedCreateWithoutBlocksInput = {
   studentQuestions?: Prisma.StudentQuestionUncheckedCreateNestedManyWithoutLearningObjectInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutLearningObjectInput
   teacherFeedbacks?: Prisma.TeacherAiFeedbackUncheckedCreateNestedManyWithoutLearningObjectInput
+  progress?: Prisma.LearningObjectProgressUncheckedCreateNestedManyWithoutLearningObjectInput
   video?: Prisma.VideoUncheckedCreateNestedOneWithoutLearningObjectInput
 }
 
@@ -1206,7 +1330,6 @@ export type LearningObjectUpdateWithoutBlocksInput = {
   keywords?: Prisma.LearningObjectUpdatekeywordsInput | string[]
   compiledContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  aiResponseId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   hasManualEdits?: Prisma.BoolFieldUpdateOperationsInput | boolean
   conceptsProcessed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1224,6 +1347,7 @@ export type LearningObjectUpdateWithoutBlocksInput = {
   studentQuestions?: Prisma.StudentQuestionUpdateManyWithoutLearningObjectNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutLearningObjectNestedInput
   teacherFeedbacks?: Prisma.TeacherAiFeedbackUpdateManyWithoutLearningObjectNestedInput
+  progress?: Prisma.LearningObjectProgressUpdateManyWithoutLearningObjectNestedInput
   video?: Prisma.VideoUpdateOneWithoutLearningObjectNestedInput
 }
 
@@ -1235,7 +1359,6 @@ export type LearningObjectUncheckedUpdateWithoutBlocksInput = {
   keywords?: Prisma.LearningObjectUpdatekeywordsInput | string[]
   compiledContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  aiResponseId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   hasManualEdits?: Prisma.BoolFieldUpdateOperationsInput | boolean
   conceptsProcessed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1252,6 +1375,7 @@ export type LearningObjectUncheckedUpdateWithoutBlocksInput = {
   studentQuestions?: Prisma.StudentQuestionUncheckedUpdateManyWithoutLearningObjectNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutLearningObjectNestedInput
   teacherFeedbacks?: Prisma.TeacherAiFeedbackUncheckedUpdateManyWithoutLearningObjectNestedInput
+  progress?: Prisma.LearningObjectProgressUncheckedUpdateManyWithoutLearningObjectNestedInput
   video?: Prisma.VideoUncheckedUpdateOneWithoutLearningObjectNestedInput
 }
 
@@ -1261,7 +1385,6 @@ export type LearningObjectCreateWithoutSessionsInput = {
   keywords?: Prisma.LearningObjectCreatekeywordsInput | string[]
   compiledContent?: string | null
   isPublished?: boolean
-  aiResponseId?: string | null
   hasManualEdits?: boolean
   conceptsProcessed?: boolean
   createdAt?: Date | string
@@ -1279,6 +1402,7 @@ export type LearningObjectCreateWithoutSessionsInput = {
   studentQuestions?: Prisma.StudentQuestionCreateNestedManyWithoutLearningObjectInput
   blocks?: Prisma.BlockCreateNestedManyWithoutLearningObjectInput
   teacherFeedbacks?: Prisma.TeacherAiFeedbackCreateNestedManyWithoutLearningObjectInput
+  progress?: Prisma.LearningObjectProgressCreateNestedManyWithoutLearningObjectInput
   video?: Prisma.VideoCreateNestedOneWithoutLearningObjectInput
 }
 
@@ -1290,7 +1414,6 @@ export type LearningObjectUncheckedCreateWithoutSessionsInput = {
   keywords?: Prisma.LearningObjectCreatekeywordsInput | string[]
   compiledContent?: string | null
   isPublished?: boolean
-  aiResponseId?: string | null
   hasManualEdits?: boolean
   conceptsProcessed?: boolean
   createdAt?: Date | string
@@ -1307,6 +1430,7 @@ export type LearningObjectUncheckedCreateWithoutSessionsInput = {
   studentQuestions?: Prisma.StudentQuestionUncheckedCreateNestedManyWithoutLearningObjectInput
   blocks?: Prisma.BlockUncheckedCreateNestedManyWithoutLearningObjectInput
   teacherFeedbacks?: Prisma.TeacherAiFeedbackUncheckedCreateNestedManyWithoutLearningObjectInput
+  progress?: Prisma.LearningObjectProgressUncheckedCreateNestedManyWithoutLearningObjectInput
   video?: Prisma.VideoUncheckedCreateNestedOneWithoutLearningObjectInput
 }
 
@@ -1332,7 +1456,6 @@ export type LearningObjectUpdateWithoutSessionsInput = {
   keywords?: Prisma.LearningObjectUpdatekeywordsInput | string[]
   compiledContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  aiResponseId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   hasManualEdits?: Prisma.BoolFieldUpdateOperationsInput | boolean
   conceptsProcessed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1350,6 +1473,7 @@ export type LearningObjectUpdateWithoutSessionsInput = {
   studentQuestions?: Prisma.StudentQuestionUpdateManyWithoutLearningObjectNestedInput
   blocks?: Prisma.BlockUpdateManyWithoutLearningObjectNestedInput
   teacherFeedbacks?: Prisma.TeacherAiFeedbackUpdateManyWithoutLearningObjectNestedInput
+  progress?: Prisma.LearningObjectProgressUpdateManyWithoutLearningObjectNestedInput
   video?: Prisma.VideoUpdateOneWithoutLearningObjectNestedInput
 }
 
@@ -1361,7 +1485,6 @@ export type LearningObjectUncheckedUpdateWithoutSessionsInput = {
   keywords?: Prisma.LearningObjectUpdatekeywordsInput | string[]
   compiledContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  aiResponseId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   hasManualEdits?: Prisma.BoolFieldUpdateOperationsInput | boolean
   conceptsProcessed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1378,6 +1501,7 @@ export type LearningObjectUncheckedUpdateWithoutSessionsInput = {
   studentQuestions?: Prisma.StudentQuestionUncheckedUpdateManyWithoutLearningObjectNestedInput
   blocks?: Prisma.BlockUncheckedUpdateManyWithoutLearningObjectNestedInput
   teacherFeedbacks?: Prisma.TeacherAiFeedbackUncheckedUpdateManyWithoutLearningObjectNestedInput
+  progress?: Prisma.LearningObjectProgressUncheckedUpdateManyWithoutLearningObjectNestedInput
   video?: Prisma.VideoUncheckedUpdateOneWithoutLearningObjectNestedInput
 }
 
@@ -1387,7 +1511,6 @@ export type LearningObjectCreateWithoutRelatedLosFromInput = {
   keywords?: Prisma.LearningObjectCreatekeywordsInput | string[]
   compiledContent?: string | null
   isPublished?: boolean
-  aiResponseId?: string | null
   hasManualEdits?: boolean
   conceptsProcessed?: boolean
   createdAt?: Date | string
@@ -1405,6 +1528,7 @@ export type LearningObjectCreateWithoutRelatedLosFromInput = {
   sessions?: Prisma.SessionCreateNestedManyWithoutLearningObjectInput
   blocks?: Prisma.BlockCreateNestedManyWithoutLearningObjectInput
   teacherFeedbacks?: Prisma.TeacherAiFeedbackCreateNestedManyWithoutLearningObjectInput
+  progress?: Prisma.LearningObjectProgressCreateNestedManyWithoutLearningObjectInput
   video?: Prisma.VideoCreateNestedOneWithoutLearningObjectInput
 }
 
@@ -1416,7 +1540,6 @@ export type LearningObjectUncheckedCreateWithoutRelatedLosFromInput = {
   keywords?: Prisma.LearningObjectCreatekeywordsInput | string[]
   compiledContent?: string | null
   isPublished?: boolean
-  aiResponseId?: string | null
   hasManualEdits?: boolean
   conceptsProcessed?: boolean
   createdAt?: Date | string
@@ -1433,6 +1556,7 @@ export type LearningObjectUncheckedCreateWithoutRelatedLosFromInput = {
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutLearningObjectInput
   blocks?: Prisma.BlockUncheckedCreateNestedManyWithoutLearningObjectInput
   teacherFeedbacks?: Prisma.TeacherAiFeedbackUncheckedCreateNestedManyWithoutLearningObjectInput
+  progress?: Prisma.LearningObjectProgressUncheckedCreateNestedManyWithoutLearningObjectInput
   video?: Prisma.VideoUncheckedCreateNestedOneWithoutLearningObjectInput
 }
 
@@ -1447,7 +1571,6 @@ export type LearningObjectCreateWithoutRelatedLosToInput = {
   keywords?: Prisma.LearningObjectCreatekeywordsInput | string[]
   compiledContent?: string | null
   isPublished?: boolean
-  aiResponseId?: string | null
   hasManualEdits?: boolean
   conceptsProcessed?: boolean
   createdAt?: Date | string
@@ -1465,6 +1588,7 @@ export type LearningObjectCreateWithoutRelatedLosToInput = {
   sessions?: Prisma.SessionCreateNestedManyWithoutLearningObjectInput
   blocks?: Prisma.BlockCreateNestedManyWithoutLearningObjectInput
   teacherFeedbacks?: Prisma.TeacherAiFeedbackCreateNestedManyWithoutLearningObjectInput
+  progress?: Prisma.LearningObjectProgressCreateNestedManyWithoutLearningObjectInput
   video?: Prisma.VideoCreateNestedOneWithoutLearningObjectInput
 }
 
@@ -1476,7 +1600,6 @@ export type LearningObjectUncheckedCreateWithoutRelatedLosToInput = {
   keywords?: Prisma.LearningObjectCreatekeywordsInput | string[]
   compiledContent?: string | null
   isPublished?: boolean
-  aiResponseId?: string | null
   hasManualEdits?: boolean
   conceptsProcessed?: boolean
   createdAt?: Date | string
@@ -1493,6 +1616,7 @@ export type LearningObjectUncheckedCreateWithoutRelatedLosToInput = {
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutLearningObjectInput
   blocks?: Prisma.BlockUncheckedCreateNestedManyWithoutLearningObjectInput
   teacherFeedbacks?: Prisma.TeacherAiFeedbackUncheckedCreateNestedManyWithoutLearningObjectInput
+  progress?: Prisma.LearningObjectProgressUncheckedCreateNestedManyWithoutLearningObjectInput
   video?: Prisma.VideoUncheckedCreateNestedOneWithoutLearningObjectInput
 }
 
@@ -1518,7 +1642,6 @@ export type LearningObjectUpdateWithoutRelatedLosFromInput = {
   keywords?: Prisma.LearningObjectUpdatekeywordsInput | string[]
   compiledContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  aiResponseId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   hasManualEdits?: Prisma.BoolFieldUpdateOperationsInput | boolean
   conceptsProcessed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1536,6 +1659,7 @@ export type LearningObjectUpdateWithoutRelatedLosFromInput = {
   sessions?: Prisma.SessionUpdateManyWithoutLearningObjectNestedInput
   blocks?: Prisma.BlockUpdateManyWithoutLearningObjectNestedInput
   teacherFeedbacks?: Prisma.TeacherAiFeedbackUpdateManyWithoutLearningObjectNestedInput
+  progress?: Prisma.LearningObjectProgressUpdateManyWithoutLearningObjectNestedInput
   video?: Prisma.VideoUpdateOneWithoutLearningObjectNestedInput
 }
 
@@ -1547,7 +1671,6 @@ export type LearningObjectUncheckedUpdateWithoutRelatedLosFromInput = {
   keywords?: Prisma.LearningObjectUpdatekeywordsInput | string[]
   compiledContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  aiResponseId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   hasManualEdits?: Prisma.BoolFieldUpdateOperationsInput | boolean
   conceptsProcessed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1564,6 +1687,7 @@ export type LearningObjectUncheckedUpdateWithoutRelatedLosFromInput = {
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutLearningObjectNestedInput
   blocks?: Prisma.BlockUncheckedUpdateManyWithoutLearningObjectNestedInput
   teacherFeedbacks?: Prisma.TeacherAiFeedbackUncheckedUpdateManyWithoutLearningObjectNestedInput
+  progress?: Prisma.LearningObjectProgressUncheckedUpdateManyWithoutLearningObjectNestedInput
   video?: Prisma.VideoUncheckedUpdateOneWithoutLearningObjectNestedInput
 }
 
@@ -1584,7 +1708,6 @@ export type LearningObjectUpdateWithoutRelatedLosToInput = {
   keywords?: Prisma.LearningObjectUpdatekeywordsInput | string[]
   compiledContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  aiResponseId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   hasManualEdits?: Prisma.BoolFieldUpdateOperationsInput | boolean
   conceptsProcessed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1602,6 +1725,7 @@ export type LearningObjectUpdateWithoutRelatedLosToInput = {
   sessions?: Prisma.SessionUpdateManyWithoutLearningObjectNestedInput
   blocks?: Prisma.BlockUpdateManyWithoutLearningObjectNestedInput
   teacherFeedbacks?: Prisma.TeacherAiFeedbackUpdateManyWithoutLearningObjectNestedInput
+  progress?: Prisma.LearningObjectProgressUpdateManyWithoutLearningObjectNestedInput
   video?: Prisma.VideoUpdateOneWithoutLearningObjectNestedInput
 }
 
@@ -1613,7 +1737,6 @@ export type LearningObjectUncheckedUpdateWithoutRelatedLosToInput = {
   keywords?: Prisma.LearningObjectUpdatekeywordsInput | string[]
   compiledContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  aiResponseId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   hasManualEdits?: Prisma.BoolFieldUpdateOperationsInput | boolean
   conceptsProcessed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1630,6 +1753,7 @@ export type LearningObjectUncheckedUpdateWithoutRelatedLosToInput = {
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutLearningObjectNestedInput
   blocks?: Prisma.BlockUncheckedUpdateManyWithoutLearningObjectNestedInput
   teacherFeedbacks?: Prisma.TeacherAiFeedbackUncheckedUpdateManyWithoutLearningObjectNestedInput
+  progress?: Prisma.LearningObjectProgressUncheckedUpdateManyWithoutLearningObjectNestedInput
   video?: Prisma.VideoUncheckedUpdateOneWithoutLearningObjectNestedInput
 }
 
@@ -1639,7 +1763,6 @@ export type LearningObjectCreateWithoutConceptMentionsInput = {
   keywords?: Prisma.LearningObjectCreatekeywordsInput | string[]
   compiledContent?: string | null
   isPublished?: boolean
-  aiResponseId?: string | null
   hasManualEdits?: boolean
   conceptsProcessed?: boolean
   createdAt?: Date | string
@@ -1657,6 +1780,7 @@ export type LearningObjectCreateWithoutConceptMentionsInput = {
   sessions?: Prisma.SessionCreateNestedManyWithoutLearningObjectInput
   blocks?: Prisma.BlockCreateNestedManyWithoutLearningObjectInput
   teacherFeedbacks?: Prisma.TeacherAiFeedbackCreateNestedManyWithoutLearningObjectInput
+  progress?: Prisma.LearningObjectProgressCreateNestedManyWithoutLearningObjectInput
   video?: Prisma.VideoCreateNestedOneWithoutLearningObjectInput
 }
 
@@ -1668,7 +1792,6 @@ export type LearningObjectUncheckedCreateWithoutConceptMentionsInput = {
   keywords?: Prisma.LearningObjectCreatekeywordsInput | string[]
   compiledContent?: string | null
   isPublished?: boolean
-  aiResponseId?: string | null
   hasManualEdits?: boolean
   conceptsProcessed?: boolean
   createdAt?: Date | string
@@ -1685,6 +1808,7 @@ export type LearningObjectUncheckedCreateWithoutConceptMentionsInput = {
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutLearningObjectInput
   blocks?: Prisma.BlockUncheckedCreateNestedManyWithoutLearningObjectInput
   teacherFeedbacks?: Prisma.TeacherAiFeedbackUncheckedCreateNestedManyWithoutLearningObjectInput
+  progress?: Prisma.LearningObjectProgressUncheckedCreateNestedManyWithoutLearningObjectInput
   video?: Prisma.VideoUncheckedCreateNestedOneWithoutLearningObjectInput
 }
 
@@ -1710,7 +1834,6 @@ export type LearningObjectUpdateWithoutConceptMentionsInput = {
   keywords?: Prisma.LearningObjectUpdatekeywordsInput | string[]
   compiledContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  aiResponseId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   hasManualEdits?: Prisma.BoolFieldUpdateOperationsInput | boolean
   conceptsProcessed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1728,6 +1851,7 @@ export type LearningObjectUpdateWithoutConceptMentionsInput = {
   sessions?: Prisma.SessionUpdateManyWithoutLearningObjectNestedInput
   blocks?: Prisma.BlockUpdateManyWithoutLearningObjectNestedInput
   teacherFeedbacks?: Prisma.TeacherAiFeedbackUpdateManyWithoutLearningObjectNestedInput
+  progress?: Prisma.LearningObjectProgressUpdateManyWithoutLearningObjectNestedInput
   video?: Prisma.VideoUpdateOneWithoutLearningObjectNestedInput
 }
 
@@ -1739,7 +1863,6 @@ export type LearningObjectUncheckedUpdateWithoutConceptMentionsInput = {
   keywords?: Prisma.LearningObjectUpdatekeywordsInput | string[]
   compiledContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  aiResponseId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   hasManualEdits?: Prisma.BoolFieldUpdateOperationsInput | boolean
   conceptsProcessed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1756,6 +1879,7 @@ export type LearningObjectUncheckedUpdateWithoutConceptMentionsInput = {
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutLearningObjectNestedInput
   blocks?: Prisma.BlockUncheckedUpdateManyWithoutLearningObjectNestedInput
   teacherFeedbacks?: Prisma.TeacherAiFeedbackUncheckedUpdateManyWithoutLearningObjectNestedInput
+  progress?: Prisma.LearningObjectProgressUncheckedUpdateManyWithoutLearningObjectNestedInput
   video?: Prisma.VideoUncheckedUpdateOneWithoutLearningObjectNestedInput
 }
 
@@ -1765,7 +1889,6 @@ export type LearningObjectCreateWithoutActivitiesInput = {
   keywords?: Prisma.LearningObjectCreatekeywordsInput | string[]
   compiledContent?: string | null
   isPublished?: boolean
-  aiResponseId?: string | null
   hasManualEdits?: boolean
   conceptsProcessed?: boolean
   createdAt?: Date | string
@@ -1783,6 +1906,7 @@ export type LearningObjectCreateWithoutActivitiesInput = {
   sessions?: Prisma.SessionCreateNestedManyWithoutLearningObjectInput
   blocks?: Prisma.BlockCreateNestedManyWithoutLearningObjectInput
   teacherFeedbacks?: Prisma.TeacherAiFeedbackCreateNestedManyWithoutLearningObjectInput
+  progress?: Prisma.LearningObjectProgressCreateNestedManyWithoutLearningObjectInput
   video?: Prisma.VideoCreateNestedOneWithoutLearningObjectInput
 }
 
@@ -1794,7 +1918,6 @@ export type LearningObjectUncheckedCreateWithoutActivitiesInput = {
   keywords?: Prisma.LearningObjectCreatekeywordsInput | string[]
   compiledContent?: string | null
   isPublished?: boolean
-  aiResponseId?: string | null
   hasManualEdits?: boolean
   conceptsProcessed?: boolean
   createdAt?: Date | string
@@ -1811,6 +1934,7 @@ export type LearningObjectUncheckedCreateWithoutActivitiesInput = {
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutLearningObjectInput
   blocks?: Prisma.BlockUncheckedCreateNestedManyWithoutLearningObjectInput
   teacherFeedbacks?: Prisma.TeacherAiFeedbackUncheckedCreateNestedManyWithoutLearningObjectInput
+  progress?: Prisma.LearningObjectProgressUncheckedCreateNestedManyWithoutLearningObjectInput
   video?: Prisma.VideoUncheckedCreateNestedOneWithoutLearningObjectInput
 }
 
@@ -1836,7 +1960,6 @@ export type LearningObjectUpdateWithoutActivitiesInput = {
   keywords?: Prisma.LearningObjectUpdatekeywordsInput | string[]
   compiledContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  aiResponseId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   hasManualEdits?: Prisma.BoolFieldUpdateOperationsInput | boolean
   conceptsProcessed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1854,6 +1977,7 @@ export type LearningObjectUpdateWithoutActivitiesInput = {
   sessions?: Prisma.SessionUpdateManyWithoutLearningObjectNestedInput
   blocks?: Prisma.BlockUpdateManyWithoutLearningObjectNestedInput
   teacherFeedbacks?: Prisma.TeacherAiFeedbackUpdateManyWithoutLearningObjectNestedInput
+  progress?: Prisma.LearningObjectProgressUpdateManyWithoutLearningObjectNestedInput
   video?: Prisma.VideoUpdateOneWithoutLearningObjectNestedInput
 }
 
@@ -1865,7 +1989,6 @@ export type LearningObjectUncheckedUpdateWithoutActivitiesInput = {
   keywords?: Prisma.LearningObjectUpdatekeywordsInput | string[]
   compiledContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  aiResponseId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   hasManualEdits?: Prisma.BoolFieldUpdateOperationsInput | boolean
   conceptsProcessed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1882,6 +2005,7 @@ export type LearningObjectUncheckedUpdateWithoutActivitiesInput = {
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutLearningObjectNestedInput
   blocks?: Prisma.BlockUncheckedUpdateManyWithoutLearningObjectNestedInput
   teacherFeedbacks?: Prisma.TeacherAiFeedbackUncheckedUpdateManyWithoutLearningObjectNestedInput
+  progress?: Prisma.LearningObjectProgressUncheckedUpdateManyWithoutLearningObjectNestedInput
   video?: Prisma.VideoUncheckedUpdateOneWithoutLearningObjectNestedInput
 }
 
@@ -1891,7 +2015,6 @@ export type LearningObjectCreateWithoutLoFeedbacksInput = {
   keywords?: Prisma.LearningObjectCreatekeywordsInput | string[]
   compiledContent?: string | null
   isPublished?: boolean
-  aiResponseId?: string | null
   hasManualEdits?: boolean
   conceptsProcessed?: boolean
   createdAt?: Date | string
@@ -1909,6 +2032,7 @@ export type LearningObjectCreateWithoutLoFeedbacksInput = {
   sessions?: Prisma.SessionCreateNestedManyWithoutLearningObjectInput
   blocks?: Prisma.BlockCreateNestedManyWithoutLearningObjectInput
   teacherFeedbacks?: Prisma.TeacherAiFeedbackCreateNestedManyWithoutLearningObjectInput
+  progress?: Prisma.LearningObjectProgressCreateNestedManyWithoutLearningObjectInput
   video?: Prisma.VideoCreateNestedOneWithoutLearningObjectInput
 }
 
@@ -1920,7 +2044,6 @@ export type LearningObjectUncheckedCreateWithoutLoFeedbacksInput = {
   keywords?: Prisma.LearningObjectCreatekeywordsInput | string[]
   compiledContent?: string | null
   isPublished?: boolean
-  aiResponseId?: string | null
   hasManualEdits?: boolean
   conceptsProcessed?: boolean
   createdAt?: Date | string
@@ -1937,6 +2060,7 @@ export type LearningObjectUncheckedCreateWithoutLoFeedbacksInput = {
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutLearningObjectInput
   blocks?: Prisma.BlockUncheckedCreateNestedManyWithoutLearningObjectInput
   teacherFeedbacks?: Prisma.TeacherAiFeedbackUncheckedCreateNestedManyWithoutLearningObjectInput
+  progress?: Prisma.LearningObjectProgressUncheckedCreateNestedManyWithoutLearningObjectInput
   video?: Prisma.VideoUncheckedCreateNestedOneWithoutLearningObjectInput
 }
 
@@ -1962,7 +2086,6 @@ export type LearningObjectUpdateWithoutLoFeedbacksInput = {
   keywords?: Prisma.LearningObjectUpdatekeywordsInput | string[]
   compiledContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  aiResponseId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   hasManualEdits?: Prisma.BoolFieldUpdateOperationsInput | boolean
   conceptsProcessed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1980,6 +2103,7 @@ export type LearningObjectUpdateWithoutLoFeedbacksInput = {
   sessions?: Prisma.SessionUpdateManyWithoutLearningObjectNestedInput
   blocks?: Prisma.BlockUpdateManyWithoutLearningObjectNestedInput
   teacherFeedbacks?: Prisma.TeacherAiFeedbackUpdateManyWithoutLearningObjectNestedInput
+  progress?: Prisma.LearningObjectProgressUpdateManyWithoutLearningObjectNestedInput
   video?: Prisma.VideoUpdateOneWithoutLearningObjectNestedInput
 }
 
@@ -1991,7 +2115,6 @@ export type LearningObjectUncheckedUpdateWithoutLoFeedbacksInput = {
   keywords?: Prisma.LearningObjectUpdatekeywordsInput | string[]
   compiledContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  aiResponseId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   hasManualEdits?: Prisma.BoolFieldUpdateOperationsInput | boolean
   conceptsProcessed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -2008,6 +2131,7 @@ export type LearningObjectUncheckedUpdateWithoutLoFeedbacksInput = {
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutLearningObjectNestedInput
   blocks?: Prisma.BlockUncheckedUpdateManyWithoutLearningObjectNestedInput
   teacherFeedbacks?: Prisma.TeacherAiFeedbackUncheckedUpdateManyWithoutLearningObjectNestedInput
+  progress?: Prisma.LearningObjectProgressUncheckedUpdateManyWithoutLearningObjectNestedInput
   video?: Prisma.VideoUncheckedUpdateOneWithoutLearningObjectNestedInput
 }
 
@@ -2017,7 +2141,6 @@ export type LearningObjectCreateWithoutNotesInput = {
   keywords?: Prisma.LearningObjectCreatekeywordsInput | string[]
   compiledContent?: string | null
   isPublished?: boolean
-  aiResponseId?: string | null
   hasManualEdits?: boolean
   conceptsProcessed?: boolean
   createdAt?: Date | string
@@ -2035,6 +2158,7 @@ export type LearningObjectCreateWithoutNotesInput = {
   sessions?: Prisma.SessionCreateNestedManyWithoutLearningObjectInput
   blocks?: Prisma.BlockCreateNestedManyWithoutLearningObjectInput
   teacherFeedbacks?: Prisma.TeacherAiFeedbackCreateNestedManyWithoutLearningObjectInput
+  progress?: Prisma.LearningObjectProgressCreateNestedManyWithoutLearningObjectInput
   video?: Prisma.VideoCreateNestedOneWithoutLearningObjectInput
 }
 
@@ -2046,7 +2170,6 @@ export type LearningObjectUncheckedCreateWithoutNotesInput = {
   keywords?: Prisma.LearningObjectCreatekeywordsInput | string[]
   compiledContent?: string | null
   isPublished?: boolean
-  aiResponseId?: string | null
   hasManualEdits?: boolean
   conceptsProcessed?: boolean
   createdAt?: Date | string
@@ -2063,6 +2186,7 @@ export type LearningObjectUncheckedCreateWithoutNotesInput = {
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutLearningObjectInput
   blocks?: Prisma.BlockUncheckedCreateNestedManyWithoutLearningObjectInput
   teacherFeedbacks?: Prisma.TeacherAiFeedbackUncheckedCreateNestedManyWithoutLearningObjectInput
+  progress?: Prisma.LearningObjectProgressUncheckedCreateNestedManyWithoutLearningObjectInput
   video?: Prisma.VideoUncheckedCreateNestedOneWithoutLearningObjectInput
 }
 
@@ -2088,7 +2212,6 @@ export type LearningObjectUpdateWithoutNotesInput = {
   keywords?: Prisma.LearningObjectUpdatekeywordsInput | string[]
   compiledContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  aiResponseId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   hasManualEdits?: Prisma.BoolFieldUpdateOperationsInput | boolean
   conceptsProcessed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -2106,6 +2229,7 @@ export type LearningObjectUpdateWithoutNotesInput = {
   sessions?: Prisma.SessionUpdateManyWithoutLearningObjectNestedInput
   blocks?: Prisma.BlockUpdateManyWithoutLearningObjectNestedInput
   teacherFeedbacks?: Prisma.TeacherAiFeedbackUpdateManyWithoutLearningObjectNestedInput
+  progress?: Prisma.LearningObjectProgressUpdateManyWithoutLearningObjectNestedInput
   video?: Prisma.VideoUpdateOneWithoutLearningObjectNestedInput
 }
 
@@ -2117,7 +2241,6 @@ export type LearningObjectUncheckedUpdateWithoutNotesInput = {
   keywords?: Prisma.LearningObjectUpdatekeywordsInput | string[]
   compiledContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  aiResponseId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   hasManualEdits?: Prisma.BoolFieldUpdateOperationsInput | boolean
   conceptsProcessed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -2134,6 +2257,7 @@ export type LearningObjectUncheckedUpdateWithoutNotesInput = {
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutLearningObjectNestedInput
   blocks?: Prisma.BlockUncheckedUpdateManyWithoutLearningObjectNestedInput
   teacherFeedbacks?: Prisma.TeacherAiFeedbackUncheckedUpdateManyWithoutLearningObjectNestedInput
+  progress?: Prisma.LearningObjectProgressUncheckedUpdateManyWithoutLearningObjectNestedInput
   video?: Prisma.VideoUncheckedUpdateOneWithoutLearningObjectNestedInput
 }
 
@@ -2143,7 +2267,6 @@ export type LearningObjectCreateWithoutStudentQuestionsInput = {
   keywords?: Prisma.LearningObjectCreatekeywordsInput | string[]
   compiledContent?: string | null
   isPublished?: boolean
-  aiResponseId?: string | null
   hasManualEdits?: boolean
   conceptsProcessed?: boolean
   createdAt?: Date | string
@@ -2161,6 +2284,7 @@ export type LearningObjectCreateWithoutStudentQuestionsInput = {
   sessions?: Prisma.SessionCreateNestedManyWithoutLearningObjectInput
   blocks?: Prisma.BlockCreateNestedManyWithoutLearningObjectInput
   teacherFeedbacks?: Prisma.TeacherAiFeedbackCreateNestedManyWithoutLearningObjectInput
+  progress?: Prisma.LearningObjectProgressCreateNestedManyWithoutLearningObjectInput
   video?: Prisma.VideoCreateNestedOneWithoutLearningObjectInput
 }
 
@@ -2172,7 +2296,6 @@ export type LearningObjectUncheckedCreateWithoutStudentQuestionsInput = {
   keywords?: Prisma.LearningObjectCreatekeywordsInput | string[]
   compiledContent?: string | null
   isPublished?: boolean
-  aiResponseId?: string | null
   hasManualEdits?: boolean
   conceptsProcessed?: boolean
   createdAt?: Date | string
@@ -2189,6 +2312,7 @@ export type LearningObjectUncheckedCreateWithoutStudentQuestionsInput = {
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutLearningObjectInput
   blocks?: Prisma.BlockUncheckedCreateNestedManyWithoutLearningObjectInput
   teacherFeedbacks?: Prisma.TeacherAiFeedbackUncheckedCreateNestedManyWithoutLearningObjectInput
+  progress?: Prisma.LearningObjectProgressUncheckedCreateNestedManyWithoutLearningObjectInput
   video?: Prisma.VideoUncheckedCreateNestedOneWithoutLearningObjectInput
 }
 
@@ -2214,7 +2338,6 @@ export type LearningObjectUpdateWithoutStudentQuestionsInput = {
   keywords?: Prisma.LearningObjectUpdatekeywordsInput | string[]
   compiledContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  aiResponseId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   hasManualEdits?: Prisma.BoolFieldUpdateOperationsInput | boolean
   conceptsProcessed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -2232,6 +2355,7 @@ export type LearningObjectUpdateWithoutStudentQuestionsInput = {
   sessions?: Prisma.SessionUpdateManyWithoutLearningObjectNestedInput
   blocks?: Prisma.BlockUpdateManyWithoutLearningObjectNestedInput
   teacherFeedbacks?: Prisma.TeacherAiFeedbackUpdateManyWithoutLearningObjectNestedInput
+  progress?: Prisma.LearningObjectProgressUpdateManyWithoutLearningObjectNestedInput
   video?: Prisma.VideoUpdateOneWithoutLearningObjectNestedInput
 }
 
@@ -2243,7 +2367,6 @@ export type LearningObjectUncheckedUpdateWithoutStudentQuestionsInput = {
   keywords?: Prisma.LearningObjectUpdatekeywordsInput | string[]
   compiledContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  aiResponseId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   hasManualEdits?: Prisma.BoolFieldUpdateOperationsInput | boolean
   conceptsProcessed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -2260,6 +2383,7 @@ export type LearningObjectUncheckedUpdateWithoutStudentQuestionsInput = {
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutLearningObjectNestedInput
   blocks?: Prisma.BlockUncheckedUpdateManyWithoutLearningObjectNestedInput
   teacherFeedbacks?: Prisma.TeacherAiFeedbackUncheckedUpdateManyWithoutLearningObjectNestedInput
+  progress?: Prisma.LearningObjectProgressUncheckedUpdateManyWithoutLearningObjectNestedInput
   video?: Prisma.VideoUncheckedUpdateOneWithoutLearningObjectNestedInput
 }
 
@@ -2269,7 +2393,6 @@ export type LearningObjectCreateWithoutPodcastsInput = {
   keywords?: Prisma.LearningObjectCreatekeywordsInput | string[]
   compiledContent?: string | null
   isPublished?: boolean
-  aiResponseId?: string | null
   hasManualEdits?: boolean
   conceptsProcessed?: boolean
   createdAt?: Date | string
@@ -2287,6 +2410,7 @@ export type LearningObjectCreateWithoutPodcastsInput = {
   sessions?: Prisma.SessionCreateNestedManyWithoutLearningObjectInput
   blocks?: Prisma.BlockCreateNestedManyWithoutLearningObjectInput
   teacherFeedbacks?: Prisma.TeacherAiFeedbackCreateNestedManyWithoutLearningObjectInput
+  progress?: Prisma.LearningObjectProgressCreateNestedManyWithoutLearningObjectInput
   video?: Prisma.VideoCreateNestedOneWithoutLearningObjectInput
 }
 
@@ -2298,7 +2422,6 @@ export type LearningObjectUncheckedCreateWithoutPodcastsInput = {
   keywords?: Prisma.LearningObjectCreatekeywordsInput | string[]
   compiledContent?: string | null
   isPublished?: boolean
-  aiResponseId?: string | null
   hasManualEdits?: boolean
   conceptsProcessed?: boolean
   createdAt?: Date | string
@@ -2315,6 +2438,7 @@ export type LearningObjectUncheckedCreateWithoutPodcastsInput = {
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutLearningObjectInput
   blocks?: Prisma.BlockUncheckedCreateNestedManyWithoutLearningObjectInput
   teacherFeedbacks?: Prisma.TeacherAiFeedbackUncheckedCreateNestedManyWithoutLearningObjectInput
+  progress?: Prisma.LearningObjectProgressUncheckedCreateNestedManyWithoutLearningObjectInput
   video?: Prisma.VideoUncheckedCreateNestedOneWithoutLearningObjectInput
 }
 
@@ -2340,7 +2464,6 @@ export type LearningObjectUpdateWithoutPodcastsInput = {
   keywords?: Prisma.LearningObjectUpdatekeywordsInput | string[]
   compiledContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  aiResponseId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   hasManualEdits?: Prisma.BoolFieldUpdateOperationsInput | boolean
   conceptsProcessed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -2358,6 +2481,7 @@ export type LearningObjectUpdateWithoutPodcastsInput = {
   sessions?: Prisma.SessionUpdateManyWithoutLearningObjectNestedInput
   blocks?: Prisma.BlockUpdateManyWithoutLearningObjectNestedInput
   teacherFeedbacks?: Prisma.TeacherAiFeedbackUpdateManyWithoutLearningObjectNestedInput
+  progress?: Prisma.LearningObjectProgressUpdateManyWithoutLearningObjectNestedInput
   video?: Prisma.VideoUpdateOneWithoutLearningObjectNestedInput
 }
 
@@ -2369,7 +2493,6 @@ export type LearningObjectUncheckedUpdateWithoutPodcastsInput = {
   keywords?: Prisma.LearningObjectUpdatekeywordsInput | string[]
   compiledContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  aiResponseId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   hasManualEdits?: Prisma.BoolFieldUpdateOperationsInput | boolean
   conceptsProcessed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -2386,6 +2509,7 @@ export type LearningObjectUncheckedUpdateWithoutPodcastsInput = {
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutLearningObjectNestedInput
   blocks?: Prisma.BlockUncheckedUpdateManyWithoutLearningObjectNestedInput
   teacherFeedbacks?: Prisma.TeacherAiFeedbackUncheckedUpdateManyWithoutLearningObjectNestedInput
+  progress?: Prisma.LearningObjectProgressUncheckedUpdateManyWithoutLearningObjectNestedInput
   video?: Prisma.VideoUncheckedUpdateOneWithoutLearningObjectNestedInput
 }
 
@@ -2395,7 +2519,6 @@ export type LearningObjectCreateWithoutMediaResourcesInput = {
   keywords?: Prisma.LearningObjectCreatekeywordsInput | string[]
   compiledContent?: string | null
   isPublished?: boolean
-  aiResponseId?: string | null
   hasManualEdits?: boolean
   conceptsProcessed?: boolean
   createdAt?: Date | string
@@ -2413,6 +2536,7 @@ export type LearningObjectCreateWithoutMediaResourcesInput = {
   sessions?: Prisma.SessionCreateNestedManyWithoutLearningObjectInput
   blocks?: Prisma.BlockCreateNestedManyWithoutLearningObjectInput
   teacherFeedbacks?: Prisma.TeacherAiFeedbackCreateNestedManyWithoutLearningObjectInput
+  progress?: Prisma.LearningObjectProgressCreateNestedManyWithoutLearningObjectInput
   video?: Prisma.VideoCreateNestedOneWithoutLearningObjectInput
 }
 
@@ -2424,7 +2548,6 @@ export type LearningObjectUncheckedCreateWithoutMediaResourcesInput = {
   keywords?: Prisma.LearningObjectCreatekeywordsInput | string[]
   compiledContent?: string | null
   isPublished?: boolean
-  aiResponseId?: string | null
   hasManualEdits?: boolean
   conceptsProcessed?: boolean
   createdAt?: Date | string
@@ -2441,6 +2564,7 @@ export type LearningObjectUncheckedCreateWithoutMediaResourcesInput = {
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutLearningObjectInput
   blocks?: Prisma.BlockUncheckedCreateNestedManyWithoutLearningObjectInput
   teacherFeedbacks?: Prisma.TeacherAiFeedbackUncheckedCreateNestedManyWithoutLearningObjectInput
+  progress?: Prisma.LearningObjectProgressUncheckedCreateNestedManyWithoutLearningObjectInput
   video?: Prisma.VideoUncheckedCreateNestedOneWithoutLearningObjectInput
 }
 
@@ -2466,7 +2590,6 @@ export type LearningObjectUpdateWithoutMediaResourcesInput = {
   keywords?: Prisma.LearningObjectUpdatekeywordsInput | string[]
   compiledContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  aiResponseId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   hasManualEdits?: Prisma.BoolFieldUpdateOperationsInput | boolean
   conceptsProcessed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -2484,6 +2607,7 @@ export type LearningObjectUpdateWithoutMediaResourcesInput = {
   sessions?: Prisma.SessionUpdateManyWithoutLearningObjectNestedInput
   blocks?: Prisma.BlockUpdateManyWithoutLearningObjectNestedInput
   teacherFeedbacks?: Prisma.TeacherAiFeedbackUpdateManyWithoutLearningObjectNestedInput
+  progress?: Prisma.LearningObjectProgressUpdateManyWithoutLearningObjectNestedInput
   video?: Prisma.VideoUpdateOneWithoutLearningObjectNestedInput
 }
 
@@ -2495,7 +2619,6 @@ export type LearningObjectUncheckedUpdateWithoutMediaResourcesInput = {
   keywords?: Prisma.LearningObjectUpdatekeywordsInput | string[]
   compiledContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  aiResponseId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   hasManualEdits?: Prisma.BoolFieldUpdateOperationsInput | boolean
   conceptsProcessed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -2512,6 +2635,7 @@ export type LearningObjectUncheckedUpdateWithoutMediaResourcesInput = {
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutLearningObjectNestedInput
   blocks?: Prisma.BlockUncheckedUpdateManyWithoutLearningObjectNestedInput
   teacherFeedbacks?: Prisma.TeacherAiFeedbackUncheckedUpdateManyWithoutLearningObjectNestedInput
+  progress?: Prisma.LearningObjectProgressUncheckedUpdateManyWithoutLearningObjectNestedInput
   video?: Prisma.VideoUncheckedUpdateOneWithoutLearningObjectNestedInput
 }
 
@@ -2521,7 +2645,6 @@ export type LearningObjectCreateWithoutTeacherFeedbacksInput = {
   keywords?: Prisma.LearningObjectCreatekeywordsInput | string[]
   compiledContent?: string | null
   isPublished?: boolean
-  aiResponseId?: string | null
   hasManualEdits?: boolean
   conceptsProcessed?: boolean
   createdAt?: Date | string
@@ -2539,6 +2662,7 @@ export type LearningObjectCreateWithoutTeacherFeedbacksInput = {
   studentQuestions?: Prisma.StudentQuestionCreateNestedManyWithoutLearningObjectInput
   sessions?: Prisma.SessionCreateNestedManyWithoutLearningObjectInput
   blocks?: Prisma.BlockCreateNestedManyWithoutLearningObjectInput
+  progress?: Prisma.LearningObjectProgressCreateNestedManyWithoutLearningObjectInput
   video?: Prisma.VideoCreateNestedOneWithoutLearningObjectInput
 }
 
@@ -2550,7 +2674,6 @@ export type LearningObjectUncheckedCreateWithoutTeacherFeedbacksInput = {
   keywords?: Prisma.LearningObjectCreatekeywordsInput | string[]
   compiledContent?: string | null
   isPublished?: boolean
-  aiResponseId?: string | null
   hasManualEdits?: boolean
   conceptsProcessed?: boolean
   createdAt?: Date | string
@@ -2567,6 +2690,7 @@ export type LearningObjectUncheckedCreateWithoutTeacherFeedbacksInput = {
   studentQuestions?: Prisma.StudentQuestionUncheckedCreateNestedManyWithoutLearningObjectInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutLearningObjectInput
   blocks?: Prisma.BlockUncheckedCreateNestedManyWithoutLearningObjectInput
+  progress?: Prisma.LearningObjectProgressUncheckedCreateNestedManyWithoutLearningObjectInput
   video?: Prisma.VideoUncheckedCreateNestedOneWithoutLearningObjectInput
 }
 
@@ -2592,7 +2716,6 @@ export type LearningObjectUpdateWithoutTeacherFeedbacksInput = {
   keywords?: Prisma.LearningObjectUpdatekeywordsInput | string[]
   compiledContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  aiResponseId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   hasManualEdits?: Prisma.BoolFieldUpdateOperationsInput | boolean
   conceptsProcessed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -2610,6 +2733,7 @@ export type LearningObjectUpdateWithoutTeacherFeedbacksInput = {
   studentQuestions?: Prisma.StudentQuestionUpdateManyWithoutLearningObjectNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutLearningObjectNestedInput
   blocks?: Prisma.BlockUpdateManyWithoutLearningObjectNestedInput
+  progress?: Prisma.LearningObjectProgressUpdateManyWithoutLearningObjectNestedInput
   video?: Prisma.VideoUpdateOneWithoutLearningObjectNestedInput
 }
 
@@ -2621,7 +2745,6 @@ export type LearningObjectUncheckedUpdateWithoutTeacherFeedbacksInput = {
   keywords?: Prisma.LearningObjectUpdatekeywordsInput | string[]
   compiledContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  aiResponseId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   hasManualEdits?: Prisma.BoolFieldUpdateOperationsInput | boolean
   conceptsProcessed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -2638,6 +2761,7 @@ export type LearningObjectUncheckedUpdateWithoutTeacherFeedbacksInput = {
   studentQuestions?: Prisma.StudentQuestionUncheckedUpdateManyWithoutLearningObjectNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutLearningObjectNestedInput
   blocks?: Prisma.BlockUncheckedUpdateManyWithoutLearningObjectNestedInput
+  progress?: Prisma.LearningObjectProgressUncheckedUpdateManyWithoutLearningObjectNestedInput
   video?: Prisma.VideoUncheckedUpdateOneWithoutLearningObjectNestedInput
 }
 
@@ -2647,7 +2771,6 @@ export type LearningObjectCreateWithoutVideoInput = {
   keywords?: Prisma.LearningObjectCreatekeywordsInput | string[]
   compiledContent?: string | null
   isPublished?: boolean
-  aiResponseId?: string | null
   hasManualEdits?: boolean
   conceptsProcessed?: boolean
   createdAt?: Date | string
@@ -2666,6 +2789,7 @@ export type LearningObjectCreateWithoutVideoInput = {
   sessions?: Prisma.SessionCreateNestedManyWithoutLearningObjectInput
   blocks?: Prisma.BlockCreateNestedManyWithoutLearningObjectInput
   teacherFeedbacks?: Prisma.TeacherAiFeedbackCreateNestedManyWithoutLearningObjectInput
+  progress?: Prisma.LearningObjectProgressCreateNestedManyWithoutLearningObjectInput
 }
 
 export type LearningObjectUncheckedCreateWithoutVideoInput = {
@@ -2676,7 +2800,6 @@ export type LearningObjectUncheckedCreateWithoutVideoInput = {
   keywords?: Prisma.LearningObjectCreatekeywordsInput | string[]
   compiledContent?: string | null
   isPublished?: boolean
-  aiResponseId?: string | null
   hasManualEdits?: boolean
   conceptsProcessed?: boolean
   createdAt?: Date | string
@@ -2694,6 +2817,7 @@ export type LearningObjectUncheckedCreateWithoutVideoInput = {
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutLearningObjectInput
   blocks?: Prisma.BlockUncheckedCreateNestedManyWithoutLearningObjectInput
   teacherFeedbacks?: Prisma.TeacherAiFeedbackUncheckedCreateNestedManyWithoutLearningObjectInput
+  progress?: Prisma.LearningObjectProgressUncheckedCreateNestedManyWithoutLearningObjectInput
 }
 
 export type LearningObjectCreateOrConnectWithoutVideoInput = {
@@ -2718,7 +2842,6 @@ export type LearningObjectUpdateWithoutVideoInput = {
   keywords?: Prisma.LearningObjectUpdatekeywordsInput | string[]
   compiledContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  aiResponseId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   hasManualEdits?: Prisma.BoolFieldUpdateOperationsInput | boolean
   conceptsProcessed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -2737,6 +2860,7 @@ export type LearningObjectUpdateWithoutVideoInput = {
   sessions?: Prisma.SessionUpdateManyWithoutLearningObjectNestedInput
   blocks?: Prisma.BlockUpdateManyWithoutLearningObjectNestedInput
   teacherFeedbacks?: Prisma.TeacherAiFeedbackUpdateManyWithoutLearningObjectNestedInput
+  progress?: Prisma.LearningObjectProgressUpdateManyWithoutLearningObjectNestedInput
 }
 
 export type LearningObjectUncheckedUpdateWithoutVideoInput = {
@@ -2747,7 +2871,6 @@ export type LearningObjectUncheckedUpdateWithoutVideoInput = {
   keywords?: Prisma.LearningObjectUpdatekeywordsInput | string[]
   compiledContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  aiResponseId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   hasManualEdits?: Prisma.BoolFieldUpdateOperationsInput | boolean
   conceptsProcessed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -2765,6 +2888,7 @@ export type LearningObjectUncheckedUpdateWithoutVideoInput = {
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutLearningObjectNestedInput
   blocks?: Prisma.BlockUncheckedUpdateManyWithoutLearningObjectNestedInput
   teacherFeedbacks?: Prisma.TeacherAiFeedbackUncheckedUpdateManyWithoutLearningObjectNestedInput
+  progress?: Prisma.LearningObjectProgressUncheckedUpdateManyWithoutLearningObjectNestedInput
 }
 
 export type LearningObjectCreateManyModuleInput = {
@@ -2774,7 +2898,6 @@ export type LearningObjectCreateManyModuleInput = {
   keywords?: Prisma.LearningObjectCreatekeywordsInput | string[]
   compiledContent?: string | null
   isPublished?: boolean
-  aiResponseId?: string | null
   hasManualEdits?: boolean
   conceptsProcessed?: boolean
   createdAt?: Date | string
@@ -2788,7 +2911,6 @@ export type LearningObjectUpdateWithoutModuleInput = {
   keywords?: Prisma.LearningObjectUpdatekeywordsInput | string[]
   compiledContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  aiResponseId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   hasManualEdits?: Prisma.BoolFieldUpdateOperationsInput | boolean
   conceptsProcessed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -2806,6 +2928,7 @@ export type LearningObjectUpdateWithoutModuleInput = {
   sessions?: Prisma.SessionUpdateManyWithoutLearningObjectNestedInput
   blocks?: Prisma.BlockUpdateManyWithoutLearningObjectNestedInput
   teacherFeedbacks?: Prisma.TeacherAiFeedbackUpdateManyWithoutLearningObjectNestedInput
+  progress?: Prisma.LearningObjectProgressUpdateManyWithoutLearningObjectNestedInput
   video?: Prisma.VideoUpdateOneWithoutLearningObjectNestedInput
 }
 
@@ -2816,7 +2939,6 @@ export type LearningObjectUncheckedUpdateWithoutModuleInput = {
   keywords?: Prisma.LearningObjectUpdatekeywordsInput | string[]
   compiledContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  aiResponseId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   hasManualEdits?: Prisma.BoolFieldUpdateOperationsInput | boolean
   conceptsProcessed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -2834,6 +2956,7 @@ export type LearningObjectUncheckedUpdateWithoutModuleInput = {
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutLearningObjectNestedInput
   blocks?: Prisma.BlockUncheckedUpdateManyWithoutLearningObjectNestedInput
   teacherFeedbacks?: Prisma.TeacherAiFeedbackUncheckedUpdateManyWithoutLearningObjectNestedInput
+  progress?: Prisma.LearningObjectProgressUncheckedUpdateManyWithoutLearningObjectNestedInput
   video?: Prisma.VideoUncheckedUpdateOneWithoutLearningObjectNestedInput
 }
 
@@ -2844,7 +2967,6 @@ export type LearningObjectUncheckedUpdateManyWithoutModuleInput = {
   keywords?: Prisma.LearningObjectUpdatekeywordsInput | string[]
   compiledContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  aiResponseId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   hasManualEdits?: Prisma.BoolFieldUpdateOperationsInput | boolean
   conceptsProcessed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -2860,7 +2982,6 @@ export type LearningObjectCreateManyTypeInput = {
   keywords?: Prisma.LearningObjectCreatekeywordsInput | string[]
   compiledContent?: string | null
   isPublished?: boolean
-  aiResponseId?: string | null
   hasManualEdits?: boolean
   conceptsProcessed?: boolean
   createdAt?: Date | string
@@ -2873,7 +2994,6 @@ export type LearningObjectUpdateWithoutTypeInput = {
   keywords?: Prisma.LearningObjectUpdatekeywordsInput | string[]
   compiledContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  aiResponseId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   hasManualEdits?: Prisma.BoolFieldUpdateOperationsInput | boolean
   conceptsProcessed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -2891,6 +3011,7 @@ export type LearningObjectUpdateWithoutTypeInput = {
   sessions?: Prisma.SessionUpdateManyWithoutLearningObjectNestedInput
   blocks?: Prisma.BlockUpdateManyWithoutLearningObjectNestedInput
   teacherFeedbacks?: Prisma.TeacherAiFeedbackUpdateManyWithoutLearningObjectNestedInput
+  progress?: Prisma.LearningObjectProgressUpdateManyWithoutLearningObjectNestedInput
   video?: Prisma.VideoUpdateOneWithoutLearningObjectNestedInput
 }
 
@@ -2902,7 +3023,6 @@ export type LearningObjectUncheckedUpdateWithoutTypeInput = {
   keywords?: Prisma.LearningObjectUpdatekeywordsInput | string[]
   compiledContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  aiResponseId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   hasManualEdits?: Prisma.BoolFieldUpdateOperationsInput | boolean
   conceptsProcessed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -2919,6 +3039,7 @@ export type LearningObjectUncheckedUpdateWithoutTypeInput = {
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutLearningObjectNestedInput
   blocks?: Prisma.BlockUncheckedUpdateManyWithoutLearningObjectNestedInput
   teacherFeedbacks?: Prisma.TeacherAiFeedbackUncheckedUpdateManyWithoutLearningObjectNestedInput
+  progress?: Prisma.LearningObjectProgressUncheckedUpdateManyWithoutLearningObjectNestedInput
   video?: Prisma.VideoUncheckedUpdateOneWithoutLearningObjectNestedInput
 }
 
@@ -2930,7 +3051,6 @@ export type LearningObjectUncheckedUpdateManyWithoutTypeInput = {
   keywords?: Prisma.LearningObjectUpdatekeywordsInput | string[]
   compiledContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  aiResponseId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   hasManualEdits?: Prisma.BoolFieldUpdateOperationsInput | boolean
   conceptsProcessed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -2955,6 +3075,7 @@ export type LearningObjectCountOutputType = {
   sessions: number
   blocks: number
   teacherFeedbacks: number
+  progress: number
 }
 
 export type LearningObjectCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -2970,6 +3091,7 @@ export type LearningObjectCountOutputTypeSelect<ExtArgs extends runtime.Types.Ex
   sessions?: boolean | LearningObjectCountOutputTypeCountSessionsArgs
   blocks?: boolean | LearningObjectCountOutputTypeCountBlocksArgs
   teacherFeedbacks?: boolean | LearningObjectCountOutputTypeCountTeacherFeedbacksArgs
+  progress?: boolean | LearningObjectCountOutputTypeCountProgressArgs
 }
 
 /**
@@ -3066,6 +3188,13 @@ export type LearningObjectCountOutputTypeCountTeacherFeedbacksArgs<ExtArgs exten
   where?: Prisma.TeacherAiFeedbackWhereInput
 }
 
+/**
+ * LearningObjectCountOutputType without action
+ */
+export type LearningObjectCountOutputTypeCountProgressArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.LearningObjectProgressWhereInput
+}
+
 
 export type LearningObjectSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -3075,7 +3204,6 @@ export type LearningObjectSelect<ExtArgs extends runtime.Types.Extensions.Intern
   keywords?: boolean
   compiledContent?: boolean
   isPublished?: boolean
-  aiResponseId?: boolean
   hasManualEdits?: boolean
   conceptsProcessed?: boolean
   createdAt?: boolean
@@ -3095,6 +3223,7 @@ export type LearningObjectSelect<ExtArgs extends runtime.Types.Extensions.Intern
   sessions?: boolean | Prisma.LearningObject$sessionsArgs<ExtArgs>
   blocks?: boolean | Prisma.LearningObject$blocksArgs<ExtArgs>
   teacherFeedbacks?: boolean | Prisma.LearningObject$teacherFeedbacksArgs<ExtArgs>
+  progress?: boolean | Prisma.LearningObject$progressArgs<ExtArgs>
   video?: boolean | Prisma.LearningObject$videoArgs<ExtArgs>
   _count?: boolean | Prisma.LearningObjectCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["learningObject"]>
@@ -3107,7 +3236,6 @@ export type LearningObjectSelectCreateManyAndReturn<ExtArgs extends runtime.Type
   keywords?: boolean
   compiledContent?: boolean
   isPublished?: boolean
-  aiResponseId?: boolean
   hasManualEdits?: boolean
   conceptsProcessed?: boolean
   createdAt?: boolean
@@ -3125,7 +3253,6 @@ export type LearningObjectSelectUpdateManyAndReturn<ExtArgs extends runtime.Type
   keywords?: boolean
   compiledContent?: boolean
   isPublished?: boolean
-  aiResponseId?: boolean
   hasManualEdits?: boolean
   conceptsProcessed?: boolean
   createdAt?: boolean
@@ -3143,7 +3270,6 @@ export type LearningObjectSelectScalar = {
   keywords?: boolean
   compiledContent?: boolean
   isPublished?: boolean
-  aiResponseId?: boolean
   hasManualEdits?: boolean
   conceptsProcessed?: boolean
   createdAt?: boolean
@@ -3151,7 +3277,7 @@ export type LearningObjectSelectScalar = {
   typeId?: boolean
 }
 
-export type LearningObjectOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "moduleId" | "title" | "orderIndex" | "keywords" | "compiledContent" | "isPublished" | "aiResponseId" | "hasManualEdits" | "conceptsProcessed" | "createdAt" | "updatedAt" | "typeId", ExtArgs["result"]["learningObject"]>
+export type LearningObjectOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "moduleId" | "title" | "orderIndex" | "keywords" | "compiledContent" | "isPublished" | "hasManualEdits" | "conceptsProcessed" | "createdAt" | "updatedAt" | "typeId", ExtArgs["result"]["learningObject"]>
 export type LearningObjectInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   type?: boolean | Prisma.LearningObjectTypeDefaultArgs<ExtArgs>
   module?: boolean | Prisma.ModuleDefaultArgs<ExtArgs>
@@ -3167,6 +3293,7 @@ export type LearningObjectInclude<ExtArgs extends runtime.Types.Extensions.Inter
   sessions?: boolean | Prisma.LearningObject$sessionsArgs<ExtArgs>
   blocks?: boolean | Prisma.LearningObject$blocksArgs<ExtArgs>
   teacherFeedbacks?: boolean | Prisma.LearningObject$teacherFeedbacksArgs<ExtArgs>
+  progress?: boolean | Prisma.LearningObject$progressArgs<ExtArgs>
   video?: boolean | Prisma.LearningObject$videoArgs<ExtArgs>
   _count?: boolean | Prisma.LearningObjectCountOutputTypeDefaultArgs<ExtArgs>
 }
@@ -3196,6 +3323,7 @@ export type $LearningObjectPayload<ExtArgs extends runtime.Types.Extensions.Inte
     sessions: Prisma.$SessionPayload<ExtArgs>[]
     blocks: Prisma.$BlockPayload<ExtArgs>[]
     teacherFeedbacks: Prisma.$TeacherAiFeedbackPayload<ExtArgs>[]
+    progress: Prisma.$LearningObjectProgressPayload<ExtArgs>[]
     video: Prisma.$VideoPayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
@@ -3206,7 +3334,6 @@ export type $LearningObjectPayload<ExtArgs extends runtime.Types.Extensions.Inte
     keywords: string[]
     compiledContent: string | null
     isPublished: boolean
-    aiResponseId: string | null
     hasManualEdits: boolean
     conceptsProcessed: boolean
     createdAt: Date
@@ -3620,6 +3747,7 @@ export interface Prisma__LearningObjectClient<T, Null = never, ExtArgs extends r
   sessions<T extends Prisma.LearningObject$sessionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.LearningObject$sessionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   blocks<T extends Prisma.LearningObject$blocksArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.LearningObject$blocksArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BlockPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   teacherFeedbacks<T extends Prisma.LearningObject$teacherFeedbacksArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.LearningObject$teacherFeedbacksArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TeacherAiFeedbackPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  progress<T extends Prisma.LearningObject$progressArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.LearningObject$progressArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LearningObjectProgressPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   video<T extends Prisma.LearningObject$videoArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.LearningObject$videoArgs<ExtArgs>>): Prisma.Prisma__VideoClient<runtime.Types.Result.GetResult<Prisma.$VideoPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -3657,7 +3785,6 @@ export interface LearningObjectFieldRefs {
   readonly keywords: Prisma.FieldRef<"LearningObject", 'String[]'>
   readonly compiledContent: Prisma.FieldRef<"LearningObject", 'String'>
   readonly isPublished: Prisma.FieldRef<"LearningObject", 'Boolean'>
-  readonly aiResponseId: Prisma.FieldRef<"LearningObject", 'String'>
   readonly hasManualEdits: Prisma.FieldRef<"LearningObject", 'Boolean'>
   readonly conceptsProcessed: Prisma.FieldRef<"LearningObject", 'Boolean'>
   readonly createdAt: Prisma.FieldRef<"LearningObject", 'DateTime'>
@@ -4349,6 +4476,30 @@ export type LearningObject$teacherFeedbacksArgs<ExtArgs extends runtime.Types.Ex
   take?: number
   skip?: number
   distinct?: Prisma.TeacherAiFeedbackScalarFieldEnum | Prisma.TeacherAiFeedbackScalarFieldEnum[]
+}
+
+/**
+ * LearningObject.progress
+ */
+export type LearningObject$progressArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the LearningObjectProgress
+   */
+  select?: Prisma.LearningObjectProgressSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the LearningObjectProgress
+   */
+  omit?: Prisma.LearningObjectProgressOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.LearningObjectProgressInclude<ExtArgs> | null
+  where?: Prisma.LearningObjectProgressWhereInput
+  orderBy?: Prisma.LearningObjectProgressOrderByWithRelationInput | Prisma.LearningObjectProgressOrderByWithRelationInput[]
+  cursor?: Prisma.LearningObjectProgressWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.LearningObjectProgressScalarFieldEnum | Prisma.LearningObjectProgressScalarFieldEnum[]
 }
 
 /**

@@ -6,6 +6,7 @@ import {
 } from '../../shared/interfaces/ai-generated-content.interface'
 import { PromptInput } from '../../../../providers/ai/interfaces/prompt-input.interface'
 import { JSON_ONLY_INSTRUCTION } from '../../shared/helpers/guidances'
+import { resolveLanguageName } from 'src/shared/utils/language.util'
 
 export interface GeneratePageRelationsPromptInput {
   currentPage: {
@@ -24,6 +25,7 @@ export interface GeneratePageRelationsPromptInput {
   }>
   config: {
     maxRelationsPerPage?: number
+    language: string
   }
 }
 
@@ -32,11 +34,12 @@ export const generatePageRelationsPrompt = (
 ): PromptInput[] => {
   const { currentPage, candidatePages, config } = input
   const maxRelations = config.maxRelationsPerPage ?? 5
+  const languageName = resolveLanguageName(config.language)
 
   return [
     {
       role: 'system',
-      content: buildRelationsSystemPrompt(maxRelations),
+      content: buildRelationsSystemPrompt(maxRelations, languageName),
     },
     {
       role: 'user',
@@ -45,7 +48,10 @@ export const generatePageRelationsPrompt = (
   ]
 }
 
-function buildRelationsSystemPrompt(maxRelations: number): string {
+function buildRelationsSystemPrompt(
+  maxRelations: number,
+  languageName: string,
+): string {
   return `You are an expert educational content analyst. Identify meaningful relationships between lesson pages.
 
 # Output Format
@@ -70,6 +76,7 @@ ${JSON_ONLY_INSTRUCTION}
 5. Maximum ${maxRelations} relations total
 6. Do NOT create relations if no meaningful connection exists
 7. Do NOT use the same mentionText for multiple relations
+8. Respond entirely in ${languageName}. All output fields MUST be written in ${languageName}.
 
 # Quality Guidelines
 

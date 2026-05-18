@@ -14,7 +14,6 @@ import { RegeneratedBlockDto } from './dtos/res/regenerated-block.dto'
 import { ExpandedContentDto } from './dtos/res/expanded-content.dto'
 import type { AiContent } from '../shared/interfaces/ai-generated-content.interface'
 import { parseJsonField } from 'src/providers/ai/helpers/utils'
-import { validateAiResponse } from 'src/providers/ai/helpers/ai-response-validator'
 import {
   generatedPageContentSchema,
   regeneratedBlockSchema,
@@ -59,10 +58,12 @@ export class PageContentService {
         tone: data.tone ?? page.module.aiConfiguration!.tone,
       },
     })
-    const aiResponse =
-      await this.openAiService.getResponse<GeneratedLoContent>(prompt)
+    const aiResponse = await this.openAiService.getResponse(
+      prompt,
+      generatedPageContentSchema,
+    )
 
-    return validateAiResponse(aiResponse.content, generatedPageContentSchema)
+    return aiResponse.content
   }
 
   async regeneratePageContent(
@@ -108,10 +109,12 @@ export class PageContentService {
       },
     })
 
-    const aiResponse =
-      await this.openAiService.getResponse<GeneratedLoContent>(prompt)
+    const aiResponse = await this.openAiService.getResponse(
+      prompt,
+      generatedPageContentSchema,
+    )
 
-    return validateAiResponse(aiResponse.content, generatedPageContentSchema)
+    return aiResponse.content
   }
 
   async regenerateBlock(
@@ -188,10 +191,12 @@ export class PageContentService {
       },
     })
 
-    const aiResponse =
-      await this.openAiService.getResponse<RegeneratedBlockDto>(prompt)
+    const aiResponse = await this.openAiService.getResponse(
+      prompt,
+      regeneratedBlockSchema,
+    )
 
-    return validateAiResponse(aiResponse.content, regeneratedBlockSchema)
+    return aiResponse.content
   }
 
   async expandContent(data: ExpandContentDto): Promise<ExpandedContentDto> {
@@ -248,10 +253,12 @@ export class PageContentService {
       },
     })
 
-    const aiResponse =
-      await this.openAiService.getResponse<ExpandedContentDto>(prompt)
+    const aiResponse = await this.openAiService.getResponse(
+      prompt,
+      expandedContentSchema,
+    )
 
-    return validateAiResponse(aiResponse.content, expandedContentSchema)
+    return aiResponse.content
   }
 
   async generateImage(prompt: string, language?: string) {

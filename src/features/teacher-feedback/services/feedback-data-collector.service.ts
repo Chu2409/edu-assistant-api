@@ -1,6 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common'
 import { DBService } from 'src/core/database/database.service'
-import { compileBlocksToText } from 'src/features/learning-objects/blocks/helpers/compile-blocks'
 import {
   LoInteractionData,
   ModuleInteractionData,
@@ -18,19 +17,14 @@ export class FeedbackDataCollectorService {
 
   constructor(private readonly dbService: DBService) {}
 
-  /**
-   * Recopila todas las interacciones de estudiantes para un LO específico.
-   * Los datos del chat se recopilan de forma anónima (sin identificar al estudiante).
-   */
   async collectLoData(learningObjectId: number): Promise<LoInteractionData> {
     const lo = await this.dbService.learningObject.findUniqueOrThrow({
       where: { id: learningObjectId },
-      include: { blocks: { orderBy: { orderIndex: 'asc' } } },
+      select: { id: true, title: true, compiledContent: true },
     })
 
     const [chatSessions, activities, feedbacks, questions, notes] =
       await Promise.all([
-        // Chat: traemos userId para conteo de estudiantes + mensajes
         this.dbService.session.findMany({
           where: { learningObjectId },
           select: {
@@ -44,7 +38,6 @@ export class FeedbackDataCollectorService {
           },
         }),
 
-        // Actividades con intentos (incluye userId para conteo)
         this.dbService.activity.findMany({
           where: { learningObjectId },
           include: {
@@ -54,7 +47,6 @@ export class FeedbackDataCollectorService {
           },
         }),
 
-        // Feedbacks de estudiantes (incluye userId para conteo)
         this.dbService.learningObjectFeedback.findMany({
           where: { learningObjectId },
           select: { feedback: true, userId: true },
@@ -62,7 +54,6 @@ export class FeedbackDataCollectorService {
           orderBy: { createdAt: 'desc' },
         }),
 
-        // Preguntas del foro (incluye userId para conteo)
         this.dbService.studentQuestion.findMany({
           where: { learningObjectId },
           select: {
@@ -75,7 +66,6 @@ export class FeedbackDataCollectorService {
           take: MAX_FORUM_QUESTIONS_PER_LO,
         }),
 
-        // Notas de estudiantes (incluye userId para conteo)
         this.dbService.note.findMany({
           where: { learningObjectId },
           select: { content: true, userId: true },
@@ -84,7 +74,6 @@ export class FeedbackDataCollectorService {
         }),
       ])
 
-    // Conteo de estudiantes distintos directamente de los datos ya obtenidos
     const studentIds = new Set<number>()
     for (const s of chatSessions) studentIds.add(s.userId)
     for (const f of feedbacks) studentIds.add(f.userId)
@@ -94,7 +83,6 @@ export class FeedbackDataCollectorService {
       for (const att of a.attempts) studentIds.add(att.userId)
     }
 
-    // Aplanar mensajes del chat (anónimo, más recientes primero)
     const chatMessages = chatSessions.flatMap((s) =>
       s.messages.map((m) => ({
         role: m.role,
@@ -102,7 +90,6 @@ export class FeedbackDataCollectorService {
       })),
     )
 
-    // Calcular resultados de actividades
     const activityResults = activities.map((a) => {
       const total = a.attempts.length
       const correct = a.attempts.filter((att) => att.isCorrect).length
@@ -123,7 +110,7 @@ export class FeedbackDataCollectorService {
     return {
       loId: lo.id,
       loTitle: lo.title,
-      loContent: compileBlocksToText(lo.blocks),
+      loContent: lo.compiledContent ?? '',
       chatMessages,
       totalChatSessions: chatSessions.length,
       activityResults,
@@ -139,9 +126,6 @@ export class FeedbackDataCollectorService {
     }
   }
 
-  /**
-   * Recopila datos agregados a nivel de módulo para el meta-feedback.
-   */
   async collectModuleData(
     moduleId: number,
     loFeedbackSummaries: { loTitle: string; summary: string }[],
@@ -153,7 +137,6 @@ export class FeedbackDataCollectorService {
       },
     })
 
-    // Tasa de acierto global de actividades del módulo
     const activities = await this.dbService.activity.findMany({
       where: { learningObject: { moduleId } },
       include: { attempts: { select: { isCorrect: true } } },
@@ -165,11 +148,9 @@ export class FeedbackDataCollectorService {
         ? allAttempts.filter((a) => a.isCorrect).length / allAttempts.length
         : 0
 
-    // Top preguntas del foro del módulo
     const topQuestions = await this.dbService.studentQuestion.findMany({
       where: { learningObject: { moduleId } },
       include: { learningObject: { select: { title: true } } },
-      orderBy: { upvotes: 'desc' },
       take: 10,
     })
 
@@ -186,10 +167,6 @@ export class FeedbackDataCollectorService {
     }
   }
 
-  /**
-   * Verifica si hay datos nuevos de interacción para un LO desde una fecha dada.
-   * Usa queries de conteo ligeras para evitar cargar datos innecesarios.
-   */
   async hasNewDataSince(
     learningObjectId: number,
     since: Date,

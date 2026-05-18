@@ -61,3 +61,14 @@ uploads/*
 
 .claude/
 graphify-out/
+
+# Local Pi runtime state
+.atl/
+
+# Pi-lens cache and session files
+.pi-lens/
+.pi/
+
+# Context and OpenSpec artifacts
+context.md
+openspec/

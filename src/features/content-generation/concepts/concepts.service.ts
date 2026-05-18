@@ -15,7 +15,6 @@ import { PageConceptsExtractedDto } from './dtos/res/generated-concept.dto'
 import { GeneratedConceptDto } from './dtos/res/generated-concept.dto'
 import { BlockType } from 'src/core/database/generated/enums'
 import { parseJsonField } from 'src/providers/ai/helpers/utils'
-import { validateAiResponse } from 'src/providers/ai/helpers/ai-response-validator'
 import { pageConceptsExtractedSchema } from '../shared/schemas/ai-content.schema'
 
 @Injectable()
@@ -60,13 +59,12 @@ export class ConceptsService {
       },
     })
 
-    const aiResponse =
-      await this.openAiService.getResponse<PageConceptsExtractedDto>(prompt)
-
-    return validateAiResponse(
-      aiResponse.content,
+    const aiResponse = await this.openAiService.getResponse(
+      prompt,
       pageConceptsExtractedSchema,
-    ) as PageConceptsExtractedDto
+    )
+
+    return aiResponse.content as PageConceptsExtractedDto
   }
 
   async generateConcept(
@@ -76,7 +74,15 @@ export class ConceptsService {
 
     const block = await this.dbService.block.findUnique({
       where: { id: data.blockId },
-      include: { learningObject: true },
+      include: {
+        learningObject: {
+          include: {
+            module: {
+              include: { aiConfiguration: true },
+            },
+          },
+        },
+      },
     })
 
     if (!block) {
@@ -91,18 +97,17 @@ export class ConceptsService {
         pageTitle: block.learningObject.title,
       },
       config: {
-        language: data.language ?? 'es',
+        language: block.learningObject.module.aiConfiguration?.language ?? 'es',
         maxDefinitionLength: 120,
       },
     })
 
-    const aiResponse =
-      await this.openAiService.getResponse<PageConceptsExtractedDto>(prompt)
-
-    const validated = validateAiResponse(
-      aiResponse.content,
+    const aiResponse = await this.openAiService.getResponse(
+      prompt,
       pageConceptsExtractedSchema,
     )
+
+    const validated = aiResponse.content
 
     const terms = validated.terms
     if (!terms.length) {

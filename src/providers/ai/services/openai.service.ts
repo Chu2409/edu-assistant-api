@@ -1,12 +1,18 @@
 import { HttpStatus, Injectable, Logger, OnModuleInit } from '@nestjs/common'
 import { BusinessException } from 'src/shared/exceptions/business.exception'
 import OpenAI from 'openai'
+import { ZodSchema, ZodError } from 'zod'
 import { CustomConfigService } from 'src/core/config/config.service'
 import { PromptInput } from '../interfaces/prompt-input.interface'
 import { AiResponseDto } from '../dtos/res/ai-response.dto'
 import { parseJsonField } from '../helpers/utils'
 import { AiConfigService } from './ai-config.service'
-import { BASE_DELAY_MS, MAX_RETRIES } from '../constants/configuration'
+import {
+  BASE_DELAY_MS,
+  MAX_RETRIES,
+  MAX_VALIDATION_RETRIES,
+} from '../constants/configuration'
+import { AiFormatValidationException } from '../exceptions/ai-format-validation.exception'
 
 @Injectable()
 export class OpenaiService implements OnModuleInit {
@@ -27,25 +33,69 @@ export class OpenaiService implements OnModuleInit {
   // 1. RESPONSES API
   async getResponse<T>(
     input: PromptInput[],
+    schema?: ZodSchema<T>,
     previousResponseId?: string,
   ): Promise<AiResponseDto<T>> {
     return this.withRetry(async () => {
-      const config = this.aiConfigurationService.getModelConfig()
-      const response = await this.openai.responses.create({
-        model: config.responses,
-        input,
-        previous_response_id: previousResponseId,
-      })
+      const result = await this.callResponsesApi<T>(input, previousResponseId)
 
-      this.logUsage(config.responses, response.usage)
-
-      const content = parseJsonField<T>(response.output_text)
-
-      return {
-        content,
-        responseId: response.id,
+      if (schema) {
+        return {
+          ...result,
+          content: this.validateWithRetry(result.content, schema),
+        }
       }
+
+      return result
     })
+  }
+
+  /**
+   * Internal call to OpenAI Responses API (no validation)
+   */
+  private async callResponsesApi<T>(
+    input: PromptInput[],
+    previousResponseId?: string,
+  ): Promise<AiResponseDto<T>> {
+    const config = this.aiConfigurationService.getModelConfig()
+    const response = await this.openai.responses.create({
+      model: config.responses,
+      input,
+      previous_response_id: previousResponseId,
+    })
+
+    this.logUsage(config.responses, response.usage)
+
+    const content = parseJsonField<T>(response.output_text)
+
+    return {
+      content,
+      responseId: response.id,
+    }
+  }
+
+  /**
+   * Validate response against a Zod schema with retries.
+   * If validation fails, re-calls OpenAI to get a corrected response.
+   */
+  private validateWithRetry<T>(content: T, schema: ZodSchema<T>): T {
+    try {
+      return schema.parse(content)
+    } catch (error) {
+      if (error instanceof ZodError) {
+        const issues = error.issues
+          .map((i) => `${i.path.join('.')}: ${i.message}`)
+          .join('; ')
+
+        this.logger.warn(
+          `Validación de formato de IA fallida, reintentando... Errores: ${issues}`,
+        )
+
+        // Throw to trigger withRetry
+        throw new AiFormatValidationException(issues)
+      }
+      throw error
+    }
   }
 
   async getMarkdownResponse(
@@ -106,19 +156,41 @@ export class OpenaiService implements OnModuleInit {
   // --- Retry logic ---
 
   private async withRetry<T>(fn: () => Promise<T>): Promise<T> {
-    for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
+    const maxAttempts = MAX_RETRIES + MAX_VALIDATION_RETRIES
+    let validationAttempts = 0
+
+    for (let attempt = 1; attempt <= maxAttempts; attempt++) {
       try {
         return await fn()
       } catch (error) {
-        const isLastAttempt = attempt === MAX_RETRIES
+        const isValidationError = error instanceof AiFormatValidationException
 
-        if (!this.isRetryable(error) || isLastAttempt) {
-          this.handleError(error, attempt)
+        if (isValidationError) {
+          validationAttempts++
+          if (validationAttempts >= MAX_VALIDATION_RETRIES) {
+            this.logger.error(
+              `Validación de formato de IA fallida después de ${MAX_VALIDATION_RETRIES} intento(s)`,
+            )
+            throw new Error(
+              'La respuesta de la IA no tiene el formato esperado después de múltiples intentos. Intenta generar de nuevo.',
+            )
+          }
+          this.logger.warn(
+            `Reintentando por formato inválido (intento ${validationAttempts}/${MAX_VALIDATION_RETRIES})...`,
+          )
+          continue // No delay for format retries
         }
 
-        const delay = BASE_DELAY_MS * Math.pow(2, attempt - 1)
+        const apiAttempt = attempt - validationAttempts
+        const isLastAttempt = apiAttempt >= MAX_RETRIES
+
+        if (!this.isRetryable(error) || isLastAttempt) {
+          this.handleError(error, apiAttempt)
+        }
+
+        const delay = BASE_DELAY_MS * Math.pow(2, apiAttempt - 1)
         this.logger.warn(
-          `Solicitud a OpenAI fallida (intento ${attempt}/${MAX_RETRIES}), reintentando en ${delay}ms...`,
+          `Solicitud a OpenAI fallida (intento ${apiAttempt}/${MAX_RETRIES}), reintentando en ${delay}ms...`,
         )
         await this.delay(delay)
       }

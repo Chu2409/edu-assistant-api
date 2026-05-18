@@ -14,7 +14,6 @@ import { parseJsonField } from 'src/providers/ai/helpers/utils'
 import { chatSessionPrompt } from './prompts/chat-session.prompt'
 import { AuthorizationUtils } from 'src/shared/utils/authorization.util'
 import { ChatMapper } from './mappers/chat.mapper'
-import { compileBlocksToText } from 'src/features/learning-objects/blocks/helpers/compile-blocks'
 import { BaseParamsReqDto } from 'src/shared/dtos/req/base-params.dto'
 
 type StoredAiMetadata = {
@@ -84,7 +83,6 @@ export class ChatService {
       )
     }
 
-    // valida acceso al objeto de aprendizaje (por si cambió publicación/matrícula)
     AuthorizationUtils.assertLoReadAccess(
       user,
       session.learningObject.module,
@@ -97,13 +95,12 @@ export class ChatService {
       this.dbService.message.count({ where: { sessionId } }),
       this.dbService.message.findMany({
         where: { sessionId },
-        orderBy: { createdAt: 'desc' }, // Traemos los más recientes primero
+        orderBy: { createdAt: 'desc' },
         skip,
         take: query.limit,
       }),
     ])
 
-    // Invertimos el arreglo de mensajes para que quede en orden cronológico (asc) para el frontend
     const sortedMessages = messages.reverse()
 
     const records = sortedMessages.map((m) =>
@@ -136,7 +133,6 @@ export class ChatService {
       include: {
         learningObject: {
           include: {
-            blocks: true,
             module: { include: { enrollments: true, aiConfiguration: true } },
           },
         },
@@ -168,7 +164,7 @@ export class ChatService {
 
     const isFirstMessage = !previousResponseId
     const lessonContext = isFirstMessage
-      ? compileBlocksToText(session.learningObject.blocks)
+      ? (session.learningObject.compiledContent ?? undefined)
       : undefined
 
     const language =

@@ -7,6 +7,8 @@ import {
 import { BusinessException } from 'src/shared/exceptions/business.exception'
 import { DBService } from 'src/core/database/database.service'
 import { OpenaiService } from 'src/providers/ai/services/openai.service'
+import { EmailService } from 'src/providers/email/email.service'
+import { teacherFeedbackContentSchema } from 'src/shared/schemas/ai-feedback.schema'
 import { FeedbackDataCollectorService } from './services/feedback-data-collector.service'
 import { TeacherFeedbackMapper } from './mappers/teacher-feedback.mapper'
 import { TeacherFeedbackDto } from './dtos/res/teacher-feedback.dto'
@@ -21,6 +23,13 @@ import type { AiFeedbackContent } from './interfaces/feedback-data.interface'
 import type { ApiPaginatedRes } from 'src/shared/dtos/res/api-response.dto'
 import { TeacherFeedbackScope } from 'src/core/database/generated/enums'
 
+import { EMAIL_TEMPLATES } from 'src/shared/constants/email-templates'
+import { InjectQueue } from '@nestjs/bullmq'
+import { Queue } from 'bullmq'
+import { NotificationType } from 'src/core/database/generated/client'
+import { QUEUE_NAMES } from 'src/shared/constants/queues'
+import { ENTITY_TYPES } from 'src/shared/constants/entity-types'
+
 @Injectable()
 export class TeacherFeedbackService {
   private readonly logger = new Logger(TeacherFeedbackService.name)
@@ -29,9 +38,10 @@ export class TeacherFeedbackService {
     private readonly dbService: DBService,
     private readonly openaiService: OpenaiService,
     private readonly dataCollector: FeedbackDataCollectorService,
+    private readonly emailService: EmailService,
+    @InjectQueue(QUEUE_NAMES.NOTIFICATIONS.NAME)
+    private readonly notificationsQueue: Queue,
   ) {}
-
-  // ─── Lectura ──────────────────────────────────────────────
 
   async listByModule(
     moduleId: number,
@@ -86,10 +96,7 @@ export class TeacherFeedbackService {
     return TeacherFeedbackMapper.toDto(feedback)
   }
 
-  /**
-   * Genera feedbacks para un módulo específico: primero por cada LO y luego uno global.
-   */
-  async generateForModule(moduleId: number): Promise<void> {
+  async generateForModule(moduleId: number): Promise<AiFeedbackContent | null> {
     const mod = await this.dbService.module.findUnique({
       where: { id: moduleId },
       include: {
@@ -99,18 +106,20 @@ export class TeacherFeedbackService {
           orderBy: { orderIndex: 'asc' },
         },
         aiConfiguration: true,
+        teacher: {
+          select: { id: true, name: true, email: true },
+        },
       },
     })
 
     if (!mod) {
       this.logger.warn(`Módulo ${moduleId} no encontrado, se omite`)
-      return
+      return null
     }
 
     const language = mod.aiConfiguration?.language ?? 'es'
     const loFeedbackSummaries: { loTitle: string; summary: string }[] = []
 
-    // 1. Generar feedback por cada LO
     for (const lo of mod.learningObjects) {
       try {
         const summary = await this.generateLoFeedback(lo.id, language)
@@ -122,20 +131,69 @@ export class TeacherFeedbackService {
       }
     }
 
-    // 2. Generar meta-feedback del módulo
     try {
-      await this.generateModuleFeedback(moduleId, language, loFeedbackSummaries)
+      const feedbackContent = await this.generateModuleFeedback(
+        moduleId,
+        language,
+        loFeedbackSummaries,
+      )
+
+      // Send email if feedback was generated
+      if (feedbackContent && mod.teacher.email) {
+        this.logger.log(`Enviando email de feedback a ${mod.teacher.email}...`)
+        await this.emailService.sendWithTemplate(
+          mod.teacher.email,
+          `Feedback AI - ${mod.title}`,
+          EMAIL_TEMPLATES.TEACHER_NEW_FEEDBACK,
+          {
+            teacherName: mod.teacher.name,
+            moduleTitle: mod.title,
+            summary: feedbackContent.summary,
+            strengths: feedbackContent.strengths,
+            improvements: feedbackContent.improvements,
+            recommendations: feedbackContent.recommendations,
+            reportUrl: `/modules/${mod.id}/wiki`,
+          },
+        )
+        this.logger.log(`Email enviado exitosamente a ${mod.teacher.email}`)
+
+        // Emit notification for teacher
+        await this.notificationsQueue.add(
+          QUEUE_NAMES.NOTIFICATIONS.JOBS.CREATE,
+          {
+            type: NotificationType.MODULE_UPDATE,
+            userId: mod.teacherId,
+            title: 'Nuevo reporte de feedback IA',
+            message: `Se ha generado un nuevo reporte pedagógico para tu módulo: "${mod.title}"`,
+            relatedEntityId: mod.id,
+            relatedEntityType: ENTITY_TYPES.MODULE,
+          },
+        )
+      } else if (!feedbackContent) {
+        this.logger.log(
+          `No se generó feedback para módulo ${mod.id}, no se envía email`,
+        )
+      }
+
+      return feedbackContent
     } catch (error) {
       this.logger.error(
         `Error generando feedback del módulo ${moduleId}: ${error}`,
       )
+      return null
     }
   }
 
   async generateForAllModules(): Promise<void> {
     const modules = await this.dbService.module.findMany({
       where: { isActive: true },
-      select: { id: true, title: true },
+      select: {
+        id: true,
+        title: true,
+        teacher: {
+          select: { email: true },
+        },
+      },
     })
 
     this.logger.log(
@@ -217,32 +275,34 @@ export class TeacherFeedbackService {
     })
 
     const prompt = loFeedbackPrompt({ language, data })
-    const aiResponse =
-      await this.openaiService.getResponse<AiFeedbackContent>(prompt)
+    const aiResponse = await this.openaiService.getResponse(
+      prompt,
+      teacherFeedbackContentSchema,
+    )
+    const validatedContent = aiResponse.content
 
     await this.dbService.teacherAiFeedback.create({
       data: {
         scope: TeacherFeedbackScope.LEARNING_OBJECT,
         moduleId: lo.moduleId,
         learningObjectId,
-        content: aiResponse.content as object,
+        content: validatedContent as object,
       },
     })
 
-    return aiResponse.content.summary
+    return validatedContent.summary
   }
 
   private async generateModuleFeedback(
     moduleId: number,
     language: string,
     loFeedbackSummaries: { loTitle: string; summary: string }[],
-  ): Promise<void> {
+  ): Promise<AiFeedbackContent | null> {
     const data = await this.dataCollector.collectModuleData(
       moduleId,
       loFeedbackSummaries,
     )
 
-    // Si no hay feedbacks de LO ni preguntas, no generar feedback de módulo vacío
     if (
       loFeedbackSummaries.length === 0 &&
       data.topForumQuestions.length === 0
@@ -250,20 +310,25 @@ export class TeacherFeedbackService {
       this.logger.log(
         `Módulo ${moduleId} no tiene datos suficientes para meta-feedback`,
       )
-      return
+      return null
     }
 
     const prompt = moduleFeedbackPrompt({ language, data })
-    const aiResponse =
-      await this.openaiService.getResponse<AiFeedbackContent>(prompt)
+    const aiResponse = await this.openaiService.getResponse(
+      prompt,
+      teacherFeedbackContentSchema,
+    )
+    const validatedContent = aiResponse.content
 
     await this.dbService.teacherAiFeedback.create({
       data: {
         scope: TeacherFeedbackScope.MODULE,
         moduleId,
-        content: aiResponse.content as object,
+        content: validatedContent as object,
       },
     })
+
+    return validatedContent
   }
 
   async validateModuleOwnership(

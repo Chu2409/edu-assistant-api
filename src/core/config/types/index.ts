@@ -34,4 +34,8 @@ export interface IConfig {
 
   MAX_VIDEO_DURATION_MINUTES: number
   MAX_VIDEO_FILE_SIZE_MB: number
+
+  ENABLE_EMAIL_NOTIFICATIONS: boolean
+
+  EMAIL_DAILY_LIMIT: number
 }

@@ -80,12 +80,12 @@ export type PrismaVersion = {
 }
 
 /**
- * Prisma Client JS version: 7.5.0
- * Query Engine version: 280c870be64f457428992c43c1f6d557fab6e29e
+ * Prisma Client JS version: 7.7.0
+ * Query Engine version: 75cbdc1eb7150937890ad5465d861175c6624711
  */
 export const prismaVersion: PrismaVersion = {
-  client: "7.5.0",
-  engine: "280c870be64f457428992c43c1f6d557fab6e29e"
+  client: "7.7.0",
+  engine: "75cbdc1eb7150937890ad5465d861175c6624711"
 }
 
 /**
@@ -390,6 +390,7 @@ export const ModelName = {
   Enrollment: 'Enrollment',
   LearningObjectType: 'LearningObjectType',
   LearningObject: 'LearningObject',
+  LearningObjectProgress: 'LearningObjectProgress',
   Block: 'Block',
   Session: 'Session',
   Message: 'Message',
@@ -407,6 +408,7 @@ export const ModelName = {
   ModuleMetrics: 'ModuleMetrics',
   SystemSetting: 'SystemSetting',
   TeacherAiFeedback: 'TeacherAiFeedback',
+  StudentAiFeedback: 'StudentAiFeedback',
   Video: 'Video',
   VideoGenerationAttempt: 'VideoGenerationAttempt'
 } as const
@@ -424,7 +426,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "module" | "aiConfiguration" | "enrollment" | "learningObjectType" | "learningObject" | "block" | "session" | "message" | "learningObjectRelation" | "learningObjectConcept" | "activity" | "activityAttempt" | "learningObjectFeedback" | "note" | "studentQuestion" | "questionReply" | "notification" | "podcast" | "mediaResource" | "moduleMetrics" | "systemSetting" | "teacherAiFeedback" | "video" | "videoGenerationAttempt"
+    modelProps: "user" | "module" | "aiConfiguration" | "enrollment" | "learningObjectType" | "learningObject" | "learningObjectProgress" | "block" | "session" | "message" | "learningObjectRelation" | "learningObjectConcept" | "activity" | "activityAttempt" | "learningObjectFeedback" | "note" | "studentQuestion" | "questionReply" | "notification" | "podcast" | "mediaResource" | "moduleMetrics" | "systemSetting" | "teacherAiFeedback" | "studentAiFeedback" | "video" | "videoGenerationAttempt"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -869,6 +871,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.LearningObjectCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.LearningObjectCountAggregateOutputType> | number
+        }
+      }
+    }
+    LearningObjectProgress: {
+      payload: Prisma.$LearningObjectProgressPayload<ExtArgs>
+      fields: Prisma.LearningObjectProgressFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.LearningObjectProgressFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LearningObjectProgressPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.LearningObjectProgressFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LearningObjectProgressPayload>
+        }
+        findFirst: {
+          args: Prisma.LearningObjectProgressFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LearningObjectProgressPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.LearningObjectProgressFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LearningObjectProgressPayload>
+        }
+        findMany: {
+          args: Prisma.LearningObjectProgressFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LearningObjectProgressPayload>[]
+        }
+        create: {
+          args: Prisma.LearningObjectProgressCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LearningObjectProgressPayload>
+        }
+        createMany: {
+          args: Prisma.LearningObjectProgressCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.LearningObjectProgressCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LearningObjectProgressPayload>[]
+        }
+        delete: {
+          args: Prisma.LearningObjectProgressDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LearningObjectProgressPayload>
+        }
+        update: {
+          args: Prisma.LearningObjectProgressUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LearningObjectProgressPayload>
+        }
+        deleteMany: {
+          args: Prisma.LearningObjectProgressDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.LearningObjectProgressUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.LearningObjectProgressUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LearningObjectProgressPayload>[]
+        }
+        upsert: {
+          args: Prisma.LearningObjectProgressUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LearningObjectProgressPayload>
+        }
+        aggregate: {
+          args: Prisma.LearningObjectProgressAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateLearningObjectProgress>
+        }
+        groupBy: {
+          args: Prisma.LearningObjectProgressGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.LearningObjectProgressGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.LearningObjectProgressCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.LearningObjectProgressCountAggregateOutputType> | number
         }
       }
     }
@@ -2130,6 +2206,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    StudentAiFeedback: {
+      payload: Prisma.$StudentAiFeedbackPayload<ExtArgs>
+      fields: Prisma.StudentAiFeedbackFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.StudentAiFeedbackFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StudentAiFeedbackPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.StudentAiFeedbackFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StudentAiFeedbackPayload>
+        }
+        findFirst: {
+          args: Prisma.StudentAiFeedbackFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StudentAiFeedbackPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.StudentAiFeedbackFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StudentAiFeedbackPayload>
+        }
+        findMany: {
+          args: Prisma.StudentAiFeedbackFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StudentAiFeedbackPayload>[]
+        }
+        create: {
+          args: Prisma.StudentAiFeedbackCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StudentAiFeedbackPayload>
+        }
+        createMany: {
+          args: Prisma.StudentAiFeedbackCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.StudentAiFeedbackCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StudentAiFeedbackPayload>[]
+        }
+        delete: {
+          args: Prisma.StudentAiFeedbackDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StudentAiFeedbackPayload>
+        }
+        update: {
+          args: Prisma.StudentAiFeedbackUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StudentAiFeedbackPayload>
+        }
+        deleteMany: {
+          args: Prisma.StudentAiFeedbackDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.StudentAiFeedbackUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.StudentAiFeedbackUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StudentAiFeedbackPayload>[]
+        }
+        upsert: {
+          args: Prisma.StudentAiFeedbackUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StudentAiFeedbackPayload>
+        }
+        aggregate: {
+          args: Prisma.StudentAiFeedbackAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateStudentAiFeedback>
+        }
+        groupBy: {
+          args: Prisma.StudentAiFeedbackGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.StudentAiFeedbackGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.StudentAiFeedbackCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.StudentAiFeedbackCountAggregateOutputType> | number
+        }
+      }
+    }
     Video: {
       payload: Prisma.$VideoPayload<ExtArgs>
       fields: Prisma.VideoFieldRefs
@@ -2398,7 +2548,6 @@ export const LearningObjectScalarFieldEnum = {
   keywords: 'keywords',
   compiledContent: 'compiledContent',
   isPublished: 'isPublished',
-  aiResponseId: 'aiResponseId',
   hasManualEdits: 'hasManualEdits',
   conceptsProcessed: 'conceptsProcessed',
   createdAt: 'createdAt',
@@ -2407,6 +2556,20 @@ export const LearningObjectScalarFieldEnum = {
 } as const
 
 export type LearningObjectScalarFieldEnum = (typeof LearningObjectScalarFieldEnum)[keyof typeof LearningObjectScalarFieldEnum]
+
+
+export const LearningObjectProgressScalarFieldEnum = {
+  id: 'id',
+  learningObjectId: 'learningObjectId',
+  userId: 'userId',
+  isCompleted: 'isCompleted',
+  completedAt: 'completedAt',
+  lastVisitedAt: 'lastVisitedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type LearningObjectProgressScalarFieldEnum = (typeof LearningObjectProgressScalarFieldEnum)[keyof typeof LearningObjectProgressScalarFieldEnum]
 
 
 export const BlockScalarFieldEnum = {
@@ -2639,6 +2802,18 @@ export const TeacherAiFeedbackScalarFieldEnum = {
 } as const
 
 export type TeacherAiFeedbackScalarFieldEnum = (typeof TeacherAiFeedbackScalarFieldEnum)[keyof typeof TeacherAiFeedbackScalarFieldEnum]
+
+
+export const StudentAiFeedbackScalarFieldEnum = {
+  id: 'id',
+  scope: 'scope',
+  studentId: 'studentId',
+  moduleId: 'moduleId',
+  content: 'content',
+  createdAt: 'createdAt'
+} as const
+
+export type StudentAiFeedbackScalarFieldEnum = (typeof StudentAiFeedbackScalarFieldEnum)[keyof typeof StudentAiFeedbackScalarFieldEnum]
 
 
 export const VideoScalarFieldEnum = {
@@ -3107,6 +3282,7 @@ export type GlobalOmitConfig = {
   enrollment?: Prisma.EnrollmentOmit
   learningObjectType?: Prisma.LearningObjectTypeOmit
   learningObject?: Prisma.LearningObjectOmit
+  learningObjectProgress?: Prisma.LearningObjectProgressOmit
   block?: Prisma.BlockOmit
   session?: Prisma.SessionOmit
   message?: Prisma.MessageOmit
@@ -3124,6 +3300,7 @@ export type GlobalOmitConfig = {
   moduleMetrics?: Prisma.ModuleMetricsOmit
   systemSetting?: Prisma.SystemSettingOmit
   teacherAiFeedback?: Prisma.TeacherAiFeedbackOmit
+  studentAiFeedback?: Prisma.StudentAiFeedbackOmit
   video?: Prisma.VideoOmit
   videoGenerationAttempt?: Prisma.VideoGenerationAttemptOmit
 }

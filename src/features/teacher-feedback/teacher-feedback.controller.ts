@@ -102,4 +102,21 @@ export class TeacherFeedbackController {
 
     return { message: 'Generación de feedback iniciada' }
   }
+
+  // TODO: Remover después de pruebas
+  @Post('generate-test')
+  @ApiOperation({
+    summary: '[TEST] Generar feedback síncrono (sin cola) y enviar email',
+  })
+  async generateTest(
+    @Param('moduleId', ParseIntPipe) moduleId: number,
+    @GetUser('id') teacherId: number,
+  ) {
+    await this.teacherFeedbackService.validateModuleOwnership(
+      moduleId,
+      teacherId,
+    )
+    const result = await this.teacherFeedbackService.generateForModule(moduleId)
+    return { message: 'Feedback generado exitosamente', content: result }
+  }
 }

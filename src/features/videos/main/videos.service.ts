@@ -277,6 +277,8 @@ export class VideosService {
         where: { learningObjectId: id },
         data: { hasManualEdits: true },
       })
+
+      await this.loHelper.updateCompiledContent(tx, id)
     })
 
     const updated = await this.dbService.learningObject.findUniqueOrThrow({
@@ -286,6 +288,8 @@ export class VideosService {
         blocks: { orderBy: { orderIndex: 'asc' } },
       },
     })
+
+    await this.loHelper.triggerEmbeddingUpdate(id, updated.isPublished)
 
     return VideoMapper.toFullDto(
       updated as typeof updated & { video: NonNullable<typeof updated.video> },

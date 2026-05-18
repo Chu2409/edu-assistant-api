@@ -16,7 +16,6 @@ import { GeneratedRelationsDto } from './dtos/res/generated-relations.dto'
 import { LoRelationsService } from '../../learning-objects/lo-relations/lo-relations.service'
 import type { AiContent } from '../shared/interfaces/ai-generated-content.interface'
 import { parseJsonField } from 'src/providers/ai/helpers/utils'
-import { validateAiResponse } from 'src/providers/ai/helpers/ai-response-validator'
 import { generatedRelationsSchema } from '../shared/schemas/ai-content.schema'
 
 @Injectable()
@@ -38,6 +37,7 @@ export class RelationsService {
       where: { id: data.learningObjectId },
       include: {
         blocks: { orderBy: { orderIndex: 'asc' } },
+        module: { include: { aiConfiguration: true } },
       },
     })
 
@@ -107,15 +107,15 @@ export class RelationsService {
       candidatePages: candidateLosForPrompt,
       config: {
         maxRelationsPerPage,
+        language: lo.module.aiConfiguration?.language ?? 'es',
       },
     })
 
-    const aiResponse =
-      await this.openAiService.getResponse<GeneratedRelationsDto>(prompt)
-
-    return validateAiResponse(
-      aiResponse.content,
+    const aiResponse = await this.openAiService.getResponse(
+      prompt,
       generatedRelationsSchema,
-    ) as GeneratedRelationsDto
+    )
+
+    return aiResponse.content as GeneratedRelationsDto
   }
 }

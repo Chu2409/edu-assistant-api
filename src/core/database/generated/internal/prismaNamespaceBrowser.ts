@@ -57,6 +57,7 @@ export const ModelName = {
   Enrollment: 'Enrollment',
   LearningObjectType: 'LearningObjectType',
   LearningObject: 'LearningObject',
+  LearningObjectProgress: 'LearningObjectProgress',
   Block: 'Block',
   Session: 'Session',
   Message: 'Message',
@@ -74,6 +75,7 @@ export const ModelName = {
   ModuleMetrics: 'ModuleMetrics',
   SystemSetting: 'SystemSetting',
   TeacherAiFeedback: 'TeacherAiFeedback',
+  StudentAiFeedback: 'StudentAiFeedback',
   Video: 'Video',
   VideoGenerationAttempt: 'VideoGenerationAttempt'
 } as const
@@ -175,7 +177,6 @@ export const LearningObjectScalarFieldEnum = {
   keywords: 'keywords',
   compiledContent: 'compiledContent',
   isPublished: 'isPublished',
-  aiResponseId: 'aiResponseId',
   hasManualEdits: 'hasManualEdits',
   conceptsProcessed: 'conceptsProcessed',
   createdAt: 'createdAt',
@@ -184,6 +185,20 @@ export const LearningObjectScalarFieldEnum = {
 } as const
 
 export type LearningObjectScalarFieldEnum = (typeof LearningObjectScalarFieldEnum)[keyof typeof LearningObjectScalarFieldEnum]
+
+
+export const LearningObjectProgressScalarFieldEnum = {
+  id: 'id',
+  learningObjectId: 'learningObjectId',
+  userId: 'userId',
+  isCompleted: 'isCompleted',
+  completedAt: 'completedAt',
+  lastVisitedAt: 'lastVisitedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type LearningObjectProgressScalarFieldEnum = (typeof LearningObjectProgressScalarFieldEnum)[keyof typeof LearningObjectProgressScalarFieldEnum]
 
 
 export const BlockScalarFieldEnum = {
@@ -416,6 +431,18 @@ export const TeacherAiFeedbackScalarFieldEnum = {
 } as const
 
 export type TeacherAiFeedbackScalarFieldEnum = (typeof TeacherAiFeedbackScalarFieldEnum)[keyof typeof TeacherAiFeedbackScalarFieldEnum]
+
+
+export const StudentAiFeedbackScalarFieldEnum = {
+  id: 'id',
+  scope: 'scope',
+  studentId: 'studentId',
+  moduleId: 'moduleId',
+  content: 'content',
+  createdAt: 'createdAt'
+} as const
+
+export type StudentAiFeedbackScalarFieldEnum = (typeof StudentAiFeedbackScalarFieldEnum)[keyof typeof StudentAiFeedbackScalarFieldEnum]
 
 
 export const VideoScalarFieldEnum = {

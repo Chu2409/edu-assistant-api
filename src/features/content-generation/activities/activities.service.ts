@@ -16,7 +16,6 @@ import type {
   AiCodeBlock,
 } from '../shared/interfaces/ai-generated-content.interface'
 import { parseJsonField } from 'src/providers/ai/helpers/utils'
-import { validateAiResponse } from 'src/providers/ai/helpers/ai-response-validator'
 import { aiGeneratedActivitySchema } from '../shared/schemas/ai-content.schema'
 
 @Injectable()
@@ -78,12 +77,11 @@ export class ActivitiesService {
       instructions: data.instructions,
     })
 
-    const aiResponse =
-      await this.openAiService.getResponse<AiGeneratedActivity>(prompt)
-
-    return validateAiResponse(
-      aiResponse.content,
+    const aiResponse = await this.openAiService.getResponse(
+      prompt,
       aiGeneratedActivitySchema,
-    ) as AiGeneratedActivity
+    )
+
+    return aiResponse.content as AiGeneratedActivity
   }
 }

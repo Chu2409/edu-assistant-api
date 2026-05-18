@@ -1,6 +1,7 @@
 import { PromptInput } from '../../../../providers/ai/interfaces/prompt-input.interface'
 import { AiTextBlock } from '../../shared/interfaces/ai-generated-content.interface'
 import { JSON_ONLY_INSTRUCTION } from '../../shared/helpers/guidances'
+import { resolveLanguageName } from 'src/shared/utils/language.util'
 
 export interface ExtractLoConceptsPrompt {
   blocks: AiTextBlock[]
@@ -16,6 +17,7 @@ export const extractLoConceptsPrompt = ({
   config,
 }: ExtractLoConceptsPrompt): PromptInput[] => {
   const { language = 'es', maxTerms = 8, maxDefinitionLength = 120 } = config
+  const languageName = resolveLanguageName(language)
 
   return [
     {
@@ -60,7 +62,7 @@ ${JSON_ONLY_INSTRUCTION}
 
 - Maximum ${maxDefinitionLength} characters (STRICT)
 - Clear, standalone, no circular definitions
-- Language: ${language}
+- Respond entirely in ${languageName}. All output fields MUST be written in ${languageName}.
 
 # QUALITY OVER QUANTITY
 
